@@ -1,0 +1,33 @@
+name: Update Baseball Stats
+
+on:
+  schedule:
+    # Run at 6 AM EST (11 AM UTC) every day
+    - cron: '0 11 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Fetch stats and generate HTML
+        run: node generate-stats.js
+      
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add index.html
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats - $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
