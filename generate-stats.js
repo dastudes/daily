@@ -515,7 +515,7 @@ async function generateHTML() {
         }
         
         .breadcrumb a::before {
-            content: "\2190 ";
+            content: "\\2190 ";
         }
         
         .header {
@@ -873,7 +873,7 @@ async function generateHTML() {
         <details>
             <summary>About these Stats</summary>
             <div class="details-content">
-                <p>This page has been created for you to easily view baseball stats for each player on each team, grouped onto one long webpage. Like how we used to read stats back in the old days, in the newspaper. You may remember that. The stats have been pulled from the official MLB Stats API. Player names link to their Baseball Savant profiles for advanced metrics and visualizations. If a player has played for more than one team, his complete stats are listed for each one. Players who appear on multiple teams are printed in italics.</p>
+                <p>This page has been created for you to easily view baseball stats for each player on each team, grouped onto one long webpage. Like how we used to read stats back in the old days, in the newspaper. You may remember that. The stats have been pulled from the official MLB Stats API. Player names link to their Baseball Savant profiles for advanced metrics and visualizations. If a player has played for more than one team, his complete stats are listed for each one. Players who appear on multiple teams are italicized.</p>
                 
                 <p>Most of these are standard stats, but I've added a few simple sabermetric takes to sort players by their impact.</p>
                 
