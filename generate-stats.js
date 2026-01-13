@@ -92,7 +92,7 @@ async function fetchPlayerStats(playerId, season) {
     return data.stats || [];
 }
 
-function createBatterRow(player, stats) {
+function createBatterRow(player, stats, playerTeamCount) {
     const rc = Math.round(calculateRC(stats));
     const avg = calcAVG(stats.hits, stats.atBats);
     const obp = calcOBP(stats);
@@ -100,9 +100,12 @@ function createBatterRow(player, stats) {
     const position = player.position ? player.position.abbreviation : '';
     const playerLink = `https://baseballsavant.mlb.com/savant-player/${player.person.id}`;
     
+    // Add asterisk if player is on multiple teams
+    const multiTeam = playerTeamCount[player.person.id] > 1 ? '*' : '';
+    
     return `
         <tr class="data-row" data-pa="${(stats.atBats || 0) + (stats.baseOnBalls || 0)}">
-            <td><a href="${playerLink}" target="_blank">${player.person.fullName}</a></td>
+            <td><a href="${playerLink}" target="_blank">${player.person.fullName}${multiTeam}</a></td>
             <td>${position}</td>
             <td class="stat-num">${rc}</td>
             <td class="stat-num">${avg}</td>
@@ -124,7 +127,7 @@ function createBatterRow(player, stats) {
     `;
 }
 
-function createPitcherRow(player, stats) {
+function createPitcherRow(player, stats, playerTeamCount) {
     const era = calcERA(stats.earnedRuns, stats.inningsPitched);
     const whip = calcWHIP(stats);
     const fip = calculateFIP(stats);
@@ -132,9 +135,12 @@ function createPitcherRow(player, stats) {
     const fipar = Math.round((6.00 - fip) * ip / 9);
     const playerLink = `https://baseballsavant.mlb.com/savant-player/${player.person.id}`;
     
+    // Add asterisk if player is on multiple teams
+    const multiTeam = playerTeamCount[player.person.id] > 1 ? '*' : '';
+    
     return `
         <tr class="data-row" data-ip="${ip}">
-            <td><a href="${playerLink}" target="_blank">${player.person.fullName}</a></td>
+            <td><a href="${playerLink}" target="_blank">${player.person.fullName}${multiTeam}</a></td>
             <td class="stat-num">${fipar}</td>
             <td class="stat-num">${ip.toFixed(1)}</td>
             <td class="stat-num">${era}</td>
@@ -242,6 +248,18 @@ async function generateHTML() {
     const allTeams = [...alTeams, ...nlTeams];
     const teamData = {};
     
+    // First pass: count how many teams each player appears on
+    console.log('Counting multi-team players...');
+    const playerTeamCount = {};
+    
+    for (const team of allTeams) {
+        const roster = await fetchTeamRoster(team.id, season);
+        for (const player of roster) {
+            const playerId = player.person.id;
+            playerTeamCount[playerId] = (playerTeamCount[playerId] || 0) + 1;
+        }
+    }
+    
     // Load all team stats
     for (const team of allTeams) {
         teamData[team.id] = await loadTeamStats(team, season);
@@ -253,15 +271,19 @@ async function generateHTML() {
         const { batters, pitchers } = teamData[team.id];
         
         const batterRows = batters.length > 0 
-            ? batters.map(b => createBatterRow(b.player, b.stats)).join('')
+            ? batters.map(b => createBatterRow(b.player, b.stats, playerTeamCount)).join('')
             : '<tr><td colspan="18" style="text-align:center;">No batters</td></tr>';
         
         const pitcherRows = pitchers.length > 0
-            ? pitchers.map(p => createPitcherRow(p.player, p.stats)).join('')
+            ? pitchers.map(p => createPitcherRow(p.player, p.stats, playerTeamCount)).join('')
             : '<tr><td colspan="16" style="text-align:center;">No pitchers</td></tr>';
         
+        const teamId = team.name.toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '');
+        
         alHTML += `
-            <div class="team-section">
+            <div class="team-section" id="${teamId}">
                 <div class="team-header">${team.name}</div>
                 
                 <div class="section-title">Batters</div>
@@ -328,15 +350,19 @@ async function generateHTML() {
         const { batters, pitchers } = teamData[team.id];
         
         const batterRows = batters.length > 0 
-            ? batters.map(b => createBatterRow(b.player, b.stats)).join('')
+            ? batters.map(b => createBatterRow(b.player, b.stats, playerTeamCount)).join('')
             : '<tr><td colspan="18" style="text-align:center;">No batters</td></tr>';
         
         const pitcherRows = pitchers.length > 0
-            ? pitchers.map(p => createPitcherRow(p.player, p.stats)).join('')
+            ? pitchers.map(p => createPitcherRow(p.player, p.stats, playerTeamCount)).join('')
             : '<tr><td colspan="16" style="text-align:center;">No pitchers</td></tr>';
         
+        const teamId = team.name.toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '');
+        
         nlHTML += `
-            <div class="team-section">
+            <div class="team-section" id="${teamId}">
                 <div class="team-header">${team.name}</div>
                 
                 <div class="section-title">Batters</div>
@@ -452,7 +478,7 @@ async function generateHTML() {
         }
         
         .breadcrumb a::before {
-            content: "← ";
+            content: "â† ";
         }
         
         .header {
@@ -609,31 +635,6 @@ async function generateHTML() {
             font-size: 0.95em;
         }
         
-        .jump-nav {
-            text-align: center;
-            margin: 20px 0;
-            padding: 12px;
-            background-color: white;
-            border: 2px solid #CD853F;
-            border-radius: 8px;
-        }
-        
-        .jump-nav strong {
-            color: #8B4513;
-            margin-right: 10px;
-        }
-        
-        .jump-nav a {
-            margin: 0 10px;
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        .jump-nav a:hover {
-            text-decoration: underline;
-            color: #1e40af;
-        }
         
         .league-header {
             color: #2563eb;
@@ -720,6 +721,45 @@ async function generateHTML() {
             display: none;
         }
         
+        /* Floating team selector */
+        .floating-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: white;
+            border: 2px solid #8B4513;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            min-width: 220px;
+        }
+        
+        .floating-selector select {
+            width: 100%;
+            padding: 8px;
+            font-size: 0.95em;
+            font-family: Georgia, "Times New Roman", serif;
+            border: 1px solid #CD853F;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .floating-selector select:hover {
+            border-color: #8B4513;
+        }
+        
+        .current-team-display {
+            font-size: 0.9em;
+            color: #2563eb;
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E8D5B7;
+            text-align: center;
+        }
+        
         @media (max-width: 800px) {
             body {
                 padding: 10px;
@@ -758,10 +798,29 @@ async function generateHTML() {
             .team-section {
                 padding: 12px;
             }
+            
+            .floating-selector {
+                top: 10px;
+                right: 10px;
+                min-width: 180px;
+                padding: 8px;
+            }
+            
+            .floating-selector select {
+                font-size: 0.85em;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="floating-selector">
+        <div class="current-team-display" id="currentTeamDisplay">Viewing: Top of Page</div>
+        <select id="teamSelector" onchange="jumpToTeam()">
+            <option value="">-- Select Team --</option>
+            <!-- Will be populated dynamically after page loads -->
+        </select>
+    </div>
+    
     <div class="container">
         <div class="breadcrumb">
             <a href="https://www.baseballgraphs.com/">To the Baseball Graphs Home Page</a>
@@ -777,14 +836,14 @@ async function generateHTML() {
         <details>
             <summary>About these Stats</summary>
             <div class="details-content">
-                <p>This page has been created for you to easily view baseball stats for each player on each team, grouped onto one long webpage. Like how we used to read stats back in the old days, in the newspaper. You may remember that. The stats have been pulled from the official MLB Stats API. Player names link to their Baseball Savant profiles for advanced metrics and visualizations. If a player has played for more than one team, his complete stats are listed for the team he is currently playing for.</p>
+                <p>This page has been created for you to easily view baseball stats for each player on each team, grouped onto one long webpage. Like how we used to read stats back in the old days, in the newspaper. You may remember that. The stats have been pulled from the official MLB Stats API. Player names link to their Baseball Savant profiles for advanced metrics and visualizations. If a player has played for more than one team, his complete stats are listed for each one. Players who appear on multiple teams are marked with an asterisk (*).</p>
                 
-                <p>Most of these are standard stats, but I've added a few simple sabermetric takes for sorting players by their impact.</p>
+                <p>Most of these are standard stats, but I've added a few simple sabermetric takes to sort players by their impact.</p>
                 
                 <ul>
-                    <li><strong>RC (Runs Created)</strong> uses Bill James' original formula (H+BB)×TB/(AB+BB)</li>
-                    <li><strong>FIP (Fielding Independent Pitching)</strong> ((13×HR)+(3×(BB+HBP))-(2×K))/IP + 3.10</li>
-                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)×IP/9</li>
+                    <li><strong>RC (Runs Created)</strong> uses Bill James' original formula (H+BB)Ã—TB/(AB+BB)</li>
+                    <li><strong>FIP (Fielding Independent Pitching)</strong> ((13Ã—HR)+(3Ã—(BB+HBP))-(2Ã—K))/IP + 3.10</li>
+                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)Ã—IP/9</li>
                 </ul>
                 
                 <p>These stats are value approximations only. Please don't quote them. For actual good sabermetric stats, go to Fangraphs or Baseball Reference.</p>
@@ -807,13 +866,6 @@ async function generateHTML() {
                 </div>
                 <div id="statsInfo">${season} Season - Generated: ${dateStr}</div>
             </div>
-        </div>
-        
-        <div class="jump-nav">
-            <strong>Jump to:</strong>
-            <a href="#american-league">American League</a>
-            <span style="color: #999;">|</span>
-            <a href="#national-league">National League</a>
         </div>
         
         <div id="content">
@@ -862,6 +914,95 @@ async function generateHTML() {
                 row.classList.remove('hidden');
             });
         }
+        
+        // Floating team selector functionality
+        function populateTeamSelector() {
+            const selector = document.getElementById('teamSelector');
+            const alSection = document.getElementById('american-league');
+            const nlSection = document.getElementById('national-league');
+            
+            // Clear existing options except the first one
+            selector.innerHTML = '<option value="">-- Select Team --</option>';
+            
+            // Get AL teams
+            const alTeams = alSection.querySelectorAll('.team-section');
+            if (alTeams.length > 0) {
+                const alGroup = document.createElement('optgroup');
+                alGroup.label = 'American League';
+                alTeams.forEach(team => {
+                    const teamName = team.querySelector('.team-header').textContent;
+                    const option = document.createElement('option');
+                    option.value = team.id;
+                    option.textContent = teamName;
+                    alGroup.appendChild(option);
+                });
+                selector.appendChild(alGroup);
+            }
+            
+            // Get NL teams
+            const nlTeams = nlSection.querySelectorAll('.team-section');
+            if (nlTeams.length > 0) {
+                const nlGroup = document.createElement('optgroup');
+                nlGroup.label = 'National League';
+                nlTeams.forEach(team => {
+                    const teamName = team.querySelector('.team-header').textContent;
+                    const option = document.createElement('option');
+                    option.value = team.id;
+                    option.textContent = teamName;
+                    nlGroup.appendChild(option);
+                });
+                selector.appendChild(nlGroup);
+            }
+        }
+        
+        function jumpToTeam() {
+            const selector = document.getElementById('teamSelector');
+            const teamId = selector.value;
+            
+            if (teamId) {
+                const element = document.getElementById(teamId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Reset dropdown so user can select same team again
+                    setTimeout(() => {
+                        selector.value = '';
+                    }, 500);
+                }
+            }
+        }
+        
+        // Track current visible team
+        function updateCurrentTeam() {
+            const teams = document.querySelectorAll('.team-section');
+            const display = document.getElementById('currentTeamDisplay');
+            
+            let currentTeam = 'Top of Page';
+            
+            for (const team of teams) {
+                const rect = team.getBoundingClientRect();
+                if (rect.top <= 150 && rect.bottom >= 150) {
+                    const teamHeader = team.querySelector('.team-header');
+                    if (teamHeader) {
+                        currentTeam = teamHeader.textContent;
+                    }
+                    break;
+                }
+            }
+            
+            display.textContent = 'Viewing: ' + (currentTeam !== 'Top of Page' ? '${season} ' : '') + currentTeam;
+        }
+        
+        // Update current team on scroll
+        let scrollTimeout;
+        window.addEventListener('scroll', function() {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(updateCurrentTeam, 100);
+        });
+        
+        // Populate team selector on load
+        window.addEventListener('load', function() {
+            populateTeamSelector();
+        });
     </script>
 </body>
 </html>`;
