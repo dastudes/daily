@@ -3,7 +3,14 @@ const fs = require('fs');
 
 const API_BASE = 'https://statsapi.mlb.com/api/v1';
 
-// Fetch current season standings
+// Fetch teams for a season
+async function fetchTeams(season) {
+    const response = await fetch(`${API_BASE}/teams?sportId=1&season=${season}`);
+    const data = await response.json();
+    return data.teams;
+}
+
+// Fetch standings to get W-L records and games back
 async function fetchStandings(season) {
     const response = await fetch(`${API_BASE}/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason`);
     const data = await response.json();
@@ -92,8 +99,8 @@ function calculateDER(stats) {
 
 async function checkSeasonHasData(season) {
     try {
-        const standings = await fetchStandings(season);
-        return standings && standings.length > 0;
+        const teams = await fetchTeams(season);
+        return teams && teams.length > 0;
     } catch (error) {
         console.log(`Error checking ${season}:`, error.message);
         return false;
@@ -114,67 +121,86 @@ async function generateHTML() {
         console.log(`Using ${season} season data`);
     }
     
-    // Fetch standings
+    // Fetch teams and standings
+    const teams = await fetchTeams(season);
     const standingsRecords = await fetchStandings(season);
     
-    // Process each team
-    const teamData = {};
-    
+    // Create a map of team standings info
+    const standingsMap = {};
     for (const divisionRecord of standingsRecords) {
         const league = divisionRecord.league.name;
         const divisionName = divisionRecord.division.name;
         const divisionAbbrev = divisionRecord.division.abbreviation;
         
         for (const teamRecord of divisionRecord.teamRecords) {
-            const team = teamRecord.team;
-            const teamId = team.id;
-            
-            // Get team stats
-            const stats = await fetchTeamStats(teamId, season);
-            let hittingStats = {};
-            let pitchingStats = {};
-            
-            for (const statGroup of stats) {
-                if (statGroup.group && statGroup.group.displayName === 'hitting' && statGroup.splits && statGroup.splits.length > 0) {
-                    hittingStats = statGroup.splits[0].stat;
-                }
-                if (statGroup.group && statGroup.group.displayName === 'pitching' && statGroup.splits && statGroup.splits.length > 0) {
-                    pitchingStats = statGroup.splits[0].stat;
-                }
-            }
-            
-            const w = teamRecord.wins;
-            const l = teamRecord.losses;
-            const pct = (w / (w + l)).toFixed(3).substring(1); // Remove leading 0
-            const rs = hittingStats.runs || 0;
-            const ra = pitchingStats.runs || 0;
-            const gamesPlayed = teamRecord.gamesPlayed || (w + l);
-            
-            teamData[teamId] = {
-                name: team.name,
-                abbreviation: team.abbreviation,
-                league: league,
-                division: divisionName,
-                divisionAbbrev: divisionAbbrev,
-                w: w,
-                l: l,
-                pct: pct,
+            const teamId = teamRecord.team.id;
+            standingsMap[teamId] = {
+                w: teamRecord.wins,
+                l: teamRecord.losses,
                 gb: teamRecord.gamesBack,
                 wcGb: teamRecord.wildCardGamesBack,
                 wcRank: teamRecord.wildCardRank,
-                rs: rs,
-                ra: ra,
-                gamesPlayed: gamesPlayed,
-                pythVar: calculatePythVar(w, l, rs, ra),
-                // Stats for graphs
-                rsPerGame: gamesPlayed > 0 ? rs / gamesPlayed : 0,
-                raPerGame: gamesPlayed > 0 ? ra / gamesPlayed : 0,
-                obp: calculateOBP(hittingStats),
-                iso: calculateISO(hittingStats),
-                fip: calculateFIP(pitchingStats),
-                der: calculateDER(pitchingStats)
+                league: league,
+                division: divisionName,
+                divisionAbbrev: divisionAbbrev
             };
         }
+    }
+    
+    // Process each team
+    const teamData = {};
+    
+    for (const team of teams) {
+        // Skip teams without standings data (e.g., All-Star teams)
+        if (!standingsMap[team.id]) continue;
+        
+        const standings = standingsMap[team.id];
+        
+        // Get team stats
+        const stats = await fetchTeamStats(team.id, season);
+        let hittingStats = {};
+        let pitchingStats = {};
+        
+        for (const statGroup of stats) {
+            if (statGroup.group && statGroup.group.displayName === 'hitting' && statGroup.splits && statGroup.splits.length > 0) {
+                hittingStats = statGroup.splits[0].stat;
+            }
+            if (statGroup.group && statGroup.group.displayName === 'pitching' && statGroup.splits && statGroup.splits.length > 0) {
+                pitchingStats = statGroup.splits[0].stat;
+            }
+        }
+        
+        const w = standings.w;
+        const l = standings.l;
+        const pct = (w / (w + l)).toFixed(3).substring(1); // Remove leading 0
+        const rs = hittingStats.runs || 0;
+        const ra = pitchingStats.runs || 0;
+        const gamesPlayed = w + l;
+        
+        teamData[team.id] = {
+            name: team.name,
+            abbreviation: team.abbreviation,
+            league: standings.league,
+            division: standings.division,
+            divisionAbbrev: standings.divisionAbbrev,
+            w: w,
+            l: l,
+            pct: pct,
+            gb: standings.gb,
+            wcGb: standings.wcGb,
+            wcRank: standings.wcRank,
+            rs: rs,
+            ra: ra,
+            gamesPlayed: gamesPlayed,
+            pythVar: calculatePythVar(w, l, rs, ra),
+            // Stats for graphs
+            rsPerGame: gamesPlayed > 0 ? rs / gamesPlayed : 0,
+            raPerGame: gamesPlayed > 0 ? ra / gamesPlayed : 0,
+            obp: calculateOBP(hittingStats),
+            iso: calculateISO(hittingStats),
+            fip: calculateFIP(pitchingStats),
+            der: calculateDER(pitchingStats)
+        };
         
         // Add small delay to avoid rate limiting
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -293,8 +319,9 @@ function generateHTMLContent(season, dateStr, teamData) {
             padding: 20px;
         }
         .container {
-            max-width: 1200px;
+            max-width: 960px;
             margin: 0 auto;
+            padding: 0 20px;
         }
         .header {
             background: linear-gradient(135deg, #8B4513, #A0522D);
