@@ -295,7 +295,7 @@ function generateHTMLContent(season, dateStr, teamData) {
     console.log(`generateHTMLContent received ${teamCount} teams`);
     if (teamCount > 0) {
         const sampleTeam = Object.values(teamData)[0];
-        console.log(`Sample team league name: "${sampleTeam.league}"`);
+        console.log(`Sample team: league="${sampleTeam.league}", division="${sampleTeam.division}", divAbbrev="${sampleTeam.divisionAbbrev}"`);
     }
     
     // Separate teams by league and division
@@ -308,19 +308,31 @@ function generateHTMLContent(season, dateStr, teamData) {
     function groupByDivision(teams) {
         const divisions = {};
         teams.forEach(team => {
-            if (!divisions[team.divisionAbbrev]) {
-                divisions[team.divisionAbbrev] = {
+            // Extract just E, C, or W from division name if divisionAbbrev isn't working
+            let divKey = team.divisionAbbrev;
+            if (!divKey || divKey === 'undefined') {
+                // Try to extract from division name (e.g., "American League East" -> "E")
+                if (team.division && team.division.includes('East')) divKey = 'E';
+                else if (team.division && team.division.includes('Central')) divKey = 'C';
+                else if (team.division && team.division.includes('West')) divKey = 'W';
+                else divKey = 'Unknown';
+            }
+            
+            if (!divisions[divKey]) {
+                divisions[divKey] = {
                     name: team.division,
                     teams: []
                 };
             }
-            divisions[team.divisionAbbrev].teams.push(team);
+            divisions[divKey].teams.push(team);
         });
         
         // Sort teams within each division by wins (descending)
         Object.keys(divisions).forEach(div => {
             divisions[div].teams.sort((a, b) => b.w - a.w);
         });
+        
+        console.log(`Division keys found: ${Object.keys(divisions).join(', ')}`);
         
         return divisions;
     }
@@ -727,6 +739,100 @@ function generateHTMLContent(season, dateStr, teamData) {
         let currentLeague = 'AL';
         let chart1, chart2, chart3;
         
+        // Plugin to draw team labels with collision detection
+        const labelPlugin = {
+            afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const meta = chart.getDatasetMeta(0);
+                
+                if (!meta.data || meta.data.length === 0) return;
+                
+                // First pass: calculate initial label positions
+                const labels = chart.data.datasets[0].data.map(function(datapoint, index) {
+                    const point = meta.data[index];
+                    const labelText = datapoint.label || '';
+                    
+                    ctx.font = 'bold 13px sans-serif';
+                    const textMetrics = ctx.measureText(labelText);
+                    const textWidth = textMetrics.width;
+                    const textHeight = 16;
+                    
+                    const positions = [
+                        { xOffset: 8, yOffset: 18, align: 'left' },
+                        { xOffset: 8, yOffset: -8, align: 'left' },
+                        { xOffset: -8, yOffset: 18, align: 'right' },
+                        { xOffset: -8, yOffset: -8, align: 'right' },
+                        { xOffset: 0, yOffset: -20, align: 'center' },
+                        { xOffset: 0, yOffset: 28, align: 'center' }
+                    ];
+                    
+                    return {
+                        point: point,
+                        text: labelText,
+                        width: textWidth,
+                        height: textHeight,
+                        positions: positions,
+                        selectedPosition: 0
+                    };
+                });
+                
+                function rectanglesOverlap(r1, r2) {
+                    return !(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom);
+                }
+                
+                function getLabelRect(label, posIndex) {
+                    const pos = label.positions[posIndex];
+                    const padding = 2;
+                    let left;
+                    if (pos.align === 'right') {
+                        left = label.point.x + pos.xOffset - label.width - padding * 2;
+                    } else if (pos.align === 'center') {
+                        left = label.point.x + pos.xOffset - label.width / 2 - padding;
+                    } else {
+                        left = label.point.x + pos.xOffset - padding;
+                    }
+                    const top = label.point.y + pos.yOffset - label.height + 2;
+                    return { left, right: left + label.width + padding * 2, top, bottom: top + label.height, pos };
+                }
+                
+                // Second pass: resolve collisions
+                for (let i = 0; i < labels.length; i++) {
+                    let foundPosition = false;
+                    for (let posIndex = 0; posIndex < labels[i].positions.length && !foundPosition; posIndex++) {
+                        const currentRect = getLabelRect(labels[i], posIndex);
+                        let hasCollision = false;
+                        for (let j = 0; j < i; j++) {
+                            const otherRect = getLabelRect(labels[j], labels[j].selectedPosition);
+                            if (rectanglesOverlap(currentRect, otherRect)) {
+                                hasCollision = true;
+                                break;
+                            }
+                        }
+                        if (!hasCollision) {
+                            labels[i].selectedPosition = posIndex;
+                            foundPosition = true;
+                        }
+                    }
+                    if (!foundPosition) labels[i].selectedPosition = 0;
+                }
+                
+                // Third pass: draw labels
+                labels.forEach(function(label) {
+                    const pos = label.positions[label.selectedPosition];
+                    const rect = getLabelRect(label, label.selectedPosition);
+                    
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.fillRect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+                    ctx.font = 'bold 13px sans-serif';
+                    ctx.fillStyle = '#000';
+                    ctx.textAlign = pos.align;
+                    ctx.fillText(label.text, label.point.x + pos.xOffset, label.point.y + pos.yOffset);
+                    ctx.restore();
+                });
+            }
+        };
+        
         function updateLeague() {
             const selected = document.querySelector('input[name="league"]:checked').value;
             currentLeague = selected;
@@ -850,6 +956,9 @@ function generateHTMLContent(season, dateStr, teamData) {
                         duration: 1500,
                         easing: 'easeOutQuart'
                     },
+                    layout: {
+                        padding: { top: 30, right: 50, bottom: 20, left: 20 }
+                    },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
@@ -878,7 +987,8 @@ function generateHTMLContent(season, dateStr, teamData) {
                             grid: { color: '#e0e0e0' }
                         }
                     }
-                }
+                },
+                plugins: [labelPlugin]
             });
         }
         
@@ -975,7 +1085,8 @@ function generateHTMLContent(season, dateStr, teamData) {
                             grid: { color: '#e0e0e0' }
                         }
                     }
-                }
+                },
+                plugins: [labelPlugin]
             });
         }
         
@@ -1073,7 +1184,8 @@ function generateHTMLContent(season, dateStr, teamData) {
                             grid: { color: '#e0e0e0' }
                         }
                     }
-                }
+                },
+                plugins: [labelPlugin]
             });
         }
         
