@@ -256,6 +256,19 @@ async function generateHTML() {
         throw new Error('No teams were successfully processed');
     }
     
+    // Debug: Show what's in teamData
+    console.log(`teamData contains ${Object.keys(teamData).length} teams`);
+    if (Object.keys(teamData).length > 0) {
+        const firstTeam = Object.values(teamData)[0];
+        console.log(`First team sample:`, JSON.stringify({
+            name: firstTeam.name,
+            league: firstTeam.league,
+            w: firstTeam.w,
+            l: firstTeam.l,
+            rs: firstTeam.rs
+        }));
+    }
+    
     // Generate the HTML
     const dateStr = new Date().toLocaleDateString('en-US', { 
         weekday: 'long', 
@@ -271,9 +284,19 @@ async function generateHTML() {
 }
 
 function generateHTMLContent(season, dateStr, teamData) {
+    // Debug: log what we received
+    const teamCount = Object.keys(teamData).length;
+    console.log(`generateHTMLContent received ${teamCount} teams`);
+    if (teamCount > 0) {
+        const sampleTeam = Object.values(teamData)[0];
+        console.log(`Sample team league name: "${sampleTeam.league}"`);
+    }
+    
     // Separate teams by league and division
     const alTeams = Object.values(teamData).filter(t => t.league === 'American League');
     const nlTeams = Object.values(teamData).filter(t => t.league === 'National League');
+    
+    console.log(`Filtered: ${alTeams.length} AL teams, ${nlTeams.length} NL teams`);
     
     // Group by division
     function groupByDivision(teams) {
