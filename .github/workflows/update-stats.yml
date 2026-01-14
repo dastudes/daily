@@ -25,9 +25,12 @@ jobs:
       - name: Fetch stats and generate HTML
         run: node generate-stats.js
       
+      - name: Generate graphs page
+        run: node generate-graphs.js
+      
       - name: Commit and push if changed
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add index.html
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats - $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
+          git add index.html graphs.html
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats and graphs - $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
