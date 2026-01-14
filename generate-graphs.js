@@ -100,9 +100,22 @@ function calculateDER(stats) {
 async function checkSeasonHasData(season) {
     try {
         const teams = await fetchTeams(season);
-        return teams && teams.length > 0;
+        if (!teams || teams.length === 0) {
+            console.log(`${season}: No teams found`);
+            return false;
+        }
+        
+        // Try to fetch standings to verify season has actual game data
+        const standings = await fetchStandings(season);
+        if (!standings || standings.length === 0) {
+            console.log(`${season}: No standings found`);
+            return false;
+        }
+        
+        console.log(`${season}: Has data (${teams.length} teams, ${standings.length} divisions)`);
+        return true;
     } catch (error) {
-        console.log(`Error checking ${season}:`, error.message);
+        console.log(`${season}: Error - ${error.message}`);
         return false;
     }
 }
@@ -112,18 +125,34 @@ async function generateHTML() {
     
     // Determine which season to use
     let season = currentYear;
+    console.log(`Checking for ${currentYear} season data...`);
     const hasCurrentData = await checkSeasonHasData(currentYear);
     
     if (!hasCurrentData) {
-        console.log(`No data for ${currentYear}, using ${currentYear - 1}`);
+        console.log(`No data for ${currentYear}, trying ${currentYear - 1}...`);
         season = currentYear - 1;
-    } else {
-        console.log(`Using ${season} season data`);
+        const hasPriorData = await checkSeasonHasData(season);
+        if (!hasPriorData) {
+            throw new Error(`No data available for ${currentYear} or ${season}`);
+        }
     }
     
+    console.log(`Using ${season} season data`);
+    
     // Fetch teams and standings
+    console.log(`Fetching teams for ${season}...`);
     const teams = await fetchTeams(season);
+    if (!teams || teams.length === 0) {
+        throw new Error(`Failed to fetch teams for ${season}`);
+    }
+    console.log(`Found ${teams.length} teams`);
+    
+    console.log(`Fetching standings for ${season}...`);
     const standingsRecords = await fetchStandings(season);
+    if (!standingsRecords || standingsRecords.length === 0) {
+        throw new Error(`Failed to fetch standings for ${season}`);
+    }
+    console.log(`Found ${standingsRecords.length} division records`);
     
     // Create a map of team standings info
     const standingsMap = {};
@@ -147,63 +176,84 @@ async function generateHTML() {
         }
     }
     
+    console.log(`Processing ${Object.keys(standingsMap).length} teams with standings data...`);
+    
     // Process each team
     const teamData = {};
+    let processedCount = 0;
     
     for (const team of teams) {
         // Skip teams without standings data (e.g., All-Star teams)
-        if (!standingsMap[team.id]) continue;
+        if (!standingsMap[team.id]) {
+            console.log(`Skipping ${team.name} - no standings data`);
+            continue;
+        }
         
         const standings = standingsMap[team.id];
         
-        // Get team stats
-        const stats = await fetchTeamStats(team.id, season);
-        let hittingStats = {};
-        let pitchingStats = {};
+        console.log(`Fetching stats for ${team.name}...`);
         
-        for (const statGroup of stats) {
-            if (statGroup.group && statGroup.group.displayName === 'hitting' && statGroup.splits && statGroup.splits.length > 0) {
-                hittingStats = statGroup.splits[0].stat;
+        try {
+            // Get team stats
+            const stats = await fetchTeamStats(team.id, season);
+            let hittingStats = {};
+            let pitchingStats = {};
+            
+            for (const statGroup of stats) {
+                if (statGroup.group && statGroup.group.displayName === 'hitting' && statGroup.splits && statGroup.splits.length > 0) {
+                    hittingStats = statGroup.splits[0].stat;
+                }
+                if (statGroup.group && statGroup.group.displayName === 'pitching' && statGroup.splits && statGroup.splits.length > 0) {
+                    pitchingStats = statGroup.splits[0].stat;
+                }
             }
-            if (statGroup.group && statGroup.group.displayName === 'pitching' && statGroup.splits && statGroup.splits.length > 0) {
-                pitchingStats = statGroup.splits[0].stat;
-            }
+            
+            const w = standings.w;
+            const l = standings.l;
+            const pct = (w / (w + l)).toFixed(3).substring(1); // Remove leading 0
+            const rs = hittingStats.runs || 0;
+            const ra = pitchingStats.runs || 0;
+            const gamesPlayed = w + l;
+            
+            teamData[team.id] = {
+                name: team.name,
+                abbreviation: team.abbreviation,
+                league: standings.league,
+                division: standings.division,
+                divisionAbbrev: standings.divisionAbbrev,
+                w: w,
+                l: l,
+                pct: pct,
+                gb: standings.gb,
+                wcGb: standings.wcGb,
+                wcRank: standings.wcRank,
+                rs: rs,
+                ra: ra,
+                gamesPlayed: gamesPlayed,
+                pythVar: calculatePythVar(w, l, rs, ra),
+                // Stats for graphs
+                rsPerGame: gamesPlayed > 0 ? rs / gamesPlayed : 0,
+                raPerGame: gamesPlayed > 0 ? ra / gamesPlayed : 0,
+                obp: calculateOBP(hittingStats),
+                iso: calculateISO(hittingStats),
+                fip: calculateFIP(pitchingStats),
+                der: calculateDER(pitchingStats)
+            };
+            
+            processedCount++;
+            
+            // Add small delay to avoid rate limiting
+            await new Promise(resolve => setTimeout(resolve, 100));
+        } catch (error) {
+            console.error(`Error processing ${team.name}:`, error.message);
+            // Continue with other teams even if one fails
         }
-        
-        const w = standings.w;
-        const l = standings.l;
-        const pct = (w / (w + l)).toFixed(3).substring(1); // Remove leading 0
-        const rs = hittingStats.runs || 0;
-        const ra = pitchingStats.runs || 0;
-        const gamesPlayed = w + l;
-        
-        teamData[team.id] = {
-            name: team.name,
-            abbreviation: team.abbreviation,
-            league: standings.league,
-            division: standings.division,
-            divisionAbbrev: standings.divisionAbbrev,
-            w: w,
-            l: l,
-            pct: pct,
-            gb: standings.gb,
-            wcGb: standings.wcGb,
-            wcRank: standings.wcRank,
-            rs: rs,
-            ra: ra,
-            gamesPlayed: gamesPlayed,
-            pythVar: calculatePythVar(w, l, rs, ra),
-            // Stats for graphs
-            rsPerGame: gamesPlayed > 0 ? rs / gamesPlayed : 0,
-            raPerGame: gamesPlayed > 0 ? ra / gamesPlayed : 0,
-            obp: calculateOBP(hittingStats),
-            iso: calculateISO(hittingStats),
-            fip: calculateFIP(pitchingStats),
-            der: calculateDER(pitchingStats)
-        };
-        
-        // Add small delay to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    console.log(`Successfully processed ${processedCount} teams out of ${teams.length}`);
+    
+    if (processedCount === 0) {
+        throw new Error('No teams were successfully processed');
     }
     
     // Generate the HTML
@@ -319,8 +369,8 @@ function generateHTMLContent(season, dateStr, teamData) {
             padding: 20px;
         }
         .container {
-            max-width: 960px;
-            margin: 0 auto;
+            max-width: 960px !important;
+            margin: 0 auto !important;
             padding: 0 20px;
         }
         .header {
