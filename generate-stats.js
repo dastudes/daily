@@ -3,6 +3,44 @@ const fs = require('fs');
 
 const API_BASE = 'https://statsapi.mlb.com/api/v1';
 
+// Map MLB team names to Fangraphs URL slugs
+function getTeamFangraphsSlug(teamName) {
+    const slugMap = {
+        'Arizona Diamondbacks': 'diamondbacks',
+        'Atlanta Braves': 'braves',
+        'Baltimore Orioles': 'orioles',
+        'Boston Red Sox': 'red-sox',
+        'Chicago Cubs': 'cubs',
+        'Chicago White Sox': 'white-sox',
+        'Cincinnati Reds': 'reds',
+        'Cleveland Guardians': 'guardians',
+        'Colorado Rockies': 'rockies',
+        'Detroit Tigers': 'tigers',
+        'Houston Astros': 'astros',
+        'Kansas City Royals': 'royals',
+        'Los Angeles Angels': 'angels',
+        'Los Angeles Dodgers': 'dodgers',
+        'Miami Marlins': 'marlins',
+        'Milwaukee Brewers': 'brewers',
+        'Minnesota Twins': 'twins',
+        'New York Mets': 'mets',
+        'New York Yankees': 'yankees',
+        'Oakland Athletics': 'athletics',
+        'Philadelphia Phillies': 'phillies',
+        'Pittsburgh Pirates': 'pirates',
+        'San Diego Padres': 'padres',
+        'San Francisco Giants': 'giants',
+        'Seattle Mariners': 'mariners',
+        'St. Louis Cardinals': 'cardinals',
+        'Tampa Bay Rays': 'rays',
+        'Texas Rangers': 'rangers',
+        'Toronto Blue Jays': 'blue-jays',
+        'Washington Nationals': 'nationals'
+    };
+    
+    return slugMap[teamName] || teamName.toLowerCase().replace(/\s+/g, '-');
+}
+
 // Calculate Runs Created (OBP × TB)
 function calculateRC(stats) {
     const h = stats.hits || 0;
@@ -350,34 +388,37 @@ async function generateHTML() {
             .replace(/\s+/g, '-')
             .replace(/[^a-z0-9-]/g, '');
         
+        const fangraphsSlug = getTeamFangraphsSlug(team.name);
+        const fangraphsUrl = `https://www.fangraphs.com/teams/${fangraphsSlug}`;
+        
         alHTML += `
             <div class="team-section" id="${teamId}">
-                <div class="team-header">${team.name}</div>
+                <div class="team-header"><a href="${fangraphsUrl}" target="_blank" style="color: #2563eb; text-decoration: none;">${team.name}</a></div>
                 
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th class="stat-num">Age</th>
+                            <th class="stat-num sortable" data-sort="age" data-default="desc">Age</th>
                             <th>Pos</th>
-                            <th class="stat-num">RC</th>
-                            <th class="stat-num">R</th>
-                            <th class="stat-num">RBI</th>
-                            <th class="stat-num">BA</th>
-                            <th class="stat-num">OBP</th>
-                            <th class="stat-num">SLG</th>
-                            <th class="stat-num">G</th>
-                            <th class="stat-num">PA</th>
-                            <th class="stat-num">H</th>
-                            <th class="stat-num">2B</th>
-                            <th class="stat-num">3B</th>
-                            <th class="stat-num">HR</th>
-                            <th class="stat-num">TB</th>
-                            <th class="stat-num">BB</th>
-                            <th class="stat-num">SO</th>
-                            <th class="stat-num">SB</th>
-                            <th class="stat-num">CS</th>
+                            <th class="stat-num sortable sorted" data-sort="rc" data-default="desc">RC</th>
+                            <th class="stat-num sortable" data-sort="r" data-default="desc">R</th>
+                            <th class="stat-num sortable" data-sort="rbi" data-default="desc">RBI</th>
+                            <th class="stat-num sortable" data-sort="ba" data-default="desc">BA</th>
+                            <th class="stat-num sortable" data-sort="obp" data-default="desc">OBP</th>
+                            <th class="stat-num sortable" data-sort="slg" data-default="desc">SLG</th>
+                            <th class="stat-num sortable" data-sort="g" data-default="desc">G</th>
+                            <th class="stat-num sortable" data-sort="pa" data-default="desc">PA</th>
+                            <th class="stat-num sortable" data-sort="h" data-default="desc">H</th>
+                            <th class="stat-num sortable" data-sort="2b" data-default="desc">2B</th>
+                            <th class="stat-num sortable" data-sort="3b" data-default="desc">3B</th>
+                            <th class="stat-num sortable" data-sort="hr" data-default="desc">HR</th>
+                            <th class="stat-num sortable" data-sort="tb" data-default="desc">TB</th>
+                            <th class="stat-num sortable" data-sort="bb" data-default="desc">BB</th>
+                            <th class="stat-num sortable" data-sort="so" data-default="desc">SO</th>
+                            <th class="stat-num sortable" data-sort="sb" data-default="desc">SB</th>
+                            <th class="stat-num sortable" data-sort="cs" data-default="desc">CS</th>
                         </tr>
                     </thead>
                     <tbody id="batters-${team.id}">
@@ -390,23 +431,23 @@ async function generateHTML() {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th class="stat-num">Age</th>
-                            <th class="stat-num">FIPAR</th>
-                            <th class="stat-num">IP</th>
-                            <th class="stat-num">ERA</th>
-                            <th class="stat-num">FIP</th>
-                            <th class="stat-num">WHIP</th>
-                            <th class="stat-num">G</th>
-                            <th class="stat-num">GS</th>
-                            <th class="stat-num">W</th>
-                            <th class="stat-num">L</th>
-                            <th class="stat-num">SV</th>
-                            <th class="stat-num">H</th>
-                            <th class="stat-num">R</th>
-                            <th class="stat-num">ER</th>
-                            <th class="stat-num">HR</th>
-                            <th class="stat-num">BB</th>
-                            <th class="stat-num">SO</th>
+                            <th class="stat-num sortable" data-sort="age" data-default="desc">Age</th>
+                            <th class="stat-num sortable sorted" data-sort="fipar" data-default="desc">FIPAR</th>
+                            <th class="stat-num sortable" data-sort="ip" data-default="desc">IP</th>
+                            <th class="stat-num sortable" data-sort="era" data-default="asc">ERA</th>
+                            <th class="stat-num sortable" data-sort="fip" data-default="asc">FIP</th>
+                            <th class="stat-num sortable" data-sort="whip" data-default="asc">WHIP</th>
+                            <th class="stat-num sortable" data-sort="g" data-default="desc">G</th>
+                            <th class="stat-num sortable" data-sort="gs" data-default="desc">GS</th>
+                            <th class="stat-num sortable" data-sort="w" data-default="desc">W</th>
+                            <th class="stat-num sortable" data-sort="l" data-default="desc">L</th>
+                            <th class="stat-num sortable" data-sort="sv" data-default="desc">SV</th>
+                            <th class="stat-num sortable" data-sort="h" data-default="desc">H</th>
+                            <th class="stat-num sortable" data-sort="r" data-default="desc">R</th>
+                            <th class="stat-num sortable" data-sort="er" data-default="desc">ER</th>
+                            <th class="stat-num sortable" data-sort="hr" data-default="desc">HR</th>
+                            <th class="stat-num sortable" data-sort="bb" data-default="desc">BB</th>
+                            <th class="stat-num sortable" data-sort="so" data-default="desc">SO</th>
                         </tr>
                     </thead>
                     <tbody id="pitchers-${team.id}">
@@ -433,34 +474,37 @@ async function generateHTML() {
             .replace(/\s+/g, '-')
             .replace(/[^a-z0-9-]/g, '');
         
+        const fangraphsSlug = getTeamFangraphsSlug(team.name);
+        const fangraphsUrl = `https://www.fangraphs.com/teams/${fangraphsSlug}`;
+        
         nlHTML += `
             <div class="team-section" id="${teamId}">
-                <div class="team-header">${team.name}</div>
+                <div class="team-header"><a href="${fangraphsUrl}" target="_blank" style="color: #2563eb; text-decoration: none;">${team.name}</a></div>
                 
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th class="stat-num">Age</th>
+                            <th class="stat-num sortable" data-sort="age" data-default="desc">Age</th>
                             <th>Pos</th>
-                            <th class="stat-num">RC</th>
-                            <th class="stat-num">R</th>
-                            <th class="stat-num">RBI</th>
-                            <th class="stat-num">BA</th>
-                            <th class="stat-num">OBP</th>
-                            <th class="stat-num">SLG</th>
-                            <th class="stat-num">G</th>
-                            <th class="stat-num">PA</th>
-                            <th class="stat-num">H</th>
-                            <th class="stat-num">2B</th>
-                            <th class="stat-num">3B</th>
-                            <th class="stat-num">HR</th>
-                            <th class="stat-num">TB</th>
-                            <th class="stat-num">BB</th>
-                            <th class="stat-num">SO</th>
-                            <th class="stat-num">SB</th>
-                            <th class="stat-num">CS</th>
+                            <th class="stat-num sortable sorted" data-sort="rc" data-default="desc">RC</th>
+                            <th class="stat-num sortable" data-sort="r" data-default="desc">R</th>
+                            <th class="stat-num sortable" data-sort="rbi" data-default="desc">RBI</th>
+                            <th class="stat-num sortable" data-sort="ba" data-default="desc">BA</th>
+                            <th class="stat-num sortable" data-sort="obp" data-default="desc">OBP</th>
+                            <th class="stat-num sortable" data-sort="slg" data-default="desc">SLG</th>
+                            <th class="stat-num sortable" data-sort="g" data-default="desc">G</th>
+                            <th class="stat-num sortable" data-sort="pa" data-default="desc">PA</th>
+                            <th class="stat-num sortable" data-sort="h" data-default="desc">H</th>
+                            <th class="stat-num sortable" data-sort="2b" data-default="desc">2B</th>
+                            <th class="stat-num sortable" data-sort="3b" data-default="desc">3B</th>
+                            <th class="stat-num sortable" data-sort="hr" data-default="desc">HR</th>
+                            <th class="stat-num sortable" data-sort="tb" data-default="desc">TB</th>
+                            <th class="stat-num sortable" data-sort="bb" data-default="desc">BB</th>
+                            <th class="stat-num sortable" data-sort="so" data-default="desc">SO</th>
+                            <th class="stat-num sortable" data-sort="sb" data-default="desc">SB</th>
+                            <th class="stat-num sortable" data-sort="cs" data-default="desc">CS</th>
                         </tr>
                     </thead>
                     <tbody id="batters-${team.id}">
@@ -473,23 +517,23 @@ async function generateHTML() {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th class="stat-num">Age</th>
-                            <th class="stat-num">FIPAR</th>
-                            <th class="stat-num">IP</th>
-                            <th class="stat-num">ERA</th>
-                            <th class="stat-num">FIP</th>
-                            <th class="stat-num">WHIP</th>
-                            <th class="stat-num">G</th>
-                            <th class="stat-num">GS</th>
-                            <th class="stat-num">W</th>
-                            <th class="stat-num">L</th>
-                            <th class="stat-num">SV</th>
-                            <th class="stat-num">H</th>
-                            <th class="stat-num">R</th>
-                            <th class="stat-num">ER</th>
-                            <th class="stat-num">HR</th>
-                            <th class="stat-num">BB</th>
-                            <th class="stat-num">SO</th>
+                            <th class="stat-num sortable" data-sort="age" data-default="desc">Age</th>
+                            <th class="stat-num sortable sorted" data-sort="fipar" data-default="desc">FIPAR</th>
+                            <th class="stat-num sortable" data-sort="ip" data-default="desc">IP</th>
+                            <th class="stat-num sortable" data-sort="era" data-default="asc">ERA</th>
+                            <th class="stat-num sortable" data-sort="fip" data-default="asc">FIP</th>
+                            <th class="stat-num sortable" data-sort="whip" data-default="asc">WHIP</th>
+                            <th class="stat-num sortable" data-sort="g" data-default="desc">G</th>
+                            <th class="stat-num sortable" data-sort="gs" data-default="desc">GS</th>
+                            <th class="stat-num sortable" data-sort="w" data-default="desc">W</th>
+                            <th class="stat-num sortable" data-sort="l" data-default="desc">L</th>
+                            <th class="stat-num sortable" data-sort="sv" data-default="desc">SV</th>
+                            <th class="stat-num sortable" data-sort="h" data-default="desc">H</th>
+                            <th class="stat-num sortable" data-sort="r" data-default="desc">R</th>
+                            <th class="stat-num sortable" data-sort="er" data-default="desc">ER</th>
+                            <th class="stat-num sortable" data-sort="hr" data-default="desc">HR</th>
+                            <th class="stat-num sortable" data-sort="bb" data-default="desc">BB</th>
+                            <th class="stat-num sortable" data-sort="so" data-default="desc">SO</th>
                         </tr>
                     </thead>
                     <tbody id="pitchers-${team.id}">
@@ -764,6 +808,19 @@ async function generateHTML() {
             font-weight: bold;
             font-family: Georgia, "Times New Roman", serif;
             font-size: 1em;
+        }
+        
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        th.sortable:hover {
+            background-color: #E8D5B7;
+        }
+        
+        th.sorted {
+            background-color: #DEB887;
         }
         
         td {
@@ -1078,7 +1135,77 @@ async function generateHTML() {
         // Populate team selector on load
         window.addEventListener('load', function() {
             populateTeamSelector();
+            initializeSortableHeaders();
         });
+        
+        // Table sorting functionality
+        function initializeSortableHeaders() {
+            document.querySelectorAll('th.sortable').forEach(header => {
+                header.addEventListener('click', function() {
+                    sortTable(this);
+                });
+            });
+        }
+        
+        function sortTable(header) {
+            const table = header.closest('table');
+            const tbody = table.querySelector('tbody');
+            const columnIndex = Array.from(header.parentElement.children).indexOf(header);
+            const sortKey = header.dataset.sort;
+            const defaultDirection = header.dataset.default || 'desc';
+            
+            // Remove sorted class from all headers in this table
+            table.querySelectorAll('th.sorted').forEach(th => th.classList.remove('sorted'));
+            
+            // Add sorted class to clicked header
+            header.classList.add('sorted');
+            
+            // Determine sort direction
+            let isAscending;
+            if (header.dataset.currentDirection) {
+                // Toggle direction if already sorted
+                isAscending = header.dataset.currentDirection === 'desc';
+            } else {
+                // Use default direction for first click
+                isAscending = defaultDirection === 'asc';
+            }
+            
+            // Store current direction
+            header.dataset.currentDirection = isAscending ? 'asc' : 'desc';
+            
+            // Get all rows (including hidden ones)
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                const aCell = a.children[columnIndex];
+                const bCell = b.children[columnIndex];
+                
+                if (!aCell || !bCell) return 0;
+                
+                const aText = aCell.textContent.trim();
+                const bText = bCell.textContent.trim();
+                
+                // Convert to numbers for numeric columns
+                const aNum = parseFloat(aText.replace(/,/g, ''));
+                const bNum = parseFloat(bText.replace(/,/g, ''));
+                
+                let comparison = 0;
+                
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    // Numeric comparison
+                    comparison = aNum - bNum;
+                } else {
+                    // Text comparison
+                    comparison = aText.localeCompare(bText);
+                }
+                
+                return isAscending ? comparison : -comparison;
+            });
+            
+            // Re-append sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
     </script>
 </body>
 </html>`;
