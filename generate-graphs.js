@@ -585,7 +585,7 @@ function generateHTMLContent(season, dateStr, teamData) {
             padding: 12px;
             font-weight: bold;
             font-size: 1.1em;
-            background: #f0f0f0;
+            background: #d0d0d0;
             border: none;
             border-right: 2px solid #888;
             cursor: pointer;
@@ -598,7 +598,7 @@ function generateHTMLContent(season, dateStr, teamData) {
             background: white;
         }
         .tab-button:hover:not(.active) {
-            background: #e0e0e0;
+            background: #c0c0c0;
         }
         .tab-content {
             padding: 20px;
@@ -648,10 +648,13 @@ function generateHTMLContent(season, dateStr, teamData) {
             border-radius: 5px;
         }
         .download-link {
+            display: block;
+            text-align: right;
             font-size: 0.85em;
             color: #2563eb;
             text-decoration: underline;
             cursor: pointer;
+            margin-bottom: 5px;
         }
         .download-link:hover {
             color: #1e40af;
@@ -741,8 +744,8 @@ function generateHTMLContent(season, dateStr, teamData) {
                     <p>Win% lines of .400, .500 and .600 are based on the Pythagorean Formula</p>
                     <p>Hover over a data point to see the team name and wins</p>
                 </div>
+                <a class="download-link" onclick="downloadChart(1)">Download Graph</a>
                 <div class="graph-controls">
-                    <a class="download-link" onclick="downloadChart(1)">Download Graph</a>
                     <div class="about-graph">
                         <details>
                             <summary>About This Graph</summary>
@@ -768,8 +771,8 @@ function generateHTMLContent(season, dateStr, teamData) {
                     <p>Dotted lines represent league averages</p>
                     <p>Hover over a data point to see the team name and runs scored</p>
                 </div>
+                <a class="download-link" onclick="downloadChart(2)">Download Graph</a>
                 <div class="graph-controls">
-                    <a class="download-link" onclick="downloadChart(2)">Download Graph</a>
                     <div class="about-graph">
                         <details>
                             <summary>About This Graph</summary>
@@ -795,8 +798,8 @@ function generateHTMLContent(season, dateStr, teamData) {
                     <p>Dotted lines represent league averages</p>
                     <p>Hover over a data point to see the team name and runs allowed</p>
                 </div>
+                <a class="download-link" onclick="downloadChart(3)">Download Graph</a>
                 <div class="graph-controls">
-                    <a class="download-link" onclick="downloadChart(3)">Download Graph</a>
                     <div class="about-graph">
                         <details>
                             <summary>About This Graph</summary>
