@@ -386,6 +386,7 @@ async function generateHTML() {
             const pa = (stats.atBats || 0) + (stats.baseOnBalls || 0) + (stats.hitByPitch || 0) + (stats.sacFlies || 0);
             const singles = (stats.hits || 0) - (stats.doubles || 0) - (stats.triples || 0) - (stats.homeRuns || 0);
             const tb = singles + 2 * (stats.doubles || 0) + 3 * (stats.triples || 0) + 4 * (stats.homeRuns || 0);
+            const rc = calculateRC(stats);
             
             allBatters.push({
                 name: b.player.person.fullName,
@@ -393,6 +394,7 @@ async function generateHTML() {
                 team: team.name,
                 teamAbbr: team.abbreviation,
                 league: league,
+                age: b.player.person.currentAge || null,
                 g: stats.gamesPlayed || 0,
                 pa: pa,
                 ab: stats.atBats || 0,
@@ -404,11 +406,13 @@ async function generateHTML() {
                 bb: stats.baseOnBalls || 0,
                 so: stats.strikeOuts || 0,
                 avg: stats.atBats > 0 ? (stats.hits / stats.atBats) : 0,
-                obp: calcOBP(stats),
-                slg: calcSLG(stats),
+                obp: pa > 0 ? ((stats.hits || 0) + (stats.baseOnBalls || 0) + (stats.hitByPitch || 0)) / pa : 0,
+                slg: stats.atBats > 0 ? tb / stats.atBats : 0,
+                ops: (pa > 0 ? ((stats.hits || 0) + (stats.baseOnBalls || 0) + (stats.hitByPitch || 0)) / pa : 0) + (stats.atBats > 0 ? tb / stats.atBats : 0),
                 doubles: stats.doubles || 0,
                 triples: stats.triples || 0,
-                tb: tb
+                tb: tb,
+                rc: rc
             });
         }
         
@@ -416,6 +420,7 @@ async function generateHTML() {
             const stats = p.stats;
             const ip = parseFloat(stats.inningsPitched) || 0;
             const fip = calculateFIP(stats);
+            const fipar = Math.round((6.00 - fip) * ip / 9);
             
             allPitchers.push({
                 name: p.player.person.fullName,
@@ -423,6 +428,7 @@ async function generateHTML() {
                 team: team.name,
                 teamAbbr: team.abbreviation,
                 league: league,
+                age: p.player.person.currentAge || null,
                 g: stats.gamesPlayed || 0,
                 gs: stats.gamesStarted || 0,
                 ip: ip,
@@ -434,6 +440,7 @@ async function generateHTML() {
                 era: ip > 0 ? ((stats.earnedRuns || 0) * 9 / ip) : 0,
                 whip: ip > 0 ? ((stats.baseOnBalls || 0) + (stats.hits || 0)) / ip : 0,
                 fip: fip,
+                fipar: fipar,
                 h: stats.hits || 0,
                 er: stats.earnedRuns || 0
             });
