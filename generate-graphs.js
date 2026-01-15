@@ -168,6 +168,16 @@ async function generateHTML() {
     
     console.log(`Using ${season} season data`);
     
+    // Read player stats JSON for leaderboards
+    let playerStats = { batters: [], pitchers: [] };
+    try {
+        const jsonData = fs.readFileSync('player-stats.json', 'utf8');
+        playerStats = JSON.parse(jsonData);
+        console.log(`Loaded player stats: ${playerStats.batters.length} batters, ${playerStats.pitchers.length} pitchers`);
+    } catch (error) {
+        console.log('Warning: Could not load player-stats.json for leaderboards:', error.message);
+    }
+    
     // Fetch teams and standings
     console.log(`Fetching teams for ${season}...`);
     const teams = await fetchTeams(season);
@@ -347,13 +357,13 @@ async function generateHTML() {
     });
     const dateTimeStr = dateStr + ' at ' + timeStr;
     
-    const html = generateHTMLContent(season, dateTimeStr, teamData);
+    const html = generateHTMLContent(season, dateTimeStr, teamData, playerStats);
     
     fs.writeFileSync('graphs.html', html);
     console.log('Generated graphs.html successfully!');
 }
 
-function generateHTMLContent(season, dateStr, teamData) {
+function generateHTMLContent(season, dateStr, teamData, playerStats) {
     // Debug: log what we received
     const teamCount = Object.keys(teamData).length;
     console.log(`generateHTMLContent received ${teamCount} teams`);
@@ -829,9 +839,143 @@ function generateHTMLContent(season, dateStr, teamData) {
         </div>
     </div>
     
+    <!-- Leaderboards Section -->
+    <div class="container" style="margin-top: 30px;">
+        <div class="standings-container">
+            <h2 style="text-align: center; margin-bottom: 20px;">Player Leaderboards</h2>
+            
+            <!-- Batting Leaderboard -->
+            <div class="leaderboard-section" style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 10px;">Batting Leaders</h3>
+                <div class="leaderboard-controls" style="display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; align-items: center;">
+                    <label>Sort by: 
+                        <select id="batterStat" onchange="updateBatterLeaderboard()">
+                            <option value="rc" selected>RC</option>
+                            <option value="hr">HR</option>
+                            <option value="rbi">RBI</option>
+                            <option value="r">Runs</option>
+                            <option value="h">Hits</option>
+                            <option value="sb">SB</option>
+                            <option value="avg">AVG</option>
+                            <option value="obp">OBP</option>
+                            <option value="slg">SLG</option>
+                            <option value="ops">OPS</option>
+                        </select>
+                    </label>
+                    <label>League: 
+                        <select id="batterLeague" onchange="updateBatterLeaderboard()">
+                            <option value="MLB">MLB</option>
+                            <option value="AL">AL</option>
+                            <option value="NL">NL</option>
+                        </select>
+                    </label>
+                    <label>Show: 
+                        <select id="batterCount" onchange="updateBatterLeaderboard()">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="batterQualified" onchange="updateBatterLeaderboard()"> Qualified only
+                    </label>
+                    <label>Max age: 
+                        <input type="number" id="batterMaxAge" min="18" max="50" value="" placeholder="Any" style="width: 60px;" onchange="updateBatterLeaderboard()">
+                    </label>
+                </div>
+                <table class="standings-table" style="width: 100%;">
+                    <thead>
+                        <tr class="border-b-2 border-blue-800">
+                            <th class="text-left py-1 px-2">Player</th>
+                            <th class="text-left py-1 px-2">Team</th>
+                            <th class="text-right py-1 px-2">Age</th>
+                            <th class="text-right py-1 px-2">G</th>
+                            <th class="text-right py-1 px-2">PA</th>
+                            <th class="text-right py-1 px-2" id="th-rc">RC</th>
+                            <th class="text-right py-1 px-2" id="th-hr">HR</th>
+                            <th class="text-right py-1 px-2" id="th-rbi">RBI</th>
+                            <th class="text-right py-1 px-2" id="th-r">R</th>
+                            <th class="text-right py-1 px-2" id="th-h">H</th>
+                            <th class="text-right py-1 px-2" id="th-sb">SB</th>
+                            <th class="text-right py-1 px-2" id="th-avg">AVG</th>
+                            <th class="text-right py-1 px-2" id="th-obp">OBP</th>
+                            <th class="text-right py-1 px-2" id="th-slg">SLG</th>
+                            <th class="text-right py-1 px-2" id="th-ops">OPS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batterLeaderboardBody">
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pitching Leaderboard -->
+            <div class="leaderboard-section">
+                <h3 style="margin-bottom: 10px;">Pitching Leaders</h3>
+                <div class="leaderboard-controls" style="display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; align-items: center;">
+                    <label>Sort by: 
+                        <select id="pitcherStat" onchange="updatePitcherLeaderboard()">
+                            <option value="fipar" selected>FIPAR</option>
+                            <option value="w">Wins</option>
+                            <option value="sv">Saves</option>
+                            <option value="k">Strikeouts</option>
+                            <option value="era">ERA</option>
+                            <option value="whip">WHIP</option>
+                            <option value="fip">FIP</option>
+                            <option value="ip">IP</option>
+                        </select>
+                    </label>
+                    <label>League: 
+                        <select id="pitcherLeague" onchange="updatePitcherLeaderboard()">
+                            <option value="MLB">MLB</option>
+                            <option value="AL">AL</option>
+                            <option value="NL">NL</option>
+                        </select>
+                    </label>
+                    <label>Show: 
+                        <select id="pitcherCount" onchange="updatePitcherLeaderboard()">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="pitcherQualified" onchange="updatePitcherLeaderboard()"> Qualified only
+                    </label>
+                    <label>Max age: 
+                        <input type="number" id="pitcherMaxAge" min="18" max="50" value="" placeholder="Any" style="width: 60px;" onchange="updatePitcherLeaderboard()">
+                    </label>
+                </div>
+                <table class="standings-table" style="width: 100%;">
+                    <thead>
+                        <tr class="border-b-2 border-blue-800">
+                            <th class="text-left py-1 px-2">Player</th>
+                            <th class="text-left py-1 px-2">Team</th>
+                            <th class="text-right py-1 px-2">Age</th>
+                            <th class="text-right py-1 px-2">G</th>
+                            <th class="text-right py-1 px-2">IP</th>
+                            <th class="text-right py-1 px-2" id="th-fipar">FIPAR</th>
+                            <th class="text-right py-1 px-2" id="th-w">W</th>
+                            <th class="text-right py-1 px-2" id="th-sv">SV</th>
+                            <th class="text-right py-1 px-2" id="th-k">K</th>
+                            <th class="text-right py-1 px-2" id="th-era">ERA</th>
+                            <th class="text-right py-1 px-2" id="th-whip">WHIP</th>
+                            <th class="text-right py-1 px-2" id="th-fip">FIP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pitcherLeaderboardBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        const alData = ${alTeamsData};
-        const nlData = ${nlTeamsData};
+        const alData = \${alTeamsData};
+        const nlData = \${nlTeamsData};
+        const batterData = \${JSON.stringify(playerStats.batters)};
+        const pitcherData = \${JSON.stringify(playerStats.pitchers)};
         let currentLeague = 'AL';
         let chart1, chart2, chart3;
         
@@ -1337,8 +1481,146 @@ function generateHTMLContent(season, dateStr, teamData) {
             }
         }
         
+        // Leaderboard functions
+        function formatRate(val) {
+            return val.toFixed(3).replace(/^0/, '');
+        }
+        
+        function formatStat(val, stat) {
+            const rateStats = ['avg', 'obp', 'slg', 'ops'];
+            const twoDecimalStats = ['era', 'whip', 'fip'];
+            const oneDecimalStats = ['ip'];
+            
+            if (rateStats.includes(stat)) {
+                return formatRate(val);
+            } else if (twoDecimalStats.includes(stat)) {
+                return val.toFixed(2);
+            } else if (oneDecimalStats.includes(stat)) {
+                return val.toFixed(1);
+            }
+            return val;
+        }
+        
+        function updateBatterLeaderboard() {
+            const stat = document.getElementById('batterStat').value;
+            const league = document.getElementById('batterLeague').value;
+            const count = parseInt(document.getElementById('batterCount').value);
+            const qualifiedOnly = document.getElementById('batterQualified').checked;
+            const maxAge = document.getElementById('batterMaxAge').value ? parseInt(document.getElementById('batterMaxAge').value) : null;
+            
+            // Filter by league
+            let filtered = batterData.filter(p => league === 'MLB' || p.league === league);
+            
+            // Filter by age
+            if (maxAge) {
+                filtered = filtered.filter(p => p.age && p.age <= maxAge);
+            }
+            
+            // Filter by qualifier (3.1 PA per team game = ~502 PA for full season, scale by games played)
+            if (qualifiedOnly) {
+                // Use 3.1 PA per team game as qualifier
+                const qualifyingPA = 502; // Full season qualifier
+                filtered = filtered.filter(p => p.pa >= qualifyingPA * 0.5); // At least half-season
+            }
+            
+            // Sort - descending for most stats, but some may need ascending
+            const ascending = false; // All batter stats are "higher is better"
+            filtered.sort((a, b) => ascending ? a[stat] - b[stat] : b[stat] - a[stat]);
+            
+            // Take top N
+            const leaders = filtered.slice(0, count);
+            
+            // Highlight the sorted column
+            ['rc', 'hr', 'rbi', 'r', 'h', 'sb', 'avg', 'obp', 'slg', 'ops'].forEach(s => {
+                const th = document.getElementById('th-' + s);
+                if (th) th.style.backgroundColor = (s === stat) ? '#fef3c7' : '';
+            });
+            
+            // Build table rows
+            const tbody = document.getElementById('batterLeaderboardBody');
+            tbody.innerHTML = leaders.map(p => {
+                const hs = 'background-color: #fef3c7; font-weight: bold;';
+                let row = '<tr class="hover:bg-blue-50">';
+                row += '<td class="py-1 px-2">' + p.name + '</td>';
+                row += '<td class="py-1 px-2">' + p.teamAbbr + '</td>';
+                row += '<td class="text-right py-1 px-2">' + (p.age || '') + '</td>';
+                row += '<td class="text-right py-1 px-2">' + p.g + '</td>';
+                row += '<td class="text-right py-1 px-2">' + p.pa + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'rc' ? hs : '') + '">' + p.rc + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'hr' ? hs : '') + '">' + p.hr + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'rbi' ? hs : '') + '">' + p.rbi + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'r' ? hs : '') + '">' + p.r + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'h' ? hs : '') + '">' + p.h + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'sb' ? hs : '') + '">' + p.sb + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'avg' ? hs : '') + '">' + formatRate(p.avg) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'obp' ? hs : '') + '">' + formatRate(p.obp) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'slg' ? hs : '') + '">' + formatRate(p.slg) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'ops' ? hs : '') + '">' + formatRate(p.ops) + '</td>';
+                row += '</tr>';
+                return row;
+            }).join('');
+        }
+        
+        function updatePitcherLeaderboard() {
+            const stat = document.getElementById('pitcherStat').value;
+            const league = document.getElementById('pitcherLeague').value;
+            const count = parseInt(document.getElementById('pitcherCount').value);
+            const qualifiedOnly = document.getElementById('pitcherQualified').checked;
+            const maxAge = document.getElementById('pitcherMaxAge').value ? parseInt(document.getElementById('pitcherMaxAge').value) : null;
+            
+            // Filter by league
+            let filtered = pitcherData.filter(p => league === 'MLB' || p.league === league);
+            
+            // Filter by age
+            if (maxAge) {
+                filtered = filtered.filter(p => p.age && p.age <= maxAge);
+            }
+            
+            // Filter by qualifier (1 IP per team game = ~162 IP for full season)
+            if (qualifiedOnly) {
+                const qualifyingIP = 162;
+                filtered = filtered.filter(p => p.ip >= qualifyingIP * 0.5);
+            }
+            
+            // Sort - ascending for ERA, WHIP, FIP; descending for others
+            const ascending = ['era', 'whip', 'fip'].includes(stat);
+            filtered.sort((a, b) => ascending ? a[stat] - b[stat] : b[stat] - a[stat]);
+            
+            // Take top N
+            const leaders = filtered.slice(0, count);
+            
+            // Highlight the sorted column
+            ['fipar', 'w', 'sv', 'k', 'era', 'whip', 'fip'].forEach(s => {
+                const th = document.getElementById('th-' + s);
+                if (th) th.style.backgroundColor = (s === stat) ? '#fef3c7' : '';
+            });
+            
+            // Build table rows
+            const tbody = document.getElementById('pitcherLeaderboardBody');
+            tbody.innerHTML = leaders.map(p => {
+                const hs = 'background-color: #fef3c7; font-weight: bold;';
+                let row = '<tr class="hover:bg-blue-50">';
+                row += '<td class="py-1 px-2">' + p.name + '</td>';
+                row += '<td class="py-1 px-2">' + p.teamAbbr + '</td>';
+                row += '<td class="text-right py-1 px-2">' + (p.age || '') + '</td>';
+                row += '<td class="text-right py-1 px-2">' + p.g + '</td>';
+                row += '<td class="text-right py-1 px-2">' + p.ip.toFixed(1) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'fipar' ? hs : '') + '">' + p.fipar + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'w' ? hs : '') + '">' + p.w + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'sv' ? hs : '') + '">' + p.sv + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'k' ? hs : '') + '">' + p.k + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'era' ? hs : '') + '">' + p.era.toFixed(2) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'whip' ? hs : '') + '">' + p.whip.toFixed(2) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'fip' ? hs : '') + '">' + p.fip.toFixed(2) + '</td>';
+                row += '</tr>';
+                return row;
+            }).join('');
+        }
+        
         // Initialize on page load
         updateAllCharts();
+        updateBatterLeaderboard();
+        updatePitcherLeaderboard();
     </script>
 </body>
 </html>`;
