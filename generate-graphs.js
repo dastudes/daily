@@ -19,7 +19,7 @@ async function fetchStandings(season) {
 
 // Fetch team stats
 async function fetchTeamStats(teamId, season) {
-    const response = await fetch(`${API_BASE}/teams/${teamId}/stats?stats=season&season=${season}&group=hitting,pitching`);
+    const response = await fetch(`${API_BASE}/teams/${teamId}/stats?stats=season&season=${season}&group=hitting,pitching,fielding`);
     const data = await response.json();
     return data.stats || [];
 }
@@ -90,31 +90,19 @@ function calculateDER(stats, teamName) {
     const k = stats.strikeOuts || 0;     // Strikeouts by pitchers
     
     // Check if errors and double plays are available
-    const hasErrors = stats.errors !== undefined;
-    const hasDP = stats.doublePlays !== undefined;
-    
-    // Log first team's available stats for debugging
-    if (teamName && teamName.includes('Yankees')) {
-        console.log(`DER Debug for ${teamName}: IP=${ip}, H=${h}, HR=${hr}, K=${k}, E=${stats.errors}, DP=${stats.doublePlays}`);
-    }
-    
-    // If we don't have errors/DP, use simplified formula
-    // Simplified: DER ≈ 1 - (H - HR) / (IP * 3 - K + H - HR)
-    // This approximates balls in play that became hits vs total balls in play
-    if (!hasErrors || !hasDP) {
-        const hitsOnBIP = h - hr;  // Hits on balls in play (exclude HR)
-        const bip = (ip * 3) - k + hitsOnBIP;  // Approximate balls in play
-        if (bip <= 0) return 0;
-        return 1 - (hitsOnBIP / bip);
-    }
-    
     const e = stats.errors || 0;
     const dp = stats.doublePlays || 0;
     
+    // Log first team's available stats for debugging
+    if (teamName && teamName.includes('Yankees')) {
+        console.log(`DER Debug for ${teamName}: IP=${ip}, H=${h}, HR=${hr}, K=${k}, E=${e}, DP=${dp}`);
+    }
+    
+    // DER = 1 - ((H + E - HR) / ((IP*3) + H + E - DP - HR - K))
     const numerator = h + e - hr;
     const denominator = (ip * 3) + h + e - dp - hr - k;
     
-    if (denominator === 0) return 0;
+    if (denominator <= 0) return 0;
     
     return 1 - (numerator / denominator);
 }
@@ -245,6 +233,7 @@ async function generateHTML() {
             const stats = await fetchTeamStats(team.id, season);
             let hittingStats = {};
             let pitchingStats = {};
+            let fieldingStats = {};
             
             for (const statGroup of stats) {
                 if (statGroup.group && statGroup.group.displayName === 'hitting' && statGroup.splits && statGroup.splits.length > 0) {
@@ -253,6 +242,17 @@ async function generateHTML() {
                 if (statGroup.group && statGroup.group.displayName === 'pitching' && statGroup.splits && statGroup.splits.length > 0) {
                     pitchingStats = statGroup.splits[0].stat;
                 }
+                if (statGroup.group && statGroup.group.displayName === 'fielding' && statGroup.splits && statGroup.splits.length > 0) {
+                    fieldingStats = statGroup.splits[0].stat;
+                }
+            }
+            
+            // Merge fielding stats into pitching stats for DER calculation
+            if (fieldingStats.errors !== undefined) {
+                pitchingStats.errors = fieldingStats.errors;
+            }
+            if (fieldingStats.doublePlays !== undefined) {
+                pitchingStats.doublePlays = fieldingStats.doublePlays;
             }
             
             const w = standings.w;
@@ -414,8 +414,10 @@ function generateHTMLContent(season, dateStr, teamData) {
             html += `</tr></thead><tbody class="text-sm">`;
             
             division.teams.forEach(team => {
-                // Check if team is in wild card spot (ranks 1-3)
-                const wcAsterisk = (team.wcRank && team.wcRank <= 3 && parseFloat(team.gb) > 0) ? '*' : '';
+                // Wild card team = not division winner (gb !== "-") but in playoff spot (wcGb is "-" or starts with "+")
+                const isDivisionWinner = team.gb === '-' || team.gb === '0.0';
+                const inWildCardSpot = team.wcGb === '-' || (team.wcGb && team.wcGb.startsWith('+'));
+                const wcAsterisk = (!isDivisionWinner && inWildCardSpot) ? '*' : '';
                 const bbrefUrl = `https://www.baseball-reference.com/teams/${team.abbreviation}/${season}.shtml`;
                 
                 html += `<tr class="hover:bg-blue-50 leading-tight">`;
