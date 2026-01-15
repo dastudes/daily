@@ -417,35 +417,48 @@ function generateHTMLContent(season, dateStr, teamData) {
             html += `<h3 class="text-lg font-semibold text-gray-800 mb-1">${division.name}</h3>`;
             html += `<table class="standings-table w-full text-gray-800 text-sm">`;
             html += `<thead><tr class="border-b-2 border-blue-800">`;
-            html += `<th class="text-left py-1 px-2" style="width: 32%;">Team</th>`;
+            html += `<th class="text-left py-1 px-2" style="width: 30%;">Team</th>`;
             html += `<th class="text-center py-1 px-2" style="width: 7%;">W</th>`;
             html += `<th class="text-center py-1 px-2" style="width: 7%;">L</th>`;
             html += `<th class="text-center py-1 px-2" style="width: 7%;">GB</th>`;
             html += `<th class="text-center py-1 px-2" style="width: 7%;">WC</th>`;
             html += `<th class="text-center py-1 px-2" style="width: 9%;">PCT</th>`;
+            html += `<th class="text-center py-1 px-2" style="width: 11%;">PythVar</th>`;
             html += `<th class="text-center py-1 px-2" style="width: 9%;">RS</th>`;
             html += `<th class="text-center py-1 px-2" style="width: 9%;">RA</th>`;
-            html += `<th class="text-right py-1 px-2" style="width: 13%;">PythVar</th>`;
             html += `</tr></thead><tbody class="text-sm">`;
             
             division.teams.forEach(team => {
                 // Clinch indicator from API: z=Division+Best Record, y=Division, w=Wild Card
                 const clinchSuffix = team.clinchIndicator ? `-${team.clinchIndicator}` : '';
-                const bbrefUrl = `https://www.baseball-reference.com/teams/${team.abbreviation}/${season}.shtml`;
+                
+                // Fangraphs team slug mapping
+                const fangraphsSlugs = {
+                    'ARI': 'diamondbacks', 'ATL': 'braves', 'BAL': 'orioles', 'BOS': 'red-sox',
+                    'CHC': 'cubs', 'CWS': 'white-sox', 'CIN': 'reds', 'CLE': 'guardians',
+                    'COL': 'rockies', 'DET': 'tigers', 'HOU': 'astros', 'KC': 'royals',
+                    'LAA': 'angels', 'LAD': 'dodgers', 'MIA': 'marlins', 'MIL': 'brewers',
+                    'MIN': 'twins', 'NYM': 'mets', 'NYY': 'yankees', 'OAK': 'athletics',
+                    'PHI': 'phillies', 'PIT': 'pirates', 'SD': 'padres', 'SF': 'giants',
+                    'SEA': 'mariners', 'STL': 'cardinals', 'TB': 'rays', 'TEX': 'rangers',
+                    'TOR': 'blue-jays', 'WSH': 'nationals'
+                };
+                const fgSlug = fangraphsSlugs[team.abbreviation] || team.abbreviation.toLowerCase();
+                const teamUrl = `https://www.fangraphs.com/teams/${fgSlug}`;
                 
                 // Format WC Rank - show rank number, or "-" for division leaders
                 const wcRankDisplay = team.wcRank ? team.wcRank : '-';
                 
                 html += `<tr class="hover:bg-blue-50 leading-tight">`;
-                html += `<td class="py-0 px-2"><a href="${bbrefUrl}" target="_blank" style="color: #2563eb; text-decoration: underline;">${team.name}</a>${clinchSuffix}</td>`;
+                html += `<td class="py-0 px-2"><a href="${teamUrl}" target="_blank" style="color: #2563eb; text-decoration: underline;">${team.name}</a>${clinchSuffix}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.w}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.l}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.gb === '0.0' ? '-' : team.gb}</td>`;
                 html += `<td class="text-center py-0 px-2">${wcRankDisplay}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.pct}</td>`;
+                html += `<td class="text-center py-0 px-2">${team.pythVar.toFixed(1)}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.rs}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.ra}</td>`;
-                html += `<td class="text-right py-0 px-2">${team.pythVar.toFixed(1)}</td>`;
                 html += `</tr>`;
             });
             
@@ -1273,16 +1286,53 @@ function generateHTMLContent(season, dateStr, teamData) {
         }
         
         function downloadChart(chartNum) {
-            let chart;
-            if (chartNum === 1) chart = chart1;
-            else if (chartNum === 2) chart = chart2;
-            else if (chartNum === 3) chart = chart3;
+            let chart, title, subtitle, canvasId;
+            if (chartNum === 1) {
+                chart = chart1;
+                canvasId = 'chart1';
+                title = 'Run Differential: ${season}';
+                subtitle = 'Runs Scored vs Runs Allowed';
+            } else if (chartNum === 2) {
+                chart = chart2;
+                canvasId = 'chart2';
+                title = 'Offensive Profile: ${season}';
+                subtitle = 'OBP vs ISO';
+            } else if (chartNum === 3) {
+                chart = chart3;
+                canvasId = 'chart3';
+                title = 'Pitching & Defense: ${season}';
+                subtitle = 'FIP vs DER';
+            }
             
             if (chart) {
-                const url = chart.toBase64Image();
+                const canvas = document.getElementById(canvasId);
+                const tempCanvas = document.createElement('canvas');
+                const ctx = tempCanvas.getContext('2d');
+                
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height + 110;
+                
+                // White background
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                
+                // Title
+                ctx.fillStyle = '#1f2937';
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(title, tempCanvas.width / 2, 40);
+                
+                // Subtitle
+                ctx.fillStyle = '#6b7280';
+                ctx.font = '18px Arial';
+                ctx.fillText(subtitle + ' - ' + currentLeague, tempCanvas.width / 2, 70);
+                
+                // Draw the chart
+                ctx.drawImage(canvas, 0, 110);
+                
                 const link = document.createElement('a');
-                link.download = 'baseball-graph-' + chartNum + '.png';
-                link.href = url;
+                link.download = 'baseball-graph-' + chartNum + '-${season}.png';
+                link.href = tempCanvas.toDataURL();
                 link.click();
             }
         }
