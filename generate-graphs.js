@@ -418,14 +418,14 @@ function generateHTMLContent(season, dateStr, teamData) {
             html += `<table class="standings-table w-full text-gray-800 text-sm">`;
             html += `<thead><tr class="border-b-2 border-blue-800">`;
             html += `<th class="text-left py-1 px-2" style="width: 30%;">Team</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 7%;">W</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 7%;">L</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 7%;">GB</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 7%;">WC</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 9%;">PCT</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 11%;">PythVar</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 9%;">RS</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 9%;">RA</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 7%;">W</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 7%;">L</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 7%;">GB</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 7%;">WC</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 9%;">PCT</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 11%;">PythVar</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 9%;">RS</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 9%;">RA</th>`;
             html += `</tr></thead><tbody class="text-sm">`;
             
             division.teams.forEach(team => {
@@ -451,14 +451,14 @@ function generateHTMLContent(season, dateStr, teamData) {
                 
                 html += `<tr class="hover:bg-blue-50 leading-tight">`;
                 html += `<td class="py-0 px-2"><a href="${teamUrl}" target="_blank" style="color: #2563eb; text-decoration: underline;">${team.name}</a>${clinchSuffix}</td>`;
-                html += `<td class="text-center py-0 px-2">${team.w}</td>`;
-                html += `<td class="text-center py-0 px-2">${team.l}</td>`;
-                html += `<td class="text-center py-0 px-2">${team.gb === '0.0' ? '-' : team.gb}</td>`;
-                html += `<td class="text-center py-0 px-2">${wcRankDisplay}</td>`;
-                html += `<td class="text-center py-0 px-2">${team.pct}</td>`;
-                html += `<td class="text-center py-0 px-2">${team.pythVar.toFixed(1)}</td>`;
-                html += `<td class="text-center py-0 px-2">${team.rs}</td>`;
-                html += `<td class="text-center py-0 px-2">${team.ra}</td>`;
+                html += `<td class="text-right py-0 px-2">${team.w}</td>`;
+                html += `<td class="text-right py-0 px-2">${team.l}</td>`;
+                html += `<td class="text-right py-0 px-2">${team.gb === '0.0' ? '-' : team.gb}</td>`;
+                html += `<td class="text-right py-0 px-2">${wcRankDisplay}</td>`;
+                html += `<td class="text-right py-0 px-2">${team.pct}</td>`;
+                html += `<td class="text-right py-0 px-2">${team.pythVar.toFixed(1)}</td>`;
+                html += `<td class="text-right py-0 px-2">${team.rs}</td>`;
+                html += `<td class="text-right py-0 px-2">${team.ra}</td>`;
                 html += `</tr>`;
             });
             
