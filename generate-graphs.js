@@ -693,6 +693,119 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         .standings-table th:not(:first-child) {
             font-family: "Courier New", Courier, monospace;
         }
+        
+        /* Leaderboard Styles */
+        .leaderboard-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #8B4513, #CD853F, #8B4513);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(139, 69, 19, 0.3);
+        }
+        .leaderboard-header h2 {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .leaderboard-header p {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+        .leaderboard-box {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px solid #CD853F;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(139, 69, 19, 0.15);
+        }
+        .leaderboard-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #CD853F;
+            color: #8B4513;
+        }
+        .leaderboard-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .leaderboard-controls label {
+            font-size: 0.9em;
+        }
+        .leaderboard-controls select,
+        .leaderboard-controls input[type="number"] {
+            padding: 4px 8px;
+            border: 1px solid #CD853F;
+            border-radius: 4px;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+        .leaderboard-controls select:hover,
+        .leaderboard-controls input[type="number"]:hover {
+            border-color: #8B4513;
+        }
+        .leaderboard-controls input[type="number"] {
+            width: 60px;
+        }
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        .leaderboard-table th {
+            background-color: #F5DEB3;
+            padding: 8px 6px;
+            border-bottom: 2px solid #8B4513;
+            color: #2F2F2F;
+            font-weight: bold;
+        }
+        .leaderboard-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        .leaderboard-table th.sortable:hover {
+            background-color: #E8D5B7;
+        }
+        .leaderboard-table th.sorted {
+            background-color: #DEB887;
+        }
+        .leaderboard-table th.sorted::after {
+            content: ' ▼';
+            font-size: 0.7em;
+        }
+        .leaderboard-table th.sorted.asc::after {
+            content: ' ▲';
+        }
+        .leaderboard-table td {
+            padding: 6px;
+            border-bottom: 1px solid #E8D5B7;
+        }
+        .leaderboard-table tr:hover {
+            background-color: #FFFAF0;
+        }
+        .leaderboard-table td:first-child {
+            font-family: Georgia, "Times New Roman", serif;
+        }
+        .leaderboard-table td:not(:first-child):not(:nth-child(2)) {
+            font-family: "Courier New", Courier, monospace;
+        }
+        .leaderboard-table .text-left {
+            text-align: left;
+        }
+        .leaderboard-table .text-right {
+            text-align: right;
+        }
+        .leaderboard-table td.sorted-col {
+            background-color: #FEF3C7;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -841,133 +954,108 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
     
     <!-- Leaderboards Section -->
     <div class="container" style="margin-top: 30px;">
-        <div class="standings-container">
-            <h2 style="text-align: center; margin-bottom: 20px;">Player Leaderboards</h2>
-            
-            <!-- Batting Leaderboard -->
-            <div class="leaderboard-section" style="margin-bottom: 30px;">
-                <h3 style="margin-bottom: 10px;">Batting Leaders</h3>
-                <div class="leaderboard-controls" style="display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; align-items: center;">
-                    <label>Sort by: 
-                        <select id="batterStat" onchange="updateBatterLeaderboard()">
-                            <option value="rc" selected>RC</option>
-                            <option value="hr">HR</option>
-                            <option value="rbi">RBI</option>
-                            <option value="r">Runs</option>
-                            <option value="h">Hits</option>
-                            <option value="sb">SB</option>
-                            <option value="avg">AVG</option>
-                            <option value="obp">OBP</option>
-                            <option value="slg">SLG</option>
-                            <option value="ops">OPS</option>
-                        </select>
-                    </label>
-                    <label>League: 
-                        <select id="batterLeague" onchange="updateBatterLeaderboard()">
-                            <option value="MLB">MLB</option>
-                            <option value="AL">AL</option>
-                            <option value="NL">NL</option>
-                        </select>
-                    </label>
-                    <label>Show: 
-                        <select id="batterCount" onchange="updateBatterLeaderboard()">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
-                    </label>
-                    <label>
-                        <input type="checkbox" id="batterQualified" onchange="updateBatterLeaderboard()"> Qualified only
-                    </label>
-                    <label>Max age: 
-                        <input type="number" id="batterMaxAge" min="18" max="50" value="" placeholder="Any" style="width: 60px;" onchange="updateBatterLeaderboard()">
-                    </label>
-                </div>
-                <table class="standings-table" style="width: 100%;">
-                    <thead>
-                        <tr class="border-b-2 border-blue-800">
-                            <th class="text-left py-1 px-2">Player</th>
-                            <th class="text-left py-1 px-2">Team</th>
-                            <th class="text-right py-1 px-2">Age</th>
-                            <th class="text-right py-1 px-2">G</th>
-                            <th class="text-right py-1 px-2">PA</th>
-                            <th class="text-right py-1 px-2" id="th-rc">RC</th>
-                            <th class="text-right py-1 px-2" id="th-hr">HR</th>
-                            <th class="text-right py-1 px-2" id="th-rbi">RBI</th>
-                            <th class="text-right py-1 px-2" id="th-r">R</th>
-                            <th class="text-right py-1 px-2" id="th-h">H</th>
-                            <th class="text-right py-1 px-2" id="th-sb">SB</th>
-                            <th class="text-right py-1 px-2" id="th-avg">AVG</th>
-                            <th class="text-right py-1 px-2" id="th-obp">OBP</th>
-                            <th class="text-right py-1 px-2" id="th-slg">SLG</th>
-                            <th class="text-right py-1 px-2" id="th-ops">OPS</th>
-                        </tr>
-                    </thead>
-                    <tbody id="batterLeaderboardBody">
-                    </tbody>
-                </table>
+        <div class="leaderboard-header">
+            <h2>Player Leaderboards</h2>
+            <p>Click column headers to sort • Click again to reverse</p>
+        </div>
+        
+        <!-- Batting Leaderboard -->
+        <div class="leaderboard-box">
+            <div class="leaderboard-title">Batting Leaders</div>
+            <div class="leaderboard-controls">
+                <label>League: 
+                    <select id="batterLeague" onchange="updateBatterLeaderboard()">
+                        <option value="MLB">MLB</option>
+                        <option value="AL">AL</option>
+                        <option value="NL">NL</option>
+                    </select>
+                </label>
+                <label>Show: 
+                    <select id="batterCount" onchange="updateBatterLeaderboard()">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </label>
+                <label>
+                    <input type="checkbox" id="batterQualified" onchange="updateBatterLeaderboard()"> Qualified only
+                </label>
+                <label>Max age: 
+                    <input type="number" id="batterMaxAge" min="18" max="50" value="" placeholder="Any" onchange="updateBatterLeaderboard()">
+                </label>
             </div>
-            
-            <!-- Pitching Leaderboard -->
-            <div class="leaderboard-section">
-                <h3 style="margin-bottom: 10px;">Pitching Leaders</h3>
-                <div class="leaderboard-controls" style="display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; align-items: center;">
-                    <label>Sort by: 
-                        <select id="pitcherStat" onchange="updatePitcherLeaderboard()">
-                            <option value="fipar" selected>FIPAR</option>
-                            <option value="w">Wins</option>
-                            <option value="sv">Saves</option>
-                            <option value="k">Strikeouts</option>
-                            <option value="era">ERA</option>
-                            <option value="whip">WHIP</option>
-                            <option value="fip">FIP</option>
-                            <option value="ip">IP</option>
-                        </select>
-                    </label>
-                    <label>League: 
-                        <select id="pitcherLeague" onchange="updatePitcherLeaderboard()">
-                            <option value="MLB">MLB</option>
-                            <option value="AL">AL</option>
-                            <option value="NL">NL</option>
-                        </select>
-                    </label>
-                    <label>Show: 
-                        <select id="pitcherCount" onchange="updatePitcherLeaderboard()">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
-                    </label>
-                    <label>
-                        <input type="checkbox" id="pitcherQualified" onchange="updatePitcherLeaderboard()"> Qualified only
-                    </label>
-                    <label>Max age: 
-                        <input type="number" id="pitcherMaxAge" min="18" max="50" value="" placeholder="Any" style="width: 60px;" onchange="updatePitcherLeaderboard()">
-                    </label>
-                </div>
-                <table class="standings-table" style="width: 100%;">
-                    <thead>
-                        <tr class="border-b-2 border-blue-800">
-                            <th class="text-left py-1 px-2">Player</th>
-                            <th class="text-left py-1 px-2">Team</th>
-                            <th class="text-right py-1 px-2">Age</th>
-                            <th class="text-right py-1 px-2">G</th>
-                            <th class="text-right py-1 px-2">IP</th>
-                            <th class="text-right py-1 px-2" id="th-fipar">FIPAR</th>
-                            <th class="text-right py-1 px-2" id="th-w">W</th>
-                            <th class="text-right py-1 px-2" id="th-sv">SV</th>
-                            <th class="text-right py-1 px-2" id="th-k">K</th>
-                            <th class="text-right py-1 px-2" id="th-era">ERA</th>
-                            <th class="text-right py-1 px-2" id="th-whip">WHIP</th>
-                            <th class="text-right py-1 px-2" id="th-fip">FIP</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pitcherLeaderboardBody">
-                    </tbody>
-                </table>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th class="text-left">Player</th>
+                        <th class="text-left">Team</th>
+                        <th class="text-right">Age</th>
+                        <th class="text-right">G</th>
+                        <th class="text-right">PA</th>
+                        <th class="text-right sortable" id="th-rc" onclick="sortBatters('rc')">RC</th>
+                        <th class="text-right sortable" id="th-hr" onclick="sortBatters('hr')">HR</th>
+                        <th class="text-right sortable" id="th-rbi" onclick="sortBatters('rbi')">RBI</th>
+                        <th class="text-right sortable" id="th-r" onclick="sortBatters('r')">R</th>
+                        <th class="text-right sortable" id="th-h" onclick="sortBatters('h')">H</th>
+                        <th class="text-right sortable" id="th-sb" onclick="sortBatters('sb')">SB</th>
+                        <th class="text-right sortable" id="th-avg" onclick="sortBatters('avg')">AVG</th>
+                        <th class="text-right sortable" id="th-obp" onclick="sortBatters('obp')">OBP</th>
+                        <th class="text-right sortable" id="th-slg" onclick="sortBatters('slg')">SLG</th>
+                        <th class="text-right sortable" id="th-ops" onclick="sortBatters('ops')">OPS</th>
+                    </tr>
+                </thead>
+                <tbody id="batterLeaderboardBody">
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pitching Leaderboard -->
+        <div class="leaderboard-box">
+            <div class="leaderboard-title">Pitching Leaders</div>
+            <div class="leaderboard-controls">
+                <label>League: 
+                    <select id="pitcherLeague" onchange="updatePitcherLeaderboard()">
+                        <option value="MLB">MLB</option>
+                        <option value="AL">AL</option>
+                        <option value="NL">NL</option>
+                    </select>
+                </label>
+                <label>Show: 
+                    <select id="pitcherCount" onchange="updatePitcherLeaderboard()">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </label>
+                <label>
+                    <input type="checkbox" id="pitcherQualified" onchange="updatePitcherLeaderboard()"> Qualified only
+                </label>
+                <label>Max age: 
+                    <input type="number" id="pitcherMaxAge" min="18" max="50" value="" placeholder="Any" onchange="updatePitcherLeaderboard()">
+                </label>
             </div>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th class="text-left">Player</th>
+                        <th class="text-left">Team</th>
+                        <th class="text-right">Age</th>
+                        <th class="text-right">G</th>
+                        <th class="text-right sortable" id="th-ip" onclick="sortPitchers('ip')">IP</th>
+                        <th class="text-right sortable" id="th-fipar" onclick="sortPitchers('fipar')">FIPAR</th>
+                        <th class="text-right sortable" id="th-w" onclick="sortPitchers('w')">W</th>
+                        <th class="text-right sortable" id="th-sv" onclick="sortPitchers('sv')">SV</th>
+                        <th class="text-right sortable" id="th-k" onclick="sortPitchers('k')">K</th>
+                        <th class="text-right sortable" id="th-era" onclick="sortPitchers('era')">ERA</th>
+                        <th class="text-right sortable" id="th-whip" onclick="sortPitchers('whip')">WHIP</th>
+                        <th class="text-right sortable" id="th-fip" onclick="sortPitchers('fip')">FIP</th>
+                    </tr>
+                </thead>
+                <tbody id="pitcherLeaderboardBody">
+                </tbody>
+            </table>
         </div>
     </div>
     
@@ -978,6 +1066,12 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         const pitcherData = ${JSON.stringify(playerStats.pitchers)};
         let currentLeague = 'AL';
         let chart1, chart2, chart3;
+        
+        // Leaderboard sort state
+        let batterSortStat = 'rc';
+        let batterSortAsc = false;
+        let pitcherSortStat = 'fipar';
+        let pitcherSortAsc = false;
         
         // Plugin to draw team labels with collision detection
         const labelPlugin = {
@@ -1501,8 +1595,30 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             return val;
         }
         
+        function sortBatters(stat) {
+            if (batterSortStat === stat) {
+                batterSortAsc = !batterSortAsc;
+            } else {
+                batterSortStat = stat;
+                batterSortAsc = false; // Default descending for all batter stats
+            }
+            updateBatterLeaderboard();
+        }
+        
+        function sortPitchers(stat) {
+            if (pitcherSortStat === stat) {
+                pitcherSortAsc = !pitcherSortAsc;
+            } else {
+                pitcherSortStat = stat;
+                // Default ascending for ERA, WHIP, FIP; descending for others
+                pitcherSortAsc = ['era', 'whip', 'fip'].includes(stat);
+            }
+            updatePitcherLeaderboard();
+        }
+        
         function updateBatterLeaderboard() {
-            const stat = document.getElementById('batterStat').value;
+            const stat = batterSortStat;
+            const ascending = batterSortAsc;
             const league = document.getElementById('batterLeague').value;
             const count = parseInt(document.getElementById('batterCount').value);
             const qualifiedOnly = document.getElementById('batterQualified').checked;
@@ -1518,51 +1634,56 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             
             // Filter by qualifier (3.1 PA per team game = ~502 PA for full season, scale by games played)
             if (qualifiedOnly) {
-                // Use 3.1 PA per team game as qualifier
-                const qualifyingPA = 502; // Full season qualifier
-                filtered = filtered.filter(p => p.pa >= qualifyingPA * 0.5); // At least half-season
+                const qualifyingPA = 502;
+                filtered = filtered.filter(p => p.pa >= qualifyingPA * 0.5);
             }
             
-            // Sort - descending for most stats, but some may need ascending
-            const ascending = false; // All batter stats are "higher is better"
+            // Sort
             filtered.sort((a, b) => ascending ? a[stat] - b[stat] : b[stat] - a[stat]);
             
             // Take top N
             const leaders = filtered.slice(0, count);
             
-            // Highlight the sorted column
-            ['rc', 'hr', 'rbi', 'r', 'h', 'sb', 'avg', 'obp', 'slg', 'ops'].forEach(s => {
+            // Update header styling
+            const sortableStats = ['rc', 'hr', 'rbi', 'r', 'h', 'sb', 'avg', 'obp', 'slg', 'ops'];
+            sortableStats.forEach(s => {
                 const th = document.getElementById('th-' + s);
-                if (th) th.style.backgroundColor = (s === stat) ? '#fef3c7' : '';
+                if (th) {
+                    th.classList.remove('sorted', 'asc');
+                    if (s === stat) {
+                        th.classList.add('sorted');
+                        if (ascending) th.classList.add('asc');
+                    }
+                }
             });
             
             // Build table rows
             const tbody = document.getElementById('batterLeaderboardBody');
             tbody.innerHTML = leaders.map(p => {
-                const hs = 'background-color: #fef3c7; font-weight: bold;';
-                let row = '<tr class="hover:bg-blue-50">';
-                row += '<td class="py-1 px-2">' + p.name + '</td>';
-                row += '<td class="py-1 px-2">' + p.teamAbbr + '</td>';
-                row += '<td class="text-right py-1 px-2">' + (p.age || '') + '</td>';
-                row += '<td class="text-right py-1 px-2">' + p.g + '</td>';
-                row += '<td class="text-right py-1 px-2">' + p.pa + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'rc' ? hs : '') + '">' + p.rc + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'hr' ? hs : '') + '">' + p.hr + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'rbi' ? hs : '') + '">' + p.rbi + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'r' ? hs : '') + '">' + p.r + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'h' ? hs : '') + '">' + p.h + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'sb' ? hs : '') + '">' + p.sb + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'avg' ? hs : '') + '">' + formatRate(p.avg) + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'obp' ? hs : '') + '">' + formatRate(p.obp) + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'slg' ? hs : '') + '">' + formatRate(p.slg) + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'ops' ? hs : '') + '">' + formatRate(p.ops) + '</td>';
+                let row = '<tr>';
+                row += '<td>' + p.name + '</td>';
+                row += '<td>' + p.teamAbbr + '</td>';
+                row += '<td class="text-right">' + (p.age || '') + '</td>';
+                row += '<td class="text-right">' + p.g + '</td>';
+                row += '<td class="text-right">' + p.pa + '</td>';
+                row += '<td class="text-right' + (stat === 'rc' ? ' sorted-col' : '') + '">' + p.rc + '</td>';
+                row += '<td class="text-right' + (stat === 'hr' ? ' sorted-col' : '') + '">' + p.hr + '</td>';
+                row += '<td class="text-right' + (stat === 'rbi' ? ' sorted-col' : '') + '">' + p.rbi + '</td>';
+                row += '<td class="text-right' + (stat === 'r' ? ' sorted-col' : '') + '">' + p.r + '</td>';
+                row += '<td class="text-right' + (stat === 'h' ? ' sorted-col' : '') + '">' + p.h + '</td>';
+                row += '<td class="text-right' + (stat === 'sb' ? ' sorted-col' : '') + '">' + p.sb + '</td>';
+                row += '<td class="text-right' + (stat === 'avg' ? ' sorted-col' : '') + '">' + formatRate(p.avg) + '</td>';
+                row += '<td class="text-right' + (stat === 'obp' ? ' sorted-col' : '') + '">' + formatRate(p.obp) + '</td>';
+                row += '<td class="text-right' + (stat === 'slg' ? ' sorted-col' : '') + '">' + formatRate(p.slg) + '</td>';
+                row += '<td class="text-right' + (stat === 'ops' ? ' sorted-col' : '') + '">' + formatRate(p.ops) + '</td>';
                 row += '</tr>';
                 return row;
             }).join('');
         }
         
         function updatePitcherLeaderboard() {
-            const stat = document.getElementById('pitcherStat').value;
+            const stat = pitcherSortStat;
+            const ascending = pitcherSortAsc;
             const league = document.getElementById('pitcherLeague').value;
             const count = parseInt(document.getElementById('pitcherCount').value);
             const qualifiedOnly = document.getElementById('pitcherQualified').checked;
@@ -1582,36 +1703,41 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                 filtered = filtered.filter(p => p.ip >= qualifyingIP * 0.5);
             }
             
-            // Sort - ascending for ERA, WHIP, FIP; descending for others
-            const ascending = ['era', 'whip', 'fip'].includes(stat);
+            // Sort
             filtered.sort((a, b) => ascending ? a[stat] - b[stat] : b[stat] - a[stat]);
             
             // Take top N
             const leaders = filtered.slice(0, count);
             
-            // Highlight the sorted column
-            ['fipar', 'w', 'sv', 'k', 'era', 'whip', 'fip'].forEach(s => {
+            // Update header styling
+            const sortableStats = ['ip', 'fipar', 'w', 'sv', 'k', 'era', 'whip', 'fip'];
+            sortableStats.forEach(s => {
                 const th = document.getElementById('th-' + s);
-                if (th) th.style.backgroundColor = (s === stat) ? '#fef3c7' : '';
+                if (th) {
+                    th.classList.remove('sorted', 'asc');
+                    if (s === stat) {
+                        th.classList.add('sorted');
+                        if (ascending) th.classList.add('asc');
+                    }
+                }
             });
             
             // Build table rows
             const tbody = document.getElementById('pitcherLeaderboardBody');
             tbody.innerHTML = leaders.map(p => {
-                const hs = 'background-color: #fef3c7; font-weight: bold;';
-                let row = '<tr class="hover:bg-blue-50">';
-                row += '<td class="py-1 px-2">' + p.name + '</td>';
-                row += '<td class="py-1 px-2">' + p.teamAbbr + '</td>';
-                row += '<td class="text-right py-1 px-2">' + (p.age || '') + '</td>';
-                row += '<td class="text-right py-1 px-2">' + p.g + '</td>';
-                row += '<td class="text-right py-1 px-2">' + p.ip.toFixed(1) + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'fipar' ? hs : '') + '">' + p.fipar + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'w' ? hs : '') + '">' + p.w + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'sv' ? hs : '') + '">' + p.sv + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'k' ? hs : '') + '">' + p.k + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'era' ? hs : '') + '">' + p.era.toFixed(2) + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'whip' ? hs : '') + '">' + p.whip.toFixed(2) + '</td>';
-                row += '<td class="text-right py-1 px-2" style="' + (stat === 'fip' ? hs : '') + '">' + p.fip.toFixed(2) + '</td>';
+                let row = '<tr>';
+                row += '<td>' + p.name + '</td>';
+                row += '<td>' + p.teamAbbr + '</td>';
+                row += '<td class="text-right">' + (p.age || '') + '</td>';
+                row += '<td class="text-right">' + p.g + '</td>';
+                row += '<td class="text-right' + (stat === 'ip' ? ' sorted-col' : '') + '">' + p.ip.toFixed(1) + '</td>';
+                row += '<td class="text-right' + (stat === 'fipar' ? ' sorted-col' : '') + '">' + p.fipar + '</td>';
+                row += '<td class="text-right' + (stat === 'w' ? ' sorted-col' : '') + '">' + p.w + '</td>';
+                row += '<td class="text-right' + (stat === 'sv' ? ' sorted-col' : '') + '">' + p.sv + '</td>';
+                row += '<td class="text-right' + (stat === 'k' ? ' sorted-col' : '') + '">' + p.k + '</td>';
+                row += '<td class="text-right' + (stat === 'era' ? ' sorted-col' : '') + '">' + p.era.toFixed(2) + '</td>';
+                row += '<td class="text-right' + (stat === 'whip' ? ' sorted-col' : '') + '">' + p.whip.toFixed(2) + '</td>';
+                row += '<td class="text-right' + (stat === 'fip' ? ' sorted-col' : '') + '">' + p.fip.toFixed(2) + '</td>';
                 row += '</tr>';
                 return row;
             }).join('');
