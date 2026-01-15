@@ -417,29 +417,31 @@ function generateHTMLContent(season, dateStr, teamData) {
             html += `<h3 class="text-lg font-semibold text-gray-800 mb-1">${division.name}</h3>`;
             html += `<table class="w-full text-gray-800 text-sm">`;
             html += `<thead><tr class="border-b-2 border-blue-800">`;
-            html += `<th class="text-left py-1 px-2" style="width: 35%;">Team</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 8%;">W</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 8%;">L</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 8%;">GB</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 10%;">PCT</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 10%;">RS</th>`;
-            html += `<th class="text-center py-1 px-2" style="width: 10%;">RA</th>`;
-            html += `<th class="text-right py-1 px-2" style="width: 11%;">PythVar</th>`;
+            html += `<th class="text-left py-1 px-2" style="width: 32%;">Team</th>`;
+            html += `<th class="text-center py-1 px-2" style="width: 7%;">W</th>`;
+            html += `<th class="text-center py-1 px-2" style="width: 7%;">L</th>`;
+            html += `<th class="text-center py-1 px-2" style="width: 7%;">GB</th>`;
+            html += `<th class="text-center py-1 px-2" style="width: 7%;">WC</th>`;
+            html += `<th class="text-center py-1 px-2" style="width: 9%;">PCT</th>`;
+            html += `<th class="text-center py-1 px-2" style="width: 9%;">RS</th>`;
+            html += `<th class="text-center py-1 px-2" style="width: 9%;">RA</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 13%;">PythVar</th>`;
             html += `</tr></thead><tbody class="text-sm">`;
             
             division.teams.forEach(team => {
-                // Division winner has BOTH gb: "-" AND wcGb: "-"
-                // Wild card team has wcGb that starts with "+" OR wcGb: "-" but gb is NOT "-"
-                const isDivisionWinner = (team.gb === '-' || team.gb === '0.0') && team.wcGb === '-';
-                const inWildCardSpot = !isDivisionWinner && (team.wcGb === '-' || (team.wcGb && team.wcGb.startsWith('+')));
-                const wcAsterisk = inWildCardSpot ? '*' : '';
+                // Clinch indicator from API: z=Division+Best Record, y=Division, w=Wild Card
+                const clinchSuffix = team.clinchIndicator ? `-${team.clinchIndicator}` : '';
                 const bbrefUrl = `https://www.baseball-reference.com/teams/${team.abbreviation}/${season}.shtml`;
                 
+                // Format WC Rank - show rank number, or "-" for division leaders
+                const wcRankDisplay = team.wcRank ? team.wcRank : '-';
+                
                 html += `<tr class="hover:bg-blue-50 leading-tight">`;
-                html += `<td class="py-0 px-2"><a href="${bbrefUrl}" target="_blank" style="color: #2563eb; text-decoration: underline;">${team.name}</a>${wcAsterisk}</td>`;
+                html += `<td class="py-0 px-2"><a href="${bbrefUrl}" target="_blank" style="color: #2563eb; text-decoration: underline;">${team.name}</a>${clinchSuffix}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.w}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.l}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.gb === '0.0' ? '-' : team.gb}</td>`;
+                html += `<td class="text-center py-0 px-2">${wcRankDisplay}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.pct}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.rs}</td>`;
                 html += `<td class="text-center py-0 px-2">${team.ra}</td>`;
@@ -705,7 +707,8 @@ function generateHTMLContent(season, dateStr, teamData) {
                 <h2>${season} American League Standings</h2>
                 ${alStandingsHTML}
                 <div class="footer-note">
-                    <strong>*</strong> = Wild Card position | PythVar = Actual Wins - Pythagorean Expected Wins
+                    <strong>z</strong>=Clinched Division &amp; Best Record | <strong>y</strong>=Clinched Division | <strong>w</strong>=Clinched Wild Card<br>
+                    WC = Wild Card Rank | PythVar = Actual Wins − Pythagorean Expected Wins
                 </div>
             </div>
             
@@ -713,7 +716,8 @@ function generateHTMLContent(season, dateStr, teamData) {
                 <h2>${season} National League Standings</h2>
                 ${nlStandingsHTML}
                 <div class="footer-note">
-                    <strong>*</strong> = Wild Card position | PythVar = Actual Wins - Pythagorean Expected Wins
+                    <strong>z</strong>=Clinched Division &amp; Best Record | <strong>y</strong>=Clinched Division | <strong>w</strong>=Clinched Wild Card<br>
+                    WC = Wild Card Rank | PythVar = Actual Wins − Pythagorean Expected Wins
                 </div>
             </div>
         </div>
