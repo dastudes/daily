@@ -216,7 +216,7 @@
         
         <div class="header">
             <h1>Baseball Graphs Daily</h1>
-            <div style="margin-top: 10px; font-size: 0.9em;">2025 Season - Updated: Thursday, January 15, 2026 at 5:49 PM EST</div>
+            <div style="margin-top: 10px; font-size: 0.9em;">2025 Season - Updated: Thursday, January 15, 2026 at 6:17 PM EST</div>
         </div>
         
         <div class="about-section">
@@ -352,9 +352,143 @@
         </div>
     </div>
     
+    <!-- Leaderboards Section -->
+    <div class="container" style="margin-top: 30px;">
+        <div class="standings-container">
+            <h2 style="text-align: center; margin-bottom: 20px;">Player Leaderboards</h2>
+            
+            <!-- Batting Leaderboard -->
+            <div class="leaderboard-section" style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 10px;">Batting Leaders</h3>
+                <div class="leaderboard-controls" style="display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; align-items: center;">
+                    <label>Sort by: 
+                        <select id="batterStat" onchange="updateBatterLeaderboard()">
+                            <option value="rc" selected>RC</option>
+                            <option value="hr">HR</option>
+                            <option value="rbi">RBI</option>
+                            <option value="r">Runs</option>
+                            <option value="h">Hits</option>
+                            <option value="sb">SB</option>
+                            <option value="avg">AVG</option>
+                            <option value="obp">OBP</option>
+                            <option value="slg">SLG</option>
+                            <option value="ops">OPS</option>
+                        </select>
+                    </label>
+                    <label>League: 
+                        <select id="batterLeague" onchange="updateBatterLeaderboard()">
+                            <option value="MLB">MLB</option>
+                            <option value="AL">AL</option>
+                            <option value="NL">NL</option>
+                        </select>
+                    </label>
+                    <label>Show: 
+                        <select id="batterCount" onchange="updateBatterLeaderboard()">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="batterQualified" onchange="updateBatterLeaderboard()"> Qualified only
+                    </label>
+                    <label>Max age: 
+                        <input type="number" id="batterMaxAge" min="18" max="50" value="" placeholder="Any" style="width: 60px;" onchange="updateBatterLeaderboard()">
+                    </label>
+                </div>
+                <table class="standings-table" style="width: 100%;">
+                    <thead>
+                        <tr class="border-b-2 border-blue-800">
+                            <th class="text-left py-1 px-2">Player</th>
+                            <th class="text-left py-1 px-2">Team</th>
+                            <th class="text-right py-1 px-2">Age</th>
+                            <th class="text-right py-1 px-2">G</th>
+                            <th class="text-right py-1 px-2">PA</th>
+                            <th class="text-right py-1 px-2" id="th-rc">RC</th>
+                            <th class="text-right py-1 px-2" id="th-hr">HR</th>
+                            <th class="text-right py-1 px-2" id="th-rbi">RBI</th>
+                            <th class="text-right py-1 px-2" id="th-r">R</th>
+                            <th class="text-right py-1 px-2" id="th-h">H</th>
+                            <th class="text-right py-1 px-2" id="th-sb">SB</th>
+                            <th class="text-right py-1 px-2" id="th-avg">AVG</th>
+                            <th class="text-right py-1 px-2" id="th-obp">OBP</th>
+                            <th class="text-right py-1 px-2" id="th-slg">SLG</th>
+                            <th class="text-right py-1 px-2" id="th-ops">OPS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batterLeaderboardBody">
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pitching Leaderboard -->
+            <div class="leaderboard-section">
+                <h3 style="margin-bottom: 10px;">Pitching Leaders</h3>
+                <div class="leaderboard-controls" style="display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; align-items: center;">
+                    <label>Sort by: 
+                        <select id="pitcherStat" onchange="updatePitcherLeaderboard()">
+                            <option value="fipar" selected>FIPAR</option>
+                            <option value="w">Wins</option>
+                            <option value="sv">Saves</option>
+                            <option value="k">Strikeouts</option>
+                            <option value="era">ERA</option>
+                            <option value="whip">WHIP</option>
+                            <option value="fip">FIP</option>
+                            <option value="ip">IP</option>
+                        </select>
+                    </label>
+                    <label>League: 
+                        <select id="pitcherLeague" onchange="updatePitcherLeaderboard()">
+                            <option value="MLB">MLB</option>
+                            <option value="AL">AL</option>
+                            <option value="NL">NL</option>
+                        </select>
+                    </label>
+                    <label>Show: 
+                        <select id="pitcherCount" onchange="updatePitcherLeaderboard()">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="pitcherQualified" onchange="updatePitcherLeaderboard()"> Qualified only
+                    </label>
+                    <label>Max age: 
+                        <input type="number" id="pitcherMaxAge" min="18" max="50" value="" placeholder="Any" style="width: 60px;" onchange="updatePitcherLeaderboard()">
+                    </label>
+                </div>
+                <table class="standings-table" style="width: 100%;">
+                    <thead>
+                        <tr class="border-b-2 border-blue-800">
+                            <th class="text-left py-1 px-2">Player</th>
+                            <th class="text-left py-1 px-2">Team</th>
+                            <th class="text-right py-1 px-2">Age</th>
+                            <th class="text-right py-1 px-2">G</th>
+                            <th class="text-right py-1 px-2">IP</th>
+                            <th class="text-right py-1 px-2" id="th-fipar">FIPAR</th>
+                            <th class="text-right py-1 px-2" id="th-w">W</th>
+                            <th class="text-right py-1 px-2" id="th-sv">SV</th>
+                            <th class="text-right py-1 px-2" id="th-k">K</th>
+                            <th class="text-right py-1 px-2" id="th-era">ERA</th>
+                            <th class="text-right py-1 px-2" id="th-whip">WHIP</th>
+                            <th class="text-right py-1 px-2" id="th-fip">FIP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pitcherLeaderboardBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        const alData = [{"name":"Los Angeles Angels","abbreviation":"LAA","league":"American League","division":"American League West","w":72,"l":90,"pct":".444","gb":"18.0","wcGb":"15.0","wcRank":"10","rs":673,"ra":837,"gamesPlayed":162,"pythVar":8.389575014434357,"rsPerGame":4.154320987654321,"raPerGame":5.166666666666667,"obp":0.2976588628762542,"iso":0.17193896538890954,"fip":1.645587310460485,"der":0.6866507947959501},{"name":"Baltimore Orioles","abbreviation":"BAL","league":"American League","division":"American League East","w":75,"l":87,"pct":".463","gb":"19.0","wcGb":"12.0","wcRank":"9","rs":677,"ra":788,"gamesPlayed":162,"pythVar":6.204340329091892,"rsPerGame":4.179012345679013,"raPerGame":4.864197530864198,"obp":0.3045212765957447,"iso":0.15915805022156573,"fip":1.2791509565703114,"der":0.6841544349174055},{"name":"Boston Red Sox","abbreviation":"BOS","league":"American League","division":"American League East","w":89,"l":73,"pct":".549","gb":"5.0","wcGb":"+2.0","wcRank":"2","clinchIndicator":"w","rs":786,"ra":676,"gamesPlayed":162,"pythVar":-4.120170603625695,"rsPerGame":4.851851851851852,"raPerGame":4.172839506172839,"obp":0.32359115129985466,"iso":0.1672060409924488,"fip":0.8417926938747324,"der":0.6894109685060305},{"name":"Cleveland Guardians","abbreviation":"CLE","league":"American League","division":"American League Central","w":88,"l":74,"pct":".543","gb":"-","wcGb":"-","clinchIndicator":"y","rs":643,"ra":649,"gamesPlayed":162,"pythVar":7.752305756904093,"rsPerGame":3.9691358024691357,"raPerGame":4.006172839506172,"obp":0.29641528576259724,"iso":0.14745762711864405,"fip":0.8169209431345353,"der":0.6981458590852905},{"name":"Detroit Tigers","abbreviation":"DET","league":"American League","division":"American League Central","w":87,"l":75,"pct":".537","gb":"1.0","wcGb":"-","wcRank":"4","clinchIndicator":"w","rs":758,"ra":691,"gamesPlayed":162,"pythVar":-1.4747021277606933,"rsPerGame":4.679012345679013,"raPerGame":4.265432098765432,"obp":0.3160144689246958,"iso":0.16678885630498536,"fip":0.9142817352552052,"der":0.700222150113571},{"name":"Houston Astros","abbreviation":"HOU","league":"American League","division":"American League West","w":87,"l":75,"pct":".537","gb":"3.0","wcGb":"-","wcRank":"3","rs":686,"ra":665,"gamesPlayed":162,"pythVar":3.482473562724792,"rsPerGame":4.234567901234568,"raPerGame":4.104938271604938,"obp":0.31532125205930805,"iso":0.148816029143898,"fip":0.8855755894590847,"der":0.7066319895968791},{"name":"Kansas City Royals","abbreviation":"KC","league":"American League","division":"American League Central","w":82,"l":80,"pct":".506","gb":"6.0","wcGb":"5.0","wcRank":"5","rs":651,"ra":637,"gamesPlayed":162,"pythVar":-0.7606615475487359,"rsPerGame":4.018518518518518,"raPerGame":3.932098765432099,"obp":0.30890227576974566,"iso":0.14969618854722885,"fip":0.8703523186185768,"der":0.7078887102275496},{"name":"Athletics","abbreviation":"ATH","league":"American League","division":"American League West","w":76,"l":86,"pct":".469","gb":"14.0","wcGb":"11.0","wcRank":"8","rs":733,"ra":817,"gamesPlayed":162,"pythVar":3.753645899908534,"rsPerGame":4.5246913580246915,"raPerGame":5.04320987654321,"obp":0.31804830287206265,"iso":0.17757346313322514,"fip":1.5237962705260228,"der":0.696801045346755},{"name":"Seattle Mariners","abbreviation":"SEA","league":"American League","division":"American League West","w":90,"l":72,"pct":".556","gb":"-","wcGb":"-","clinchIndicator":"y","rs":766,"ra":694,"gamesPlayed":162,"pythVar":1.0303409235561531,"rsPerGame":4.728395061728395,"raPerGame":4.283950617283951,"obp":0.3204276688806091,"iso":0.17557251908396945,"fip":0.8398303925591574,"der":0.7017725769021874},{"name":"Tampa Bay Rays","abbreviation":"TB","league":"American League","division":"American League East","w":77,"l":85,"pct":".475","gb":"17.0","wcGb":"10.0","wcRank":"7","rs":714,"ra":683,"gamesPlayed":162,"pythVar":-7.593076816708233,"rsPerGame":4.407407407407407,"raPerGame":4.216049382716049,"obp":0.3132570101211216,"iso":0.14990859232175502,"fip":1.0173992034099644,"der":0.7038125435001159},{"name":"Texas Rangers","abbreviation":"TEX","league":"American League","division":"American League West","w":81,"l":81,"pct":".500","gb":"9.0","wcGb":"6.0","wcRank":"6","rs":684,"ra":605,"gamesPlayed":162,"pythVar":-9.891472524257054,"rsPerGame":4.222222222222222,"raPerGame":3.734567901234568,"obp":0.30238726790450926,"iso":0.14697776961234613,"fip":0.7532917532917532,"der":0.719889363842092},{"name":"Toronto Blue Jays","abbreviation":"TOR","league":"American League","division":"American League East","w":94,"l":68,"pct":".580","gb":"-","wcGb":"-","clinchIndicator":"z","rs":798,"ra":721,"gamesPlayed":162,"pythVar":4.809065875873756,"rsPerGame":4.925925925925926,"raPerGame":4.450617283950617,"obp":0.3333876486882842,"iso":0.1621572544034865,"fip":1.129346314325452,"der":0.699191102123357},{"name":"Minnesota Twins","abbreviation":"MIN","league":"American League","division":"American League Central","w":70,"l":92,"pct":".432","gb":"18.0","wcGb":"17.0","wcRank":"11","rs":678,"ra":773,"gamesPlayed":162,"pythVar":-0.43879331790282095,"rsPerGame":4.185185185185185,"raPerGame":4.771604938271605,"obp":0.3104645395933212,"iso":0.15868924889543443,"fip":0.9549852755574253,"der":0.6832579185520362},{"name":"Chicago White Sox","abbreviation":"CWS","league":"American League","division":"American League Central","w":60,"l":102,"pct":".370","gb":"28.0","wcGb":"27.0","wcRank":"12","rs":647,"ra":742,"gamesPlayed":162,"pythVar":-9.971674819665836,"rsPerGame":3.993827160493827,"raPerGame":4.580246913580247,"obp":0.30151006711409395,"iso":0.14097080156220942,"fip":1.3319209039548023,"der":0.694212849435998},{"name":"New York Yankees","abbreviation":"NYY","league":"American League","division":"American League East","w":94,"l":68,"pct":".580","gb":"-","wcGb":"+7.0","wcRank":"1","clinchIndicator":"w","rs":849,"ra":685,"gamesPlayed":162,"pythVar":-4.1237065408654985,"rsPerGame":5.2407407407407405,"raPerGame":4.228395061728395,"obp":0.33204695288631614,"iso":0.2041674282580881,"fip":0.8595052807115063,"der":0.7053884903068235}];
-        const nlData = [{"name":"Arizona Diamondbacks","abbreviation":"AZ","league":"National League","division":"National League West","w":80,"l":82,"pct":".494","gb":"13.0","wcGb":"3.0","wcRank":"6","rs":791,"ra":785,"gamesPlayed":162,"pythVar":-1.6167423299347945,"rsPerGame":4.882716049382716,"raPerGame":4.845679012345679,"obp":0.3246353322528363,"iso":0.1815693430656934,"fip":1.1378116343490305,"der":0.6933491686460808},{"name":"Chicago Cubs","abbreviation":"CHC","league":"National League","division":"National League Central","w":92,"l":70,"pct":".568","gb":"5.0","wcGb":"+9.0","wcRank":"1","clinchIndicator":"w","rs":793,"ra":649,"gamesPlayed":162,"pythVar":-5.01779724775011,"rsPerGame":4.895061728395062,"raPerGame":4.006172839506172,"obp":0.3204878048780488,"iso":0.18089171974522292,"fip":1.024390243902439,"der":0.7190651906519065},{"name":"Cincinnati Reds","abbreviation":"CIN","league":"National League","division":"National League Central","w":83,"l":79,"pct":".512","gb":"14.0","wcGb":"-","wcRank":"4","clinchIndicator":"w","rs":716,"ra":681,"gamesPlayed":162,"pythVar":-2.0561512140816944,"rsPerGame":4.419753086419753,"raPerGame":4.203703703703703,"obp":0.31482701812191105,"iso":0.14629221732745962,"fip":0.9707317073170731,"der":0.70936950514946},{"name":"Colorado Rockies","abbreviation":"COL","league":"National League","division":"National League West","w":43,"l":119,"pct":".265","gb":"50.0","wcGb":"40.0","wcRank":"12","rs":597,"ra":1021,"gamesPlayed":162,"pythVar":1.7244822532794757,"rsPerGame":3.685185185185185,"raPerGame":6.302469135802469,"obp":0.29289840299014613,"iso":0.14922337278106507,"fip":2.102196005969725,"der":0.6599560517612589},{"name":"Los Angeles Dodgers","abbreviation":"LAD","league":"National League","division":"National League West","w":93,"l":69,"pct":".574","gb":"-","wcGb":"-","clinchIndicator":"y","rs":825,"ra":683,"gamesPlayed":162,"pythVar":-3.120568661876675,"rsPerGame":5.092592592592593,"raPerGame":4.216049382716049,"obp":0.3273375465888835,"iso":0.1881043605181536,"fip":0.7973629424011104,"der":0.7038092770147706},{"name":"Washington Nationals","abbreviation":"WSH","league":"National League","division":"National League East","w":66,"l":96,"pct":".407","gb":"30.0","wcGb":"17.0","wcRank":"11","rs":687,"ra":899,"gamesPlayed":162,"pythVar":6.274355749627006,"rsPerGame":4.2407407407407405,"raPerGame":5.549382716049383,"obp":0.30409258638040926,"iso":0.14699372925119883,"fip":1.5817581336518869,"der":0.6782671954567854},{"name":"New York Mets","abbreviation":"NYM","league":"National League","division":"National League East","w":83,"l":79,"pct":".512","gb":"13.0","wcGb":"-","wcRank":"3","rs":766,"ra":715,"gamesPlayed":162,"pythVar":-3.572055436296253,"rsPerGame":4.728395061728395,"raPerGame":4.41358024691358,"obp":0.3261363636363636,"iso":0.1781198460692688,"fip":0.7479050279329609,"der":0.6875308033514047},{"name":"Pittsburgh Pirates","abbreviation":"PIT","league":"National League","division":"National League Central","w":71,"l":91,"pct":".438","gb":"26.0","wcGb":"12.0","wcRank":"10","rs":583,"ra":645,"gamesPlayed":162,"pythVar":-1.8416433615464172,"rsPerGame":3.5987654320987654,"raPerGame":3.9814814814814814,"obp":0.30512435319646136,"iso":0.11869767441860463,"fip":0.698503705775416,"der":0.7058968787040696},{"name":"San Diego Padres","abbreviation":"SD","league":"National League","division":"National League West","w":90,"l":72,"pct":".556","gb":"3.0","wcGb":"+7.0","wcRank":"2","clinchIndicator":"w","rs":702,"ra":621,"gamesPlayed":162,"pythVar":-0.8813278008298795,"rsPerGame":4.333333333333333,"raPerGame":3.8333333333333335,"obp":0.3208547291701176,"iso":0.13753687315634217,"fip":0.8820655966503839,"der":0.7161038961038961},{"name":"San Francisco Giants","abbreviation":"SF","league":"National League","division":"National League West","w":81,"l":81,"pct":".500","gb":"12.0","wcGb":"2.0","wcRank":"5","rs":705,"ra":684,"gamesPlayed":162,"pythVar":-2.448684345530694,"rsPerGame":4.351851851851852,"raPerGame":4.222222222222222,"obp":0.3112911224995867,"iso":0.1514418604651163,"fip":0.6056377337426737,"der":0.6825165305328666},{"name":"St. Louis Cardinals","abbreviation":"STL","league":"National League","division":"National League Central","w":78,"l":84,"pct":".481","gb":"19.0","wcGb":"5.0","wcRank":"8","rs":689,"ra":754,"gamesPlayed":162,"pythVar":4.282520654462985,"rsPerGame":4.253086419753086,"raPerGame":4.654320987654321,"obp":0.31412485510846166,"iso":0.13362782992821645,"fip":0.9210893854748603,"der":0.6879498490828884},{"name":"Philadelphia Phillies","abbreviation":"PHI","league":"National League","division":"National League East","w":96,"l":66,"pct":".593","gb":"-","wcGb":"-","clinchIndicator":"y","rs":778,"ra":648,"gamesPlayed":162,"pythVar":0.35314498413949025,"rsPerGame":4.802469135802469,"raPerGame":4,"obp":0.3276394989425736,"iso":0.17255754939278595,"fip":0.5694049024373308,"der":0.691033162944124},{"name":"Atlanta Braves","abbreviation":"ATL","league":"National League","division":"National League East","w":76,"l":86,"pct":".469","gb":"20.0","wcGb":"7.0","wcRank":"9","rs":724,"ra":734,"gamesPlayed":162,"pythVar":-3.8889411552197117,"rsPerGame":4.469135802469136,"raPerGame":4.530864197530864,"obp":0.320097244732577,"iso":0.1545025417574437,"fip":1.0632823365785813,"der":0.6982974461692539},{"name":"Miami Marlins","abbreviation":"MIA","league":"National League","division":"National League East","w":79,"l":83,"pct":".488","gb":"17.0","wcGb":"4.0","wcRank":"7","rs":709,"ra":798,"gamesPlayed":162,"pythVar":7.534099176382313,"rsPerGame":4.3765432098765435,"raPerGame":4.925925925925926,"obp":0.31422505307855625,"iso":0.14288291538877868,"fip":1.2008869794193058,"der":0.6988282461876237},{"name":"Milwaukee Brewers","abbreviation":"MIL","league":"National League","division":"National League Central","w":97,"l":65,"pct":".599","gb":"-","wcGb":"-","clinchIndicator":"z","rs":806,"ra":634,"gamesPlayed":162,"pythVar":-3.0778172523183827,"rsPerGame":4.9753086419753085,"raPerGame":3.9135802469135803,"obp":0.3324189123769566,"iso":0.14500907441016336,"fip":0.7766990291262136,"der":0.7076844523870309}];
+        const alData = ${alTeamsData};
+        const nlData = ${nlTeamsData};
+        const batterData = ${JSON.stringify(playerStats.batters)};
+        const pitcherData = ${JSON.stringify(playerStats.pitchers)};
         let currentLeague = 'AL';
         let chart1, chart2, chart3;
         
@@ -860,8 +994,146 @@
             }
         }
         
+        // Leaderboard functions
+        function formatRate(val) {
+            return val.toFixed(3).replace(/^0/, '');
+        }
+        
+        function formatStat(val, stat) {
+            const rateStats = ['avg', 'obp', 'slg', 'ops'];
+            const twoDecimalStats = ['era', 'whip', 'fip'];
+            const oneDecimalStats = ['ip'];
+            
+            if (rateStats.includes(stat)) {
+                return formatRate(val);
+            } else if (twoDecimalStats.includes(stat)) {
+                return val.toFixed(2);
+            } else if (oneDecimalStats.includes(stat)) {
+                return val.toFixed(1);
+            }
+            return val;
+        }
+        
+        function updateBatterLeaderboard() {
+            const stat = document.getElementById('batterStat').value;
+            const league = document.getElementById('batterLeague').value;
+            const count = parseInt(document.getElementById('batterCount').value);
+            const qualifiedOnly = document.getElementById('batterQualified').checked;
+            const maxAge = document.getElementById('batterMaxAge').value ? parseInt(document.getElementById('batterMaxAge').value) : null;
+            
+            // Filter by league
+            let filtered = batterData.filter(p => league === 'MLB' || p.league === league);
+            
+            // Filter by age
+            if (maxAge) {
+                filtered = filtered.filter(p => p.age && p.age <= maxAge);
+            }
+            
+            // Filter by qualifier (3.1 PA per team game = ~502 PA for full season, scale by games played)
+            if (qualifiedOnly) {
+                // Use 3.1 PA per team game as qualifier
+                const qualifyingPA = 502; // Full season qualifier
+                filtered = filtered.filter(p => p.pa >= qualifyingPA * 0.5); // At least half-season
+            }
+            
+            // Sort - descending for most stats, but some may need ascending
+            const ascending = false; // All batter stats are "higher is better"
+            filtered.sort((a, b) => ascending ? a[stat] - b[stat] : b[stat] - a[stat]);
+            
+            // Take top N
+            const leaders = filtered.slice(0, count);
+            
+            // Highlight the sorted column
+            ['rc', 'hr', 'rbi', 'r', 'h', 'sb', 'avg', 'obp', 'slg', 'ops'].forEach(s => {
+                const th = document.getElementById('th-' + s);
+                if (th) th.style.backgroundColor = (s === stat) ? '#fef3c7' : '';
+            });
+            
+            // Build table rows
+            const tbody = document.getElementById('batterLeaderboardBody');
+            tbody.innerHTML = leaders.map(p => {
+                const hs = 'background-color: #fef3c7; font-weight: bold;';
+                let row = '<tr class="hover:bg-blue-50">';
+                row += '<td class="py-1 px-2">' + p.name + '</td>';
+                row += '<td class="py-1 px-2">' + p.teamAbbr + '</td>';
+                row += '<td class="text-right py-1 px-2">' + (p.age || '') + '</td>';
+                row += '<td class="text-right py-1 px-2">' + p.g + '</td>';
+                row += '<td class="text-right py-1 px-2">' + p.pa + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'rc' ? hs : '') + '">' + p.rc + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'hr' ? hs : '') + '">' + p.hr + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'rbi' ? hs : '') + '">' + p.rbi + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'r' ? hs : '') + '">' + p.r + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'h' ? hs : '') + '">' + p.h + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'sb' ? hs : '') + '">' + p.sb + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'avg' ? hs : '') + '">' + formatRate(p.avg) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'obp' ? hs : '') + '">' + formatRate(p.obp) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'slg' ? hs : '') + '">' + formatRate(p.slg) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'ops' ? hs : '') + '">' + formatRate(p.ops) + '</td>';
+                row += '</tr>';
+                return row;
+            }).join('');
+        }
+        
+        function updatePitcherLeaderboard() {
+            const stat = document.getElementById('pitcherStat').value;
+            const league = document.getElementById('pitcherLeague').value;
+            const count = parseInt(document.getElementById('pitcherCount').value);
+            const qualifiedOnly = document.getElementById('pitcherQualified').checked;
+            const maxAge = document.getElementById('pitcherMaxAge').value ? parseInt(document.getElementById('pitcherMaxAge').value) : null;
+            
+            // Filter by league
+            let filtered = pitcherData.filter(p => league === 'MLB' || p.league === league);
+            
+            // Filter by age
+            if (maxAge) {
+                filtered = filtered.filter(p => p.age && p.age <= maxAge);
+            }
+            
+            // Filter by qualifier (1 IP per team game = ~162 IP for full season)
+            if (qualifiedOnly) {
+                const qualifyingIP = 162;
+                filtered = filtered.filter(p => p.ip >= qualifyingIP * 0.5);
+            }
+            
+            // Sort - ascending for ERA, WHIP, FIP; descending for others
+            const ascending = ['era', 'whip', 'fip'].includes(stat);
+            filtered.sort((a, b) => ascending ? a[stat] - b[stat] : b[stat] - a[stat]);
+            
+            // Take top N
+            const leaders = filtered.slice(0, count);
+            
+            // Highlight the sorted column
+            ['fipar', 'w', 'sv', 'k', 'era', 'whip', 'fip'].forEach(s => {
+                const th = document.getElementById('th-' + s);
+                if (th) th.style.backgroundColor = (s === stat) ? '#fef3c7' : '';
+            });
+            
+            // Build table rows
+            const tbody = document.getElementById('pitcherLeaderboardBody');
+            tbody.innerHTML = leaders.map(p => {
+                const hs = 'background-color: #fef3c7; font-weight: bold;';
+                let row = '<tr class="hover:bg-blue-50">';
+                row += '<td class="py-1 px-2">' + p.name + '</td>';
+                row += '<td class="py-1 px-2">' + p.teamAbbr + '</td>';
+                row += '<td class="text-right py-1 px-2">' + (p.age || '') + '</td>';
+                row += '<td class="text-right py-1 px-2">' + p.g + '</td>';
+                row += '<td class="text-right py-1 px-2">' + p.ip.toFixed(1) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'fipar' ? hs : '') + '">' + p.fipar + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'w' ? hs : '') + '">' + p.w + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'sv' ? hs : '') + '">' + p.sv + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'k' ? hs : '') + '">' + p.k + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'era' ? hs : '') + '">' + p.era.toFixed(2) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'whip' ? hs : '') + '">' + p.whip.toFixed(2) + '</td>';
+                row += '<td class="text-right py-1 px-2" style="' + (stat === 'fip' ? hs : '') + '">' + p.fip.toFixed(2) + '</td>';
+                row += '</tr>';
+                return row;
+            }).join('');
+        }
+        
         // Initialize on page load
         updateAllCharts();
+        updateBatterLeaderboard();
+        updatePitcherLeaderboard();
     </script>
 </body>
 </html>
