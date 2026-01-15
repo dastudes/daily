@@ -371,6 +371,83 @@ async function generateHTML() {
         teamData[team.id] = await loadTeamStats(team, season);
     }
     
+    // ========== Generate JSON for leaderboards ==========
+    console.log('Generating player-stats.json for leaderboards...');
+    
+    const allBatters = [];
+    const allPitchers = [];
+    
+    for (const team of allTeams) {
+        const league = team.league.name === 'American League' ? 'AL' : 'NL';
+        const { batters, pitchers } = teamData[team.id];
+        
+        for (const b of batters) {
+            const stats = b.stats;
+            const pa = (stats.atBats || 0) + (stats.baseOnBalls || 0) + (stats.hitByPitch || 0) + (stats.sacFlies || 0);
+            const singles = (stats.hits || 0) - (stats.doubles || 0) - (stats.triples || 0) - (stats.homeRuns || 0);
+            const tb = singles + 2 * (stats.doubles || 0) + 3 * (stats.triples || 0) + 4 * (stats.homeRuns || 0);
+            
+            allBatters.push({
+                name: b.player.person.fullName,
+                playerId: b.player.person.id,
+                team: team.name,
+                teamAbbr: team.abbreviation,
+                league: league,
+                g: stats.gamesPlayed || 0,
+                pa: pa,
+                ab: stats.atBats || 0,
+                h: stats.hits || 0,
+                hr: stats.homeRuns || 0,
+                rbi: stats.rbi || 0,
+                r: stats.runs || 0,
+                sb: stats.stolenBases || 0,
+                bb: stats.baseOnBalls || 0,
+                so: stats.strikeOuts || 0,
+                avg: stats.atBats > 0 ? (stats.hits / stats.atBats) : 0,
+                obp: calcOBP(stats),
+                slg: calcSLG(stats),
+                doubles: stats.doubles || 0,
+                triples: stats.triples || 0,
+                tb: tb
+            });
+        }
+        
+        for (const p of pitchers) {
+            const stats = p.stats;
+            const ip = parseFloat(stats.inningsPitched) || 0;
+            const fip = calculateFIP(stats);
+            
+            allPitchers.push({
+                name: p.player.person.fullName,
+                playerId: p.player.person.id,
+                team: team.name,
+                teamAbbr: team.abbreviation,
+                league: league,
+                g: stats.gamesPlayed || 0,
+                gs: stats.gamesStarted || 0,
+                ip: ip,
+                w: stats.wins || 0,
+                l: stats.losses || 0,
+                sv: stats.saves || 0,
+                k: stats.strikeOuts || 0,
+                bb: stats.baseOnBalls || 0,
+                era: ip > 0 ? ((stats.earnedRuns || 0) * 9 / ip) : 0,
+                whip: ip > 0 ? ((stats.baseOnBalls || 0) + (stats.hits || 0)) / ip : 0,
+                fip: fip,
+                h: stats.hits || 0,
+                er: stats.earnedRuns || 0
+            });
+        }
+    }
+    
+    const playerStatsJson = {
+        season: season,
+        updated: new Date().toISOString(),
+        batters: allBatters,
+        pitchers: allPitchers
+    };
+    // ========== End JSON generation ==========
+    
     // Generate team HTML sections
     let alHTML = '';
     for (const team of alTeams) {
@@ -1212,6 +1289,10 @@ async function generateHTML() {
     
     fs.writeFileSync('index.html', html);
     console.log('Generated index.html successfully!');
+    
+    // Write the JSON file for leaderboards
+    fs.writeFileSync('player-stats.json', JSON.stringify(playerStatsJson, null, 2));
+    console.log('Generated player-stats.json successfully!');
 }
 
 generateHTML().catch(console.error);
