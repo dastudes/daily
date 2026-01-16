@@ -1827,7 +1827,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             const tbody = document.getElementById('batterLeaderboardBody');
             tbody.innerHTML = leaders.map(p => {
                 let row = '<tr>';
-                row += '<td><a href="https://www.mlb.com/player/' + p.playerId + '" target="_blank">' + p.name + '</a></td>';
+                row += '<td><a href="https://baseballsavant.mlb.com/savant-player/' + p.playerId + '" target="_blank">' + p.name + '</a></td>';
                 row += '<td>' + p.teamAbbr + '</td>';
                 row += '<td class="text-right">' + (p.age || '') + '</td>';
                 row += '<td class="text-right">' + p.g + '</td>';
@@ -1895,7 +1895,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             const tbody = document.getElementById('pitcherLeaderboardBody');
             tbody.innerHTML = leaders.map(p => {
                 let row = '<tr>';
-                row += '<td><a href="https://www.mlb.com/player/' + p.playerId + '" target="_blank">' + p.name + '</a></td>';
+                row += '<td><a href="https://baseballsavant.mlb.com/savant-player/' + p.playerId + '" target="_blank">' + p.name + '</a></td>';
                 row += '<td>' + p.teamAbbr + '</td>';
                 row += '<td class="text-right">' + (p.age || '') + '</td>';
                 row += '<td class="text-right">' + p.g + '</td>';
