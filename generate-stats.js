@@ -435,6 +435,7 @@ async function generateHTML() {
                 w: stats.wins || 0,
                 l: stats.losses || 0,
                 sv: stats.saves || 0,
+                hr: stats.homeRuns || 0,
                 k: stats.strikeOuts || 0,
                 bb: stats.baseOnBalls || 0,
                 era: ip > 0 ? Math.round(((stats.earnedRuns || 0) * 9 / ip) * 100) / 100 : 0,
