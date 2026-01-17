@@ -920,8 +920,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                 <summary>About These Graphs</summary>
                 <div class="content">
                     <p><strong>Welcome to Baseball Graphs Daily!</strong></p>
-                    <p>This page automatically updates each morning with the latest MLB standings, graphs and leaderboards for the baseball nut who want to get the big picture. The idea here is that numbers are nice, but pictures sometimes tell the story a little more easily. Scroll on down to see if you agree. Each section has some text to help you understand what you're seeing.</p>
-                    <p>For up-to-date statistics for all players, visit our <a href="https://dastudes.github.io/daily/player_stats.html" style="color: #2563eb; text-decoration: underline;">Daily Player Stats page</a>.</p>
+                    <p class="mb-2">This page automatically updates each morning with the latest MLB standings, graphs and leaderboards for the baseball nut who want to get the big picture. The idea here is that numbers are nice, but pictures sometimes tell the story a little more easily. Scroll on down to see if you agree. Each section has some text to help you understand what you're seeing.</p>
+                    <p class="mb-2">For up-to-date statistics for all players, visit our <a href="https://dastudes.github.io/daily/player_stats.html" style="color: #2563eb; text-decoration: underline;">Daily Player Stats page</a>.</p>
                 </div>
             </details>
         </div>
