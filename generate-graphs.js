@@ -359,8 +359,8 @@ async function generateHTML() {
     
     const html = generateHTMLContent(season, dateTimeStr, teamData, playerStats);
     
-    fs.writeFileSync('graphs.html', html);
-    console.log('Generated graphs.html successfully!');
+    fs.writeFileSync('index.html', html);
+    console.log('Generated index.html successfully!');
 }
 
 function generateHTMLContent(season, dateStr, teamData, playerStats) {
