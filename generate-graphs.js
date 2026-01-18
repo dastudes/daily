@@ -524,7 +524,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         .header h1 {
             font-size: 2.2em;
             font-weight: bold;
-            margin: 0 0 8px 0;
+            margin: 0 0 4px 0;
+            line-height: 1.2;
         }
         .header p {
             font-size: 1.1em;
