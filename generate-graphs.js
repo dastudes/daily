@@ -508,19 +508,22 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             padding: 0 20px;
         }
         .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 25px;
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e3a8a 100%);
             color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
         }
         .header h1 {
-            margin: 0;
-            font-size: 2.5em;
+            font-size: 2.2em;
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
         }
         .breadcrumb {
             text-align: left;
@@ -918,7 +921,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         
         <div class="header">
             <h1>Baseball Graphs Daily</h1>
-            <div style="margin-top: 10px; font-size: 0.9em;">${season} Season - Updated: ${dateStr}</div>
+            <p>${season} Season - Updated: ${dateStr}</p>
         </div>
         
         <div class="nav-bar">
