@@ -723,12 +723,13 @@ async function generateHTML() {
         .header h1 {
             font-size: 2.2em;
             font-weight: bold;
-            margin-bottom: 8px;
+            margin: 0 0 8px 0;
         }
         
         .header p {
             font-size: 1.1em;
             opacity: 0.95;
+            margin: 0;
         }
         
         hr {
