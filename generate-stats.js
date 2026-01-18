@@ -41,7 +41,7 @@ function getTeamFangraphsSlug(teamName) {
     return slugMap[teamName] || teamName.toLowerCase().replace(/\s+/g, '-');
 }
 
-// Calculate Runs Created (OBP Ã— TB)
+// Calculate Runs Created (OBP x TB)
 function calculateRC(stats) {
     const h = stats.hits || 0;
     const bb = stats.baseOnBalls || 0;
@@ -169,7 +169,7 @@ function createBatterRow(player, stats, playerTeamCount) {
         if (batCode === 'L') {
             handednessSymbol = '*';
         } else if (batCode === 'S') {
-            handednessSymbol = 'â€ ';
+            handednessSymbol = "&dagger;";
         }
         // R (right-handed) gets no symbol
     }
