@@ -441,7 +441,7 @@
         
         <div class="header">
             <h1>Baseball Graphs Daily</h1>
-            <p>2025 Season - Updated: Sunday, January 18, 2026 at 2:13 PM EST</p>
+            <p>2025 Season - Updated: Sunday, January 18, 2026 at 3:21 PM EST</p>
         </div>
         
         <div class="nav-bar">
@@ -594,8 +594,8 @@
                 
                 <ul>
                     <li><strong>RC (Runs Created)</strong> is simply OBPxTB</li>
-                    <li><strong>FIP (Fielding Independent Pitching)</strong> ((13Ã—HR)+(3Ã—(BB+HBP))-(2Ã—K))/IP + 3.10</li>
-                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)Ã—IP/9</li>
+                    <li><strong>FIP (Fielding Independent Pitching)</strong> ((13xHR)+(3x(BB+HBP))-(2xK))/IP + 3.10</li>
+                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)xIP/9</li>
                 </ul>
                 
                 <p>These stats are value approximations only. Please don't quote them. For actual good sabermetric stats, go to <a href="https://www.fangraphs.com/">Fangraphs</a> or <a href="https://www.baseball-reference.com/">Baseball Reference</a>.</p>
@@ -1251,7 +1251,7 @@
         
         function getBatterHandedness(batSide) {
             if (batSide === 'L') return '*';
-            if (batSide === 'S') return '†';
+            if (batSide === 'S') return '&dagger;';
             return '';
         }
         
