@@ -535,33 +535,32 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             text-decoration: underline;
             color: #1e40af;
         }
-        .breadcrumb .separator {
-            color: #6b7280;
-            margin: 0 8px;
-        }
-        .breadcrumb .current {
-            color: #374151;
-        }
-        .about-section {
-            background: white;
-            border: 2px solid #1e3a8a;
-            border-radius: 8px;
-            padding: 15px;
+        .nav-bar {
+            display: flex;
             margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .about-section details {
-            cursor: pointer;
-        }
-        .about-section summary {
+        .nav-bar a {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
             font-weight: bold;
             font-size: 1.1em;
-            color: #1e3a8a;
-            padding: 5px;
+            transition: background-color 0.2s;
         }
-        .about-section .content {
-            margin-top: 10px;
-            line-height: 1.6;
+        .nav-bar a.active {
+            background: #1e3a8a;
+            color: white;
+        }
+        .nav-bar a:not(.active) {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        .nav-bar a:not(.active):hover {
+            background: #d1d5db;
         }
         .league-selector {
             display: flex;
@@ -914,7 +913,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="https://www.baseballgraphs.com/">Baseball Graphs Home</a><span class="separator">&gt;</span><span class="current">Baseball Graphs Daily</span>
+            <a href="https://www.baseballgraphs.com/">← Baseball Graphs Home</a>
         </div>
         
         <div class="header">
@@ -922,15 +921,9 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             <div style="margin-top: 10px; font-size: 0.9em;">${season} Season - Updated: ${dateStr}</div>
         </div>
         
-        <div class="about-section">
-            <details>
-                <summary>About These Graphs</summary>
-                <div class="content">
-                    <p><strong>Welcome to Baseball Graphs Daily!</strong></p>
-                    <p class="mb-2">This page automatically updates each morning with the latest MLB standings, graphs and leaderboards for the baseball nut who want to get the big picture. The idea here is that numbers are nice, but pictures sometimes tell the story a little more easily. Scroll on down to see if you agree. Each section has some text to help you understand what you're seeing.</p>
-                    <p class="mb-2">For up-to-date statistics for all players, visit our <a href="https://dastudes.github.io/daily/player_stats.html" style="color: #2563eb; text-decoration: underline;">Daily Player Stats page</a>.</p>
-                </div>
-            </details>
+        <div class="nav-bar">
+            <a href="index.html" class="active">Graphs & Standings</a>
+            <a href="player_stats.html">Player Stats</a>
         </div>
         
         <div class="standings-box">
@@ -1078,8 +1071,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                 
                 <ul>
                     <li><strong>RC (Runs Created)</strong> is simply OBPxTB</li>
-                    <li><strong>FIP (Fielding Independent Pitching)</strong> ((13xHR)+(3x(BB+HBP))-(2xK))/IP + 3.10</li>
-                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)xIP/9</li>
+                    <li><strong>FIP (Fielding Independent Pitching)</strong> ((13Ã—HR)+(3Ã—(BB+HBP))-(2Ã—K))/IP + 3.10</li>
+                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)Ã—IP/9</li>
                 </ul>
                 
                 <p>These stats are value approximations only. Please don't quote them. For actual good sabermetric stats, go to <a href="https://www.fangraphs.com/">Fangraphs</a> or <a href="https://www.baseball-reference.com/">Baseball Reference</a>.</p>
