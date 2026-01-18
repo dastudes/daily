@@ -1078,8 +1078,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                 
                 <ul>
                     <li><strong>RC (Runs Created)</strong> is simply OBPxTB</li>
-                    <li><strong>FIP (Fielding Independent Pitching)</strong> ((13Ã—HR)+(3Ã—(BB+HBP))-(2Ã—K))/IP + 3.10</li>
-                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)Ã—IP/9</li>
+                    <li><strong>FIP (Fielding Independent Pitching)</strong> ((13xHR)+(3x(BB+HBP))-(2xK))/IP + 3.10</li>
+                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)xIP/9</li>
                 </ul>
                 
                 <p>These stats are value approximations only. Please don't quote them. For actual good sabermetric stats, go to <a href="https://www.fangraphs.com/">Fangraphs</a> or <a href="https://www.baseball-reference.com/">Baseball Reference</a>.</p>
