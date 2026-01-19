@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-01-18T20:21:17.979Z",
+  "updated": "2026-01-19T11:42:24.194Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -25813,7 +25813,7 @@
       "team": "Boston Red Sox",
       "teamAbbr": "BOS",
       "league": "AL",
-      "age": 32,
+      "age": 33,
       "g": 4,
       "gs": 0,
       "ip": 5.1,
@@ -26365,7 +26365,7 @@
       "team": "Chicago White Sox",
       "teamAbbr": "CWS",
       "league": "AL",
-      "age": 27,
+      "age": 28,
       "g": 72,
       "gs": 3,
       "ip": 69.2,
@@ -31645,7 +31645,7 @@
       "team": "Minnesota Twins",
       "teamAbbr": "MIN",
       "league": "AL",
-      "age": 25,
+      "age": 26,
       "g": 18,
       "gs": 2,
       "ip": 33.2,
