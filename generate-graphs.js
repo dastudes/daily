@@ -881,11 +881,11 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             background-color: #DEB887;
         }
         .leaderboard-table th.sorted::after {
-            content: ' â–¼';
+            content: ' ▼';
             font-size: 0.7em;
         }
         .leaderboard-table th.sorted.asc::after {
-            content: ' â–²';
+            content: ' ▲';
         }
         .leaderboard-table td {
             padding: 6px;
