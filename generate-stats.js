@@ -994,6 +994,46 @@ async function generateHTML() {
             border-color: #8B4513;
         }
         
+        .floating-filters {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #E8D5B7;
+        }
+        
+        .filter-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        
+        .filter-row label {
+            font-size: 0.9em;
+            color: #8B4513;
+            font-weight: 600;
+        }
+        
+        .filter-row input {
+            width: 60px;
+            padding: 4px 6px;
+            font-size: 0.9em;
+            font-family: Georgia, "Times New Roman", serif;
+            border: 1px solid #CD853F;
+            border-radius: 4px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .filter-buttons button {
+            flex: 1;
+            padding: 6px 10px;
+            font-size: 0.85em;
+        }
+        
         .current-team-display {
             font-size: 0.9em;
             color: #2563eb;
@@ -1063,6 +1103,20 @@ async function generateHTML() {
             <option value="">-- Select Team --</option>
             <!-- Will be populated dynamically after page loads -->
         </select>
+        <div class="floating-filters">
+            <div class="filter-row">
+                <label for="floatingMinPA">Min PA:</label>
+                <input type="number" id="floatingMinPA" value="0">
+            </div>
+            <div class="filter-row">
+                <label for="floatingMinIP">Min IP:</label>
+                <input type="number" id="floatingMinIP" value="0">
+            </div>
+            <div class="filter-buttons">
+                <button onclick="applyFiltersFromFloating()">Apply</button>
+                <button onclick="resetFiltersFromFloating()">Reset</button>
+            </div>
+        </div>
     </div>
     
     <div class="container">
@@ -1133,6 +1187,10 @@ async function generateHTML() {
             const minPA = parseInt(document.getElementById('minPA').value) || 0;
             const minIP = parseFloat(document.getElementById('minIP').value) || 0;
             
+            // Sync floating controls
+            document.getElementById('floatingMinPA').value = minPA;
+            document.getElementById('floatingMinIP').value = minIP;
+            
             // Filter batters
             document.querySelectorAll('tbody[id^="batters-"] .data-row').forEach(row => {
                 const pa = parseInt(row.dataset.pa) || 0;
@@ -1157,9 +1215,27 @@ async function generateHTML() {
         function resetFilters() {
             document.getElementById('minPA').value = '0';
             document.getElementById('minIP').value = '0';
+            document.getElementById('floatingMinPA').value = '0';
+            document.getElementById('floatingMinIP').value = '0';
             document.querySelectorAll('.data-row').forEach(row => {
                 row.classList.remove('hidden');
             });
+        }
+        
+        function applyFiltersFromFloating() {
+            const minPA = parseInt(document.getElementById('floatingMinPA').value) || 0;
+            const minIP = parseFloat(document.getElementById('floatingMinIP').value) || 0;
+            
+            // Sync main controls
+            document.getElementById('minPA').value = minPA;
+            document.getElementById('minIP').value = minIP;
+            
+            // Apply filters
+            applyFilters();
+        }
+        
+        function resetFiltersFromFloating() {
+            resetFilters();
         }
         
         // Floating team selector functionality
