@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-01-22T11:50:03.434Z",
+  "updated": "2026-01-23T11:41:52.708Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -3815,7 +3815,7 @@
       "team": "Cleveland Guardians",
       "teamAbbr": "CLE",
       "league": "AL",
-      "age": 28,
+      "age": 29,
       "g": 131,
       "pa": 421,
       "ab": 379,
@@ -39445,7 +39445,7 @@
       "team": "Cincinnati Reds",
       "teamAbbr": "CIN",
       "league": "NL",
-      "age": 27,
+      "age": 28,
       "g": 7,
       "gs": 0,
       "ip": 7.1,
