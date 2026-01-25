@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-01-24T11:35:01.734Z",
+  "updated": "2026-01-25T11:32:49.397Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -2681,7 +2681,7 @@
       "team": "Chicago White Sox",
       "teamAbbr": "CWS",
       "league": "AL",
-      "age": 25,
+      "age": 26,
       "g": 140,
       "pa": 543,
       "ab": 518,
