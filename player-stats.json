@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-01-25T11:32:49.397Z",
+  "updated": "2026-01-26T11:43:03.074Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -440,7 +440,7 @@
       "team": "Athletics",
       "teamAbbr": "ATH",
       "league": "AL",
-      "age": 24,
+      "age": 25,
       "g": 49,
       "pa": 131,
       "ab": 120,
@@ -11780,7 +11780,7 @@
       "team": "Toronto Blue Jays",
       "teamAbbr": "TOR",
       "league": "AL",
-      "age": 26,
+      "age": 27,
       "g": 82,
       "pa": 227,
       "ab": 188,
@@ -39517,7 +39517,7 @@
       "team": "Cincinnati Reds",
       "teamAbbr": "CIN",
       "league": "NL",
-      "age": 24,
+      "age": 25,
       "g": 8,
       "gs": 0,
       "ip": 10,
@@ -46069,7 +46069,7 @@
       "team": "San Diego Padres",
       "teamAbbr": "SD",
       "league": "NL",
-      "age": 26,
+      "age": 27,
       "g": 2,
       "gs": 0,
       "ip": 3.2,
