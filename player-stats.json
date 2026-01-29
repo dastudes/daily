@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-01-28T11:44:16.143Z",
+  "updated": "2026-01-29T11:58:21.012Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -30373,7 +30373,7 @@
       "team": "Los Angeles Angels",
       "teamAbbr": "LAA",
       "league": "AL",
-      "age": 30,
+      "age": 31,
       "g": 43,
       "gs": 0,
       "ip": 47,
@@ -41317,7 +41317,7 @@
       "team": "Los Angeles Dodgers",
       "teamAbbr": "LAD",
       "league": "NL",
-      "age": 26,
+      "age": 27,
       "g": 12,
       "gs": 0,
       "ip": 12,
@@ -48253,7 +48253,7 @@
       "team": "Washington Nationals",
       "teamAbbr": "WSH",
       "league": "NL",
-      "age": 26,
+      "age": 27,
       "g": 12,
       "gs": 0,
       "ip": 12,
