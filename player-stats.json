@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-01-31T11:40:31.566Z",
+  "updated": "2026-02-01T11:46:30.689Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -8405,7 +8405,7 @@
       "team": "New York Yankees",
       "teamAbbr": "NYY",
       "league": "AL",
-      "age": 27,
+      "age": 28,
       "g": 130,
       "pa": 530,
       "ab": 462,
@@ -12806,7 +12806,7 @@
       "team": "Arizona Diamondbacks",
       "teamAbbr": "AZ",
       "league": "NL",
-      "age": 27,
+      "age": 28,
       "g": 34,
       "pa": 1,
       "ab": 1,
@@ -36037,7 +36037,7 @@
       "team": "Arizona Diamondbacks",
       "teamAbbr": "AZ",
       "league": "NL",
-      "age": 27,
+      "age": 28,
       "g": 33,
       "gs": 23,
       "ip": 154,
@@ -43333,7 +43333,7 @@
       "team": "New York Mets",
       "teamAbbr": "NYM",
       "league": "NL",
-      "age": 33,
+      "age": 34,
       "g": 15,
       "gs": 12,
       "ip": 60.2,
