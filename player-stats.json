@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-02-03T12:02:35.630Z",
+  "updated": "2026-02-04T12:01:18.634Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -25453,7 +25453,7 @@
       "team": "Boston Red Sox",
       "teamAbbr": "BOS",
       "league": "AL",
-      "age": 30,
+      "age": 31,
       "g": 72,
       "gs": 0,
       "ip": 67,
@@ -32917,7 +32917,7 @@
       "team": "Seattle Mariners",
       "teamAbbr": "SEA",
       "league": "AL",
-      "age": 27,
+      "age": 28,
       "g": 23,
       "gs": 23,
       "ip": 126,
