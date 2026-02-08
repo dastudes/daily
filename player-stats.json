@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-02-07T11:46:29.347Z",
+  "updated": "2026-02-08T11:46:17.171Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -7244,7 +7244,7 @@
       "team": "Los Angeles Angels",
       "teamAbbr": "LAA",
       "league": "AL",
-      "age": 21,
+      "age": 22,
       "g": 13,
       "pa": 43,
       "ab": 42,
@@ -20015,7 +20015,7 @@
       "team": "Pittsburgh Pirates",
       "teamAbbr": "PIT",
       "league": "NL",
-      "age": 27,
+      "age": 28,
       "g": 107,
       "pa": 373,
       "ab": 331,
@@ -45469,7 +45469,7 @@
       "team": "Pittsburgh Pirates",
       "teamAbbr": "PIT",
       "league": "NL",
-      "age": 27,
+      "age": 28,
       "g": 1,
       "gs": 0,
       "ip": 1,
