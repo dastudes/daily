@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-02-12T11:59:08.793Z",
+  "updated": "2026-02-13T11:37:22.366Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -34405,7 +34405,7 @@
       "team": "Texas Rangers",
       "teamAbbr": "TEX",
       "league": "AL",
-      "age": 35,
+      "age": 36,
       "g": 22,
       "gs": 22,
       "ip": 130,
@@ -46669,7 +46669,7 @@
       "team": "San Francisco Giants",
       "teamAbbr": "SF",
       "league": "NL",
-      "age": 27,
+      "age": 28,
       "g": 36,
       "gs": 0,
       "ip": 30,
