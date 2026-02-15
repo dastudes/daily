@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-02-14T11:24:52.388Z",
+  "updated": "2026-02-15T11:24:51.436Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -2924,7 +2924,7 @@
       "team": "Chicago White Sox",
       "teamAbbr": "CWS",
       "league": "AL",
-      "age": 23,
+      "age": 24,
       "g": 78,
       "pa": 296,
       "ab": 253,
@@ -6272,7 +6272,7 @@
       "team": "Kansas City Royals",
       "teamAbbr": "KC",
       "league": "AL",
-      "age": 36,
+      "age": 37,
       "g": 46,
       "pa": 125,
       "ab": 113,
@@ -16883,7 +16883,7 @@
       "team": "Los Angeles Dodgers",
       "teamAbbr": "LAD",
       "league": "NL",
-      "age": 26,
+      "age": 27,
       "g": 19,
       "pa": 23,
       "ab": 21,
