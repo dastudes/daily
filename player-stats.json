@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-02-18T11:41:24.600Z",
+  "updated": "2026-02-19T11:39:45.432Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -4652,7 +4652,7 @@
       "team": "Detroit Tigers",
       "teamAbbr": "DET",
       "league": "AL",
-      "age": 25,
+      "age": 26,
       "g": 52,
       "pa": 127,
       "ab": 104,
@@ -23581,7 +23581,7 @@
       "team": "Athletics",
       "teamAbbr": "ATH",
       "league": "AL",
-      "age": 29,
+      "age": 30,
       "g": 27,
       "gs": 27,
       "ip": 135.2,
@@ -44845,7 +44845,7 @@
       "team": "Pittsburgh Pirates",
       "teamAbbr": "PIT",
       "league": "NL",
-      "age": 26,
+      "age": 27,
       "g": 34,
       "gs": 12,
       "ip": 99,
@@ -45853,7 +45853,7 @@
       "team": "San Diego Padres",
       "teamAbbr": "SD",
       "league": "NL",
-      "age": 29,
+      "age": 30,
       "g": 27,
       "gs": 27,
       "ip": 135.2,
