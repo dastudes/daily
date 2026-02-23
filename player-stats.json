@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-02-22T11:23:27.186Z",
+  "updated": "2026-02-23T11:41:08.071Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -683,7 +683,7 @@
       "team": "Athletics",
       "teamAbbr": "ATH",
       "league": "AL",
-      "age": 26,
+      "age": 27,
       "g": 37,
       "pa": 0,
       "ab": 0,
@@ -23653,7 +23653,7 @@
       "team": "Athletics",
       "teamAbbr": "ATH",
       "league": "AL",
-      "age": 26,
+      "age": 27,
       "g": 37,
       "gs": 0,
       "ip": 42.1,
@@ -26797,7 +26797,7 @@
       "team": "Chicago White Sox",
       "teamAbbr": "CWS",
       "league": "AL",
-      "age": 27,
+      "age": 28,
       "g": 5,
       "gs": 0,
       "ip": 3.1,
