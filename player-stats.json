@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-03-03T11:33:55.663Z",
+  "updated": "2026-03-04T11:34:11.796Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -19286,7 +19286,7 @@
       "team": "Philadelphia Phillies",
       "teamAbbr": "PHI",
       "league": "NL",
-      "age": 33,
+      "age": 34,
       "g": 147,
       "pa": 589,
       "ab": 547,
@@ -44168,7 +44168,7 @@
       "pitchHand": "R"
     },
     {
-      "name": "Ranger Suárez",
+      "name": "Ranger Suarez",
       "playerId": 624133,
       "team": "Philadelphia Phillies",
       "teamAbbr": "PHI",
