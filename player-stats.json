@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-03-09T11:39:37.137Z",
+  "updated": "2026-03-10T11:34:33.339Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -1547,7 +1547,7 @@
       "team": "Baltimore Orioles",
       "teamAbbr": "BAL",
       "league": "AL",
-      "age": 27,
+      "age": 28,
       "g": 16,
       "pa": 45,
       "ab": 41,
@@ -22310,7 +22310,7 @@
       "team": "St. Louis Cardinals",
       "teamAbbr": "STL",
       "league": "NL",
-      "age": 28,
+      "age": 29,
       "g": 19,
       "pa": 41,
       "ab": 34,
@@ -33397,7 +33397,7 @@
       "team": "Seattle Mariners",
       "teamAbbr": "SEA",
       "league": "AL",
-      "age": 30,
+      "age": 31,
       "g": 2,
       "gs": 2,
       "ip": 7,
@@ -35317,7 +35317,7 @@
       "team": "Toronto Blue Jays",
       "teamAbbr": "TOR",
       "league": "AL",
-      "age": 28,
+      "age": 29,
       "g": 66,
       "gs": 1,
       "ip": 73,
