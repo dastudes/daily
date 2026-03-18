@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-03-17T11:47:01.531Z",
+  "updated": "2026-03-18T11:48:01.713Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -4193,7 +4193,7 @@
       "team": "Cleveland Guardians",
       "teamAbbr": "CLE",
       "league": "AL",
-      "age": 27,
+      "age": 28,
       "g": 48,
       "pa": 0,
       "ab": 0,
@@ -19367,7 +19367,7 @@
       "team": "Philadelphia Phillies",
       "teamAbbr": "PHI",
       "league": "NL",
-      "age": 34,
+      "age": 35,
       "g": 134,
       "pa": 549,
       "ab": 502,
@@ -27229,7 +27229,7 @@
       "team": "Cleveland Guardians",
       "teamAbbr": "CLE",
       "league": "AL",
-      "age": 27,
+      "age": 28,
       "g": 48,
       "gs": 0,
       "ip": 47.1,
@@ -31621,7 +31621,7 @@
       "team": "Minnesota Twins",
       "teamAbbr": "MIN",
       "league": "AL",
-      "age": 29,
+      "age": 30,
       "g": 3,
       "gs": 0,
       "ip": 5.1,
