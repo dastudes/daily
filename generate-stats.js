@@ -806,30 +806,6 @@ async function generateHTML() {
             margin-bottom: 5px;
         }
         
-        .controls {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: white;
-            border: 2px solid #CD853F;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(139, 69, 19, 0.15);
-        }
-        
-        .controls-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .controls-left {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
         button {
             padding: 10px 20px;
             background: linear-gradient(135deg, #8B4513, #A0522D);
@@ -857,13 +833,6 @@ async function generateHTML() {
             border: 1px solid #CD853F;
             border-radius: 4px;
             background-color: white;
-            width: 60px;
-        }
-        
-        #statsInfo {
-            font-style: italic;
-            color: #666;
-            font-size: 0.95em;
         }
         
         
@@ -966,23 +935,46 @@ async function generateHTML() {
         }
         
         /* Floating team selector */
-        .floating-selector {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+        .sticky-nav-bar {
+            position: sticky;
+            top: 0;
             z-index: 1000;
             background-color: white;
-            border: 2px solid #8B4513;
-            border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            min-width: 220px;
+            border-bottom: 3px solid #8B4513;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            padding: 12px 20px;
         }
         
-        .floating-selector select {
-            width: 100%;
-            padding: 8px;
+        .nav-bar-content {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filters-group {
+            gap: 12px;
+        }
+        
+        .current-team-display {
             font-size: 0.95em;
+            color: #2563eb;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .sticky-nav-bar select {
+            padding: 6px 10px;
+            font-size: 0.9em;
             font-family: Georgia, "Times New Roman", serif;
             border: 1px solid #CD853F;
             border-radius: 4px;
@@ -990,58 +982,42 @@ async function generateHTML() {
             cursor: pointer;
         }
         
-        .floating-selector select:hover {
+        .sticky-nav-bar select:hover {
             border-color: #8B4513;
         }
         
-        .floating-filters {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #E8D5B7;
-        }
-        
-        .filter-row {
+        .filter-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            gap: 5px;
         }
         
-        .filter-row label {
+        .filter-item label {
             font-size: 0.9em;
             color: #8B4513;
             font-weight: 600;
+            white-space: nowrap;
         }
         
-        .filter-row input {
-            width: 60px;
-            padding: 4px 6px;
+        .filter-item input {
+            width: 55px;
+            padding: 5px 6px;
             font-size: 0.9em;
             font-family: Georgia, "Times New Roman", serif;
             border: 1px solid #CD853F;
             border-radius: 4px;
         }
         
-        .filter-buttons {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        
-        .filter-buttons button {
-            flex: 1;
-            padding: 6px 10px;
-            font-size: 0.85em;
-        }
-        
-        .current-team-display {
+        .sticky-nav-bar button {
+            padding: 6px 14px;
             font-size: 0.9em;
-            color: #2563eb;
-            font-weight: bold;
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #E8D5B7;
-            text-align: center;
+        }
+        
+        .season-info {
+            font-size: 0.85em;
+            color: #666;
+            font-style: italic;
+            white-space: nowrap;
         }
         
         @media (max-width: 800px) {
@@ -1057,18 +1033,35 @@ async function generateHTML() {
                 font-size: 1em;
             }
             
-            .controls-inner {
-                flex-direction: column;
-                align-items: stretch;
+            .sticky-nav-bar {
+                padding: 10px;
             }
             
-            .controls-left {
+            .nav-bar-content {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 10px;
             }
             
-            button, input {
+            .nav-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            
+            .filters-group {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .sticky-nav-bar select,
+            .sticky-nav-bar button {
                 width: 100%;
+            }
+            
+            .filter-item {
+                flex: 1;
+                min-width: 120px;
             }
             
             table {
@@ -1082,40 +1075,32 @@ async function generateHTML() {
             .team-section {
                 padding: 12px;
             }
-            
-            .floating-selector {
-                top: 10px;
-                right: 10px;
-                min-width: 180px;
-                padding: 8px;
-            }
-            
-            .floating-selector select {
-                font-size: 0.85em;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="floating-selector">
-        <div class="current-team-display" id="currentTeamDisplay">Viewing: Top of Page</div>
-        <select id="teamSelector" onchange="jumpToTeam()">
-            <option value="">-- Select Team --</option>
-            <!-- Will be populated dynamically after page loads -->
-        </select>
-        <div class="floating-filters">
-            <div class="filter-row">
-                <label for="floatingMinPA">Min PA:</label>
-                <input type="number" id="floatingMinPA" value="0">
+    <div class="sticky-nav-bar">
+        <div class="nav-bar-content">
+            <div class="nav-group">
+                <span class="current-team-display" id="currentTeamDisplay">Viewing: Top of Page</span>
+                <select id="teamSelector" onchange="jumpToTeam()">
+                    <option value="">-- Jump to Team --</option>
+                    <!-- Will be populated dynamically after page loads -->
+                </select>
             </div>
-            <div class="filter-row">
-                <label for="floatingMinIP">Min IP:</label>
-                <input type="number" id="floatingMinIP" value="0">
+            <div class="nav-group filters-group">
+                <div class="filter-item">
+                    <label for="minPA">Min PA:</label>
+                    <input type="number" id="minPA" value="0">
+                </div>
+                <div class="filter-item">
+                    <label for="minIP">Min IP:</label>
+                    <input type="number" id="minIP" value="0">
+                </div>
+                <button onclick="applyFilters()">Apply</button>
+                <button onclick="resetFilters()">Reset</button>
             </div>
-            <div class="filter-buttons">
-                <button onclick="applyFiltersFromFloating()">Apply</button>
-                <button onclick="resetFiltersFromFloating()">Reset</button>
-            </div>
+            <div class="nav-group season-info" id="statsInfo">${season} Season</div>
         </div>
     </div>
     
@@ -1151,24 +1136,6 @@ async function generateHTML() {
             </div>
         </details>
         
-        <div class="controls">
-            <div class="controls-inner">
-                <div class="controls-left">
-                    <button onclick="applyFilters()">Apply Filters</button>
-                    <div>
-                        <label for="minPA">Min PA: </label>
-                        <input type="number" id="minPA" value="0">
-                    </div>
-                    <div>
-                        <label for="minIP">Min IP: </label>
-                        <input type="number" id="minIP" value="0">
-                    </div>
-                    <button onclick="resetFilters()">Show All</button>
-                </div>
-                <div id="statsInfo">${season} Season - Generated: ${dateStr}</div>
-            </div>
-        </div>
-        
         <div id="content">
             <div id="american-league">
                 <h2 class="league-header">AMERICAN LEAGUE</h2>
@@ -1186,10 +1153,6 @@ async function generateHTML() {
         function applyFilters() {
             const minPA = parseInt(document.getElementById('minPA').value) || 0;
             const minIP = parseFloat(document.getElementById('minIP').value) || 0;
-            
-            // Sync floating controls
-            document.getElementById('floatingMinPA').value = minPA;
-            document.getElementById('floatingMinIP').value = minIP;
             
             // Filter batters
             document.querySelectorAll('tbody[id^="batters-"] .data-row').forEach(row => {
@@ -1215,30 +1178,12 @@ async function generateHTML() {
         function resetFilters() {
             document.getElementById('minPA').value = '0';
             document.getElementById('minIP').value = '0';
-            document.getElementById('floatingMinPA').value = '0';
-            document.getElementById('floatingMinIP').value = '0';
             document.querySelectorAll('.data-row').forEach(row => {
                 row.classList.remove('hidden');
             });
         }
         
-        function applyFiltersFromFloating() {
-            const minPA = parseInt(document.getElementById('floatingMinPA').value) || 0;
-            const minIP = parseFloat(document.getElementById('floatingMinIP').value) || 0;
-            
-            // Sync main controls
-            document.getElementById('minPA').value = minPA;
-            document.getElementById('minIP').value = minIP;
-            
-            // Apply filters
-            applyFilters();
-        }
-        
-        function resetFiltersFromFloating() {
-            resetFilters();
-        }
-        
-        // Floating team selector functionality
+        // Team selector functionality
         function populateTeamSelector() {
             const selector = document.getElementById('teamSelector');
             const alSection = document.getElementById('american-league');
