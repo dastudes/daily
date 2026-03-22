@@ -943,6 +943,7 @@ async function generateHTML() {
             border-bottom: 3px solid #8B4513;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             padding: 12px 20px;
+            margin-bottom: 20px;
         }
         
         .nav-bar-content {
