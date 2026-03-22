@@ -1013,12 +1013,6 @@ async function generateHTML() {
             font-size: 0.9em;
         }
         
-        .season-info {
-            font-size: 0.85em;
-            color: #666;
-            font-style: italic;
-            white-space: nowrap;
-        }
         
         @media (max-width: 800px) {
             body {
@@ -1100,7 +1094,6 @@ async function generateHTML() {
                 <button onclick="applyFilters()">Apply</button>
                 <button onclick="resetFilters()">Reset</button>
             </div>
-            <div class="nav-group season-info" id="statsInfo">${season} Season</div>
         </div>
     </div>
     
@@ -1112,6 +1105,7 @@ async function generateHTML() {
         <div class="header">
             <h1>Baseball Graphs ${season} Player Stats</h1>
             <p>Team-by-Team Stats for Easy Reading</p>
+            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: ${dateStr}</p>
         </div>
         
         <div class="nav-bar">
