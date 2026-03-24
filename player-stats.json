@@ -1,6 +1,6 @@
 {
   "season": 2025,
-  "updated": "2026-03-23T11:48:08.745Z",
+  "updated": "2026-03-24T11:51:03.984Z",
   "batters": [
     {
       "name": "Brent Rooker",
@@ -36349,7 +36349,7 @@
       "team": "Arizona Diamondbacks",
       "teamAbbr": "AZ",
       "league": "NL",
-      "age": 31,
+      "age": 32,
       "g": 29,
       "gs": 0,
       "ip": 25.2,
@@ -42133,7 +42133,7 @@
       "team": "Miami Marlins",
       "teamAbbr": "MIA",
       "league": "NL",
-      "age": 26,
+      "age": 27,
       "g": 24,
       "gs": 0,
       "ip": 36.2,
