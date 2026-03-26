@@ -304,29 +304,31 @@ async function loadTeamStats(team, season) {
 
 async function checkSeasonHasData(season) {
     console.log(`Checking if ${season} season has data...`);
-    const teams = await fetchTeams(season);
-    if (!teams || teams.length === 0) return false;
-    
-    // Check first team's roster
-    const sampleTeam = teams[0];
-    const roster = await fetchTeamRoster(sampleTeam.id, season);
-    if (!roster || roster.length === 0) return false;
-    
-    // Check if any players have stats
-    let hasStats = false;
-    for (const player of roster.slice(0, 5)) { // Just check first 5 players
-        const stats = await fetchPlayerStats(player.person.id, season);
-        for (const statGroup of stats) {
-            if (statGroup.splits && statGroup.splits.length > 0) {
-                hasStats = true;
-                break;
+    try {
+        const response = await fetch(`${API_BASE}/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason`);
+        const data = await response.json();
+        const standings = data.records;
+        if (!standings || standings.length === 0) return false;
+
+        let hasGamesPlayed = false;
+        for (const division of standings) {
+            if (division.teamRecords && division.teamRecords.length > 0) {
+                for (const team of division.teamRecords) {
+                    if (team.wins > 0 || team.losses > 0) {
+                        hasGamesPlayed = true;
+                        break;
+                    }
+                }
             }
+            if (hasGamesPlayed) break;
         }
-        if (hasStats) break;
+
+        console.log(`${season} has data: ${hasGamesPlayed}`);
+        return hasGamesPlayed;
+    } catch (error) {
+        console.log(`${season}: Error - ${error.message}`);
+        return false;
     }
-    
-    console.log(`${season} has data: ${hasStats}`);
-    return hasStats;
 }
 
 async function generateHTML() {
