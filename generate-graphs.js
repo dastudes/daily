@@ -952,7 +952,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                 <h2>${season} American League Standings</h2>
                 ${alStandingsHTML}
                 <div class="footer-note">
-                    WC = Wild Card Rank | PythVar = Actual Wins âˆ’ Pythagorean Expected Wins<br>
+                    WC = Wild Card Rank | PythVar = Actual Wins - Pythagorean Expected Wins<br>
                     <strong>z</strong>=Clinched Division &amp; Best Record | <strong>y</strong>=Clinched Division | <strong>w</strong>=Clinched Wild Card
                     
                 </div>
@@ -962,7 +962,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                 <h2>${season} National League Standings</h2>
                 ${nlStandingsHTML}
                 <div class="footer-note">
-                    WC = Wild Card Rank | PythVar = Actual Wins âˆ’ Pythagorean Expected Wins<br>
+                    WC = Wild Card Rank | PythVar = Actual Wins - Pythagorean Expected Wins<br>
                     <strong>z</strong>=Clinched Division &amp; Best Record | <strong>y</strong>=Clinched Division | <strong>w</strong>=Clinched Wild Card
                 
                 </div>
@@ -1395,8 +1395,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             // Calculate axis bounds from team data with padding
             const rsValues = teams.map(t => t.rs);
             const raValues = teams.map(t => t.ra);
-            const rsPad = Math.max(15, (Math.max(...rsValues) - Math.min(...rsValues)) * 0.12);
-            const raPad = Math.max(15, (Math.max(...raValues) - Math.min(...raValues)) * 0.12);
+            const rsPad = (Math.max(...rsValues) - Math.min(...rsValues)) * 0.10;
+            const raPad = (Math.max(...raValues) - Math.min(...raValues)) * 0.10;
             const xMin = Math.floor(Math.min(...rsValues) - rsPad);
             const xMax = Math.ceil(Math.max(...rsValues) + rsPad);
             const yMin = Math.floor(Math.min(...raValues) - raPad);
