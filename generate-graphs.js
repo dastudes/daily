@@ -1392,6 +1392,16 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             const isobar500 = calculateIsobar(teams, 0.500);
             const isobar600 = calculateIsobar(teams, 0.600);
             
+            // Calculate axis bounds from team data with padding
+            const rsValues = teams.map(t => t.rs);
+            const raValues = teams.map(t => t.ra);
+            const rsPad = Math.max(15, (Math.max(...rsValues) - Math.min(...rsValues)) * 0.12);
+            const raPad = Math.max(15, (Math.max(...raValues) - Math.min(...raValues)) * 0.12);
+            const xMin = Math.floor(Math.min(...rsValues) - rsPad);
+            const xMax = Math.ceil(Math.max(...rsValues) + rsPad);
+            const yMin = Math.floor(Math.min(...raValues) - raPad);
+            const yMax = Math.ceil(Math.max(...raValues) + raPad);
+            
             chart1 = new Chart(ctx, {
                 type: 'scatter',
                 data: {
@@ -1468,10 +1478,14 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                     },
                     scales: {
                         x: {
+                            min: xMin,
+                            max: xMax,
                             title: { display: true, text: 'Runs Scored', font: { size: 14, weight: 'bold' } },
                             grid: { color: '#e0e0e0' }
                         },
                         y: {
+                            min: yMin,
+                            max: yMax,
                             title: { display: true, text: 'Runs Allowed', font: { size: 14, weight: 'bold' } },
                             reverse: true,
                             grid: { color: '#e0e0e0' }
