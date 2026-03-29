@@ -183,14 +183,14 @@ function createBatterRow(player, stats, playerTeamCount) {
             <td style="${nameStyle}"><a href="${playerLink}" target="_blank">${player.person.fullName}${handednessSymbol}</a></td>
             <td class="stat-num">${age}</td>
             <td>${position}</td>
+            <td class="stat-num">${stats.gamesPlayed || 0}</td>
             <td class="stat-num">${rc}</td>
+            <td class="stat-num">${pa}</td>
             <td class="stat-num">${stats.runs || 0}</td>
             <td class="stat-num">${stats.rbi || 0}</td>
             <td class="stat-num">${avg}</td>
             <td class="stat-num">${obp}</td>
             <td class="stat-num">${slg}</td>
-            <td class="stat-num">${stats.gamesPlayed || 0}</td>
-            <td class="stat-num">${pa}</td>
             <td class="stat-num">${stats.hits || 0}</td>
             <td class="stat-num">${stats.doubles || 0}</td>
             <td class="stat-num">${stats.triples || 0}</td>
@@ -491,14 +491,14 @@ async function generateHTML() {
                             <th>Name</th>
                             <th class="stat-num sortable" data-sort="age" data-default="desc">Age</th>
                             <th>Pos</th>
+                            <th class="stat-num sortable" data-sort="g" data-default="desc">G</th>
                             <th class="stat-num sortable sorted" data-sort="rc" data-default="desc">RC</th>
+                            <th class="stat-num sortable" data-sort="pa" data-default="desc">PA</th>
                             <th class="stat-num sortable" data-sort="r" data-default="desc">R</th>
                             <th class="stat-num sortable" data-sort="rbi" data-default="desc">RBI</th>
                             <th class="stat-num sortable" data-sort="ba" data-default="desc">BA</th>
                             <th class="stat-num sortable" data-sort="obp" data-default="desc">OBP</th>
                             <th class="stat-num sortable" data-sort="slg" data-default="desc">SLG</th>
-                            <th class="stat-num sortable" data-sort="g" data-default="desc">G</th>
-                            <th class="stat-num sortable" data-sort="pa" data-default="desc">PA</th>
                             <th class="stat-num sortable" data-sort="h" data-default="desc">H</th>
                             <th class="stat-num sortable" data-sort="2b" data-default="desc">2B</th>
                             <th class="stat-num sortable" data-sort="3b" data-default="desc">3B</th>
@@ -577,14 +577,14 @@ async function generateHTML() {
                             <th>Name</th>
                             <th class="stat-num sortable" data-sort="age" data-default="desc">Age</th>
                             <th>Pos</th>
+                            <th class="stat-num sortable" data-sort="g" data-default="desc">G</th>
                             <th class="stat-num sortable sorted" data-sort="rc" data-default="desc">RC</th>
+                            <th class="stat-num sortable" data-sort="pa" data-default="desc">PA</th>
                             <th class="stat-num sortable" data-sort="r" data-default="desc">R</th>
                             <th class="stat-num sortable" data-sort="rbi" data-default="desc">RBI</th>
                             <th class="stat-num sortable" data-sort="ba" data-default="desc">BA</th>
                             <th class="stat-num sortable" data-sort="obp" data-default="desc">OBP</th>
                             <th class="stat-num sortable" data-sort="slg" data-default="desc">SLG</th>
-                            <th class="stat-num sortable" data-sort="g" data-default="desc">G</th>
-                            <th class="stat-num sortable" data-sort="pa" data-default="desc">PA</th>
                             <th class="stat-num sortable" data-sort="h" data-default="desc">H</th>
                             <th class="stat-num sortable" data-sort="2b" data-default="desc">2B</th>
                             <th class="stat-num sortable" data-sort="3b" data-default="desc">3B</th>
