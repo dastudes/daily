@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-04-05T16:24:37.680Z",
+  "updated": "2026-04-05T16:34:15.858Z",
   "batters": [
     {
       "name": "Shea Langeliers",
@@ -7210,33 +7210,6 @@
       "tb": 10,
       "rc": 4,
       "batSide": "L"
-    },
-    {
-      "name": "Mookie Betts",
-      "playerId": 605141,
-      "team": "Los Angeles Dodgers",
-      "teamAbbr": "LAD",
-      "league": "NL",
-      "age": 33,
-      "g": 8,
-      "pa": 32,
-      "ab": 28,
-      "h": 5,
-      "hr": 2,
-      "rbi": 7,
-      "r": 7,
-      "sb": 0,
-      "bb": 3,
-      "so": 4,
-      "avg": 0.179,
-      "obp": 0.281,
-      "slg": 0.429,
-      "ops": 0.71,
-      "doubles": 1,
-      "triples": 0,
-      "tb": 12,
-      "rc": 3,
-      "batSide": "R"
     },
     {
       "name": "Max Muncy",
