@@ -403,7 +403,11 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         
         // Sort teams within each division by wins (descending)
         Object.keys(divisions).forEach(div => {
-            divisions[div].teams.sort((a, b) => b.w - a.w);
+            divisions[div].teams.sort((a, b) => {
+                    const pctA = (a.w + a.l) > 0 ? a.w / (a.w + a.l) : 0;
+                    const pctB = (b.w + b.l) > 0 ? b.w / (b.w + b.l) : 0;
+                    return pctB - pctA;
+                });
         });
         
         console.log(`Division keys found: ${Object.keys(divisions).join(', ')}`);
@@ -1392,16 +1396,6 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             const isobar500 = calculateIsobar(teams, 0.500);
             const isobar600 = calculateIsobar(teams, 0.600);
             
-            // Calculate axis bounds from team data with padding
-            const rsValues = teams.map(t => t.rs);
-            const raValues = teams.map(t => t.ra);
-            const rsPad = (Math.max(...rsValues) - Math.min(...rsValues)) * 0.10;
-            const raPad = (Math.max(...raValues) - Math.min(...raValues)) * 0.10;
-            const xMin = Math.floor(Math.min(...rsValues) - rsPad);
-            const xMax = Math.ceil(Math.max(...rsValues) + rsPad);
-            const yMin = Math.floor(Math.min(...raValues) - raPad);
-            const yMax = Math.ceil(Math.max(...raValues) + raPad);
-            
             chart1 = new Chart(ctx, {
                 type: 'scatter',
                 data: {
@@ -1478,14 +1472,10 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                     },
                     scales: {
                         x: {
-                            min: xMin,
-                            max: xMax,
                             title: { display: true, text: 'Runs Scored', font: { size: 14, weight: 'bold' } },
                             grid: { color: '#e0e0e0' }
                         },
                         y: {
-                            min: yMin,
-                            max: yMax,
                             title: { display: true, text: 'Runs Allowed', font: { size: 14, weight: 'bold' } },
                             reverse: true,
                             grid: { color: '#e0e0e0' }
@@ -1518,6 +1508,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             const maxOBP = Math.max(...teams.map(t => t.obp));
             const minISO = Math.min(...teams.map(t => t.iso));
             const maxISO = Math.max(...teams.map(t => t.iso));
+            const obpPad = (maxOBP - minOBP) * 0.15;
+            const isoPad = (maxISO - minISO) * 0.15;
             
             chart2 = new Chart(ctx, {
                 type: 'scatter',
@@ -1533,7 +1525,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                         },
                         {
                             label: 'Avg OBP',
-                            data: [{ x: avgOBP, y: minISO }, { x: avgOBP, y: maxISO }],
+                            data: [{ x: avgOBP, y: minISO - isoPad }, { x: avgOBP, y: maxISO + isoPad }],
                             type: 'line',
                             borderColor: '#888',
                             borderWidth: 2,
@@ -1544,7 +1536,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                         },
                         {
                             label: 'Avg ISO',
-                            data: [{ x: minOBP, y: avgISO }, { x: maxOBP, y: avgISO }],
+                            data: [{ x: minOBP - obpPad, y: avgISO }, { x: maxOBP + obpPad, y: avgISO }],
                             type: 'line',
                             borderColor: '#888',
                             borderWidth: 2,
@@ -1616,6 +1608,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             const maxFIP = Math.max(...teams.map(t => t.fip));
             const minDER = Math.min(...teams.map(t => t.der));
             const maxDER = Math.max(...teams.map(t => t.der));
+            const fipPad = (maxFIP - minFIP) * 0.15;
+            const derPad = (maxDER - minDER) * 0.15;
             
             chart3 = new Chart(ctx, {
                 type: 'scatter',
@@ -1631,7 +1625,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                         },
                         {
                             label: 'Avg FIP',
-                            data: [{ x: avgFIP, y: minDER }, { x: avgFIP, y: maxDER }],
+                            data: [{ x: avgFIP, y: minDER - derPad }, { x: avgFIP, y: maxDER + derPad }],
                             type: 'line',
                             borderColor: '#888',
                             borderWidth: 2,
@@ -1642,7 +1636,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                         },
                         {
                             label: 'Avg DER',
-                            data: [{ x: minFIP, y: avgDER }, { x: maxFIP, y: avgDER }],
+                            data: [{ x: minFIP - fipPad, y: avgDER }, { x: maxFIP + fipPad, y: avgDER }],
                             type: 'line',
                             borderColor: '#888',
                             borderWidth: 2,
