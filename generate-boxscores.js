@@ -634,6 +634,8 @@ async function generateHTML() {
             .game-score { font-size: 1em; }
         }
     </style>
+    <script data-goatcounter="https://baseball-graphs.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
     <div class="container">
