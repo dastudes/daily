@@ -374,10 +374,10 @@ async function generateHTML() {
             text-align: center;
             margin-bottom: 20px;
             padding: 25px;
-            background: linear-gradient(135deg, #8B4513, #CD853F, #8B4513);
+            background: linear-gradient(135deg, #2d6a4f, #52b788, #2d6a4f);
             color: white;
             border-radius: 8px;
-            box-shadow: 0 3px 6px rgba(139, 69, 19, 0.3);
+            box-shadow: 0 3px 6px rgba(45, 106, 79, 0.3);
         }
         .header h1 { font-size: 2.2em; font-weight: bold; margin: 0 0 8px 0; line-height: 1.2; }
         .header p { font-size: 1.1em; opacity: 0.95; margin: 0; }
@@ -398,7 +398,7 @@ async function generateHTML() {
             font-size: 1.1em;
             transition: background-color 0.2s;
         }
-        .nav-bar a.active { background: #8B4513; color: white; }
+        .nav-bar a.active { background: #2d6a4f; color: white; }
         .nav-bar a:not(.active) { background: #e5e7eb; color: #374151; }
         .nav-bar a:not(.active):hover { background: #d1d5db; }
 
@@ -433,7 +433,7 @@ async function generateHTML() {
 
         .expand-btn {
             padding: 8px 18px;
-            background: linear-gradient(135deg, #8B4513, #A0522D);
+            background: linear-gradient(135deg, #2d6a4f, #40916c);
             color: white;
             border: none;
             border-radius: 5px;
@@ -444,15 +444,15 @@ async function generateHTML() {
             white-space: nowrap;
             box-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
-        .expand-btn:hover { background: linear-gradient(135deg, #A0522D, #CD853F); }
+        .expand-btn:hover { background: linear-gradient(135deg, #40916c, #52b788); }
 
         /* Individual game box */
         .game-box {
             margin-bottom: 14px;
-            border: 2px solid #CD853F;
+            border: 2px solid #52b788;
             border-radius: 8px;
             background: white;
-            box-shadow: 0 2px 4px rgba(139, 69, 19, 0.12);
+            box-shadow: 0 2px 4px rgba(45, 106, 79, 0.12);
         }
 
         .game-summary {
@@ -467,8 +467,8 @@ async function generateHTML() {
         }
         .game-summary::-webkit-details-marker { display: none; }
         details[open] > .game-summary {
-            border-bottom: 2px solid #CD853F;
-            background: #FFF8F0;
+            border-bottom: 2px solid #52b788;
+            background: #f0faf4;
             border-radius: 6px 6px 0 0;
         }
 
@@ -480,7 +480,7 @@ async function generateHTML() {
             height: 0;
             border-style: solid;
             border-width: 5px 0 5px 8px;
-            border-color: transparent transparent transparent #8B4513;
+            border-color: transparent transparent transparent #2d6a4f;
             transition: transform 0.25s ease;
             flex-shrink: 0;
         }
@@ -491,7 +491,7 @@ async function generateHTML() {
         .game-teams {
             font-size: 1.1em;
             font-weight: bold;
-            color: #8B4513;
+            color: #2d6a4f;
             flex: 1;
         }
         .game-score {
@@ -523,10 +523,10 @@ async function generateHTML() {
             white-space: nowrap;
         }
         .linescore-table th {
-            background: #F5DEB3;
+            background: #d8f3dc;
             padding: 5px 9px;
             text-align: center;
-            border-bottom: 2px solid #8B4513;
+            border-bottom: 2px solid #2d6a4f;
             font-family: Georgia, "Times New Roman", serif;
             min-width: 26px;
         }
@@ -534,14 +534,14 @@ async function generateHTML() {
         .linescore-table td {
             padding: 4px 9px;
             text-align: center;
-            border-bottom: 1px solid #E8D5B7;
+            border-bottom: 1px solid #b7e4c7;
         }
         .linescore-table td.ls-team {
             text-align: left;
             font-family: Georgia, "Times New Roman", serif;
             font-weight: bold;
         }
-        .ls-rhe-sep { border-left: 2px solid #8B4513 !important; }
+        .ls-rhe-sep { border-left: 2px solid #2d6a4f !important; }
         .ls-bold { font-weight: bold; }
 
         /* Two-column layout for batting/pitching */
@@ -558,7 +558,7 @@ async function generateHTML() {
         .section-title {
             font-size: 1.0em;
             font-weight: bold;
-            color: #8B4513;
+            color: #2d6a4f;
             margin-top: 14px;
             margin-bottom: 5px;
         }
@@ -574,9 +574,9 @@ async function generateHTML() {
             margin-bottom: 2px;
         }
         .box-table th {
-            background: #F5DEB3;
+            background: #d8f3dc;
             padding: 5px 4px;
-            border-bottom: 2px solid #8B4513;
+            border-bottom: 2px solid #2d6a4f;
             font-family: Georgia, "Times New Roman", serif;
             font-size: 0.95em;
             white-space: nowrap;
@@ -584,7 +584,7 @@ async function generateHTML() {
         .box-table th.name-col { text-align: left; }
         .box-table td {
             padding: 3px 4px;
-            border-bottom: 1px solid #E8D5B7;
+            border-bottom: 1px solid #b7e4c7;
         }
         .box-table td.name-col {
             font-family: Georgia, "Times New Roman", serif;
@@ -592,9 +592,9 @@ async function generateHTML() {
         }
         .stat-num { text-align: right; }
         .pos-tag { font-size: 0.78em; color: #6b7280; }
-        .season-col { color: #8B4513; font-weight: bold; }
+        .season-col { color: #2d6a4f; font-weight: bold; }
         .totals-row td {
-            border-top: 2px solid #8B4513;
+            border-top: 2px solid #2d6a4f;
             font-weight: bold;
         }
 
@@ -603,7 +603,7 @@ async function generateHTML() {
             font-size: 0.9em;
             color: #374151;
             padding-top: 10px;
-            border-top: 1px solid #E8D5B7;
+            border-top: 1px solid #b7e4c7;
         }
 
         .no-games {
@@ -612,7 +612,7 @@ async function generateHTML() {
             color: #6b7280;
             font-size: 1.1em;
             background: white;
-            border: 2px solid #CD853F;
+            border: 2px solid #52b788;
             border-radius: 8px;
         }
 
