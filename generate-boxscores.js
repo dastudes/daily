@@ -1,0 +1,661 @@
+const fetch = require('node-fetch');
+const fs = require('fs');
+
+const API_BASE = 'https://statsapi.mlb.com/api/v1';
+
+// Get yesterday's date in Eastern time (YYYY-MM-DD)
+function getYesterdayDate() {
+    const now = new Date();
+    const eastern = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+    eastern.setDate(eastern.getDate() - 1);
+    const year = eastern.getFullYear();
+    const month = String(eastern.getMonth() + 1).padStart(2, '0');
+    const day = String(eastern.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+// Format a rate stat (OBP, AVG, etc.) without leading zero
+// OPS can exceed 1.000, so handle that case
+function formatOPS(val) {
+    if (!val || isNaN(parseFloat(val))) return '-';
+    const num = parseFloat(val);
+    if (num >= 1) return num.toFixed(3);
+    return num.toFixed(3).replace(/^0/, '');
+}
+
+async function fetchSchedule(date) {
+    const url = `${API_BASE}/schedule?sportId=1&date=${date}&hydrate=linescore,decisions`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.dates && data.dates.length > 0 ? data.dates[0].games : [];
+}
+
+async function fetchBoxscore(gamePk) {
+    const url = `${API_BASE}/game/${gamePk}/boxscore`;
+    const response = await fetch(url);
+    return response.json();
+}
+
+// Generate the inning-by-inning linescore table
+function generateLinescoreHTML(linescore, awayAbbr, homeAbbr) {
+    if (!linescore || !linescore.innings) return '';
+
+    const innings = linescore.innings;
+    const numInnings = Math.max(innings.length, 9);
+
+    let html = '<table class="linescore-table"><thead><tr>';
+    html += '<th class="ls-team">Team</th>';
+    for (let i = 1; i <= numInnings; i++) {
+        html += `<th>${i}</th>`;
+    }
+    html += '<th class="ls-rhe-sep">R</th><th>H</th><th>E</th>';
+    html += '</tr></thead><tbody>';
+
+    // Away row
+    html += '<tr>';
+    html += `<td class="ls-team">${awayAbbr}</td>`;
+    for (let i = 0; i < numInnings; i++) {
+        const inning = innings[i];
+        const runs = inning && inning.away && inning.away.runs !== undefined
+            ? inning.away.runs : (i < innings.length ? '' : '');
+        html += `<td>${runs}</td>`;
+    }
+    const awayTotals = linescore.teams && linescore.teams.away ? linescore.teams.away : {};
+    html += `<td class="ls-rhe-sep ls-bold">${awayTotals.runs !== undefined ? awayTotals.runs : ''}</td>`;
+    html += `<td class="ls-bold">${awayTotals.hits !== undefined ? awayTotals.hits : ''}</td>`;
+    html += `<td class="ls-bold">${awayTotals.errors !== undefined ? awayTotals.errors : ''}</td>`;
+    html += '</tr>';
+
+    // Home row
+    html += '<tr>';
+    html += `<td class="ls-team">${homeAbbr}</td>`;
+    for (let i = 0; i < numInnings; i++) {
+        const inning = innings[i];
+        let runs = '';
+        if (inning && inning.home) {
+            // runs undefined = walk-off, bottom not played
+            runs = inning.home.runs !== undefined ? inning.home.runs : 'x';
+        } else if (i < innings.length) {
+            runs = 'x';
+        }
+        html += `<td>${runs}</td>`;
+    }
+    const homeTotals = linescore.teams && linescore.teams.home ? linescore.teams.home : {};
+    html += `<td class="ls-rhe-sep ls-bold">${homeTotals.runs !== undefined ? homeTotals.runs : ''}</td>`;
+    html += `<td class="ls-bold">${homeTotals.hits !== undefined ? homeTotals.hits : ''}</td>`;
+    html += `<td class="ls-bold">${homeTotals.errors !== undefined ? homeTotals.errors : ''}</td>`;
+    html += '</tr>';
+
+    html += '</tbody></table>';
+    return html;
+}
+
+// Generate batting table for one team
+function generateBattingHTML(teamData, teamName) {
+    const players = teamData.players || {};
+    const battingOrder = teamData.battingOrder || [];
+
+    // Build list in batting order, then catch any stragglers with stats
+    const seen = new Set();
+    const batters = [];
+
+    battingOrder.forEach(playerId => {
+        const key = `ID${playerId}`;
+        if (players[key] && !seen.has(key)) {
+            seen.add(key);
+            batters.push(players[key]);
+        }
+    });
+
+    // Catch edge cases (e.g. DH-swap players not in battingOrder)
+    Object.keys(players).forEach(key => {
+        if (!seen.has(key)) {
+            const p = players[key];
+            const s = p.stats && p.stats.batting;
+            if (s && ((s.atBats || 0) + (s.baseOnBalls || 0) + (s.hitByPitch || 0) + (s.sacFlies || 0)) > 0) {
+                batters.push(p);
+                seen.add(key);
+            }
+        }
+    });
+
+    // Filter to players who actually had a plate appearance
+    const active = batters.filter(p => {
+        const s = p.stats && p.stats.batting;
+        if (!s) return false;
+        return ((s.atBats || 0) + (s.baseOnBalls || 0) + (s.hitByPitch || 0) + (s.sacFlies || 0) + (s.sacBunts || 0)) > 0;
+    });
+
+    if (active.length === 0) return '';
+
+    const totals = teamData.teamStats && teamData.teamStats.batting ? teamData.teamStats.batting : null;
+
+    let html = `<div class="section-title">${teamName} Batting</div>`;
+    html += '<div class="table-scroll"><table class="box-table">';
+    html += '<thead><tr>';
+    html += '<th class="name-col">Batter</th>';
+    html += '<th class="stat-num">AB</th>';
+    html += '<th class="stat-num">R</th>';
+    html += '<th class="stat-num">H</th>';
+    html += '<th class="stat-num">RBI</th>';
+    html += '<th class="stat-num">BB</th>';
+    html += '<th class="stat-num">SO</th>';
+    html += '<th class="stat-num season-col">OPS</th>';
+    html += '</tr></thead><tbody>';
+
+    active.forEach(p => {
+        const s = p.stats.batting;
+        const pos = p.position ? p.position.abbreviation : '';
+        const seasonOPS = p.seasonStats && p.seasonStats.batting
+            ? formatOPS(p.seasonStats.batting.ops) : '-';
+
+        html += '<tr>';
+        html += `<td class="name-col">${p.person.fullName} <span class="pos-tag">${pos}</span></td>`;
+        html += `<td class="stat-num">${s.atBats || 0}</td>`;
+        html += `<td class="stat-num">${s.runs || 0}</td>`;
+        html += `<td class="stat-num">${s.hits || 0}</td>`;
+        html += `<td class="stat-num">${s.rbi || 0}</td>`;
+        html += `<td class="stat-num">${s.baseOnBalls || 0}</td>`;
+        html += `<td class="stat-num">${s.strikeOuts || 0}</td>`;
+        html += `<td class="stat-num season-col">${seasonOPS}</td>`;
+        html += '</tr>';
+    });
+
+    if (totals) {
+        html += '<tr class="totals-row">';
+        html += '<td class="name-col">Totals</td>';
+        html += `<td class="stat-num">${totals.atBats || 0}</td>`;
+        html += `<td class="stat-num">${totals.runs || 0}</td>`;
+        html += `<td class="stat-num">${totals.hits || 0}</td>`;
+        html += `<td class="stat-num">${totals.rbi || 0}</td>`;
+        html += `<td class="stat-num">${totals.baseOnBalls || 0}</td>`;
+        html += `<td class="stat-num">${totals.strikeOuts || 0}</td>`;
+        html += '<td class="stat-num season-col"></td>';
+        html += '</tr>';
+    }
+
+    html += '</tbody></table></div>';
+    return html;
+}
+
+// Generate pitching table for one team
+function generatePitchingHTML(teamData, teamName) {
+    const players = teamData.players || {};
+    const pitcherIds = teamData.pitchers || [];
+
+    const pitchers = pitcherIds
+        .map(id => players[`ID${id}`])
+        .filter(p => p && p.stats && p.stats.pitching
+            && parseFloat(p.stats.pitching.inningsPitched || 0) > 0);
+
+    if (pitchers.length === 0) return '';
+
+    let html = `<div class="section-title">${teamName} Pitching</div>`;
+    html += '<div class="table-scroll"><table class="box-table">';
+    html += '<thead><tr>';
+    html += '<th class="name-col">Pitcher</th>';
+    html += '<th class="stat-num">IP</th>';
+    html += '<th class="stat-num">H</th>';
+    html += '<th class="stat-num">R</th>';
+    html += '<th class="stat-num">ER</th>';
+    html += '<th class="stat-num">BB</th>';
+    html += '<th class="stat-num">SO</th>';
+    html += '<th class="stat-num season-col">ERA</th>';
+    html += '</tr></thead><tbody>';
+
+    pitchers.forEach(p => {
+        const s = p.stats.pitching;
+        const seasonERA = p.seasonStats && p.seasonStats.pitching && p.seasonStats.pitching.era !== undefined
+            ? parseFloat(p.seasonStats.pitching.era).toFixed(2) : '-';
+
+        html += '<tr>';
+        html += `<td class="name-col">${p.person.fullName}</td>`;
+        html += `<td class="stat-num">${parseFloat(s.inningsPitched || 0).toFixed(1)}</td>`;
+        html += `<td class="stat-num">${s.hits || 0}</td>`;
+        html += `<td class="stat-num">${s.runs || 0}</td>`;
+        html += `<td class="stat-num">${s.earnedRuns || 0}</td>`;
+        html += `<td class="stat-num">${s.baseOnBalls || 0}</td>`;
+        html += `<td class="stat-num">${s.strikeOuts || 0}</td>`;
+        html += `<td class="stat-num season-col">${seasonERA}</td>`;
+        html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    return html;
+}
+
+// Generate W/L/SV decisions line
+function generateDecisionsHTML(decisions) {
+    if (!decisions) return '';
+
+    const parts = [];
+    if (decisions.winner) parts.push(`W: ${decisions.winner.fullName}`);
+    if (decisions.loser)  parts.push(`L: ${decisions.loser.fullName}`);
+    if (decisions.save)   parts.push(`SV: ${decisions.save.fullName}`);
+
+    if (parts.length === 0) return '';
+    return `<div class="decisions">${parts.join(' &nbsp;&bull;&nbsp; ')}</div>`;
+}
+
+async function generateHTML() {
+    const date = getYesterdayDate();
+    console.log(`Fetching games for ${date}...`);
+
+    const games = await fetchSchedule(date);
+
+    // Only include completed, non-postponed games
+    const finalGames = games.filter(g =>
+        g.status && g.status.abstractGameState === 'Final' &&
+        g.status.statusCode !== 'PPD'
+    );
+
+    console.log(`Found ${finalGames.length} final games on ${date}`);
+
+    // Format dates for display
+    // Add T12:00:00 to avoid timezone shifting the date itself
+    const displayDate = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    const now = new Date();
+    const updatedStr = now.toLocaleString('en-US', {
+        timeZone: 'America/New_York',
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+    });
+
+    let gamesHTML = '';
+    const jumpLinks = [];
+
+    for (const game of finalGames) {
+        const gamePk = game.gamePk;
+        const awayTeam = game.teams.away.team;
+        const homeTeam = game.teams.home.team;
+        const awayScore = game.teams.away.score;
+        const homeScore = game.teams.home.score;
+        const gameNumber = game.gameNumber > 1 ? ` - Game ${game.gameNumber}` : '';
+        const gameId = `game-${gamePk}`;
+
+        console.log(`Fetching boxscore for ${awayTeam.name} @ ${homeTeam.name}...`);
+        const boxscore = await fetchBoxscore(gamePk);
+
+        const linescore = game.linescore;
+        const decisions = game.decisions;
+
+        jumpLinks.push({
+            id: gameId,
+            text: `${awayTeam.abbreviation} @ ${homeTeam.abbreviation}${gameNumber}`
+        });
+
+        const linescoreHTML    = generateLinescoreHTML(linescore, awayTeam.abbreviation, homeTeam.abbreviation);
+        const awayBattingHTML  = generateBattingHTML(boxscore.teams.away, awayTeam.name);
+        const awayPitchingHTML = generatePitchingHTML(boxscore.teams.away, awayTeam.name);
+        const homeBattingHTML  = generateBattingHTML(boxscore.teams.home, homeTeam.name);
+        const homePitchingHTML = generatePitchingHTML(boxscore.teams.home, homeTeam.name);
+        const decisionsHTML    = generateDecisionsHTML(decisions);
+
+        gamesHTML += `
+        <details class="game-box" id="${gameId}">
+            <summary class="game-summary">
+                <span class="game-teams">${awayTeam.name} @ ${homeTeam.name}${gameNumber}</span>
+                <span class="game-score">${awayTeam.abbreviation} ${awayScore}, ${homeTeam.abbreviation} ${homeScore}</span>
+                <span class="game-final">Final</span>
+            </summary>
+            <div class="game-content">
+                <div class="linescore-wrap">
+                    ${linescoreHTML}
+                </div>
+                <div class="teams-grid">
+                    <div class="team-col-box">
+                        ${awayBattingHTML}
+                        ${awayPitchingHTML}
+                    </div>
+                    <div class="team-col-box">
+                        ${homeBattingHTML}
+                        ${homePitchingHTML}
+                    </div>
+                </div>
+                ${decisionsHTML}
+            </div>
+        </details>`;
+
+        // Small delay to be polite to the API
+        await new Promise(resolve => setTimeout(resolve, 200));
+    }
+
+    const jumpLinksHTML = jumpLinks
+        .map(j => `<a href="#${j.id}" class="jump-link">${j.text}</a>`)
+        .join('');
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baseball Graphs Box Scores - ${displayDate}</title>
+    <link rel="icon" href="favicon.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            background-color: #F8F8FF;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 960px; margin: 0 auto; }
+
+        .breadcrumb {
+            text-align: left;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .breadcrumb a { color: #2563eb; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; color: #1e40af; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 25px;
+            background: linear-gradient(135deg, #8B4513, #CD853F, #8B4513);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(139, 69, 19, 0.3);
+        }
+        .header h1 { font-size: 2.2em; font-weight: bold; margin: 0 0 8px 0; line-height: 1.2; }
+        .header p { font-size: 1.1em; opacity: 0.95; margin: 0; }
+
+        .nav-bar {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .nav-bar a {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: background-color 0.2s;
+        }
+        .nav-bar a.active { background: #8B4513; color: white; }
+        .nav-bar a:not(.active) { background: #e5e7eb; color: #374151; }
+        .nav-bar a:not(.active):hover { background: #d1d5db; }
+
+        /* Controls bar: jump links + expand button */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .jump-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .jump-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.85em;
+            padding: 4px 9px;
+            border: 1px solid #93c5fd;
+            border-radius: 4px;
+            background: white;
+            white-space: nowrap;
+        }
+        .jump-link:hover { background: #eff6ff; border-color: #2563eb; }
+
+        .expand-btn {
+            padding: 8px 18px;
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .expand-btn:hover { background: linear-gradient(135deg, #A0522D, #CD853F); }
+
+        /* Individual game box */
+        .game-box {
+            margin-bottom: 14px;
+            border: 2px solid #CD853F;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(139, 69, 19, 0.12);
+        }
+
+        .game-summary {
+            padding: 13px 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            user-select: none;
+            list-style: none;
+            border-radius: 6px;
+        }
+        .game-summary::-webkit-details-marker { display: none; }
+        details[open] > .game-summary {
+            border-bottom: 2px solid #CD853F;
+            background: #FFF8F0;
+            border-radius: 6px 6px 0 0;
+        }
+
+        /* Expand arrow */
+        .game-summary::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 5px 0 5px 8px;
+            border-color: transparent transparent transparent #8B4513;
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+        }
+        details[open] > .game-summary::before {
+            transform: rotate(90deg);
+        }
+
+        .game-teams {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #8B4513;
+            flex: 1;
+        }
+        .game-score {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #2F2F2F;
+        }
+        .game-final {
+            font-size: 0.8em;
+            color: #6b7280;
+            background: #f3f4f6;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        .game-content { padding: 16px 18px 12px; }
+
+        /* Linescore */
+        .linescore-wrap {
+            overflow-x: auto;
+            margin-bottom: 18px;
+        }
+        .linescore-table {
+            border-collapse: collapse;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.88em;
+            white-space: nowrap;
+        }
+        .linescore-table th {
+            background: #F5DEB3;
+            padding: 5px 9px;
+            text-align: center;
+            border-bottom: 2px solid #8B4513;
+            font-family: Georgia, "Times New Roman", serif;
+            min-width: 26px;
+        }
+        .linescore-table th.ls-team { text-align: left; min-width: 55px; }
+        .linescore-table td {
+            padding: 4px 9px;
+            text-align: center;
+            border-bottom: 1px solid #E8D5B7;
+        }
+        .linescore-table td.ls-team {
+            text-align: left;
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: bold;
+        }
+        .ls-rhe-sep { border-left: 2px solid #8B4513 !important; }
+        .ls-bold { font-weight: bold; }
+
+        /* Two-column layout for batting/pitching */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 12px;
+        }
+        @media (max-width: 680px) {
+            .teams-grid { grid-template-columns: 1fr; }
+        }
+
+        .section-title {
+            font-size: 1.0em;
+            font-weight: bold;
+            color: #8B4513;
+            margin-top: 14px;
+            margin-bottom: 5px;
+        }
+        .team-col-box .section-title:first-child { margin-top: 0; }
+
+        .table-scroll { overflow-x: auto; }
+
+        .box-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82em;
+            font-family: "Courier New", Courier, monospace;
+            margin-bottom: 2px;
+        }
+        .box-table th {
+            background: #F5DEB3;
+            padding: 5px 4px;
+            border-bottom: 2px solid #8B4513;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+        .box-table th.name-col { text-align: left; }
+        .box-table td {
+            padding: 3px 4px;
+            border-bottom: 1px solid #E8D5B7;
+        }
+        .box-table td.name-col {
+            font-family: Georgia, "Times New Roman", serif;
+            white-space: nowrap;
+        }
+        .stat-num { text-align: right; }
+        .pos-tag { font-size: 0.78em; color: #6b7280; }
+        .season-col { color: #8B4513; font-weight: bold; }
+        .totals-row td {
+            border-top: 2px solid #8B4513;
+            font-weight: bold;
+        }
+
+        /* Decisions line */
+        .decisions {
+            font-size: 0.9em;
+            color: #374151;
+            padding-top: 10px;
+            border-top: 1px solid #E8D5B7;
+        }
+
+        .no-games {
+            text-align: center;
+            padding: 50px;
+            color: #6b7280;
+            font-size: 1.1em;
+            background: white;
+            border: 2px solid #CD853F;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header h1 { font-size: 1.6em; }
+            .game-teams { font-size: 0.95em; }
+            .game-score { font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="https://www.baseballgraphs.com/">&larr; Baseball Graphs Home</a>
+        </div>
+
+        <div class="header">
+            <h1>Baseball Graphs Box Scores</h1>
+            <p>${displayDate}</p>
+            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: ${updatedStr}</p>
+        </div>
+
+        <div class="nav-bar">
+            <a href="index.html">Graphs &amp; Standings</a>
+            <a href="player_stats.html">Player Stats</a>
+            <a href="box-scores.html" class="active">Box Scores</a>
+        </div>
+
+        ${finalGames.length > 0 ? `
+        <div class="controls-bar">
+            <div class="jump-links">${jumpLinksHTML}</div>
+            <button class="expand-btn" id="expandBtn" onclick="toggleAll()">Expand All</button>
+        </div>
+        ${gamesHTML}
+        ` : '<div class="no-games">No completed games found for ' + displayDate + '.</div>'}
+    </div>
+
+    <script>
+        let allExpanded = false;
+
+        function toggleAll() {
+            const boxes = document.querySelectorAll('.game-box');
+            allExpanded = !allExpanded;
+            boxes.forEach(box => {
+                if (allExpanded) {
+                    box.setAttribute('open', '');
+                } else {
+                    box.removeAttribute('open');
+                }
+            });
+            document.getElementById('expandBtn').textContent = allExpanded ? 'Collapse All' : 'Expand All';
+        }
+    </script>
+</body>
+</html>`;
+
+    fs.writeFileSync('box-scores.html', html);
+    console.log('Generated box-scores.html successfully!');
+}
+
+generateHTML().catch(console.error);
