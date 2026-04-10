@@ -36,6 +36,16 @@ async function fetchBoxscore(gamePk) {
     return response.json();
 }
 
+// Fetch all MLB teams for the season and build an id -> abbreviation map
+async function fetchTeamMap(season) {
+    const url = `${API_BASE}/teams?sportId=1&season=${season}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const map = {};
+    (data.teams || []).forEach(t => { map[t.id] = t.abbreviation; });
+    return map;
+}
+
 // Generate the inning-by-inning linescore table
 function generateLinescoreHTML(linescore, awayAbbr, homeAbbr) {
     if (!linescore || !linescore.innings) return '';
@@ -241,6 +251,10 @@ async function generateHTML() {
     const date = getYesterdayDate();
     console.log(`Fetching games for ${date}...`);
 
+    const season = new Date().getFullYear();
+    const teamMap = await fetchTeamMap(season);
+    console.log(`Loaded abbreviations for ${Object.keys(teamMap).length} teams`);
+
     const games = await fetchSchedule(date);
 
     // Only include completed, non-postponed games
@@ -271,6 +285,8 @@ async function generateHTML() {
         const gamePk = game.gamePk;
         const awayTeam = game.teams.away.team;
         const homeTeam = game.teams.home.team;
+        const awayAbbr = teamMap[awayTeam.id] || awayTeam.abbreviation || awayTeam.name;
+        const homeAbbr = teamMap[homeTeam.id] || homeTeam.abbreviation || homeTeam.name;
         const awayScore = game.teams.away.score;
         const homeScore = game.teams.home.score;
         const gameNumber = game.gameNumber > 1 ? ` - Game ${game.gameNumber}` : '';
@@ -284,10 +300,10 @@ async function generateHTML() {
 
         jumpLinks.push({
             id: gameId,
-            text: `${awayTeam.abbreviation} @ ${homeTeam.abbreviation}${gameNumber}`
+            text: `${awayAbbr} @ ${homeAbbr}${gameNumber}`
         });
 
-        const linescoreHTML    = generateLinescoreHTML(linescore, awayTeam.abbreviation, homeTeam.abbreviation);
+        const linescoreHTML    = generateLinescoreHTML(linescore, awayAbbr, homeAbbr);
         const awayBattingHTML  = generateBattingHTML(boxscore.teams.away, awayTeam.name);
         const awayPitchingHTML = generatePitchingHTML(boxscore.teams.away, awayTeam.name);
         const homeBattingHTML  = generateBattingHTML(boxscore.teams.home, homeTeam.name);
@@ -298,7 +314,7 @@ async function generateHTML() {
         <details class="game-box" id="${gameId}">
             <summary class="game-summary">
                 <span class="game-teams">${awayTeam.name} @ ${homeTeam.name}${gameNumber}</span>
-                <span class="game-score">${awayTeam.abbreviation} ${awayScore}, ${homeTeam.abbreviation} ${homeScore}</span>
+                <span class="game-score">${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}</span>
                 <span class="game-final">Final</span>
             </summary>
             <div class="game-content">
