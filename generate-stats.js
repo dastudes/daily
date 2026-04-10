@@ -1114,6 +1114,7 @@ async function generateHTML() {
         <div class="nav-bar">
             <a href="index.html">Graphs & Standings</a>
             <a href="player_stats.html" class="active">Player Stats</a>
+            <a href="box-scores.html">Box Scores</a>
         </div>
         
         <details>
