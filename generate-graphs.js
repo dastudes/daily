@@ -923,6 +923,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             color: #1e40af;
         }
     </style>
+    <script data-goatcounter="https://baseball-graphs.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
     <div class="page-container">
