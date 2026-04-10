@@ -1074,6 +1074,8 @@ async function generateHTML() {
             }
         }
     </style>
+    <script data-goatcounter="https://baseball-graphs.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
     <div class="sticky-nav-bar">
