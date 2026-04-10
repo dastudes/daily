@@ -148,8 +148,11 @@ function generateBattingHTML(teamData, teamName) {
     html += '<th class="stat-num">R</th>';
     html += '<th class="stat-num">H</th>';
     html += '<th class="stat-num">RBI</th>';
+    html += '<th class="stat-num">2B</th>';
+    html += '<th class="stat-num">HR</th>';
     html += '<th class="stat-num">BB</th>';
     html += '<th class="stat-num">SO</th>';
+    html += '<th class="stat-num">SB</th>';
     html += '<th class="stat-num season-col">OPS</th>';
     html += '</tr></thead><tbody>';
 
@@ -165,8 +168,11 @@ function generateBattingHTML(teamData, teamName) {
         html += `<td class="stat-num">${s.runs || 0}</td>`;
         html += `<td class="stat-num">${s.hits || 0}</td>`;
         html += `<td class="stat-num">${s.rbi || 0}</td>`;
+        html += `<td class="stat-num">${s.doubles || 0}</td>`;
+        html += `<td class="stat-num">${s.homeRuns || 0}</td>`;
         html += `<td class="stat-num">${s.baseOnBalls || 0}</td>`;
         html += `<td class="stat-num">${s.strikeOuts || 0}</td>`;
+        html += `<td class="stat-num">${s.stolenBases || 0}</td>`;
         html += `<td class="stat-num season-col">${seasonOPS}</td>`;
         html += '</tr>';
     });
@@ -178,8 +184,11 @@ function generateBattingHTML(teamData, teamName) {
         html += `<td class="stat-num">${totals.runs || 0}</td>`;
         html += `<td class="stat-num">${totals.hits || 0}</td>`;
         html += `<td class="stat-num">${totals.rbi || 0}</td>`;
+        html += `<td class="stat-num">${totals.doubles || 0}</td>`;
+        html += `<td class="stat-num">${totals.homeRuns || 0}</td>`;
         html += `<td class="stat-num">${totals.baseOnBalls || 0}</td>`;
         html += `<td class="stat-num">${totals.strikeOuts || 0}</td>`;
+        html += `<td class="stat-num">${totals.stolenBases || 0}</td>`;
         html += '<td class="stat-num season-col"></td>';
         html += '</tr>';
     }
@@ -210,6 +219,7 @@ function generatePitchingHTML(teamData, teamName) {
     html += '<th class="stat-num">ER</th>';
     html += '<th class="stat-num">BB</th>';
     html += '<th class="stat-num">SO</th>';
+    html += '<th class="stat-num">HR</th>';
     html += '<th class="stat-num season-col">ERA</th>';
     html += '</tr></thead><tbody>';
 
@@ -226,6 +236,7 @@ function generatePitchingHTML(teamData, teamName) {
         html += `<td class="stat-num">${s.earnedRuns || 0}</td>`;
         html += `<td class="stat-num">${s.baseOnBalls || 0}</td>`;
         html += `<td class="stat-num">${s.strikeOuts || 0}</td>`;
+        html += `<td class="stat-num">${s.homeRuns || 0}</td>`;
         html += `<td class="stat-num season-col">${seasonERA}</td>`;
         html += '</tr>';
     });
