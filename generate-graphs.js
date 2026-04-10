@@ -938,6 +938,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         <div class="nav-bar">
             <a href="index.html" class="active">Graphs & Standings</a>
             <a href="player_stats.html">Player Stats</a>
+            <a href="box-scores.html">Box Scores</a>
         </div>
         
         <div class="standings-box">
