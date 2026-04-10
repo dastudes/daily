@@ -28,9 +28,12 @@ jobs:
       - name: Generate graphs page
         run: node generate-graphs.js
       
+      - name: Generate box scores page
+        run: node generate-boxscores.js
+      
       - name: Commit and push if changed
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add index.html player_stats.html player-stats.json
+          git add index.html player_stats.html player-stats.json box-scores.html
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats and graphs - $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
