@@ -209,7 +209,8 @@ function createPitcherRow(player, stats, playerTeamCount) {
     const whip = calcWHIP(stats);
     const fip = calculateFIP(stats);
     const ip = stats.inningsPitched ? parseFloat(stats.inningsPitched) : 0;
-    const fipar = Math.round((6.00 - fip) * ip / 9);
+    const eraNum = ip > 0 ? (stats.earnedRuns || 0) * 9 / ip : 0;
+    const par = Math.round((6.00 - (fip + eraNum) / 2) * ip / 9);
     const playerLink = `https://baseballsavant.mlb.com/savant-player/${player.person.id}`;
     
     // Get age (current age from player data)
@@ -234,7 +235,7 @@ function createPitcherRow(player, stats, playerTeamCount) {
         <tr class="data-row" data-ip="${ip}">
             <td style="${nameStyle}"><a href="${playerLink}" target="_blank">${player.person.fullName}${handednessSymbol}</a></td>
             <td class="stat-num">${age}</td>
-            <td class="stat-num">${fipar}</td>
+            <td class="stat-num">${par}</td>
             <td class="stat-num">${ip.toFixed(1)}</td>
             <td class="stat-num">${era}</td>
             <td class="stat-num">${fip.toFixed(2)}</td>
@@ -292,11 +293,15 @@ async function loadTeamStats(team, season) {
     // Sort batters by RC descending
     batters.sort((a, b) => calculateRC(b.stats) - calculateRC(a.stats));
     
-    // Sort pitchers by FIPAR descending
+    // Sort pitchers by PAR descending
     pitchers.sort((a, b) => {
-        const fiparA = (6.00 - calculateFIP(a.stats)) * parseFloat(a.stats.inningsPitched || 0) / 9;
-        const fiparB = (6.00 - calculateFIP(b.stats)) * parseFloat(b.stats.inningsPitched || 0) / 9;
-        return fiparB - fiparA;
+        const ipA = parseFloat(a.stats.inningsPitched || 0);
+        const ipB = parseFloat(b.stats.inningsPitched || 0);
+        const eraNumA = ipA > 0 ? (a.stats.earnedRuns || 0) * 9 / ipA : 0;
+        const eraNumB = ipB > 0 ? (b.stats.earnedRuns || 0) * 9 / ipB : 0;
+        const parA = (6.00 - (calculateFIP(a.stats) + eraNumA) / 2) * ipA / 9;
+        const parB = (6.00 - (calculateFIP(b.stats) + eraNumB) / 2) * ipB / 9;
+        return parB - parA;
     });
     
     return { batters, pitchers };
@@ -423,7 +428,8 @@ async function generateHTML() {
             const stats = p.stats;
             const ip = parseFloat(stats.inningsPitched) || 0;
             const fip = calculateFIP(stats);
-            const fipar = Math.round((6.00 - fip) * ip / 9);
+            const eraNum = ip > 0 ? (stats.earnedRuns || 0) * 9 / ip : 0;
+            const par = Math.round((6.00 - (fip + eraNum) / 2) * ip / 9);
             
             allPitchers.push({
                 name: p.player.person.fullName,
@@ -444,7 +450,7 @@ async function generateHTML() {
                 era: ip > 0 ? Math.round(((stats.earnedRuns || 0) * 9 / ip) * 100) / 100 : 0,
                 whip: ip > 0 ? Math.round(((stats.baseOnBalls || 0) + (stats.hits || 0)) / ip * 100) / 100 : 0,
                 fip: Math.round(fip * 100) / 100,
-                fipar: fipar,
+                par: par,
                 h: stats.hits || 0,
                 er: stats.earnedRuns || 0,
                 pitchHand: p.player.person.pitchHand ? p.player.person.pitchHand.code : null
@@ -521,7 +527,7 @@ async function generateHTML() {
                         <tr>
                             <th>Name</th>
                             <th class="stat-num sortable" data-sort="age" data-default="desc">Age</th>
-                            <th class="stat-num sortable sorted" data-sort="fipar" data-default="desc">FIPAR</th>
+                            <th class="stat-num sortable sorted" data-sort="par" data-default="desc">PAR</th>
                             <th class="stat-num sortable" data-sort="ip" data-default="desc">IP</th>
                             <th class="stat-num sortable" data-sort="era" data-default="asc">ERA</th>
                             <th class="stat-num sortable" data-sort="fip" data-default="asc">FIP</th>
@@ -607,7 +613,7 @@ async function generateHTML() {
                         <tr>
                             <th>Name</th>
                             <th class="stat-num sortable" data-sort="age" data-default="desc">Age</th>
-                            <th class="stat-num sortable sorted" data-sort="fipar" data-default="desc">FIPAR</th>
+                            <th class="stat-num sortable sorted" data-sort="par" data-default="desc">PAR</th>
                             <th class="stat-num sortable" data-sort="ip" data-default="desc">IP</th>
                             <th class="stat-num sortable" data-sort="era" data-default="asc">ERA</th>
                             <th class="stat-num sortable" data-sort="fip" data-default="asc">FIP</th>
@@ -1129,7 +1135,7 @@ async function generateHTML() {
                 <ul>
                     <li><strong>RC (Runs Created)</strong> is simply OBPxTB</li>
                     <li><strong>FIP (Fielding Independent Pitching)</strong> ((13xHR)+(3x(BB+HBP))-(2xK))/IP + 3.10</li>
-                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)xIP/9</li>
+                    <li><strong>PAR (Pitching Above Replacement)</strong> (6-(FIP+ERA)/2)xIP/9</li>
                 </ul>
                 
                 <p>These stats are value approximations only. Please don't quote them. For actual good sabermetric stats, go to <a href="https://www.fangraphs.com/">Fangraphs</a> or <a href="https://www.baseball-reference.com/">Baseball Reference</a>.</p>
