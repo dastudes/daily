@@ -312,6 +312,7 @@
         td {
             padding: 6px;
             border-bottom: 1px solid #E8D5B7;
+            color: #111;
         }
         
         tr:hover {
@@ -348,7 +349,7 @@
             background-color: white;
             border-bottom: 3px solid #8B4513;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            padding: 12px 20px;
+            padding: 7px 16px;
             margin-bottom: 20px;
         }
         
@@ -358,30 +359,30 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
+            gap: 12px;
             flex-wrap: wrap;
         }
         
         .nav-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 7px;
         }
         
         .filters-group {
-            gap: 12px;
+            gap: 7px;
         }
         
         .current-team-display {
-            font-size: 0.95em;
+            font-size: 0.9em;
             color: #2563eb;
             font-weight: bold;
             white-space: nowrap;
         }
         
         .sticky-nav-bar select {
-            padding: 6px 10px;
-            font-size: 0.9em;
+            padding: 4px 8px;
+            font-size: 0.85em;
             font-family: Georgia, "Times New Roman", serif;
             border: 1px solid #CD853F;
             border-radius: 4px;
@@ -396,28 +397,28 @@
         .filter-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
         
         .filter-item label {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #8B4513;
             font-weight: 600;
             white-space: nowrap;
         }
         
         .filter-item input {
-            width: 55px;
-            padding: 5px 6px;
-            font-size: 0.9em;
+            width: 48px;
+            padding: 4px 5px;
+            font-size: 0.85em;
             font-family: Georgia, "Times New Roman", serif;
             border: 1px solid #CD853F;
             border-radius: 4px;
         }
         
         .sticky-nav-bar button {
-            padding: 6px 14px;
-            font-size: 0.9em;
+            padding: 4px 10px;
+            font-size: 0.85em;
         }
         
         
@@ -485,7 +486,7 @@
     <div class="sticky-nav-bar">
         <div class="nav-bar-content">
             <div class="nav-group">
-                <span class="current-team-display" id="currentTeamDisplay">Viewing: Top of Page</span>
+                <span class="current-team-display" id="currentTeamDisplay">Top of Page</span>
                 <select id="teamSelector" onchange="jumpToTeam()">
                     <option value="">-- Jump to Team --</option>
                     <!-- Will be populated dynamically after page loads -->
@@ -515,7 +516,7 @@
         <div class="header">
             <h1>Baseball Graphs 2026 Player Stats</h1>
             <p>Team-by-Team Stats for Easy Reading</p>
-            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: April 11, 2026 at 1:42 PM EDT</p>
+            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: April 11, 2026 at 3:25 PM EDT</p>
         </div>
         
         <div class="nav-bar">
@@ -3773,7 +3774,7 @@
             <details class="team-section" id="detroit-tigers">
                 <summary class="team-summary">
                     <span class="team-name-text">Detroit Tigers</span>
-                    <span class="team-summary-stats">W/L: 5-9 | RS: +3 | RA: -3</span>
+                    <span class="team-summary-stats">W/L: 5-9 | RS: +6 | RA: -2</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -3804,64 +3805,87 @@
                     </thead>
                     <tbody id="batters-116">
                         
-        <tr class="data-row" data-pa="48">
+        <tr class="data-row" data-pa="51">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/690993" target="_blank">Colt Keith*</a></td>
             <td class="stat-num">24</td>
             <td>2B</td>
             <td class="stat-num">14</td>
-            <td class="stat-num">10</td>
-            <td class="stat-num">48</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">51</td>
             <td class="stat-num">9</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">.378</td>
-            <td class="stat-num">.417</td>
-            <td class="stat-num">.533</td>
+            <td class="stat-num">.354</td>
+            <td class="stat-num">.392</td>
+            <td class="stat-num">.500</td>
             <td class="stat-num">17</td>
             <td class="stat-num">7</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">24</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">10</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="60">
+        <tr class="data-row" data-pa="63">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/805808" target="_blank">Kevin McGonigle*</a></td>
             <td class="stat-num">21</td>
             <td>SS</td>
             <td class="stat-num">15</td>
             <td class="stat-num">9</td>
-            <td class="stat-num">60</td>
-            <td class="stat-num">8</td>
+            <td class="stat-num">63</td>
+            <td class="stat-num">9</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">.302</td>
-            <td class="stat-num">.383</td>
-            <td class="stat-num">.453</td>
+            <td class="stat-num">.291</td>
+            <td class="stat-num">.381</td>
+            <td class="stat-num">.436</td>
             <td class="stat-num">16</td>
             <td class="stat-num">6</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">24</td>
-            <td class="stat-num">7</td>
+            <td class="stat-num">8</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="45">
+        <tr class="data-row" data-pa="64">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/682985" target="_blank">Riley Greene*</a></td>
+            <td class="stat-num">25</td>
+            <td>LF</td>
+            <td class="stat-num">15</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">64</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">.228</td>
+            <td class="stat-num">.313</td>
+            <td class="stat-num">.351</td>
+            <td class="stat-num">13</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">20</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="47">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/693307" target="_blank">Dillon Dingler</a></td>
             <td class="stat-num">27</td>
             <td>C</td>
             <td class="stat-num">13</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">45</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">47</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">8</td>
-            <td class="stat-num">.263</td>
-            <td class="stat-num">.378</td>
-            <td class="stat-num">.447</td>
+            <td class="stat-num">.250</td>
+            <td class="stat-num">.362</td>
+            <td class="stat-num">.425</td>
             <td class="stat-num">10</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
@@ -3919,117 +3943,94 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="62">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/682985" target="_blank">Riley Greene*</a></td>
-            <td class="stat-num">25</td>
-            <td>LF</td>
-            <td class="stat-num">15</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">62</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">.218</td>
-            <td class="stat-num">.306</td>
-            <td class="stat-num">.291</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">16</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">14</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="50">
+        <tr class="data-row" data-pa="52">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/681481" target="_blank">Kerry Carpenter*</a></td>
             <td class="stat-num">28</td>
             <td>RF</td>
             <td class="stat-num">14</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">50</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">52</td>
             <td class="stat-num">3</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">.186</td>
-            <td class="stat-num">.280</td>
-            <td class="stat-num">.326</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">0</td>
+            <td class="stat-num">.205</td>
+            <td class="stat-num">.308</td>
+            <td class="stat-num">.364</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">16</td>
             <td class="stat-num">6</td>
             <td class="stat-num">20</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="52">
+        <tr class="data-row" data-pa="54">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/679529" target="_blank">Spencer Torkelson</a></td>
             <td class="stat-num">26</td>
             <td>1B</td>
             <td class="stat-num">14</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">52</td>
+            <td class="stat-num">54</td>
             <td class="stat-num">4</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">.195</td>
-            <td class="stat-num">.365</td>
-            <td class="stat-num">.244</td>
+            <td class="stat-num">.190</td>
+            <td class="stat-num">.370</td>
+            <td class="stat-num">.238</td>
             <td class="stat-num">8</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">10</td>
-            <td class="stat-num">10</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">11</td>
+            <td class="stat-num">15</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="34">
+        <tr class="data-row" data-pa="36">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/656716" target="_blank">Zach McKinstry*</a></td>
             <td class="stat-num">30</td>
             <td>3B</td>
             <td class="stat-num">11</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">34</td>
+            <td class="stat-num">36</td>
             <td class="stat-num">1</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">.194</td>
-            <td class="stat-num">.265</td>
-            <td class="stat-num">.323</td>
+            <td class="stat-num">.182</td>
+            <td class="stat-num">.250</td>
+            <td class="stat-num">.303</td>
             <td class="stat-num">6</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">10</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">8</td>
+            <td class="stat-num">9</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="19">
+        <tr class="data-row" data-pa="22">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/663837" target="_blank">Matt Vierling</a></td>
             <td class="stat-num">29</td>
             <td>CF</td>
             <td class="stat-num">10</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">19</td>
+            <td class="stat-num">22</td>
             <td class="stat-num">1</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">.167</td>
-            <td class="stat-num">.158</td>
-            <td class="stat-num">.389</td>
+            <td class="stat-num">.143</td>
+            <td class="stat-num">.136</td>
+            <td class="stat-num">.333</td>
             <td class="stat-num">3</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">7</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">4</td>
+            <td class="stat-num">6</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -4080,13 +4081,13 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="4">
+        <tr class="data-row" data-pa="7">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/672761" target="_blank">Wenceel Pérez&dagger;</a></td>
             <td class="stat-num">26</td>
             <td>RF</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">4</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">.000</td>
@@ -4195,6 +4196,27 @@
             <td class="stat-num">12</td>
         </tr>
     
+        <tr class="data-row" data-ip="16">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/663554" target="_blank">Casey Mize</a></td>
+            <td class="stat-num">28</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">16.0</td>
+            <td class="stat-num">3.94</td>
+            <td class="stat-num">3.60</td>
+            <td class="stat-num">1.44</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">17</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">18</td>
+        </tr>
+    
         <tr class="data-row" data-ip="6.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/657756" target="_blank">Connor Seabold</a></td>
             <td class="stat-num">30</td>
@@ -4235,27 +4257,6 @@
             <td class="stat-num">0</td>
             <td class="stat-num">4</td>
             <td class="stat-num">5</td>
-        </tr>
-    
-        <tr class="data-row" data-ip="12.1">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/663554" target="_blank">Casey Mize</a></td>
-            <td class="stat-num">28</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">12.1</td>
-            <td class="stat-num">4.46</td>
-            <td class="stat-num">4.01</td>
-            <td class="stat-num">1.49</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">15</td>
         </tr>
     
         <tr class="data-row" data-ip="5.1">
@@ -4384,15 +4385,15 @@
             <td class="stat-num">6</td>
         </tr>
     
-        <tr class="data-row" data-ip="6.1">
+        <tr class="data-row" data-ip="8.2">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/623454" target="_blank">Drew Anderson</a></td>
             <td class="stat-num">32</td>
-            <td class="stat-num">-1</td>
-            <td class="stat-num">6.1</td>
-            <td class="stat-num">7.38</td>
-            <td class="stat-num">7.53</td>
-            <td class="stat-num">1.80</td>
-            <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">8.2</td>
+            <td class="stat-num">5.49</td>
+            <td class="stat-num">6.51</td>
+            <td class="stat-num">1.46</td>
+            <td class="stat-num">5</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
@@ -4401,8 +4402,8 @@
             <td class="stat-num">5</td>
             <td class="stat-num">5</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">7</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">8</td>
         </tr>
     
                     </tbody>
@@ -6310,7 +6311,7 @@
             <details class="team-section" id="minnesota-twins">
                 <summary class="team-summary">
                     <span class="team-name-text">Minnesota Twins</span>
-                    <span class="team-summary-stats">W/L: 7-7 | RS: +9 | RA: +5</span>
+                    <span class="team-summary-stats">W/L: 7-7 | RS: +9 | RA: +7</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -6345,7 +6346,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/605137" target="_blank">Josh Bell&dagger;</a></td>
             <td class="stat-num">33</td>
             <td>1B</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">15</td>
             <td class="stat-num">10</td>
             <td class="stat-num">55</td>
             <td class="stat-num">11</td>
@@ -6368,7 +6369,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/680777" target="_blank">Ryan Jeffers</a></td>
             <td class="stat-num">28</td>
             <td>C</td>
-            <td class="stat-num">10</td>
+            <td class="stat-num">11</td>
             <td class="stat-num">6</td>
             <td class="stat-num">41</td>
             <td class="stat-num">6</td>
@@ -6414,7 +6415,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/605170" target="_blank">Victor Caratini&dagger;</a></td>
             <td class="stat-num">32</td>
             <td>C</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">4</td>
             <td class="stat-num">47</td>
             <td class="stat-num">3</td>
@@ -6433,41 +6434,41 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="38">
+        <tr class="data-row" data-pa="39">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/668885" target="_blank">Austin Martin</a></td>
             <td class="stat-num">27</td>
             <td>CF</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">38</td>
+            <td class="stat-num">39</td>
             <td class="stat-num">5</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">.286</td>
-            <td class="stat-num">.474</td>
-            <td class="stat-num">.321</td>
+            <td class="stat-num">.276</td>
+            <td class="stat-num">.462</td>
+            <td class="stat-num">.310</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">9</td>
             <td class="stat-num">8</td>
-            <td class="stat-num">5</td>
+            <td class="stat-num">6</td>
             <td class="stat-num">2</td>
             <td class="stat-num">2</td>
         </tr>
     
-        <tr class="data-row" data-pa="59">
+        <tr class="data-row" data-pa="60">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/807712" target="_blank">Luke Keaschall</a></td>
             <td class="stat-num">23</td>
             <td>2B</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">15</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">59</td>
+            <td class="stat-num">60</td>
             <td class="stat-num">7</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">.204</td>
-            <td class="stat-num">.254</td>
-            <td class="stat-num">.278</td>
+            <td class="stat-num">.200</td>
+            <td class="stat-num">.250</td>
+            <td class="stat-num">.273</td>
             <td class="stat-num">11</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
@@ -6479,18 +6480,18 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="57">
+        <tr class="data-row" data-pa="58">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/621439" target="_blank">Byron Buxton</a></td>
             <td class="stat-num">32</td>
             <td>CF</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">57</td>
+            <td class="stat-num">58</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">.180</td>
-            <td class="stat-num">.263</td>
-            <td class="stat-num">.280</td>
+            <td class="stat-num">.176</td>
+            <td class="stat-num">.259</td>
+            <td class="stat-num">.275</td>
             <td class="stat-num">9</td>
             <td class="stat-num">3</td>
             <td class="stat-num">1</td>
@@ -6506,7 +6507,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/663616" target="_blank">Trevor Larnach*</a></td>
             <td class="stat-num">29</td>
             <td>RF</td>
-            <td class="stat-num">10</td>
+            <td class="stat-num">11</td>
             <td class="stat-num">3</td>
             <td class="stat-num">25</td>
             <td class="stat-num">4</td>
@@ -6552,7 +6553,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/686797" target="_blank">Brooks Lee&dagger;</a></td>
             <td class="stat-num">25</td>
             <td>3B</td>
-            <td class="stat-num">12</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">3</td>
             <td class="stat-num">37</td>
             <td class="stat-num">2</td>
@@ -6617,6 +6618,52 @@
             <td class="stat-num">0</td>
         </tr>
     
+        <tr class="data-row" data-pa="0">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/657746" target="_blank">Joe Ryan</a></td>
+            <td class="stat-num">29</td>
+            <td>P</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="0">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/668952" target="_blank">Ryan Kreidler</a></td>
+            <td class="stat-num">28</td>
+            <td>CF</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
                     </tbody>
                 </table>
                 
@@ -6670,21 +6717,21 @@
         <tr class="data-row" data-ip="14.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/657746" target="_blank">Joe Ryan</a></td>
             <td class="stat-num">29</td>
-            <td class="stat-num">4</td>
+            <td class="stat-num">2</td>
             <td class="stat-num">14.1</td>
-            <td class="stat-num">4.47</td>
-            <td class="stat-num">1.97</td>
-            <td class="stat-num">1.28</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">3</td>
+            <td class="stat-num">5.74</td>
+            <td class="stat-num">3.10</td>
+            <td class="stat-num">1.42</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">1</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">5</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">6</td>
             <td class="stat-num">17</td>
         </tr>
     
@@ -9491,7 +9538,7 @@
             <details class="team-section" id="toronto-blue-jays">
                 <summary class="team-summary">
                     <span class="team-name-text">Toronto Blue Jays</span>
-                    <span class="team-summary-stats">W/L: 6-7 | RS: -4 | RA: +7</span>
+                    <span class="team-summary-stats">W/L: 6-7 | RS: -2 | RA: +7</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -9522,18 +9569,18 @@
                     </thead>
                     <tbody id="batters-141">
                         
-        <tr class="data-row" data-pa="56">
+        <tr class="data-row" data-pa="57">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/665489" target="_blank">Vladimir Guerrero Jr.</a></td>
             <td class="stat-num">27</td>
             <td>1B</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">56</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">57</td>
             <td class="stat-num">5</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">.304</td>
-            <td class="stat-num">.429</td>
-            <td class="stat-num">.435</td>
+            <td class="stat-num">.298</td>
+            <td class="stat-num">.421</td>
+            <td class="stat-num">.426</td>
             <td class="stat-num">14</td>
             <td class="stat-num">3</td>
             <td class="stat-num">0</td>
@@ -9549,7 +9596,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/665926" target="_blank">Andrés Giménez*</a></td>
             <td class="stat-num">27</td>
             <td>2B</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">7</td>
             <td class="stat-num">51</td>
             <td class="stat-num">4</td>
@@ -9568,11 +9615,57 @@
             <td class="stat-num">0</td>
         </tr>
     
+        <tr class="data-row" data-pa="50">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/662139" target="_blank">Daulton Varsho*</a></td>
+            <td class="stat-num">29</td>
+            <td>CF</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">50</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">.227</td>
+            <td class="stat-num">.320</td>
+            <td class="stat-num">.432</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">19</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="61">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/543807" target="_blank">George Springer</a></td>
+            <td class="stat-num">36</td>
+            <td>RF</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">61</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">.189</td>
+            <td class="stat-num">.295</td>
+            <td class="stat-num">.377</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">20</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">1</td>
+        </tr>
+    
         <tr class="data-row" data-pa="53">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/676391" target="_blank">Ernie Clement</a></td>
             <td class="stat-num">30</td>
             <td>3B</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">6</td>
             <td class="stat-num">53</td>
             <td class="stat-num">3</td>
@@ -9591,41 +9684,18 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="60">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/543807" target="_blank">George Springer</a></td>
-            <td class="stat-num">36</td>
-            <td>RF</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">60</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">.189</td>
-            <td class="stat-num">.283</td>
-            <td class="stat-num">.377</td>
-            <td class="stat-num">10</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">20</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">14</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">1</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="40">
+        <tr class="data-row" data-pa="41">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/660821" target="_blank">Jesús Sánchez*</a></td>
             <td class="stat-num">28</td>
             <td>RF</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">40</td>
+            <td class="stat-num">13</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">41</td>
             <td class="stat-num">5</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">.278</td>
-            <td class="stat-num">.350</td>
-            <td class="stat-num">.444</td>
+            <td class="stat-num">.270</td>
+            <td class="stat-num">.341</td>
+            <td class="stat-num">.432</td>
             <td class="stat-num">10</td>
             <td class="stat-num">3</td>
             <td class="stat-num">0</td>
@@ -9660,48 +9730,25 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="49">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/662139" target="_blank">Daulton Varsho*</a></td>
-            <td class="stat-num">29</td>
-            <td>CF</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">49</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">.209</td>
-            <td class="stat-num">.306</td>
-            <td class="stat-num">.349</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">15</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="23">
+        <tr class="data-row" data-pa="24">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/676914" target="_blank">Davis Schneider</a></td>
             <td class="stat-num">27</td>
             <td>LF</td>
-            <td class="stat-num">9</td>
+            <td class="stat-num">10</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">23</td>
+            <td class="stat-num">24</td>
             <td class="stat-num">7</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">.294</td>
-            <td class="stat-num">.478</td>
-            <td class="stat-num">.529</td>
+            <td class="stat-num">.278</td>
+            <td class="stat-num">.458</td>
+            <td class="stat-num">.500</td>
             <td class="stat-num">5</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">9</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -9756,7 +9803,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/678218" target="_blank">Brandon Valenzuela&dagger;</a></td>
             <td class="stat-num">25</td>
             <td>C</td>
-            <td class="stat-num">5</td>
+            <td class="stat-num">6</td>
             <td class="stat-num">2</td>
             <td class="stat-num">12</td>
             <td class="stat-num">2</td>
@@ -9779,7 +9826,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/664770" target="_blank">Nathan Lukes*</a></td>
             <td class="stat-num">31</td>
             <td>RF</td>
-            <td class="stat-num">9</td>
+            <td class="stat-num">10</td>
             <td class="stat-num">0</td>
             <td class="stat-num">21</td>
             <td class="stat-num">2</td>
@@ -9794,6 +9841,29 @@
             <td class="stat-num">2</td>
             <td class="stat-num">1</td>
             <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="0">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/641778" target="_blank">Eric Lauer</a></td>
+            <td class="stat-num">30</td>
+            <td>P</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -9953,6 +10023,27 @@
             <td class="stat-num">15</td>
         </tr>
     
+        <tr class="data-row" data-ip="8.1">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/641778" target="_blank">Eric Lauer*</a></td>
+            <td class="stat-num">30</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">8.1</td>
+            <td class="stat-num">4.44</td>
+            <td class="stat-num">3.72</td>
+            <td class="stat-num">1.23</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">10</td>
+        </tr>
+    
         <tr class="data-row" data-ip="8">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/453286" target="_blank">Max Scherzer</a></td>
             <td class="stat-num">41</td>
@@ -9972,27 +10063,6 @@
             <td class="stat-num">2</td>
             <td class="stat-num">2</td>
             <td class="stat-num">6</td>
-        </tr>
-    
-        <tr class="data-row" data-ip="7.1">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/641778" target="_blank">Eric Lauer*</a></td>
-            <td class="stat-num">30</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">7.1</td>
-            <td class="stat-num">5.07</td>
-            <td class="stat-num">4.09</td>
-            <td class="stat-num">1.41</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">9</td>
         </tr>
     
         <tr class="data-row" data-ip="6">
@@ -10134,7 +10204,7 @@
             <details class="team-section" id="arizona-diamondbacks">
                 <summary class="team-summary">
                     <span class="team-name-text">Arizona Diamondbacks</span>
-                    <span class="team-summary-stats">W/L: 8-6 | RS: -2 | RA: +7</span>
+                    <span class="team-summary-stats">W/L: 8-6 | RS: -2 | RA: +10</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -10165,25 +10235,25 @@
                     </thead>
                     <tbody id="batters-109">
                         
-        <tr class="data-row" data-pa="50">
+        <tr class="data-row" data-pa="53">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/682998" target="_blank">Corbin Carroll*</a></td>
             <td class="stat-num">25</td>
             <td>RF</td>
             <td class="stat-num">13</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">50</td>
+            <td class="stat-num">11</td>
+            <td class="stat-num">53</td>
             <td class="stat-num">10</td>
             <td class="stat-num">11</td>
-            <td class="stat-num">.333</td>
-            <td class="stat-num">.420</td>
-            <td class="stat-num">.690</td>
+            <td class="stat-num">.311</td>
+            <td class="stat-num">.396</td>
+            <td class="stat-num">.644</td>
             <td class="stat-num">14</td>
             <td class="stat-num">3</td>
             <td class="stat-num">3</td>
             <td class="stat-num">2</td>
             <td class="stat-num">29</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">10</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
         </tr>
@@ -10234,18 +10304,41 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="64">
+        <tr class="data-row" data-pa="32">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/699912" target="_blank">Jose Fernandez</a></td>
+            <td class="stat-num">22</td>
+            <td>SS</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">32</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">.313</td>
+            <td class="stat-num">.313</td>
+            <td class="stat-num">.531</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">17</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="66">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/606466" target="_blank">Ketel Marte&dagger;</a></td>
             <td class="stat-num">32</td>
             <td>2B</td>
             <td class="stat-num">15</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">64</td>
+            <td class="stat-num">66</td>
             <td class="stat-num">7</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">.203</td>
-            <td class="stat-num">.266</td>
-            <td class="stat-num">.339</td>
+            <td class="stat-num">.197</td>
+            <td class="stat-num">.258</td>
+            <td class="stat-num">.328</td>
             <td class="stat-num">12</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
@@ -10257,165 +10350,142 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="29">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/699912" target="_blank">Jose Fernandez</a></td>
-            <td class="stat-num">22</td>
-            <td>SS</td>
-            <td class="stat-num">10</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">29</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">.310</td>
-            <td class="stat-num">.310</td>
-            <td class="stat-num">.552</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">16</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="56">
+        <tr class="data-row" data-pa="59">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/672695" target="_blank">Geraldo Perdomo&dagger;</a></td>
             <td class="stat-num">26</td>
             <td>SS</td>
             <td class="stat-num">15</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">56</td>
-            <td class="stat-num">5</td>
+            <td class="stat-num">59</td>
+            <td class="stat-num">6</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">.178</td>
-            <td class="stat-num">.304</td>
-            <td class="stat-num">.289</td>
+            <td class="stat-num">.170</td>
+            <td class="stat-num">.305</td>
+            <td class="stat-num">.277</td>
             <td class="stat-num">8</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">13</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">4</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">5</td>
             <td class="stat-num">3</td>
             <td class="stat-num">2</td>
         </tr>
     
-        <tr class="data-row" data-pa="29">
+        <tr class="data-row" data-pa="31">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/678489" target="_blank">Jorge Barrosa&dagger;</a></td>
             <td class="stat-num">25</td>
             <td>LF</td>
             <td class="stat-num">9</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">29</td>
+            <td class="stat-num">31</td>
             <td class="stat-num">4</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">.214</td>
-            <td class="stat-num">.241</td>
-            <td class="stat-num">.429</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">.233</td>
+            <td class="stat-num">.258</td>
+            <td class="stat-num">.433</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">4</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">12</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">1</td>
             <td class="stat-num">10</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="42">
+        <tr class="data-row" data-pa="44">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/677950" target="_blank">Alek Thomas*</a></td>
             <td class="stat-num">25</td>
             <td>CF</td>
             <td class="stat-num">12</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">42</td>
+            <td class="stat-num">44</td>
             <td class="stat-num">4</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">.150</td>
-            <td class="stat-num">.190</td>
-            <td class="stat-num">.250</td>
+            <td class="stat-num">.146</td>
+            <td class="stat-num">.205</td>
+            <td class="stat-num">.244</td>
             <td class="stat-num">6</td>
             <td class="stat-num">4</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">10</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">2</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">3</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="46">
+        <tr class="data-row" data-pa="16">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/680728" target="_blank">Adrian Del Castillo*</a></td>
+            <td class="stat-num">26</td>
+            <td>C</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">16</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">.313</td>
+            <td class="stat-num">.313</td>
+            <td class="stat-num">.375</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="49">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/571448" target="_blank">Nolan Arenado</a></td>
             <td class="stat-num">34</td>
             <td>3B</td>
             <td class="stat-num">13</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">46</td>
+            <td class="stat-num">49</td>
             <td class="stat-num">3</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">.178</td>
-            <td class="stat-num">.196</td>
-            <td class="stat-num">.200</td>
+            <td class="stat-num">.167</td>
+            <td class="stat-num">.184</td>
+            <td class="stat-num">.188</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">9</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="13">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/680728" target="_blank">Adrian Del Castillo*</a></td>
-            <td class="stat-num">26</td>
-            <td>C</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">1</td>
             <td class="stat-num">13</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">.231</td>
-            <td class="stat-num">.231</td>
-            <td class="stat-num">.308</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">6</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="27">
+        <tr class="data-row" data-pa="29">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694374" target="_blank">Tim Tawa</a></td>
             <td class="stat-num">27</td>
             <td>2B</td>
             <td class="stat-num">10</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">27</td>
+            <td class="stat-num">29</td>
             <td class="stat-num">1</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">.130</td>
-            <td class="stat-num">.222</td>
-            <td class="stat-num">.174</td>
+            <td class="stat-num">.125</td>
+            <td class="stat-num">.241</td>
+            <td class="stat-num">.167</td>
             <td class="stat-num">3</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">3</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
         </tr>
     
         <tr class="data-row" data-pa="17">
@@ -10437,29 +10507,6 @@
             <td class="stat-num">4</td>
             <td class="stat-num">1</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="0">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694297" target="_blank">Brandon Pfaadt</a></td>
-            <td class="stat-num">27</td>
-            <td>P</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">.000</td>
-            <td class="stat-num">.000</td>
-            <td class="stat-num">.000</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -10684,27 +10731,6 @@
             <td class="stat-num">2</td>
         </tr>
     
-        <tr class="data-row" data-ip="12.2">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694297" target="_blank">Brandon Pfaadt</a></td>
-            <td class="stat-num">27</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">12.2</td>
-            <td class="stat-num">5.90</td>
-            <td class="stat-num">3.84</td>
-            <td class="stat-num">1.31</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">8</td>
-        </tr>
-    
         <tr class="data-row" data-ip="15">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/669194" target="_blank">Ryne Nelson</a></td>
             <td class="stat-num">28</td>
@@ -10747,6 +10773,27 @@
             <td class="stat-num">7</td>
         </tr>
     
+        <tr class="data-row" data-ip="5.1">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/656464" target="_blank">Kevin Ginkel</a></td>
+            <td class="stat-num">32</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">5.1</td>
+            <td class="stat-num">7.06</td>
+            <td class="stat-num">2.32</td>
+            <td class="stat-num">1.57</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">5</td>
+        </tr>
+    
         <tr class="data-row" data-ip="6.2">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/664199" target="_blank">Taylor Clarke</a></td>
             <td class="stat-num">32</td>
@@ -10768,25 +10815,25 @@
             <td class="stat-num">5</td>
         </tr>
     
-        <tr class="data-row" data-ip="4.1">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/656464" target="_blank">Kevin Ginkel</a></td>
-            <td class="stat-num">32</td>
+        <tr class="data-row" data-ip="16.2">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694297" target="_blank">Brandon Pfaadt</a></td>
+            <td class="stat-num">27</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">4.1</td>
-            <td class="stat-num">8.78</td>
-            <td class="stat-num">2.37</td>
-            <td class="stat-num">1.71</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
+            <td class="stat-num">16.2</td>
+            <td class="stat-num">6.11</td>
+            <td class="stat-num">5.45</td>
+            <td class="stat-num">1.42</td>
             <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">17</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">11</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">11</td>
         </tr>
     
         <tr class="data-row" data-ip="1">
@@ -10818,7 +10865,7 @@
             <details class="team-section" id="atlanta-braves">
                 <summary class="team-summary">
                     <span class="team-name-text">Atlanta Braves</span>
-                    <span class="team-summary-stats">W/L: 9-5 | RS: +16 | RA: -19</span>
+                    <span class="team-summary-stats">W/L: 9-5 | RS: +15 | RA: -20</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -11483,7 +11530,7 @@
             <details class="team-section" id="chicago-cubs">
                 <summary class="team-summary">
                     <span class="team-name-text">Chicago Cubs</span>
-                    <span class="team-summary-stats">W/L: 6-7 | RS: -5 | RA: -10</span>
+                    <span class="team-summary-stats">W/L: 6-7 | RS: -6 | RA: -8</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -11514,48 +11561,48 @@
                     </thead>
                     <tbody id="batters-112">
                         
-        <tr class="data-row" data-pa="58">
+        <tr class="data-row" data-pa="60">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/663538" target="_blank">Nico Hoerner</a></td>
             <td class="stat-num">28</td>
             <td>2B</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">11</td>
-            <td class="stat-num">58</td>
+            <td class="stat-num">60</td>
             <td class="stat-num">8</td>
             <td class="stat-num">9</td>
-            <td class="stat-num">.326</td>
-            <td class="stat-num">.448</td>
-            <td class="stat-num">.522</td>
-            <td class="stat-num">15</td>
+            <td class="stat-num">.333</td>
+            <td class="stat-num">.450</td>
+            <td class="stat-num">.521</td>
+            <td class="stat-num">16</td>
             <td class="stat-num">6</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">24</td>
+            <td class="stat-num">25</td>
             <td class="stat-num">9</td>
             <td class="stat-num">6</td>
             <td class="stat-num">5</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="49">
+        <tr class="data-row" data-pa="50">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/664023" target="_blank">Ian Happ&dagger;</a></td>
             <td class="stat-num">31</td>
             <td>LF</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">8</td>
-            <td class="stat-num">49</td>
+            <td class="stat-num">50</td>
             <td class="stat-num">7</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">.233</td>
-            <td class="stat-num">.327</td>
-            <td class="stat-num">.558</td>
+            <td class="stat-num">.227</td>
+            <td class="stat-num">.320</td>
+            <td class="stat-num">.545</td>
             <td class="stat-num">10</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
             <td class="stat-num">4</td>
             <td class="stat-num">24</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">18</td>
+            <td class="stat-num">19</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -11583,25 +11630,25 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="58">
+        <tr class="data-row" data-pa="59">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/608324" target="_blank">Alex Bregman</a></td>
             <td class="stat-num">32</td>
             <td>3B</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">58</td>
+            <td class="stat-num">59</td>
             <td class="stat-num">3</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">.192</td>
-            <td class="stat-num">.276</td>
-            <td class="stat-num">.327</td>
+            <td class="stat-num">.189</td>
+            <td class="stat-num">.271</td>
+            <td class="stat-num">.321</td>
             <td class="stat-num">10</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">2</td>
             <td class="stat-num">17</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">8</td>
+            <td class="stat-num">9</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -11629,64 +11676,87 @@
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="53">
+        <tr class="data-row" data-pa="54">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/691718" target="_blank">Pete Crow-Armstrong*</a></td>
             <td class="stat-num">24</td>
             <td>CF</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">53</td>
+            <td class="stat-num">54</td>
             <td class="stat-num">8</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">.216</td>
-            <td class="stat-num">.245</td>
-            <td class="stat-num">.294</td>
+            <td class="stat-num">.212</td>
+            <td class="stat-num">.241</td>
+            <td class="stat-num">.288</td>
             <td class="stat-num">11</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">15</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">15</td>
             <td class="stat-num">4</td>
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="20">
+        <tr class="data-row" data-pa="21">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/665804" target="_blank">Miguel Amaya</a></td>
             <td class="stat-num">27</td>
             <td>C</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">20</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">21</td>
             <td class="stat-num">3</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">.294</td>
-            <td class="stat-num">.400</td>
-            <td class="stat-num">.529</td>
+            <td class="stat-num">.278</td>
+            <td class="stat-num">.381</td>
+            <td class="stat-num">.500</td>
             <td class="stat-num">5</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">9</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">3</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="52">
+        <tr class="data-row" data-pa="34">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694208" target="_blank">Moisés Ballesteros*</a></td>
+            <td class="stat-num">22</td>
+            <td>C</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">34</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">.233</td>
+            <td class="stat-num">.294</td>
+            <td class="stat-num">.333</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="53">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/621020" target="_blank">Dansby Swanson</a></td>
             <td class="stat-num">32</td>
             <td>SS</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">52</td>
+            <td class="stat-num">53</td>
             <td class="stat-num">7</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">.140</td>
-            <td class="stat-num">.269</td>
-            <td class="stat-num">.233</td>
+            <td class="stat-num">.136</td>
+            <td class="stat-num">.264</td>
+            <td class="stat-num">.227</td>
             <td class="stat-num">6</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
@@ -11698,71 +11768,48 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="33">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694208" target="_blank">Moisés Ballesteros*</a></td>
-            <td class="stat-num">22</td>
-            <td>C</td>
-            <td class="stat-num">11</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">33</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">.207</td>
-            <td class="stat-num">.273</td>
-            <td class="stat-num">.310</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="20">
+        <tr class="data-row" data-pa="21">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/624424" target="_blank">Michael Conforto*</a></td>
             <td class="stat-num">33</td>
             <td>LF</td>
-            <td class="stat-num">8</td>
+            <td class="stat-num">9</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">20</td>
+            <td class="stat-num">21</td>
             <td class="stat-num">2</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">.250</td>
-            <td class="stat-num">.400</td>
-            <td class="stat-num">.313</td>
+            <td class="stat-num">.235</td>
+            <td class="stat-num">.381</td>
+            <td class="stat-num">.294</td>
             <td class="stat-num">4</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">5</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">7</td>
+            <td class="stat-num">8</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="56">
+        <tr class="data-row" data-pa="58">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/683737" target="_blank">Michael Busch*</a></td>
             <td class="stat-num">28</td>
             <td>1B</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">56</td>
+            <td class="stat-num">58</td>
             <td class="stat-num">6</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">.125</td>
-            <td class="stat-num">.232</td>
-            <td class="stat-num">.167</td>
+            <td class="stat-num">.120</td>
+            <td class="stat-num">.224</td>
+            <td class="stat-num">.160</td>
             <td class="stat-num">6</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">8</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">10</td>
+            <td class="stat-num">11</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -11863,25 +11910,25 @@
             <td class="stat-num">20</td>
         </tr>
     
-        <tr class="data-row" data-ip="11.2">
+        <tr class="data-row" data-ip="15.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/665795" target="_blank">Edward Cabrera</a></td>
             <td class="stat-num">27</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">11.2</td>
-            <td class="stat-num">0.00</td>
-            <td class="stat-num">3.10</td>
-            <td class="stat-num">0.71</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">2</td>
+            <td class="stat-num">15.1</td>
+            <td class="stat-num">1.79</td>
+            <td class="stat-num">2.97</td>
+            <td class="stat-num">1.13</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">6</td>
             <td class="stat-num">9</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">13</td>
         </tr>
     
         <tr class="data-row" data-ip="11.1">
@@ -12123,7 +12170,7 @@
             <details class="team-section" id="cincinnati-reds">
                 <summary class="team-summary">
                     <span class="team-name-text">Cincinnati Reds</span>
-                    <span class="team-summary-stats">W/L: 8-6 | RS: -20 | RA: +2</span>
+                    <span class="team-summary-stats">W/L: 8-6 | RS: -21 | RA: +1</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -12784,7 +12831,7 @@
             <details class="team-section" id="colorado-rockies">
                 <summary class="team-summary">
                     <span class="team-name-text">Colorado Rockies</span>
-                    <span class="team-summary-stats">W/L: 6-8 | RS: -3 | RA: -1</span>
+                    <span class="team-summary-stats">W/L: 6-8 | RS: -4 | RA: -2</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -13447,7 +13494,7 @@
             <details class="team-section" id="los-angeles-dodgers">
                 <summary class="team-summary">
                     <span class="team-name-text">Los Angeles Dodgers</span>
-                    <span class="team-summary-stats">W/L: 10-3 | RS: +22 | RA: -8</span>
+                    <span class="team-summary-stats">W/L: 10-3 | RS: +21 | RA: -9</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -14129,7 +14176,7 @@
             <details class="team-section" id="miami-marlins">
                 <summary class="team-summary">
                     <span class="team-name-text">Miami Marlins</span>
-                    <span class="team-summary-stats">W/L: 8-6 | RS: +6 | RA: +2</span>
+                    <span class="team-summary-stats">W/L: 8-6 | RS: +6 | RA: +4</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -14160,18 +14207,18 @@
                     </thead>
                     <tbody id="batters-146">
                         
-        <tr class="data-row" data-pa="58">
+        <tr class="data-row" data-pa="61">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/669364" target="_blank">Xavier Edwards&dagger;</a></td>
             <td class="stat-num">26</td>
             <td>SS</td>
             <td class="stat-num">15</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">58</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">61</td>
             <td class="stat-num">11</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">.377</td>
-            <td class="stat-num">.431</td>
-            <td class="stat-num">.566</td>
+            <td class="stat-num">.357</td>
+            <td class="stat-num">.410</td>
+            <td class="stat-num">.536</td>
             <td class="stat-num">20</td>
             <td class="stat-num">3</td>
             <td class="stat-num">2</td>
@@ -14183,72 +14230,72 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="54">
+        <tr class="data-row" data-pa="57">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/672640" target="_blank">Otto Lopez</a></td>
             <td class="stat-num">27</td>
             <td>2B</td>
             <td class="stat-num">14</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">54</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">57</td>
             <td class="stat-num">9</td>
             <td class="stat-num">4</td>
             <td class="stat-num">.327</td>
-            <td class="stat-num">.389</td>
-            <td class="stat-num">.490</td>
-            <td class="stat-num">16</td>
-            <td class="stat-num">3</td>
+            <td class="stat-num">.386</td>
+            <td class="stat-num">.500</td>
+            <td class="stat-num">17</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">1</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">24</td>
+            <td class="stat-num">26</td>
             <td class="stat-num">4</td>
             <td class="stat-num">8</td>
             <td class="stat-num">2</td>
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="43">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/683357" target="_blank">Owen Caissie*</a></td>
-            <td class="stat-num">23</td>
-            <td>RF</td>
-            <td class="stat-num">14</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">43</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">.297</td>
-            <td class="stat-num">.372</td>
-            <td class="stat-num">.568</td>
-            <td class="stat-num">11</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">21</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">15</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="45">
+        <tr class="data-row" data-pa="48">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/689414" target="_blank">Liam Hicks*</a></td>
             <td class="stat-num">26</td>
             <td>C</td>
             <td class="stat-num">14</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">45</td>
-            <td class="stat-num">9</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">48</td>
+            <td class="stat-num">10</td>
             <td class="stat-num">13</td>
-            <td class="stat-num">.282</td>
-            <td class="stat-num">.356</td>
-            <td class="stat-num">.538</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">.286</td>
+            <td class="stat-num">.354</td>
+            <td class="stat-num">.524</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">21</td>
+            <td class="stat-num">22</td>
             <td class="stat-num">3</td>
             <td class="stat-num">3</td>
             <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="46">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/683357" target="_blank">Owen Caissie*</a></td>
+            <td class="stat-num">23</td>
+            <td>RF</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">46</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">.275</td>
+            <td class="stat-num">.348</td>
+            <td class="stat-num">.525</td>
+            <td class="stat-num">11</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">21</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">17</td>
+            <td class="stat-num">1</td>
             <td class="stat-num">0</td>
         </tr>
     
@@ -14275,117 +14322,117 @@
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="57">
+        <tr class="data-row" data-pa="48">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/681393" target="_blank">Connor Norby</a></td>
+            <td class="stat-num">25</td>
+            <td>3B</td>
+            <td class="stat-num">13</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">48</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">.237</td>
+            <td class="stat-num">.375</td>
+            <td class="stat-num">.421</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">16</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="60">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/682663" target="_blank">Agustín Ramírez</a></td>
             <td class="stat-num">24</td>
             <td>C</td>
             <td class="stat-num">14</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">57</td>
+            <td class="stat-num">60</td>
             <td class="stat-num">7</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">.245</td>
-            <td class="stat-num">.351</td>
-            <td class="stat-num">.347</td>
+            <td class="stat-num">.231</td>
+            <td class="stat-num">.333</td>
+            <td class="stat-num">.327</td>
             <td class="stat-num">12</td>
             <td class="stat-num">3</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">17</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="46">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/681393" target="_blank">Connor Norby</a></td>
-            <td class="stat-num">25</td>
-            <td>3B</td>
             <td class="stat-num">13</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">46</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">.216</td>
-            <td class="stat-num">.370</td>
-            <td class="stat-num">.378</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">0</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">14</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="64">
+        <tr class="data-row" data-pa="67">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/805300" target="_blank">Jakob Marsee*</a></td>
             <td class="stat-num">24</td>
             <td>CF</td>
             <td class="stat-num">15</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">64</td>
+            <td class="stat-num">67</td>
             <td class="stat-num">9</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">.145</td>
-            <td class="stat-num">.250</td>
-            <td class="stat-num">.200</td>
+            <td class="stat-num">.140</td>
+            <td class="stat-num">.254</td>
+            <td class="stat-num">.193</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">11</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">17</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">18</td>
             <td class="stat-num">6</td>
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="29">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/688363" target="_blank">Graham Pauley*</a></td>
-            <td class="stat-num">25</td>
-            <td>3B</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">29</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">.172</td>
-            <td class="stat-num">.172</td>
-            <td class="stat-num">.310</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="37">
+        <tr class="data-row" data-pa="40">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/681715" target="_blank">Heriberto Hernández</a></td>
             <td class="stat-num">26</td>
             <td>LF</td>
             <td class="stat-num">12</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">37</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">40</td>
             <td class="stat-num">2</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">.125</td>
-            <td class="stat-num">.243</td>
-            <td class="stat-num">.188</td>
-            <td class="stat-num">4</td>
+            <td class="stat-num">.147</td>
+            <td class="stat-num">.275</td>
+            <td class="stat-num">.206</td>
+            <td class="stat-num">5</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">6</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="31">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/688363" target="_blank">Graham Pauley*</a></td>
+            <td class="stat-num">25</td>
+            <td>3B</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">31</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">.161</td>
+            <td class="stat-num">.161</td>
+            <td class="stat-num">.290</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">9</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
         </tr>
@@ -14456,6 +14503,29 @@
             <td class="stat-num">1</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="0">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/669622" target="_blank">Anthony Bender</a></td>
+            <td class="stat-num">31</td>
+            <td>P</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
@@ -14530,25 +14600,25 @@
             <td class="stat-num">10</td>
         </tr>
     
-        <tr class="data-row" data-ip="13.1">
+        <tr class="data-row" data-ip="16.2">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/676083" target="_blank">Janson Junk</a></td>
             <td class="stat-num">30</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">13.1</td>
-            <td class="stat-num">4.12</td>
-            <td class="stat-num">3.56</td>
-            <td class="stat-num">1.37</td>
+            <td class="stat-num">16.2</td>
+            <td class="stat-num">4.44</td>
+            <td class="stat-num">3.96</td>
+            <td class="stat-num">1.30</td>
             <td class="stat-num">3</td>
             <td class="stat-num">3</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">15</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">3</td>
+            <td class="stat-num">17</td>
+            <td class="stat-num">9</td>
             <td class="stat-num">8</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">12</td>
         </tr>
     
         <tr class="data-row" data-ip="14.2">
@@ -14593,6 +14663,27 @@
             <td class="stat-num">10</td>
         </tr>
     
+        <tr class="data-row" data-ip="4.2">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/667463" target="_blank">John King*</a></td>
+            <td class="stat-num">31</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">4.2</td>
+            <td class="stat-num">0.00</td>
+            <td class="stat-num">3.58</td>
+            <td class="stat-num">0.71</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">5</td>
+        </tr>
+    
         <tr class="data-row" data-ip="4">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/677053" target="_blank">Andrew Nardi*</a></td>
             <td class="stat-num">27</td>
@@ -14614,25 +14705,25 @@
             <td class="stat-num">6</td>
         </tr>
     
-        <tr class="data-row" data-ip="3.2">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/667463" target="_blank">John King*</a></td>
+        <tr class="data-row" data-ip="6">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/656848" target="_blank">Michael Petersen</a></td>
             <td class="stat-num">31</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">3.2</td>
-            <td class="stat-num">0.00</td>
-            <td class="stat-num">3.10</td>
-            <td class="stat-num">0.63</td>
-            <td class="stat-num">5</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">6.0</td>
+            <td class="stat-num">4.50</td>
+            <td class="stat-num">5.27</td>
+            <td class="stat-num">1.33</td>
+            <td class="stat-num">6</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">3</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">6</td>
         </tr>
     
         <tr class="data-row" data-ip="16">
@@ -14719,46 +14810,25 @@
             <td class="stat-num">6</td>
         </tr>
     
-        <tr class="data-row" data-ip="5">
+        <tr class="data-row" data-ip="5.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/669622" target="_blank">Anthony Bender</a></td>
             <td class="stat-num">31</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">5.0</td>
-            <td class="stat-num">7.20</td>
-            <td class="stat-num">3.90</td>
-            <td class="stat-num">2.00</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">5</td>
+            <td class="stat-num">5.1</td>
+            <td class="stat-num">7.06</td>
+            <td class="stat-num">4.47</td>
+            <td class="stat-num">2.16</td>
             <td class="stat-num">7</td>
-        </tr>
-    
-        <tr class="data-row" data-ip="5">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/656848" target="_blank">Michael Petersen</a></td>
-            <td class="stat-num">31</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">5.0</td>
-            <td class="stat-num">5.40</td>
-            <td class="stat-num">5.70</td>
-            <td class="stat-num">1.60</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
             <td class="stat-num">5</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">4</td>
             <td class="stat-num">6</td>
+            <td class="stat-num">7</td>
         </tr>
     
                     </tbody>
@@ -14769,7 +14839,7 @@
             <details class="team-section" id="milwaukee-brewers">
                 <summary class="team-summary">
                     <span class="team-name-text">Milwaukee Brewers</span>
-                    <span class="team-summary-stats">W/L: 8-5 | RS: +12 | RA: -3</span>
+                    <span class="team-summary-stats">W/L: 8-5 | RS: +11 | RA: -4</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -15432,7 +15502,7 @@
             <details class="team-section" id="new-york-mets">
                 <summary class="team-summary">
                     <span class="team-name-text">New York Mets</span>
-                    <span class="team-summary-stats">W/L: 7-7 | RS: -5 | RA: -3</span>
+                    <span class="team-summary-stats">W/L: 7-7 | RS: -6 | RA: -4</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -16097,7 +16167,7 @@
             <details class="team-section" id="philadelphia-phillies">
                 <summary class="team-summary">
                     <span class="team-name-text">Philadelphia Phillies</span>
-                    <span class="team-summary-stats">W/L: 6-7 | RS: -15 | RA: +8</span>
+                    <span class="team-summary-stats">W/L: 6-7 | RS: -12 | RA: +8</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -16128,179 +16198,179 @@
                     </thead>
                     <tbody id="batters-143">
                         
-        <tr class="data-row" data-pa="57">
+        <tr class="data-row" data-pa="60">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/547180" target="_blank">Bryce Harper*</a></td>
             <td class="stat-num">33</td>
             <td>1B</td>
             <td class="stat-num">14</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">60</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">57</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">.240</td>
-            <td class="stat-num">.333</td>
-            <td class="stat-num">.440</td>
-            <td class="stat-num">12</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">.250</td>
+            <td class="stat-num">.350</td>
+            <td class="stat-num">.500</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">4</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">22</td>
-            <td class="stat-num">7</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">26</td>
+            <td class="stat-num">8</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="59">
+        <tr class="data-row" data-pa="62">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/656941" target="_blank">Kyle Schwarber*</a></td>
             <td class="stat-num">33</td>
             <td>LF</td>
             <td class="stat-num">14</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">62</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">59</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">.178</td>
-            <td class="stat-num">.373</td>
-            <td class="stat-num">.422</td>
-            <td class="stat-num">8</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">.188</td>
+            <td class="stat-num">.371</td>
+            <td class="stat-num">.479</td>
+            <td class="stat-num">9</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">19</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">23</td>
             <td class="stat-num">12</td>
-            <td class="stat-num">22</td>
+            <td class="stat-num">23</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="48">
+        <tr class="data-row" data-pa="45">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/702222" target="_blank">Justin Crawford*</a></td>
+            <td class="stat-num">22</td>
+            <td>CF</td>
+            <td class="stat-num">13</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">45</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">.350</td>
+            <td class="stat-num">.422</td>
+            <td class="stat-num">.475</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">19</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">1</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="56">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/666969" target="_blank">Adolis García</a></td>
+            <td class="stat-num">33</td>
+            <td>RF</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">56</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">.224</td>
+            <td class="stat-num">.304</td>
+            <td class="stat-num">.388</td>
+            <td class="stat-num">11</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">19</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">15</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="51">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/669016" target="_blank">Brandon Marsh*</a></td>
             <td class="stat-num">28</td>
             <td>CF</td>
             <td class="stat-num">13</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">48</td>
+            <td class="stat-num">51</td>
             <td class="stat-num">5</td>
             <td class="stat-num">9</td>
-            <td class="stat-num">.267</td>
-            <td class="stat-num">.292</td>
-            <td class="stat-num">.467</td>
+            <td class="stat-num">.250</td>
+            <td class="stat-num">.275</td>
+            <td class="stat-num">.438</td>
             <td class="stat-num">12</td>
             <td class="stat-num">3</td>
             <td class="stat-num">0</td>
             <td class="stat-num">2</td>
             <td class="stat-num">21</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="42">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/702222" target="_blank">Justin Crawford*</a></td>
-            <td class="stat-num">22</td>
-            <td>CF</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">42</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">.316</td>
-            <td class="stat-num">.381</td>
-            <td class="stat-num">.421</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">16</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">1</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="54">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/666969" target="_blank">Adolis García</a></td>
-            <td class="stat-num">33</td>
-            <td>RF</td>
-            <td class="stat-num">14</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">54</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">.229</td>
-            <td class="stat-num">.296</td>
-            <td class="stat-num">.396</td>
-            <td class="stat-num">11</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">19</td>
-            <td class="stat-num">4</td>
             <td class="stat-num">14</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="60">
+        <tr class="data-row" data-pa="63">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/607208" target="_blank">Trea Turner</a></td>
             <td class="stat-num">32</td>
             <td>SS</td>
             <td class="stat-num">14</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">60</td>
+            <td class="stat-num">63</td>
             <td class="stat-num">10</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">.250</td>
-            <td class="stat-num">.300</td>
-            <td class="stat-num">.321</td>
+            <td class="stat-num">.237</td>
+            <td class="stat-num">.286</td>
+            <td class="stat-num">.305</td>
             <td class="stat-num">14</td>
             <td class="stat-num">4</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">18</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">15</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="37">
+        <tr class="data-row" data-pa="39">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/592663" target="_blank">J.T. Realmuto</a></td>
             <td class="stat-num">35</td>
             <td>C</td>
             <td class="stat-num">11</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">37</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">39</td>
             <td class="stat-num">4</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">.233</td>
-            <td class="stat-num">.378</td>
-            <td class="stat-num">.400</td>
+            <td class="stat-num">.219</td>
+            <td class="stat-num">.359</td>
+            <td class="stat-num">.375</td>
             <td class="stat-num">7</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">12</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">8</td>
+            <td class="stat-num">9</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="52">
+        <tr class="data-row" data-pa="55">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/664761" target="_blank">Alec Bohm</a></td>
             <td class="stat-num">29</td>
             <td>3B</td>
             <td class="stat-num">13</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">52</td>
-            <td class="stat-num">3</td>
+            <td class="stat-num">55</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">8</td>
-            <td class="stat-num">.170</td>
-            <td class="stat-num">.250</td>
-            <td class="stat-num">.255</td>
+            <td class="stat-num">.160</td>
+            <td class="stat-num">.236</td>
+            <td class="stat-num">.240</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
@@ -16312,24 +16382,24 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="43">
+        <tr class="data-row" data-pa="46">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/681082" target="_blank">Bryson Stott*</a></td>
             <td class="stat-num">28</td>
             <td>2B</td>
             <td class="stat-num">12</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">43</td>
+            <td class="stat-num">46</td>
             <td class="stat-num">1</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">.175</td>
-            <td class="stat-num">.233</td>
-            <td class="stat-num">.200</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
+            <td class="stat-num">.190</td>
+            <td class="stat-num">.261</td>
+            <td class="stat-num">.214</td>
             <td class="stat-num">8</td>
-            <td class="stat-num">2</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">3</td>
             <td class="stat-num">8</td>
             <td class="stat-num">3</td>
             <td class="stat-num">0</td>
@@ -16404,6 +16474,29 @@
             <td class="stat-num">0</td>
         </tr>
     
+        <tr class="data-row" data-pa="0">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/641745" target="_blank">Brad Keller</a></td>
+            <td class="stat-num">30</td>
+            <td>P</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
         <tr class="data-row" data-pa="7">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/664238" target="_blank">Dylan Moore</a></td>
             <td class="stat-num">33</td>
@@ -16432,29 +16525,6 @@
             <td class="stat-num">28</td>
             <td>P</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">.000</td>
-            <td class="stat-num">.000</td>
-            <td class="stat-num">.000</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="0">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/592836" target="_blank">Taijuan Walker</a></td>
-            <td class="stat-num">33</td>
-            <td>P</td>
-            <td class="stat-num">3</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
@@ -16523,6 +16593,27 @@
             <td class="stat-num">23</td>
         </tr>
     
+        <tr class="data-row" data-ip="7.2">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/641835" target="_blank">Tim Mayza*</a></td>
+            <td class="stat-num">34</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">7.2</td>
+            <td class="stat-num">0.00</td>
+            <td class="stat-num">1.02</td>
+            <td class="stat-num">0.42</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">9</td>
+        </tr>
+    
         <tr class="data-row" data-ip="17.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/605400" target="_blank">Aaron Nola</a></td>
             <td class="stat-num">32</td>
@@ -16542,27 +16633,6 @@
             <td class="stat-num">3</td>
             <td class="stat-num">4</td>
             <td class="stat-num">19</td>
-        </tr>
-    
-        <tr class="data-row" data-ip="7">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/641835" target="_blank">Tim Mayza*</a></td>
-            <td class="stat-num">34</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">7.0</td>
-            <td class="stat-num">0.00</td>
-            <td class="stat-num">1.24</td>
-            <td class="stat-num">0.29</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">8</td>
         </tr>
     
         <tr class="data-row" data-ip="17.1">
@@ -16670,6 +16740,27 @@
             <td class="stat-num">6</td>
         </tr>
     
+        <tr class="data-row" data-ip="3">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/689147" target="_blank">Orion Kerkering</a></td>
+            <td class="stat-num">25</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">3.0</td>
+            <td class="stat-num">0.00</td>
+            <td class="stat-num">3.43</td>
+            <td class="stat-num">1.00</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">1</td>
+        </tr>
+    
         <tr class="data-row" data-ip="5.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/647315" target="_blank">Zach Pop</a></td>
             <td class="stat-num">29</td>
@@ -16691,46 +16782,25 @@
             <td class="stat-num">5</td>
         </tr>
     
-        <tr class="data-row" data-ip="6">
+        <tr class="data-row" data-ip="7">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/641745" target="_blank">Brad Keller</a></td>
             <td class="stat-num">30</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">6.0</td>
-            <td class="stat-num">4.50</td>
-            <td class="stat-num">4.43</td>
-            <td class="stat-num">1.00</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">7.0</td>
+            <td class="stat-num">5.14</td>
+            <td class="stat-num">4.10</td>
+            <td class="stat-num">1.29</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">1</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">4</td>
-        </tr>
-    
-        <tr class="data-row" data-ip="2">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/689147" target="_blank">Orion Kerkering</a></td>
-            <td class="stat-num">25</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">2.0</td>
-            <td class="stat-num">0.00</td>
-            <td class="stat-num">4.60</td>
-            <td class="stat-num">1.50</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
+            <td class="stat-num">6</td>
         </tr>
     
         <tr class="data-row" data-ip="0.2">
@@ -16754,15 +16824,15 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-ip="4.1">
+        <tr class="data-row" data-ip="4.2">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/621237" target="_blank">José Alvarado*</a></td>
             <td class="stat-num">30</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">4.1</td>
-            <td class="stat-num">10.98</td>
-            <td class="stat-num">1.88</td>
-            <td class="stat-num">2.44</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">4.2</td>
+            <td class="stat-num">10.71</td>
+            <td class="stat-num">2.62</td>
+            <td class="stat-num">2.38</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
@@ -16775,25 +16845,25 @@
             <td class="stat-num">7</td>
         </tr>
     
-        <tr class="data-row" data-ip="11.2">
+        <tr class="data-row" data-ip="14.2">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/592836" target="_blank">Taijuan Walker</a></td>
             <td class="stat-num">33</td>
-            <td class="stat-num">-3</td>
-            <td class="stat-num">11.2</td>
-            <td class="stat-num">9.64</td>
-            <td class="stat-num">7.74</td>
-            <td class="stat-num">2.32</td>
+            <td class="stat-num">-2</td>
+            <td class="stat-num">14.2</td>
+            <td class="stat-num">7.61</td>
+            <td class="stat-num">6.55</td>
+            <td class="stat-num">1.97</td>
             <td class="stat-num">3</td>
             <td class="stat-num">3</td>
             <td class="stat-num">0</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">20</td>
+            <td class="stat-num">21</td>
             <td class="stat-num">13</td>
             <td class="stat-num">12</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">9</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">12</td>
         </tr>
     
                     </tbody>
@@ -16804,7 +16874,7 @@
             <details class="team-section" id="pittsburgh-pirates">
                 <summary class="team-summary">
                     <span class="team-name-text">Pittsburgh Pirates</span>
-                    <span class="team-summary-stats">W/L: 8-5 | RS: -5 | RA: -8</span>
+                    <span class="team-summary-stats">W/L: 8-5 | RS: -3 | RA: -9</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -16835,18 +16905,41 @@
                     </thead>
                     <tbody id="batters-134">
                         
-        <tr class="data-row" data-pa="53">
+        <tr class="data-row" data-pa="57">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/665833" target="_blank">Oneil Cruz*</a></td>
+            <td class="stat-num">27</td>
+            <td>CF</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">57</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">.340</td>
+            <td class="stat-num">.386</td>
+            <td class="stat-num">.604</td>
+            <td class="stat-num">18</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">32</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">17</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">1</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="55">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/656811" target="_blank">Ryan O'Hearn*</a></td>
             <td class="stat-num">32</td>
             <td>1B</td>
-            <td class="stat-num">12</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">11</td>
-            <td class="stat-num">53</td>
+            <td class="stat-num">55</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">11</td>
-            <td class="stat-num">.341</td>
-            <td class="stat-num">.434</td>
-            <td class="stat-num">.591</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">.333</td>
+            <td class="stat-num">.418</td>
+            <td class="stat-num">.578</td>
             <td class="stat-num">15</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
@@ -16858,71 +16951,71 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="54">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/665833" target="_blank">Oneil Cruz*</a></td>
-            <td class="stat-num">27</td>
-            <td>CF</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">10</td>
-            <td class="stat-num">54</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">.300</td>
-            <td class="stat-num">.352</td>
-            <td class="stat-num">.580</td>
-            <td class="stat-num">15</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">29</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">17</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">1</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="58">
+        <tr class="data-row" data-pa="60">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/668804" target="_blank">Bryan Reynolds&dagger;</a></td>
             <td class="stat-num">31</td>
             <td>RF</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">8</td>
-            <td class="stat-num">58</td>
+            <td class="stat-num">60</td>
             <td class="stat-num">11</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">.245</td>
-            <td class="stat-num">.345</td>
-            <td class="stat-num">.449</td>
-            <td class="stat-num">12</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">.255</td>
+            <td class="stat-num">.350</td>
+            <td class="stat-num">.451</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">22</td>
+            <td class="stat-num">23</td>
             <td class="stat-num">8</td>
-            <td class="stat-num">16</td>
+            <td class="stat-num">17</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="48">
+        <tr class="data-row" data-pa="50">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/664040" target="_blank">Brandon Lowe*</a></td>
             <td class="stat-num">31</td>
             <td>2B</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">48</td>
+            <td class="stat-num">50</td>
+            <td class="stat-num">5</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">.220</td>
-            <td class="stat-num">.333</td>
-            <td class="stat-num">.488</td>
+            <td class="stat-num">.214</td>
+            <td class="stat-num">.340</td>
+            <td class="stat-num">.476</td>
             <td class="stat-num">9</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
             <td class="stat-num">3</td>
             <td class="stat-num">20</td>
-            <td class="stat-num">7</td>
+            <td class="stat-num">8</td>
             <td class="stat-num">10</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="34">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694377" target="_blank">Nick Yorke</a></td>
+            <td class="stat-num">24</td>
+            <td>2B</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">34</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">.370</td>
+            <td class="stat-num">.471</td>
+            <td class="stat-num">.444</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">5</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -16950,64 +17043,41 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="32">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694377" target="_blank">Nick Yorke</a></td>
-            <td class="stat-num">24</td>
-            <td>2B</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">32</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">.320</td>
-            <td class="stat-num">.438</td>
-            <td class="stat-num">.400</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">10</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="31">
+        <tr class="data-row" data-pa="33">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/680779" target="_blank">Henry Davis</a></td>
             <td class="stat-num">26</td>
             <td>C</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">31</td>
+            <td class="stat-num">33</td>
             <td class="stat-num">2</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">.222</td>
-            <td class="stat-num">.323</td>
-            <td class="stat-num">.333</td>
+            <td class="stat-num">.207</td>
+            <td class="stat-num">.303</td>
+            <td class="stat-num">.310</td>
             <td class="stat-num">6</td>
             <td class="stat-num">3</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">9</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">4</td>
+            <td class="stat-num">6</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="37">
+        <tr class="data-row" data-pa="39">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/687462" target="_blank">Spencer Horwitz*</a></td>
             <td class="stat-num">28</td>
             <td>1B</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">37</td>
+            <td class="stat-num">39</td>
             <td class="stat-num">3</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">.233</td>
-            <td class="stat-num">.351</td>
-            <td class="stat-num">.267</td>
+            <td class="stat-num">.219</td>
+            <td class="stat-num">.333</td>
+            <td class="stat-num">.250</td>
             <td class="stat-num">7</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
@@ -17042,26 +17112,26 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="25">
+        <tr class="data-row" data-pa="27">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/804606" target="_blank">Konnor Griffin</a></td>
             <td class="stat-num">19</td>
             <td>SS</td>
-            <td class="stat-num">7</td>
+            <td class="stat-num">8</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">25</td>
+            <td class="stat-num">27</td>
             <td class="stat-num">2</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">.143</td>
-            <td class="stat-num">.240</td>
-            <td class="stat-num">.190</td>
-            <td class="stat-num">3</td>
+            <td class="stat-num">.174</td>
+            <td class="stat-num">.259</td>
+            <td class="stat-num">.217</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">4</td>
+            <td class="stat-num">5</td>
             <td class="stat-num">2</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
             <td class="stat-num">0</td>
         </tr>
     
@@ -17088,25 +17158,25 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="39">
+        <tr class="data-row" data-pa="41">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/542303" target="_blank">Marcell Ozuna</a></td>
             <td class="stat-num">35</td>
             <td>DH</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">39</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">.057</td>
-            <td class="stat-num">.154</td>
-            <td class="stat-num">.057</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">4</td>
             <td class="stat-num">10</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">41</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">.056</td>
+            <td class="stat-num">.171</td>
+            <td class="stat-num">.056</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">11</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -17184,6 +17254,27 @@
             <td class="stat-num">11</td>
         </tr>
     
+        <tr class="data-row" data-ip="15">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/677952" target="_blank">Braxton Ashcraft</a></td>
+            <td class="stat-num">26</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">15.0</td>
+            <td class="stat-num">1.80</td>
+            <td class="stat-num">1.63</td>
+            <td class="stat-num">0.93</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">17</td>
+        </tr>
+    
         <tr class="data-row" data-ip="14.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/669387" target="_blank">Carmen Mlodzinski</a></td>
             <td class="stat-num">27</td>
@@ -17203,27 +17294,6 @@
             <td class="stat-num">0</td>
             <td class="stat-num">6</td>
             <td class="stat-num">15</td>
-        </tr>
-    
-        <tr class="data-row" data-ip="12">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/677952" target="_blank">Braxton Ashcraft</a></td>
-            <td class="stat-num">26</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">12.0</td>
-            <td class="stat-num">2.25</td>
-            <td class="stat-num">2.27</td>
-            <td class="stat-num">1.00</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">11</td>
         </tr>
     
         <tr class="data-row" data-ip="7">
@@ -17444,7 +17514,7 @@
             <details class="team-section" id="san-diego-padres">
                 <summary class="team-summary">
                     <span class="team-name-text">San Diego Padres</span>
-                    <span class="team-summary-stats">W/L: 8-6 | RS: -3 | RA: -3</span>
+                    <span class="team-summary-stats">W/L: 8-6 | RS: -4 | RA: -4</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -18084,7 +18154,7 @@
             <details class="team-section" id="san-francisco-giants">
                 <summary class="team-summary">
                     <span class="team-name-text">San Francisco Giants</span>
-                    <span class="team-summary-stats">W/L: 6-8 | RS: -14 | RA: +4</span>
+                    <span class="team-summary-stats">W/L: 6-8 | RS: -15 | RA: +3</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -18745,7 +18815,7 @@
             <details class="team-section" id="st-louis-cardinals">
                 <summary class="team-summary">
                     <span class="team-name-text">St. Louis Cardinals</span>
-                    <span class="team-summary-stats">W/L: 8-5 | RS: +1 | RA: +8</span>
+                    <span class="team-summary-stats">W/L: 8-5 | RS: +0 | RA: +7</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -19364,7 +19434,7 @@
             <details class="team-section" id="washington-nationals">
                 <summary class="team-summary">
                     <span class="team-name-text">Washington Nationals</span>
-                    <span class="team-summary-stats">W/L: 5-8 | RS: +17 | RA: +25</span>
+                    <span class="team-summary-stats">W/L: 5-8 | RS: +16 | RA: +24</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -20045,7 +20115,7 @@
             const alSection = document.getElementById('american-league');
             const nlSection = document.getElementById('national-league');
             
-            selector.innerHTML = '<option value="">-- Select Team --</option>';
+            selector.innerHTML = '<option value="">-- Select Team --</option><option value="top">Top of Page</option>';
             
             const alTeams = alSection.querySelectorAll('.team-section');
             if (alTeams.length > 0) {
@@ -20080,11 +20150,20 @@
             const selector = document.getElementById('teamSelector');
             const teamId = selector.value;
             
+            if (teamId === 'top') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => { selector.value = ''; }, 500);
+                return;
+            }
+            
             if (teamId) {
                 const element = document.getElementById(teamId);
                 if (element) {
                     element.setAttribute('open', '');
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    const navBar = document.querySelector('.sticky-nav-bar');
+                    const navHeight = navBar ? navBar.offsetHeight : 0;
+                    const top = element.getBoundingClientRect().top + window.pageYOffset - navHeight - 8;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
                     setTimeout(() => { selector.value = ''; }, 500);
                 }
             }
@@ -20106,7 +20185,7 @@
                 }
             }
             
-            display.textContent = 'Viewing: ' + (currentTeam !== 'Top of Page' ? '2026 ' : '') + currentTeam;
+            display.textContent = currentTeam;
         }
         
         // Expand / collapse all team sections
