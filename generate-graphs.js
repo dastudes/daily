@@ -1089,7 +1089,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                 <ul>
                     <li><strong>RC (Runs Created)</strong> is simply OBPxTB</li>
                     <li><strong>FIP (Fielding Independent Pitching)</strong> ((13xHR)+(3x(BB+HBP))-(2xK))/IP + 3.10</li>
-                    <li><strong>FIPAR (FIP Above Replacement)</strong> (6-FIP)xIP/9</li>
+                    <li><strong>PAR (Pitching Above Replacement)</strong> (6-(FIP+ERA)/2)xIP/9</li>
                 </ul>
                 
                 <p>These stats are value approximations only. Please don't quote them. For actual good sabermetric stats, go to <a href="https://www.fangraphs.com/">Fangraphs</a> or <a href="https://www.baseball-reference.com/">Baseball Reference</a>.</p>
@@ -1196,7 +1196,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                         <th class="text-left">Team</th>
                         <th class="text-right">Age</th>
                         <th class="text-right">G</th>
-                        <th class="text-right sortable" id="th-p-fipar" onclick="sortPitchers('fipar')">FIPAR</th>
+                        <th class="text-right sortable" id="th-p-par" onclick="sortPitchers('par')">PAR</th>
                         <th class="text-right sortable" id="th-p-ip" onclick="sortPitchers('ip')">IP</th>
                         <th class="text-right sortable" id="th-p-era" onclick="sortPitchers('era')">ERA</th>
                         <th class="text-right sortable" id="th-p-fip" onclick="sortPitchers('fip')">FIP</th>
@@ -1227,7 +1227,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         // Leaderboard sort state
         let batterSortStat = 'rc';
         let batterSortAsc = false;
-        let pitcherSortStat = 'fipar';
+        let pitcherSortStat = 'par';
         let pitcherSortAsc = false;
         
         // Leaderboard filter state
@@ -1974,7 +1974,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             const leaders = filtered.slice(0, count);
             
             // Update header styling
-            const sortableStats = ['fipar', 'ip', 'era', 'fip', 'whip', 'gs', 'w', 'l', 'sv', 'hr', 'bb', 'k'];
+            const sortableStats = ['par', 'ip', 'era', 'fip', 'whip', 'gs', 'w', 'l', 'sv', 'hr', 'bb', 'k'];
             sortableStats.forEach(s => {
                 const th = document.getElementById('th-p-' + s);
                 if (th) {
@@ -1995,7 +1995,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                 row += '<td>' + p.teamAbbr + '</td>';
                 row += '<td class="text-right">' + (p.age || '') + '</td>';
                 row += '<td class="text-right">' + p.g + '</td>';
-                row += '<td class="text-right' + (stat === 'fipar' ? ' sorted-col' : '') + '">' + p.fipar + '</td>';
+                row += '<td class="text-right' + (stat === 'par' ? ' sorted-col' : '') + '">' + p.par + '</td>';
                 row += '<td class="text-right' + (stat === 'ip' ? ' sorted-col' : '') + '">' + p.ip.toFixed(1) + '</td>';
                 row += '<td class="text-right' + (stat === 'era' ? ' sorted-col' : '') + '">' + p.era.toFixed(2) + '</td>';
                 row += '<td class="text-right' + (stat === 'fip' ? ' sorted-col' : '') + '">' + p.fip.toFixed(2) + '</td>';
