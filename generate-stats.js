@@ -542,9 +542,6 @@ async function generateHTML() {
         const teamId = team.name.toLowerCase()
             .replace(/\s+/g, '-')
             .replace(/[^a-z0-9-]/g, '');
-        
-        const fangraphsSlug = getTeamFangraphsSlug(team.name);
-        const fangraphsUrl = `https://www.fangraphs.com/teams/${fangraphsSlug}`;
 
         const ts = standingsMap[team.id] || { w: 0, l: 0, rs: 0, ra: 0 };
         const avgs = leagueAvgs['AL'];
@@ -556,8 +553,8 @@ async function generateHTML() {
         alHTML += `
             <details class="team-section" id="${teamId}">
                 <summary class="team-summary">
-                    <span class="team-name-text"><a href="${fangraphsUrl}" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">${team.name}</a></span>
-                    <span class="team-summary-stats">${ts.w}-${ts.l} | RS: ${rsDisplay} | RA: ${raDisplay}</span>
+                    <span class="team-name-text">${team.name}</span>
+                    <span class="team-summary-stats">W/L: ${ts.w}-${ts.l} | RS: ${rsDisplay} | RA: ${raDisplay}</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -639,9 +636,6 @@ async function generateHTML() {
         const teamId = team.name.toLowerCase()
             .replace(/\s+/g, '-')
             .replace(/[^a-z0-9-]/g, '');
-        
-        const fangraphsSlug = getTeamFangraphsSlug(team.name);
-        const fangraphsUrl = `https://www.fangraphs.com/teams/${fangraphsSlug}`;
 
         const ts = standingsMap[team.id] || { w: 0, l: 0, rs: 0, ra: 0 };
         const avgs = leagueAvgs['NL'];
@@ -653,8 +647,8 @@ async function generateHTML() {
         nlHTML += `
             <details class="team-section" id="${teamId}">
                 <summary class="team-summary">
-                    <span class="team-name-text"><a href="${fangraphsUrl}" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">${team.name}</a></span>
-                    <span class="team-summary-stats">${ts.w}-${ts.l} | RS: ${rsDisplay} | RA: ${raDisplay}</span>
+                    <span class="team-name-text">${team.name}</span>
+                    <span class="team-summary-stats">W/L: ${ts.w}-${ts.l} | RS: ${rsDisplay} | RA: ${raDisplay}</span>
                 </summary>
                 <div class="team-content">
                 <div class="section-title">Batters</div>
@@ -947,7 +941,7 @@ async function generateHTML() {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 16px 12px 38px;
+            padding: 7px 14px 7px 34px;
             cursor: pointer;
             list-style: none;
             user-select: none;
@@ -960,7 +954,7 @@ async function generateHTML() {
         .team-summary::before {
             content: "";
             position: absolute;
-            left: 14px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             width: 0;
@@ -986,15 +980,16 @@ async function generateHTML() {
         }
 
         .team-name-text {
-            font-size: 1.4em;
+            font-size: 1.25em;
             font-weight: bold;
             color: #2563eb;
         }
 
         .team-summary-stats {
-            font-family: "Courier New", Courier, monospace;
-            font-size: 0.95em;
-            color: #555;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.0em;
+            font-weight: bold;
+            color: #8B4513;
             white-space: nowrap;
         }
 
