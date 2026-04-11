@@ -429,7 +429,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             const division = divisions[divAbbrev];
             html += `<div class="mb-4">`;
             html += `<h3 class="text-lg font-semibold text-gray-800 mb-1">${division.name}</h3>`;
-            html += `<table class="standings-table w-full text-gray-800 text-sm">`;
+            html += `<table class="standings-table w-full text-gray-800">`;
             html += `<thead><tr class="border-b-2 border-blue-800">`;
             html += `<th class="text-left py-1 px-2" style="width: 30%;">Team</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 7%;">W</th>`;
