@@ -1040,6 +1040,7 @@ async function generateHTML() {
         td {
             padding: 6px;
             border-bottom: 1px solid #E8D5B7;
+            color: #111;
         }
         
         tr:hover {
@@ -1076,7 +1077,7 @@ async function generateHTML() {
             background-color: white;
             border-bottom: 3px solid #8B4513;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            padding: 12px 20px;
+            padding: 7px 16px;
             margin-bottom: 20px;
         }
         
@@ -1086,30 +1087,30 @@ async function generateHTML() {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
+            gap: 12px;
             flex-wrap: wrap;
         }
         
         .nav-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 7px;
         }
         
         .filters-group {
-            gap: 12px;
+            gap: 7px;
         }
         
         .current-team-display {
-            font-size: 0.95em;
+            font-size: 0.9em;
             color: #2563eb;
             font-weight: bold;
             white-space: nowrap;
         }
         
         .sticky-nav-bar select {
-            padding: 6px 10px;
-            font-size: 0.9em;
+            padding: 4px 8px;
+            font-size: 0.85em;
             font-family: Georgia, "Times New Roman", serif;
             border: 1px solid #CD853F;
             border-radius: 4px;
@@ -1124,28 +1125,28 @@ async function generateHTML() {
         .filter-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
         
         .filter-item label {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #8B4513;
             font-weight: 600;
             white-space: nowrap;
         }
         
         .filter-item input {
-            width: 55px;
-            padding: 5px 6px;
-            font-size: 0.9em;
+            width: 48px;
+            padding: 4px 5px;
+            font-size: 0.85em;
             font-family: Georgia, "Times New Roman", serif;
             border: 1px solid #CD853F;
             border-radius: 4px;
         }
         
         .sticky-nav-bar button {
-            padding: 6px 14px;
-            font-size: 0.9em;
+            padding: 4px 10px;
+            font-size: 0.85em;
         }
         
         
@@ -1213,7 +1214,7 @@ async function generateHTML() {
     <div class="sticky-nav-bar">
         <div class="nav-bar-content">
             <div class="nav-group">
-                <span class="current-team-display" id="currentTeamDisplay">Viewing: Top of Page</span>
+                <span class="current-team-display" id="currentTeamDisplay">Top of Page</span>
                 <select id="teamSelector" onchange="jumpToTeam()">
                     <option value="">-- Jump to Team --</option>
                     <!-- Will be populated dynamically after page loads -->
@@ -1322,7 +1323,7 @@ async function generateHTML() {
             const alSection = document.getElementById('american-league');
             const nlSection = document.getElementById('national-league');
             
-            selector.innerHTML = '<option value="">-- Select Team --</option>';
+            selector.innerHTML = '<option value="">-- Select Team --</option><option value="top">Top of Page</option>';
             
             const alTeams = alSection.querySelectorAll('.team-section');
             if (alTeams.length > 0) {
@@ -1357,11 +1358,20 @@ async function generateHTML() {
             const selector = document.getElementById('teamSelector');
             const teamId = selector.value;
             
+            if (teamId === 'top') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => { selector.value = ''; }, 500);
+                return;
+            }
+            
             if (teamId) {
                 const element = document.getElementById(teamId);
                 if (element) {
                     element.setAttribute('open', '');
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    const navBar = document.querySelector('.sticky-nav-bar');
+                    const navHeight = navBar ? navBar.offsetHeight : 0;
+                    const top = element.getBoundingClientRect().top + window.pageYOffset - navHeight - 8;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
                     setTimeout(() => { selector.value = ''; }, 500);
                 }
             }
@@ -1383,7 +1393,7 @@ async function generateHTML() {
                 }
             }
             
-            display.textContent = 'Viewing: ' + (currentTeam !== 'Top of Page' ? '${season} ' : '') + currentTeam;
+            display.textContent = currentTeam;
         }
         
         // Expand / collapse all team sections
