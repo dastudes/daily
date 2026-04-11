@@ -126,6 +126,62 @@ async function fetchTeams(season) {
     return data.teams;
 }
 
+// Lightweight fetch of RS and RA for a single team
+async function fetchTeamRunTotals(teamId, season) {
+    try {
+        const response = await fetch(`${API_BASE}/teams/${teamId}/stats?stats=season&season=${season}&group=hitting,pitching`);
+        const data = await response.json();
+        let rs = 0, ra = 0;
+        for (const statGroup of (data.stats || [])) {
+            if (statGroup.group && statGroup.group.displayName === 'hitting' && statGroup.splits && statGroup.splits.length > 0) {
+                rs = statGroup.splits[0].stat.runs || 0;
+            }
+            if (statGroup.group && statGroup.group.displayName === 'pitching' && statGroup.splits && statGroup.splits.length > 0) {
+                ra = statGroup.splits[0].stat.runs || 0;
+            }
+        }
+        return { rs, ra };
+    } catch (e) {
+        return { rs: 0, ra: 0 };
+    }
+}
+
+// Fetch W/L from standings + RS/RA per team, compute league averages
+async function fetchTeamStandingsMap(season, allTeams) {
+    // One standings call for W/L
+    const response = await fetch(`${API_BASE}/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason`);
+    const data = await response.json();
+    const wlMap = {};
+    for (const division of (data.records || [])) {
+        for (const teamRecord of (division.teamRecords || [])) {
+            wlMap[teamRecord.team.id] = { w: teamRecord.wins, l: teamRecord.losses };
+        }
+    }
+
+    // One stats call per team for RS/RA
+    const standingsMap = {};
+    for (const team of allTeams) {
+        const league = team.league && team.league.name === 'American League' ? 'AL' : 'NL';
+        const wl = wlMap[team.id] || { w: 0, l: 0 };
+        const { rs, ra } = await fetchTeamRunTotals(team.id, season);
+        standingsMap[team.id] = { w: wl.w, l: wl.l, rs, ra, league };
+        await new Promise(resolve => setTimeout(resolve, 50));
+    }
+
+    // Compute per-league averages
+    const alTeams = Object.values(standingsMap).filter(t => t.league === 'AL');
+    const nlTeams = Object.values(standingsMap).filter(t => t.league === 'NL');
+    const avg = (arr, key) => arr.length ? Math.round(arr.reduce((s, t) => s + t[key], 0) / arr.length) : 0;
+
+    const leagueAvgs = {
+        AL: { rs: avg(alTeams, 'rs'), ra: avg(alTeams, 'ra') },
+        NL: { rs: avg(nlTeams, 'rs'), ra: avg(nlTeams, 'ra') }
+    };
+
+    console.log(`League averages - AL RS: ${leagueAvgs.AL.rs}, AL RA: ${leagueAvgs.AL.ra}, NL RS: ${leagueAvgs.NL.rs}, NL RA: ${leagueAvgs.NL.ra}`);
+    return { standingsMap, leagueAvgs };
+}
+
 async function fetchTeamRoster(teamId, season) {
     const response = await fetch(`${API_BASE}/teams/${teamId}/roster?season=${season}`);
     const data = await response.json();
@@ -361,6 +417,10 @@ async function generateHTML() {
     const allTeams = [...alTeams, ...nlTeams];
     const teamData = {};
     
+    // Fetch W/L, RS, RA and compute league averages (lightweight - one standings call + 30 team stats calls)
+    console.log('Fetching team standings and run totals...');
+    const { standingsMap, leagueAvgs } = await fetchTeamStandingsMap(season, allTeams);
+
     // First pass: count how many teams each player appears on
     console.log('Counting multi-team players...');
     const playerTeamCount = {};
@@ -485,11 +545,21 @@ async function generateHTML() {
         
         const fangraphsSlug = getTeamFangraphsSlug(team.name);
         const fangraphsUrl = `https://www.fangraphs.com/teams/${fangraphsSlug}`;
+
+        const ts = standingsMap[team.id] || { w: 0, l: 0, rs: 0, ra: 0 };
+        const avgs = leagueAvgs['AL'];
+        const rsDiff = ts.rs - avgs.rs;
+        const raDiff = ts.ra - avgs.ra;
+        const rsDisplay = (rsDiff >= 0 ? '+' : '') + rsDiff;
+        const raDisplay = (raDiff >= 0 ? '+' : '') + raDiff;
         
         alHTML += `
-            <div class="team-section" id="${teamId}">
-                <div class="team-header"><a href="${fangraphsUrl}" target="_blank" style="color: #2563eb; text-decoration: none;">${team.name}</a></div>
-                
+            <details class="team-section" id="${teamId}">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="${fangraphsUrl}" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">${team.name}</a></span>
+                    <span class="team-summary-stats">${ts.w}-${ts.l} | RS: ${rsDisplay} | RA: ${raDisplay}</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -549,7 +619,8 @@ async function generateHTML() {
                         ${pitcherRows}
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         `;
     }
     
@@ -571,11 +642,21 @@ async function generateHTML() {
         
         const fangraphsSlug = getTeamFangraphsSlug(team.name);
         const fangraphsUrl = `https://www.fangraphs.com/teams/${fangraphsSlug}`;
+
+        const ts = standingsMap[team.id] || { w: 0, l: 0, rs: 0, ra: 0 };
+        const avgs = leagueAvgs['NL'];
+        const rsDiff = ts.rs - avgs.rs;
+        const raDiff = ts.ra - avgs.ra;
+        const rsDisplay = (rsDiff >= 0 ? '+' : '') + rsDiff;
+        const raDisplay = (raDiff >= 0 ? '+' : '') + raDiff;
         
         nlHTML += `
-            <div class="team-section" id="${teamId}">
-                <div class="team-header"><a href="${fangraphsUrl}" target="_blank" style="color: #2563eb; text-decoration: none;">${team.name}</a></div>
-                
+            <details class="team-section" id="${teamId}">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="${fangraphsUrl}" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">${team.name}</a></span>
+                    <span class="team-summary-stats">${ts.w}-${ts.l} | RS: ${rsDisplay} | RA: ${raDisplay}</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -635,7 +716,8 @@ async function generateHTML() {
                         ${pitcherRows}
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         `;
     }
     
@@ -854,21 +936,70 @@ async function generateHTML() {
         }
         
         .team-section {
-            margin-bottom: 35px;
+            margin-bottom: 10px;
             background-color: white;
-            padding: 20px;
             border: 2px solid #CD853F;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(139, 69, 19, 0.15);
         }
-        
-        .team-header {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
+
+        .team-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px 12px 38px;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .team-summary::-webkit-details-marker { display: none; }
+
+        .team-summary::before {
+            content: "";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 5px 0 5px 8px;
+            border-color: transparent transparent transparent #8B4513;
+            transition: transform 0.25s ease;
+        }
+
+        details.team-section[open] > .team-summary::before {
+            transform: translateY(-50%) rotate(90deg);
+        }
+
+        details.team-section[open] > .team-summary {
             border-bottom: 2px solid #CD853F;
+            border-radius: 6px 6px 0 0;
+            background-color: #FFFAF0;
+        }
+
+        .team-summary:hover {
+            background-color: #FFFAF0;
+        }
+
+        .team-name-text {
+            font-size: 1.4em;
+            font-weight: bold;
             color: #2563eb;
+        }
+
+        .team-summary-stats {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.95em;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .team-content {
+            padding: 16px 20px 20px 20px;
         }
         
         .section-title {
@@ -1104,6 +1235,7 @@ async function generateHTML() {
                 </div>
                 <button onclick="applyFilters()">Apply</button>
                 <button onclick="resetFilters()">Reset</button>
+                <button id="expandAllBtn" onclick="toggleAllTeams()">Expand All</button>
             </div>
         </div>
     </div>
@@ -1195,34 +1327,31 @@ async function generateHTML() {
             const alSection = document.getElementById('american-league');
             const nlSection = document.getElementById('national-league');
             
-            // Clear existing options except the first one
             selector.innerHTML = '<option value="">-- Select Team --</option>';
             
-            // Get AL teams
             const alTeams = alSection.querySelectorAll('.team-section');
             if (alTeams.length > 0) {
                 const alGroup = document.createElement('optgroup');
                 alGroup.label = 'American League';
                 alTeams.forEach(team => {
-                    const teamName = team.querySelector('.team-header').textContent;
+                    const nameEl = team.querySelector('.team-name-text');
                     const option = document.createElement('option');
                     option.value = team.id;
-                    option.textContent = teamName;
+                    option.textContent = nameEl ? nameEl.textContent : team.id;
                     alGroup.appendChild(option);
                 });
                 selector.appendChild(alGroup);
             }
             
-            // Get NL teams
             const nlTeams = nlSection.querySelectorAll('.team-section');
             if (nlTeams.length > 0) {
                 const nlGroup = document.createElement('optgroup');
                 nlGroup.label = 'National League';
                 nlTeams.forEach(team => {
-                    const teamName = team.querySelector('.team-header').textContent;
+                    const nameEl = team.querySelector('.team-name-text');
                     const option = document.createElement('option');
                     option.value = team.id;
-                    option.textContent = teamName;
+                    option.textContent = nameEl ? nameEl.textContent : team.id;
                     nlGroup.appendChild(option);
                 });
                 selector.appendChild(nlGroup);
@@ -1236,11 +1365,9 @@ async function generateHTML() {
             if (teamId) {
                 const element = document.getElementById(teamId);
                 if (element) {
+                    element.setAttribute('open', '');
                     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    // Reset dropdown so user can select same team again
-                    setTimeout(() => {
-                        selector.value = '';
-                    }, 500);
+                    setTimeout(() => { selector.value = ''; }, 500);
                 }
             }
         }
@@ -1255,15 +1382,25 @@ async function generateHTML() {
             for (const team of teams) {
                 const rect = team.getBoundingClientRect();
                 if (rect.top <= 150 && rect.bottom >= 150) {
-                    const teamHeader = team.querySelector('.team-header');
-                    if (teamHeader) {
-                        currentTeam = teamHeader.textContent;
-                    }
+                    const nameEl = team.querySelector('.team-name-text');
+                    if (nameEl) currentTeam = nameEl.textContent;
                     break;
                 }
             }
             
             display.textContent = 'Viewing: ' + (currentTeam !== 'Top of Page' ? '${season} ' : '') + currentTeam;
+        }
+        
+        // Expand / collapse all team sections
+        let allExpanded = false;
+        function toggleAllTeams() {
+            const sections = document.querySelectorAll('.team-section');
+            allExpanded = !allExpanded;
+            sections.forEach(s => {
+                if (allExpanded) s.setAttribute('open', '');
+                else s.removeAttribute('open');
+            });
+            document.getElementById('expandAllBtn').textContent = allExpanded ? 'Collapse All' : 'Expand All';
         }
         
         // Update current team on scroll
