@@ -894,6 +894,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         .leaderboard-table td {
             padding: 6px;
             border-bottom: 1px solid #E8D5B7;
+            color: #111;
         }
         .leaderboard-table tr:hover {
             background-color: #FFFAF0;
