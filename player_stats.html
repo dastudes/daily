@@ -202,21 +202,70 @@
         }
         
         .team-section {
-            margin-bottom: 35px;
+            margin-bottom: 10px;
             background-color: white;
-            padding: 20px;
             border: 2px solid #CD853F;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(139, 69, 19, 0.15);
         }
-        
-        .team-header {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
+
+        .team-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px 12px 38px;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .team-summary::-webkit-details-marker { display: none; }
+
+        .team-summary::before {
+            content: "";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 5px 0 5px 8px;
+            border-color: transparent transparent transparent #8B4513;
+            transition: transform 0.25s ease;
+        }
+
+        details.team-section[open] > .team-summary::before {
+            transform: translateY(-50%) rotate(90deg);
+        }
+
+        details.team-section[open] > .team-summary {
             border-bottom: 2px solid #CD853F;
+            border-radius: 6px 6px 0 0;
+            background-color: #FFFAF0;
+        }
+
+        .team-summary:hover {
+            background-color: #FFFAF0;
+        }
+
+        .team-name-text {
+            font-size: 1.4em;
+            font-weight: bold;
             color: #2563eb;
+        }
+
+        .team-summary-stats {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.95em;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .team-content {
+            padding: 16px 20px 20px 20px;
         }
         
         .section-title {
@@ -452,6 +501,7 @@
                 </div>
                 <button onclick="applyFilters()">Apply</button>
                 <button onclick="resetFilters()">Reset</button>
+                <button id="expandAllBtn" onclick="toggleAllTeams()">Expand All</button>
             </div>
         </div>
     </div>
@@ -464,7 +514,7 @@
         <div class="header">
             <h1>Baseball Graphs 2026 Player Stats</h1>
             <p>Team-by-Team Stats for Easy Reading</p>
-            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: April 11, 2026 at 12:49 PM EDT</p>
+            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: April 11, 2026 at 1:23 PM EDT</p>
         </div>
         
         <div class="nav-bar">
@@ -494,9 +544,12 @@
             <div id="american-league">
                 <h2 class="league-header">AMERICAN LEAGUE</h2>
                 
-            <div class="team-section" id="athletics">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/athletics" target="_blank" style="color: #2563eb; text-decoration: none;">Athletics</a></div>
-                
+            <details class="team-section" id="athletics">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/athletics" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Athletics</a></span>
+                    <span class="team-summary-stats">6-7 | RS: -4 | RA: -1</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -1151,11 +1204,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="baltimore-orioles">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/orioles" target="_blank" style="color: #2563eb; text-decoration: none;">Baltimore Orioles</a></div>
-                
+            <details class="team-section" id="baltimore-orioles">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/orioles" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Baltimore Orioles</a></span>
+                    <span class="team-summary-stats">6-7 | RS: -7 | RA: -5</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -1787,11 +1844,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="boston-red-sox">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/red-sox" target="_blank" style="color: #2563eb; text-decoration: none;">Boston Red Sox</a></div>
-                
+            <details class="team-section" id="boston-red-sox">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/red-sox" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Boston Red Sox</a></span>
+                    <span class="team-summary-stats">4-9 | RS: -9 | RA: -2</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -2446,11 +2507,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="chicago-white-sox">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/white-sox" target="_blank" style="color: #2563eb; text-decoration: none;">Chicago White Sox</a></div>
-                
+            <details class="team-section" id="chicago-white-sox">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/white-sox" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Chicago White Sox</a></span>
+                    <span class="team-summary-stats">5-9 | RS: -12 | RA: +12</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -3061,11 +3126,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="cleveland-guardians">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/guardians" target="_blank" style="color: #2563eb; text-decoration: none;">Cleveland Guardians</a></div>
-                
+            <details class="team-section" id="cleveland-guardians">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/guardians" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Cleveland Guardians</a></span>
+                    <span class="team-summary-stats">8-6 | RS: -4 | RA: -6</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -3697,11 +3766,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="detroit-tigers">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/tigers" target="_blank" style="color: #2563eb; text-decoration: none;">Detroit Tigers</a></div>
-                
+            <details class="team-section" id="detroit-tigers">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/tigers" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Detroit Tigers</a></span>
+                    <span class="team-summary-stats">5-9 | RS: +2 | RA: -3</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -3730,46 +3803,46 @@
                     </thead>
                     <tbody id="batters-116">
                         
-        <tr class="data-row" data-pa="47">
+        <tr class="data-row" data-pa="48">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/690993" target="_blank">Colt Keith*</a></td>
             <td class="stat-num">24</td>
             <td>2B</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">9</td>
-            <td class="stat-num">47</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">10</td>
+            <td class="stat-num">48</td>
             <td class="stat-num">8</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">.364</td>
-            <td class="stat-num">.404</td>
-            <td class="stat-num">.500</td>
-            <td class="stat-num">16</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">.378</td>
+            <td class="stat-num">.417</td>
+            <td class="stat-num">.533</td>
+            <td class="stat-num">17</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">22</td>
+            <td class="stat-num">24</td>
             <td class="stat-num">3</td>
             <td class="stat-num">10</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="59">
+        <tr class="data-row" data-pa="60">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/805808" target="_blank">Kevin McGonigle*</a></td>
             <td class="stat-num">21</td>
             <td>SS</td>
-            <td class="stat-num">14</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">59</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">7</td>
-            <td class="stat-num">.288</td>
-            <td class="stat-num">.373</td>
-            <td class="stat-num">.423</td>
             <td class="stat-num">15</td>
-            <td class="stat-num">5</td>
+            <td class="stat-num">9</td>
+            <td class="stat-num">60</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">.302</td>
+            <td class="stat-num">.383</td>
+            <td class="stat-num">.453</td>
+            <td class="stat-num">16</td>
+            <td class="stat-num">6</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">22</td>
+            <td class="stat-num">24</td>
             <td class="stat-num">7</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
@@ -3780,7 +3853,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/693307" target="_blank">Dillon Dingler</a></td>
             <td class="stat-num">27</td>
             <td>C</td>
-            <td class="stat-num">12</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">7</td>
             <td class="stat-num">44</td>
             <td class="stat-num">6</td>
@@ -3849,7 +3922,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/682985" target="_blank">Riley Greene*</a></td>
             <td class="stat-num">25</td>
             <td>LF</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">15</td>
             <td class="stat-num">4</td>
             <td class="stat-num">61</td>
             <td class="stat-num">7</td>
@@ -3872,7 +3945,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/681481" target="_blank">Kerry Carpenter*</a></td>
             <td class="stat-num">28</td>
             <td>RF</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">4</td>
             <td class="stat-num">49</td>
             <td class="stat-num">3</td>
@@ -3895,7 +3968,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/679529" target="_blank">Spencer Torkelson</a></td>
             <td class="stat-num">26</td>
             <td>1B</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">4</td>
             <td class="stat-num">51</td>
             <td class="stat-num">4</td>
@@ -3918,7 +3991,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/656716" target="_blank">Zach McKinstry*</a></td>
             <td class="stat-num">30</td>
             <td>3B</td>
-            <td class="stat-num">10</td>
+            <td class="stat-num">11</td>
             <td class="stat-num">3</td>
             <td class="stat-num">33</td>
             <td class="stat-num">1</td>
@@ -3941,7 +4014,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/663837" target="_blank">Matt Vierling</a></td>
             <td class="stat-num">29</td>
             <td>CF</td>
-            <td class="stat-num">9</td>
+            <td class="stat-num">10</td>
             <td class="stat-num">1</td>
             <td class="stat-num">19</td>
             <td class="stat-num">1</td>
@@ -4006,13 +4079,13 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="3">
+        <tr class="data-row" data-pa="4">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/672761" target="_blank">Wenceel Pérez&dagger;</a></td>
             <td class="stat-num">26</td>
             <td>RF</td>
-            <td class="stat-num">1</td>
+            <td class="stat-num">2</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">3</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">.000</td>
@@ -4163,6 +4236,27 @@
             <td class="stat-num">5</td>
         </tr>
     
+        <tr class="data-row" data-ip="11.1">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/663554" target="_blank">Casey Mize</a></td>
+            <td class="stat-num">28</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">11.1</td>
+            <td class="stat-num">4.86</td>
+            <td class="stat-num">4.27</td>
+            <td class="stat-num">1.53</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">14</td>
+        </tr>
+    
         <tr class="data-row" data-ip="5.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/640448" target="_blank">Kyle Finnegan</a></td>
             <td class="stat-num">34</td>
@@ -4224,27 +4318,6 @@
             <td class="stat-num">1</td>
             <td class="stat-num">3</td>
             <td class="stat-num">4</td>
-        </tr>
-    
-        <tr class="data-row" data-ip="10.1">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/663554" target="_blank">Casey Mize</a></td>
-            <td class="stat-num">28</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">10.1</td>
-            <td class="stat-num">5.35</td>
-            <td class="stat-num">4.59</td>
-            <td class="stat-num">1.58</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">11</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">13</td>
         </tr>
     
         <tr class="data-row" data-ip="5.2">
@@ -4333,11 +4406,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="houston-astros">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/astros" target="_blank" style="color: #2563eb; text-decoration: none;">Houston Astros</a></div>
-                
+            <details class="team-section" id="houston-astros">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/astros" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Houston Astros</a></span>
+                    <span class="team-summary-stats">6-8 | RS: +30 | RA: +27</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -4969,11 +5046,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="kansas-city-royals">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/royals" target="_blank" style="color: #2563eb; text-decoration: none;">Kansas City Royals</a></div>
-                
+            <details class="team-section" id="kansas-city-royals">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/royals" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Kansas City Royals</a></span>
+                    <span class="team-summary-stats">6-8 | RS: -8 | RA: -1</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -5605,11 +5686,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="los-angeles-angels">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/angels" target="_blank" style="color: #2563eb; text-decoration: none;">Los Angeles Angels</a></div>
-                
+            <details class="team-section" id="los-angeles-angels">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/angels" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Los Angeles Angels</a></span>
+                    <span class="team-summary-stats">7-7 | RS: +6 | RA: +4</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -6218,11 +6303,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="minnesota-twins">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/twins" target="_blank" style="color: #2563eb; text-decoration: none;">Minnesota Twins</a></div>
-                
+            <details class="team-section" id="minnesota-twins">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/twins" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Minnesota Twins</a></span>
+                    <span class="team-summary-stats">7-7 | RS: +9 | RA: +5</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -6810,11 +6899,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="new-york-yankees">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/yankees" target="_blank" style="color: #2563eb; text-decoration: none;">New York Yankees</a></div>
-                
+            <details class="team-section" id="new-york-yankees">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/yankees" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">New York Yankees</a></span>
+                    <span class="team-summary-stats">8-5 | RS: +2 | RA: -26</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -7469,11 +7562,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="seattle-mariners">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/mariners" target="_blank" style="color: #2563eb; text-decoration: none;">Seattle Mariners</a></div>
-                
+            <details class="team-section" id="seattle-mariners">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/mariners" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Seattle Mariners</a></span>
+                    <span class="team-summary-stats">5-9 | RS: -6 | RA: -12</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -8128,11 +8225,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="tampa-bay-rays">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/rays" target="_blank" style="color: #2563eb; text-decoration: none;">Tampa Bay Rays</a></div>
-                
+            <details class="team-section" id="tampa-bay-rays">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/rays" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Tampa Bay Rays</a></span>
+                    <span class="team-summary-stats">6-7 | RS: +5 | RA: +12</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -8743,11 +8844,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="texas-rangers">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/rangers" target="_blank" style="color: #2563eb; text-decoration: none;">Texas Rangers</a></div>
-                
+            <details class="team-section" id="texas-rangers">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/rangers" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Texas Rangers</a></span>
+                    <span class="team-summary-stats">7-6 | RS: -4 | RA: -13</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -9379,11 +9484,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="toronto-blue-jays">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/blue-jays" target="_blank" style="color: #2563eb; text-decoration: none;">Toronto Blue Jays</a></div>
-                
+            <details class="team-section" id="toronto-blue-jays">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/blue-jays" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Toronto Blue Jays</a></span>
+                    <span class="team-summary-stats">6-7 | RS: -4 | RA: +7</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -10013,16 +10122,20 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
             </div>
             
             <div id="national-league" style="margin-top: 20px;">
                 <h2 class="league-header">NATIONAL LEAGUE</h2>
                 
-            <div class="team-section" id="arizona-diamondbacks">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/diamondbacks" target="_blank" style="color: #2563eb; text-decoration: none;">Arizona Diamondbacks</a></div>
-                
+            <details class="team-section" id="arizona-diamondbacks">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/diamondbacks" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Arizona Diamondbacks</a></span>
+                    <span class="team-summary-stats">8-6 | RS: -2 | RA: +7</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -10051,24 +10164,24 @@
                     </thead>
                     <tbody id="batters-109">
                         
-        <tr class="data-row" data-pa="49">
+        <tr class="data-row" data-pa="50">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/682998" target="_blank">Corbin Carroll*</a></td>
             <td class="stat-num">25</td>
             <td>RF</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">12</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">49</td>
-            <td class="stat-num">9</td>
+            <td class="stat-num">50</td>
+            <td class="stat-num">10</td>
             <td class="stat-num">11</td>
             <td class="stat-num">.333</td>
-            <td class="stat-num">.408</td>
+            <td class="stat-num">.420</td>
             <td class="stat-num">.690</td>
             <td class="stat-num">14</td>
             <td class="stat-num">3</td>
             <td class="stat-num">3</td>
             <td class="stat-num">2</td>
             <td class="stat-num">29</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">10</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
@@ -10097,6 +10210,29 @@
             <td class="stat-num">0</td>
         </tr>
     
+        <tr class="data-row" data-pa="63">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/606466" target="_blank">Ketel Marte&dagger;</a></td>
+            <td class="stat-num">32</td>
+            <td>2B</td>
+            <td class="stat-num">15</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">63</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">.207</td>
+            <td class="stat-num">.270</td>
+            <td class="stat-num">.345</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">20</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">13</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
         <tr class="data-row" data-pa="45">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/672515" target="_blank">Gabriel Moreno</a></td>
             <td class="stat-num">26</td>
@@ -10120,64 +10256,41 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="28">
+        <tr class="data-row" data-pa="29">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/699912" target="_blank">Jose Fernandez</a></td>
             <td class="stat-num">22</td>
             <td>SS</td>
-            <td class="stat-num">9</td>
+            <td class="stat-num">10</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">28</td>
+            <td class="stat-num">29</td>
             <td class="stat-num">6</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">.321</td>
-            <td class="stat-num">.321</td>
-            <td class="stat-num">.571</td>
+            <td class="stat-num">.310</td>
+            <td class="stat-num">.310</td>
+            <td class="stat-num">.552</td>
             <td class="stat-num">9</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">2</td>
             <td class="stat-num">16</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">7</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="62">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/606466" target="_blank">Ketel Marte&dagger;</a></td>
-            <td class="stat-num">32</td>
-            <td>2B</td>
-            <td class="stat-num">14</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">62</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">.193</td>
-            <td class="stat-num">.258</td>
-            <td class="stat-num">.281</td>
-            <td class="stat-num">11</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">16</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-        </tr>
-    
-        <tr class="data-row" data-pa="55">
+        <tr class="data-row" data-pa="56">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/672695" target="_blank">Geraldo Perdomo&dagger;</a></td>
             <td class="stat-num">26</td>
             <td>SS</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">15</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">55</td>
+            <td class="stat-num">56</td>
             <td class="stat-num">5</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">.182</td>
-            <td class="stat-num">.309</td>
-            <td class="stat-num">.295</td>
+            <td class="stat-num">.178</td>
+            <td class="stat-num">.304</td>
+            <td class="stat-num">.289</td>
             <td class="stat-num">8</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
@@ -10212,25 +10325,25 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="45">
+        <tr class="data-row" data-pa="46">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/571448" target="_blank">Nolan Arenado</a></td>
             <td class="stat-num">34</td>
             <td>3B</td>
-            <td class="stat-num">12</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">45</td>
+            <td class="stat-num">46</td>
             <td class="stat-num">3</td>
             <td class="stat-num">2</td>
-            <td class="stat-num">.182</td>
+            <td class="stat-num">.178</td>
+            <td class="stat-num">.196</td>
             <td class="stat-num">.200</td>
-            <td class="stat-num">.205</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">9</td>
             <td class="stat-num">1</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -10255,6 +10368,29 @@
             <td class="stat-num">2</td>
             <td class="stat-num">9</td>
             <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+        </tr>
+    
+        <tr class="data-row" data-pa="13">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/680728" target="_blank">Adrian Del Castillo*</a></td>
+            <td class="stat-num">26</td>
+            <td>C</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">13</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">.231</td>
+            <td class="stat-num">.231</td>
+            <td class="stat-num">.308</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">4</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
     
@@ -10304,25 +10440,25 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="12">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/680728" target="_blank">Adrian Del Castillo*</a></td>
-            <td class="stat-num">26</td>
-            <td>C</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">.167</td>
-            <td class="stat-num">.167</td>
-            <td class="stat-num">.250</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
+        <tr class="data-row" data-pa="0">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694297" target="_blank">Brandon Pfaadt</a></td>
+            <td class="stat-num">27</td>
+            <td>P</td>
             <td class="stat-num">3</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">6</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">.000</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -10568,6 +10704,27 @@
             <td class="stat-num">12</td>
         </tr>
     
+        <tr class="data-row" data-ip="11.2">
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694297" target="_blank">Brandon Pfaadt</a></td>
+            <td class="stat-num">27</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">11.2</td>
+            <td class="stat-num">6.43</td>
+            <td class="stat-num">3.81</td>
+            <td class="stat-num">1.34</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">8</td>
+            <td class="stat-num">1</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">7</td>
+        </tr>
+    
         <tr class="data-row" data-ip="5.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/623149" target="_blank">Paul Sewald</a></td>
             <td class="stat-num">35</td>
@@ -10607,27 +10764,6 @@
             <td class="stat-num">4</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">5</td>
-        </tr>
-    
-        <tr class="data-row" data-ip="10.2">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/694297" target="_blank">Brandon Pfaadt</a></td>
-            <td class="stat-num">27</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">10.2</td>
-            <td class="stat-num">7.06</td>
-            <td class="stat-num">4.28</td>
-            <td class="stat-num">1.47</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">3</td>
             <td class="stat-num">5</td>
         </tr>
     
@@ -10675,11 +10811,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="atlanta-braves">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/braves" target="_blank" style="color: #2563eb; text-decoration: none;">Atlanta Braves</a></div>
-                
+            <details class="team-section" id="atlanta-braves">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/braves" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Atlanta Braves</a></span>
+                    <span class="team-summary-stats">9-5 | RS: +16 | RA: -19</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -11336,11 +11476,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="chicago-cubs">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/cubs" target="_blank" style="color: #2563eb; text-decoration: none;">Chicago Cubs</a></div>
-                
+            <details class="team-section" id="chicago-cubs">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/cubs" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Chicago Cubs</a></span>
+                    <span class="team-summary-stats">6-7 | RS: -5 | RA: -10</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -11972,11 +12116,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="cincinnati-reds">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/reds" target="_blank" style="color: #2563eb; text-decoration: none;">Cincinnati Reds</a></div>
-                
+            <details class="team-section" id="cincinnati-reds">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/reds" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Cincinnati Reds</a></span>
+                    <span class="team-summary-stats">8-6 | RS: -20 | RA: +2</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -12629,11 +12777,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="colorado-rockies">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/rockies" target="_blank" style="color: #2563eb; text-decoration: none;">Colorado Rockies</a></div>
-                
+            <details class="team-section" id="colorado-rockies">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/rockies" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Colorado Rockies</a></span>
+                    <span class="team-summary-stats">6-8 | RS: -3 | RA: -1</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -13288,11 +13440,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="los-angeles-dodgers">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/dodgers" target="_blank" style="color: #2563eb; text-decoration: none;">Los Angeles Dodgers</a></div>
-                
+            <details class="team-section" id="los-angeles-dodgers">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/dodgers" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Los Angeles Dodgers</a></span>
+                    <span class="team-summary-stats">10-3 | RS: +22 | RA: -8</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -13966,11 +14122,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="miami-marlins">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/marlins" target="_blank" style="color: #2563eb; text-decoration: none;">Miami Marlins</a></div>
-                
+            <details class="team-section" id="miami-marlins">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/marlins" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Miami Marlins</a></span>
+                    <span class="team-summary-stats">8-6 | RS: +6 | RA: +1</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -13999,18 +14159,18 @@
                     </thead>
                     <tbody id="batters-146">
                         
-        <tr class="data-row" data-pa="57">
+        <tr class="data-row" data-pa="58">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/669364" target="_blank">Xavier Edwards&dagger;</a></td>
             <td class="stat-num">26</td>
             <td>SS</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">15</td>
             <td class="stat-num">13</td>
-            <td class="stat-num">57</td>
+            <td class="stat-num">58</td>
             <td class="stat-num">11</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">.385</td>
-            <td class="stat-num">.439</td>
-            <td class="stat-num">.577</td>
+            <td class="stat-num">.377</td>
+            <td class="stat-num">.431</td>
+            <td class="stat-num">.566</td>
             <td class="stat-num">20</td>
             <td class="stat-num">3</td>
             <td class="stat-num">2</td>
@@ -14026,7 +14186,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/672640" target="_blank">Otto Lopez</a></td>
             <td class="stat-num">27</td>
             <td>2B</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">8</td>
             <td class="stat-num">53</td>
             <td class="stat-num">9</td>
@@ -14049,7 +14209,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/683357" target="_blank">Owen Caissie*</a></td>
             <td class="stat-num">23</td>
             <td>RF</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">8</td>
             <td class="stat-num">42</td>
             <td class="stat-num">6</td>
@@ -14068,18 +14228,18 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="44">
+        <tr class="data-row" data-pa="45">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/689414" target="_blank">Liam Hicks*</a></td>
             <td class="stat-num">26</td>
             <td>C</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">44</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">7</td>
+            <td class="stat-num">45</td>
             <td class="stat-num">9</td>
             <td class="stat-num">13</td>
-            <td class="stat-num">.289</td>
-            <td class="stat-num">.364</td>
-            <td class="stat-num">.553</td>
+            <td class="stat-num">.282</td>
+            <td class="stat-num">.356</td>
+            <td class="stat-num">.538</td>
             <td class="stat-num">11</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
@@ -14114,23 +14274,23 @@
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="56">
+        <tr class="data-row" data-pa="57">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/682663" target="_blank">Agustín Ramírez</a></td>
             <td class="stat-num">24</td>
             <td>C</td>
-            <td class="stat-num">13</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">56</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">6</td>
+            <td class="stat-num">57</td>
             <td class="stat-num">7</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">.229</td>
-            <td class="stat-num">.339</td>
-            <td class="stat-num">.333</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">.245</td>
+            <td class="stat-num">.351</td>
+            <td class="stat-num">.347</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">3</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">16</td>
+            <td class="stat-num">17</td>
             <td class="stat-num">7</td>
             <td class="stat-num">12</td>
             <td class="stat-num">1</td>
@@ -14141,7 +14301,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/681393" target="_blank">Connor Norby</a></td>
             <td class="stat-num">25</td>
             <td>3B</td>
-            <td class="stat-num">12</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">5</td>
             <td class="stat-num">45</td>
             <td class="stat-num">3</td>
@@ -14160,25 +14320,25 @@
             <td class="stat-num">0</td>
         </tr>
     
-        <tr class="data-row" data-pa="63">
+        <tr class="data-row" data-pa="64">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/805300" target="_blank">Jakob Marsee*</a></td>
             <td class="stat-num">24</td>
             <td>CF</td>
-            <td class="stat-num">14</td>
+            <td class="stat-num">15</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">63</td>
+            <td class="stat-num">64</td>
             <td class="stat-num">9</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">.148</td>
-            <td class="stat-num">.254</td>
-            <td class="stat-num">.204</td>
+            <td class="stat-num">.145</td>
+            <td class="stat-num">.250</td>
+            <td class="stat-num">.200</td>
             <td class="stat-num">8</td>
             <td class="stat-num">1</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
             <td class="stat-num">11</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">16</td>
+            <td class="stat-num">17</td>
             <td class="stat-num">6</td>
             <td class="stat-num">1</td>
         </tr>
@@ -14187,7 +14347,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/688363" target="_blank">Graham Pauley*</a></td>
             <td class="stat-num">25</td>
             <td>3B</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">2</td>
             <td class="stat-num">28</td>
             <td class="stat-num">3</td>
@@ -14210,7 +14370,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/681715" target="_blank">Heriberto Hernández</a></td>
             <td class="stat-num">26</td>
             <td>LF</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">1</td>
             <td class="stat-num">37</td>
             <td class="stat-num">2</td>
@@ -14369,22 +14529,22 @@
             <td class="stat-num">10</td>
         </tr>
     
-        <tr class="data-row" data-ip="11.2">
+        <tr class="data-row" data-ip="12.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/676083" target="_blank">Janson Junk</a></td>
             <td class="stat-num">30</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">11.2</td>
-            <td class="stat-num">3.21</td>
-            <td class="stat-num">3.37</td>
-            <td class="stat-num">1.25</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">2</td>
+            <td class="stat-num">12.1</td>
+            <td class="stat-num">3.72</td>
+            <td class="stat-num">3.35</td>
+            <td class="stat-num">1.32</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">3</td>
             <td class="stat-num">0</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
-            <td class="stat-num">12</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">4</td>
+            <td class="stat-num">14</td>
+            <td class="stat-num">5</td>
+            <td class="stat-num">5</td>
             <td class="stat-num">1</td>
             <td class="stat-num">2</td>
             <td class="stat-num">8</td>
@@ -14602,11 +14762,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="milwaukee-brewers">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/brewers" target="_blank" style="color: #2563eb; text-decoration: none;">Milwaukee Brewers</a></div>
-                
+            <details class="team-section" id="milwaukee-brewers">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/brewers" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Milwaukee Brewers</a></span>
+                    <span class="team-summary-stats">8-5 | RS: +12 | RA: -3</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -15261,11 +15425,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="new-york-mets">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/mets" target="_blank" style="color: #2563eb; text-decoration: none;">New York Mets</a></div>
-                
+            <details class="team-section" id="new-york-mets">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/mets" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">New York Mets</a></span>
+                    <span class="team-summary-stats">7-7 | RS: -5 | RA: -3</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -15899,27 +16067,6 @@
             <td class="stat-num">3</td>
         </tr>
     
-        <tr class="data-row" data-ip="7.1">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/663992" target="_blank">Richard Lovelady*</a></td>
-            <td class="stat-num">30</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">7.1</td>
-            <td class="stat-num">3.80</td>
-            <td class="stat-num">4.93</td>
-            <td class="stat-num">1.69</td>
-            <td class="stat-num">6</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">8</td>
-            <td class="stat-num">5</td>
-            <td class="stat-num">3</td>
-            <td class="stat-num">1</td>
-            <td class="stat-num">4</td>
-            <td class="stat-num">6</td>
-        </tr>
-    
         <tr class="data-row" data-ip="5.1">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/472610" target="_blank">Luis García</a></td>
             <td class="stat-num">39</td>
@@ -15943,11 +16090,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="philadelphia-phillies">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/phillies" target="_blank" style="color: #2563eb; text-decoration: none;">Philadelphia Phillies</a></div>
-                
+            <details class="team-section" id="philadelphia-phillies">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/phillies" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Philadelphia Phillies</a></span>
+                    <span class="team-summary-stats">6-7 | RS: -15 | RA: +8</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -15976,18 +16127,18 @@
                     </thead>
                     <tbody id="batters-143">
                         
-        <tr class="data-row" data-pa="56">
+        <tr class="data-row" data-pa="57">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/547180" target="_blank">Bryce Harper*</a></td>
             <td class="stat-num">33</td>
             <td>1B</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">56</td>
+            <td class="stat-num">57</td>
             <td class="stat-num">6</td>
             <td class="stat-num">8</td>
-            <td class="stat-num">.245</td>
-            <td class="stat-num">.339</td>
-            <td class="stat-num">.449</td>
+            <td class="stat-num">.240</td>
+            <td class="stat-num">.333</td>
+            <td class="stat-num">.440</td>
             <td class="stat-num">12</td>
             <td class="stat-num">4</td>
             <td class="stat-num">0</td>
@@ -15999,25 +16150,25 @@
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="58">
+        <tr class="data-row" data-pa="59">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/656941" target="_blank">Kyle Schwarber*</a></td>
             <td class="stat-num">33</td>
             <td>LF</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">7</td>
-            <td class="stat-num">58</td>
+            <td class="stat-num">59</td>
             <td class="stat-num">6</td>
             <td class="stat-num">6</td>
-            <td class="stat-num">.182</td>
-            <td class="stat-num">.379</td>
-            <td class="stat-num">.432</td>
+            <td class="stat-num">.178</td>
+            <td class="stat-num">.373</td>
+            <td class="stat-num">.422</td>
             <td class="stat-num">8</td>
             <td class="stat-num">2</td>
             <td class="stat-num">0</td>
             <td class="stat-num">3</td>
             <td class="stat-num">19</td>
             <td class="stat-num">12</td>
-            <td class="stat-num">21</td>
+            <td class="stat-num">22</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
         </tr>
@@ -16049,7 +16200,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/702222" target="_blank">Justin Crawford*</a></td>
             <td class="stat-num">22</td>
             <td>CF</td>
-            <td class="stat-num">12</td>
+            <td class="stat-num">13</td>
             <td class="stat-num">6</td>
             <td class="stat-num">42</td>
             <td class="stat-num">5</td>
@@ -16068,25 +16219,25 @@
             <td class="stat-num">1</td>
         </tr>
     
-        <tr class="data-row" data-pa="59">
+        <tr class="data-row" data-pa="60">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/607208" target="_blank">Trea Turner</a></td>
             <td class="stat-num">32</td>
             <td>SS</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">5</td>
-            <td class="stat-num">59</td>
+            <td class="stat-num">60</td>
             <td class="stat-num">10</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">.255</td>
-            <td class="stat-num">.305</td>
-            <td class="stat-num">.327</td>
+            <td class="stat-num">.250</td>
+            <td class="stat-num">.300</td>
+            <td class="stat-num">.321</td>
             <td class="stat-num">14</td>
             <td class="stat-num">4</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">18</td>
             <td class="stat-num">4</td>
-            <td class="stat-num">13</td>
+            <td class="stat-num">14</td>
             <td class="stat-num">1</td>
             <td class="stat-num">0</td>
         </tr>
@@ -16118,7 +16269,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/592663" target="_blank">J.T. Realmuto</a></td>
             <td class="stat-num">35</td>
             <td>C</td>
-            <td class="stat-num">10</td>
+            <td class="stat-num">11</td>
             <td class="stat-num">5</td>
             <td class="stat-num">36</td>
             <td class="stat-num">4</td>
@@ -16164,7 +16315,7 @@
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/681082" target="_blank">Bryson Stott*</a></td>
             <td class="stat-num">28</td>
             <td>2B</td>
-            <td class="stat-num">11</td>
+            <td class="stat-num">12</td>
             <td class="stat-num">2</td>
             <td class="stat-num">42</td>
             <td class="stat-num">1</td>
@@ -16276,10 +16427,10 @@
         </tr>
     
         <tr class="data-row" data-pa="0">
-            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/661395" target="_blank">Jhoan Duran</a></td>
-            <td class="stat-num">28</td>
+            <td style=""><a href="https://baseballsavant.mlb.com/savant-player/592836" target="_blank">Taijuan Walker</a></td>
+            <td class="stat-num">33</td>
             <td>P</td>
-            <td class="stat-num">7</td>
+            <td class="stat-num">3</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
             <td class="stat-num">0</td>
@@ -16600,34 +16751,38 @@
             <td class="stat-num">7</td>
         </tr>
     
-        <tr class="data-row" data-ip="9.2">
+        <tr class="data-row" data-ip="10.2">
             <td style=""><a href="https://baseballsavant.mlb.com/savant-player/592836" target="_blank">Taijuan Walker</a></td>
             <td class="stat-num">33</td>
-            <td class="stat-num">-3</td>
-            <td class="stat-num">9.2</td>
-            <td class="stat-num">9.78</td>
-            <td class="stat-num">7.67</td>
-            <td class="stat-num">2.39</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">2</td>
-            <td class="stat-num">0</td>
-            <td class="stat-num">17</td>
-            <td class="stat-num">11</td>
-            <td class="stat-num">10</td>
+            <td class="stat-num">-4</td>
+            <td class="stat-num">10.2</td>
+            <td class="stat-num">10.59</td>
+            <td class="stat-num">8.39</td>
+            <td class="stat-num">2.45</td>
             <td class="stat-num">3</td>
-            <td class="stat-num">5</td>
+            <td class="stat-num">3</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">2</td>
+            <td class="stat-num">0</td>
+            <td class="stat-num">19</td>
+            <td class="stat-num">13</td>
+            <td class="stat-num">12</td>
+            <td class="stat-num">4</td>
             <td class="stat-num">6</td>
+            <td class="stat-num">8</td>
         </tr>
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="pittsburgh-pirates">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/pirates" target="_blank" style="color: #2563eb; text-decoration: none;">Pittsburgh Pirates</a></div>
-                
+            <details class="team-section" id="pittsburgh-pirates">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/pirates" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Pittsburgh Pirates</a></span>
+                    <span class="team-summary-stats">8-5 | RS: -5 | RA: -8</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -17259,11 +17414,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="san-diego-padres">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/padres" target="_blank" style="color: #2563eb; text-decoration: none;">San Diego Padres</a></div>
-                
+            <details class="team-section" id="san-diego-padres">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/padres" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">San Diego Padres</a></span>
+                    <span class="team-summary-stats">8-6 | RS: -3 | RA: -3</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -17895,11 +18054,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="san-francisco-giants">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/giants" target="_blank" style="color: #2563eb; text-decoration: none;">San Francisco Giants</a></div>
-                
+            <details class="team-section" id="san-francisco-giants">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/giants" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">San Francisco Giants</a></span>
+                    <span class="team-summary-stats">6-8 | RS: -14 | RA: +4</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -18552,11 +18715,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="st-louis-cardinals">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/cardinals" target="_blank" style="color: #2563eb; text-decoration: none;">St. Louis Cardinals</a></div>
-                
+            <details class="team-section" id="st-louis-cardinals">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/cardinals" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">St. Louis Cardinals</a></span>
+                    <span class="team-summary-stats">8-5 | RS: +1 | RA: +8</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -19167,11 +19334,15 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
-            <div class="team-section" id="washington-nationals">
-                <div class="team-header"><a href="https://www.fangraphs.com/teams/nationals" target="_blank" style="color: #2563eb; text-decoration: none;">Washington Nationals</a></div>
-                
+            <details class="team-section" id="washington-nationals">
+                <summary class="team-summary">
+                    <span class="team-name-text"><a href="https://www.fangraphs.com/teams/nationals" target="_blank" onclick="event.stopPropagation()" style="color: #2563eb; text-decoration: none;">Washington Nationals</a></span>
+                    <span class="team-summary-stats">5-8 | RS: +17 | RA: +25</span>
+                </summary>
+                <div class="team-content">
                 <div class="section-title">Batters</div>
                 <table>
                     <thead>
@@ -19803,7 +19974,8 @@
     
                     </tbody>
                 </table>
-            </div>
+                </div>
+            </details>
         
             </div>
         </div>
@@ -19849,34 +20021,31 @@
             const alSection = document.getElementById('american-league');
             const nlSection = document.getElementById('national-league');
             
-            // Clear existing options except the first one
             selector.innerHTML = '<option value="">-- Select Team --</option>';
             
-            // Get AL teams
             const alTeams = alSection.querySelectorAll('.team-section');
             if (alTeams.length > 0) {
                 const alGroup = document.createElement('optgroup');
                 alGroup.label = 'American League';
                 alTeams.forEach(team => {
-                    const teamName = team.querySelector('.team-header').textContent;
+                    const nameEl = team.querySelector('.team-name-text');
                     const option = document.createElement('option');
                     option.value = team.id;
-                    option.textContent = teamName;
+                    option.textContent = nameEl ? nameEl.textContent : team.id;
                     alGroup.appendChild(option);
                 });
                 selector.appendChild(alGroup);
             }
             
-            // Get NL teams
             const nlTeams = nlSection.querySelectorAll('.team-section');
             if (nlTeams.length > 0) {
                 const nlGroup = document.createElement('optgroup');
                 nlGroup.label = 'National League';
                 nlTeams.forEach(team => {
-                    const teamName = team.querySelector('.team-header').textContent;
+                    const nameEl = team.querySelector('.team-name-text');
                     const option = document.createElement('option');
                     option.value = team.id;
-                    option.textContent = teamName;
+                    option.textContent = nameEl ? nameEl.textContent : team.id;
                     nlGroup.appendChild(option);
                 });
                 selector.appendChild(nlGroup);
@@ -19890,11 +20059,9 @@
             if (teamId) {
                 const element = document.getElementById(teamId);
                 if (element) {
+                    element.setAttribute('open', '');
                     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    // Reset dropdown so user can select same team again
-                    setTimeout(() => {
-                        selector.value = '';
-                    }, 500);
+                    setTimeout(() => { selector.value = ''; }, 500);
                 }
             }
         }
@@ -19909,15 +20076,25 @@
             for (const team of teams) {
                 const rect = team.getBoundingClientRect();
                 if (rect.top <= 150 && rect.bottom >= 150) {
-                    const teamHeader = team.querySelector('.team-header');
-                    if (teamHeader) {
-                        currentTeam = teamHeader.textContent;
-                    }
+                    const nameEl = team.querySelector('.team-name-text');
+                    if (nameEl) currentTeam = nameEl.textContent;
                     break;
                 }
             }
             
             display.textContent = 'Viewing: ' + (currentTeam !== 'Top of Page' ? '2026 ' : '') + currentTeam;
+        }
+        
+        // Expand / collapse all team sections
+        let allExpanded = false;
+        function toggleAllTeams() {
+            const sections = document.querySelectorAll('.team-section');
+            allExpanded = !allExpanded;
+            sections.forEach(s => {
+                if (allExpanded) s.setAttribute('open', '');
+                else s.removeAttribute('open');
+            });
+            document.getElementById('expandAllBtn').textContent = allExpanded ? 'Collapse All' : 'Expand All';
         }
         
         // Update current team on scroll
