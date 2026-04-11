@@ -924,13 +924,13 @@ async function generateHTML() {
             color: #2563eb;
             font-size: 1.8em;
             font-weight: bold;
-            margin: 30px 0 20px 0;
-            padding-bottom: 10px;
+            margin: 20px 0 8px 0;
+            padding-bottom: 8px;
             border-bottom: 3px solid #2563eb;
         }
         
         .team-section {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             background-color: white;
             border: 2px solid #CD853F;
             border-radius: 8px;
@@ -941,7 +941,7 @@ async function generateHTML() {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 7px 14px 7px 34px;
+            padding: 5px 14px 5px 32px;
             cursor: pointer;
             list-style: none;
             user-select: none;
