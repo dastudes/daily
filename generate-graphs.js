@@ -438,15 +438,15 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             html += `<h3 class="text-lg font-semibold text-gray-800 mb-1">${division.name}</h3>`;
             html += `<table class="standings-table w-full text-gray-800">`;
             html += `<thead><tr class="border-b-2 border-blue-800">`;
-            html += `<th class="text-left py-1 px-2" style="width: 30%;">Team</th>`;
+            html += `<th class="text-left py-1 px-2" style="width: 24%;">Team</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 7%;">W</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 7%;">L</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 7%;">GB</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 7%;">WC</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 9%;">PCT</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 11%;">PythVar</th>`;
-            html += `<th class="text-right py-1 px-2" style="width: 9%;">RS</th>`;
-            html += `<th class="text-right py-1 px-2" style="width: 9%;">RA</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 7%;">RS</th>`;
+            html += `<th class="text-right py-1 px-2" style="width: 7%;">RA</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 9%;">L10</th>`;
             html += `</tr></thead><tbody class="text-base">`;
             
