@@ -211,6 +211,11 @@ async function generateHTML() {
                 loggedSample = true;
             }
             
+            // Extract last 10 games record from splitRecords
+            const splitRecords = teamRecord.records && teamRecord.records.splitRecords ? teamRecord.records.splitRecords : [];
+            const last10Record = splitRecords.find(r => r.type === 'lastTen');
+            const last10 = last10Record ? `${last10Record.wins}-${last10Record.losses}` : null;
+
             standingsMap[teamId] = {
                 w: teamRecord.wins,
                 l: teamRecord.losses,
@@ -223,7 +228,8 @@ async function generateHTML() {
                 divisionChamp: teamRecord.divisionChamp,
                 league: league,
                 division: divisionName,
-                divisionAbbrev: divisionAbbrev
+                divisionAbbrev: divisionAbbrev,
+                last10: last10
             };
         }
     }
@@ -298,6 +304,7 @@ async function generateHTML() {
                 wcGb: standings.wcGb,
                 wcRank: standings.wcRank,
                 clinchIndicator: standings.clinchIndicator,
+                last10: standings.last10,
                 rs: rs,
                 ra: ra,
                 gamesPlayed: gamesPlayed,
@@ -440,7 +447,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
             html += `<th class="text-right py-1 px-2" style="width: 11%;">PythVar</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 9%;">RS</th>`;
             html += `<th class="text-right py-1 px-2" style="width: 9%;">RA</th>`;
-            html += `</tr></thead><tbody class="text-sm">`;
+            html += `<th class="text-right py-1 px-2" style="width: 9%;">L10</th>`;
+            html += `</tr></thead><tbody class="text-base">`;
             
             division.teams.forEach(team => {
                 // Clinch indicator from API: z=Division+Best Record, y=Division, w=Wild Card
@@ -473,6 +481,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
                 html += `<td class="text-right py-0 px-2">${team.pythVar.toFixed(1)}</td>`;
                 html += `<td class="text-right py-0 px-2">${team.rs}</td>`;
                 html += `<td class="text-right py-0 px-2">${team.ra}</td>`;
+                html += `<td class="text-right py-0 px-2">${team.last10 || '-'}</td>`;
                 html += `</tr>`;
             });
             
