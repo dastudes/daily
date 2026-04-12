@@ -46,6 +46,15 @@ async function fetchTeamMap(season) {
     return map;
 }
 
+// Build a Baseball Savant player URL from name + MLB id
+function statcastURL(fullName, id) {
+    const slug = fullName.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+    return `https://baseballsavant.mlb.com/savant-player/${slug}-${id}`;
+}
+
 // Generate the inning-by-inning linescore table
 function generateLinescoreHTML(linescore, awayAbbr, homeAbbr) {
     if (!linescore || !linescore.innings) return '';
@@ -162,8 +171,9 @@ function generateBattingHTML(teamData, teamName) {
         const seasonOPS = p.seasonStats && p.seasonStats.batting
             ? formatOPS(p.seasonStats.batting.ops) : '-';
 
+        const batterURL = statcastURL(p.person.fullName, p.person.id);
         html += '<tr>';
-        html += `<td class="name-col">${p.person.fullName} <span class="pos-tag">${pos}</span></td>`;
+        html += `<td class="name-col"><a href="${batterURL}" class="player-link" target="_blank" rel="noopener">${p.person.fullName}</a> <span class="pos-tag">${pos}</span></td>`;
         html += `<td class="stat-num">${s.atBats || 0}</td>`;
         html += `<td class="stat-num">${s.runs || 0}</td>`;
         html += `<td class="stat-num">${s.hits || 0}</td>`;
@@ -228,8 +238,9 @@ function generatePitchingHTML(teamData, teamName) {
         const seasonERA = p.seasonStats && p.seasonStats.pitching && p.seasonStats.pitching.era !== undefined
             ? parseFloat(p.seasonStats.pitching.era).toFixed(2) : '-';
 
+        const pitcherURL = statcastURL(p.person.fullName, p.person.id);
         html += '<tr>';
-        html += `<td class="name-col">${p.person.fullName}</td>`;
+        html += `<td class="name-col"><a href="${pitcherURL}" class="player-link" target="_blank" rel="noopener">${p.person.fullName}</a></td>`;
         html += `<td class="stat-num">${parseFloat(s.inningsPitched || 0).toFixed(1)}</td>`;
         html += `<td class="stat-num">${s.hits || 0}</td>`;
         html += `<td class="stat-num">${s.runs || 0}</td>`;
@@ -311,7 +322,7 @@ async function generateHTML() {
 
         jumpLinks.push({
             id: gameId,
-            text: `${awayAbbr} @ ${homeAbbr}${gameNumber}`
+            text: `${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}${gameNumber}`
         });
 
         const linescoreHTML    = generateLinescoreHTML(linescore, awayAbbr, homeAbbr);
@@ -603,6 +614,7 @@ async function generateHTML() {
         }
         .stat-num { text-align: right; }
         .pos-tag { font-size: 0.78em; color: #6b7280; }
+        .player-link { color: inherit; text-decoration: none; }
         .season-col { color: #2d6a4f; font-weight: bold; }
         .totals-row td {
             border-top: 2px solid #2d6a4f;
