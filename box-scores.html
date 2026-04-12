@@ -291,7 +291,7 @@
         <div class="header">
             <h1>Baseball Graphs Box Scores</h1>
             <p>Saturday, April 11, 2026</p>
-            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: April 12, 2026 at 1:58 PM EDT</p>
+            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: April 12, 2026 at 2:08 PM EDT</p>
         </div>
 
         <div class="nav-bar">
@@ -302,7 +302,7 @@
 
         
         <div class="controls-bar">
-            <div class="jump-links"><a href="#game-823480" class="jump-link">AZ 3, PHI 4</a><a href="#game-824294" class="jump-link">MIA 1, DET 6</a><a href="#game-824697" class="jump-link">PIT 4, CHC 3</a><a href="#game-822830" class="jump-link">MIN 7, TOR 4</a><a href="#game-824535" class="jump-link">LAA 3, CIN 7</a><a href="#game-823644" class="jump-link">ATH 11, NYM 6</a><a href="#game-824129" class="jump-link">CWS 0, KC 2</a><a href="#game-822996" class="jump-link">NYY 4, TB 5</a><a href="#game-823805" class="jump-link">WSH 3, MIL 1</a><a href="#game-824857" class="jump-link">SF 2, BAL 6</a><a href="#game-823074" class="jump-link">BOS 7, STL 1</a><a href="#game-824939" class="jump-link">CLE 6, ATL 0</a><a href="#game-823316" class="jump-link">COL 5, SD 9</a><a href="#game-823967" class="jump-link">TEX 3, LAD 6</a><a href="#game-823155" class="jump-link">HOU 7, SEA 8</a></div>
+            <div class="jump-links"><a href="#game-823480" class="jump-link" onclick="expandGame(event,'game-823480')">AZ 3, PHI 4</a><a href="#game-824294" class="jump-link" onclick="expandGame(event,'game-824294')">MIA 1, DET 6</a><a href="#game-824697" class="jump-link" onclick="expandGame(event,'game-824697')">PIT 4, CHC 3</a><a href="#game-822830" class="jump-link" onclick="expandGame(event,'game-822830')">MIN 7, TOR 4</a><a href="#game-824535" class="jump-link" onclick="expandGame(event,'game-824535')">LAA 3, CIN 7</a><a href="#game-823644" class="jump-link" onclick="expandGame(event,'game-823644')">ATH 11, NYM 6</a><a href="#game-824129" class="jump-link" onclick="expandGame(event,'game-824129')">CWS 0, KC 2</a><a href="#game-822996" class="jump-link" onclick="expandGame(event,'game-822996')">NYY 4, TB 5</a><a href="#game-823805" class="jump-link" onclick="expandGame(event,'game-823805')">WSH 3, MIL 1</a><a href="#game-824857" class="jump-link" onclick="expandGame(event,'game-824857')">SF 2, BAL 6</a><a href="#game-823074" class="jump-link" onclick="expandGame(event,'game-823074')">BOS 7, STL 1</a><a href="#game-824939" class="jump-link" onclick="expandGame(event,'game-824939')">CLE 6, ATL 0</a><a href="#game-823316" class="jump-link" onclick="expandGame(event,'game-823316')">COL 5, SD 9</a><a href="#game-823967" class="jump-link" onclick="expandGame(event,'game-823967')">TEX 3, LAD 6</a><a href="#game-823155" class="jump-link" onclick="expandGame(event,'game-823155')">HOU 7, SEA 8</a></div>
             <button class="expand-btn" id="expandBtn" onclick="toggleAll()">Expand All</button>
         </div>
         
@@ -655,6 +655,15 @@
     </div>
 
     <script>
+        function expandGame(e, id) {
+            e.preventDefault();
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (!el.open) el.setAttribute('open', '');
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.replaceState(null, '', '#' + id);
+        }
+
         let allExpanded = false;
 
         function toggleAll() {
