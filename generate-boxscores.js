@@ -362,7 +362,7 @@ async function generateHTML() {
     }
 
     const jumpLinksHTML = jumpLinks
-        .map(j => `<a href="#${j.id}" class="jump-link">${j.text}</a>`)
+        .map(j => `<a href="#${j.id}" class="jump-link" onclick="expandGame(event,'${j.id}')">${j.text}</a>`)
         .join('');
 
     const html = `<!DOCTYPE html>
@@ -677,6 +677,15 @@ async function generateHTML() {
     </div>
 
     <script>
+        function expandGame(e, id) {
+            e.preventDefault();
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (!el.open) el.setAttribute('open', '');
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.replaceState(null, '', '#' + id);
+        }
+
         let allExpanded = false;
 
         function toggleAll() {
