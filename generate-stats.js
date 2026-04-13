@@ -930,7 +930,8 @@ async function generateHTML() {
         }
         
         .team-section {
-            margin-bottom: 5px;
+            margin: 0 0 4px 0;
+            padding: 0;
             background-color: white;
             border: 2px solid #CD853F;
             border-radius: 8px;
@@ -1150,6 +1151,12 @@ async function generateHTML() {
         }
         
         
+        @media (max-width: 768px) {
+            .nav-bar {
+                display: none;
+            }
+        }
+
         @media (max-width: 800px) {
             body {
                 padding: 10px;
@@ -1243,7 +1250,6 @@ async function generateHTML() {
         
         <div class="header">
             <h1>Baseball Graphs ${season} Player Stats</h1>
-            <p>Team-by-Team Stats for Easy Reading</p>
             <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: ${dateStr}</p>
         </div>
         
