@@ -331,6 +331,11 @@ async function generateHTML() {
         console.log(`Fetching boxscore for ${awayTeam.name} @ ${homeTeam.name}...`);
         const boxscore = await fetchBoxscore(gamePk);
 
+        // DEBUG: show batting teamStats keys so we can verify RISP field names
+        if (jumpLinks.length === 0) {
+            console.log('teamStats.batting keys:', Object.keys(boxscore.teams.away.teamStats && boxscore.teams.away.teamStats.batting || {}));
+        }
+
         const linescore = game.linescore;
         const decisions = game.decisions;
 
