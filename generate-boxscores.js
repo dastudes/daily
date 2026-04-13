@@ -256,14 +256,28 @@ function generatePitchingHTML(teamData, teamName) {
     return html;
 }
 
-// Generate W/L/SV decisions line
-function generateDecisionsHTML(decisions) {
-    if (!decisions) return '';
-
+// Generate W/L/SV decisions line plus RISP for each team
+function generateDecisionsHTML(decisions, awayAbbr, awayTeamStats, homeAbbr, homeTeamStats) {
     const parts = [];
-    if (decisions.winner) parts.push(`W: ${decisions.winner.fullName}`);
-    if (decisions.loser)  parts.push(`L: ${decisions.loser.fullName}`);
-    if (decisions.save)   parts.push(`SV: ${decisions.save.fullName}`);
+    if (decisions) {
+        if (decisions.winner) parts.push(`W: ${decisions.winner.fullName}`);
+        if (decisions.loser)  parts.push(`L: ${decisions.loser.fullName}`);
+        if (decisions.save)   parts.push(`SV: ${decisions.save.fullName}`);
+    }
+
+    // RISP: hits/AB with runners in scoring position
+    function rispStr(abbr, stats) {
+        if (!stats) return null;
+        const h  = stats.hitsWithRisp;
+        const ab = stats.atBatsWithRisp;
+        if (h === undefined || ab === undefined) return null;
+        return `${abbr} RISP: ${h}-for-${ab}`;
+    }
+
+    const awayRisp = rispStr(awayAbbr, awayTeamStats && awayTeamStats.batting);
+    const homeRisp = rispStr(homeAbbr, homeTeamStats && homeTeamStats.batting);
+    if (awayRisp) parts.push(awayRisp);
+    if (homeRisp) parts.push(homeRisp);
 
     if (parts.length === 0) return '';
     return `<div class="decisions">${parts.join(' &nbsp;&bull;&nbsp; ')}</div>`;
@@ -330,7 +344,10 @@ async function generateHTML() {
         const awayPitchingHTML = generatePitchingHTML(boxscore.teams.away, awayTeam.name);
         const homeBattingHTML  = generateBattingHTML(boxscore.teams.home, homeTeam.name);
         const homePitchingHTML = generatePitchingHTML(boxscore.teams.home, homeTeam.name);
-        const decisionsHTML    = generateDecisionsHTML(decisions);
+        const decisionsHTML    = generateDecisionsHTML(
+            decisions, awayAbbr, boxscore.teams.away.teamStats,
+            homeAbbr, boxscore.teams.home.teamStats
+        );
 
         gamesHTML += `
         <details class="game-box" id="${gameId}">
