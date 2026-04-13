@@ -942,7 +942,7 @@ async function generateHTML() {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 5px 14px 5px 32px;
+            padding: 8px 14px 8px 32px;
             cursor: pointer;
             list-style: none;
             user-select: none;
@@ -1152,7 +1152,7 @@ async function generateHTML() {
         
         
         @media (max-width: 768px) {
-            .nav-bar {
+            .sticky-nav-bar {
                 display: none;
             }
         }
@@ -1207,10 +1207,6 @@ async function generateHTML() {
             
             th, td {
                 padding: 4px 2px;
-            }
-            
-            .team-section {
-                padding: 12px;
             }
         }
     </style>
