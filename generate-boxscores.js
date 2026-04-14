@@ -153,7 +153,7 @@ function generateBattingHTML(teamData, teamName) {
     html += '<div class="table-scroll"><table class="box-table">';
     html += '<thead><tr>';
     html += '<th class="name-col">Batter</th>';
-    html += '<th class="stat-num">AB</th>';
+    html += '<th class="stat-num">PA</th>';
     html += '<th class="stat-num">R</th>';
     html += '<th class="stat-num">H</th>';
     html += '<th class="stat-num">RBI</th>';
@@ -174,7 +174,8 @@ function generateBattingHTML(teamData, teamName) {
         const batterURL = statcastURL(p.person.fullName, p.person.id);
         html += '<tr>';
         html += `<td class="name-col"><a href="${batterURL}" class="player-link" target="_blank" rel="noopener">${p.person.fullName}</a> <span class="pos-tag">${pos}</span></td>`;
-        html += `<td class="stat-num">${s.atBats || 0}</td>`;
+        const pa = (s.atBats || 0) + (s.baseOnBalls || 0) + (s.hitByPitch || 0) + (s.sacFlies || 0) + (s.sacBunts || 0);
+        html += `<td class="stat-num">${pa}</td>`;
         html += `<td class="stat-num">${s.runs || 0}</td>`;
         html += `<td class="stat-num">${s.hits || 0}</td>`;
         html += `<td class="stat-num">${s.rbi || 0}</td>`;
@@ -190,7 +191,8 @@ function generateBattingHTML(teamData, teamName) {
     if (totals) {
         html += '<tr class="totals-row">';
         html += '<td class="name-col">Totals</td>';
-        html += `<td class="stat-num">${totals.atBats || 0}</td>`;
+        const totalPA = (totals.atBats || 0) + (totals.baseOnBalls || 0) + (totals.hitByPitch || 0) + (totals.sacFlies || 0) + (totals.sacBunts || 0);
+        html += `<td class="stat-num">${totalPA}</td>`;
         html += `<td class="stat-num">${totals.runs || 0}</td>`;
         html += `<td class="stat-num">${totals.hits || 0}</td>`;
         html += `<td class="stat-num">${totals.rbi || 0}</td>`;
