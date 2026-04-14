@@ -1,2 +1,2 @@
 # daily_stats
-Baseball Stats in USA Today pulled daily
+Baseball Stats, Standings and Box Scores in old newspaper, USA Today style. Pulled daily
