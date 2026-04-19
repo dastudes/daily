@@ -271,6 +271,81 @@ function generateDecisionsHTML(decisions) {
     return `<div class="decisions">${parts.join(' &nbsp;&bull;&nbsp; ')}</div>`;
 }
 
+// Fetch win probability data for a game
+async function fetchWPA(gamePk) {
+    try {
+        const url = `${API_BASE}/game/${gamePk}/winProbability`;
+        const response = await fetch(url);
+        if (!response.ok) return [];
+        const data = await response.json();
+        return Array.isArray(data) ? data : [];
+    } catch (e) {
+        console.warn(`WPA fetch failed for gamePk ${gamePk}: ${e.message}`);
+        return [];
+    }
+}
+
+// Batting events where pitcher attribution makes sense
+const BATTING_EVENTS = new Set([
+    'Single', 'Double', 'Triple', 'Home Run',
+    'Walk', 'Intent Walk', 'Hit By Pitch',
+    'Strikeout', 'Groundout', 'Flyout', 'Lineout', 'Pop Out',
+    'Grounded Into DP', 'Double Play', 'Triple Play',
+    'Sac Fly', 'Sac Bunt', 'Field Error', 'Fielders Choice'
+]);
+
+// Format inning string e.g. "top 7th" or "bot 9th"
+function formatInning(about) {
+    const num = about.inning || '?';
+    const half = about.isTopInning ? 'top' : 'bot';
+    const suffix = num === 1 ? 'st' : num === 2 ? 'nd' : num === 3 ? 'rd' : 'th';
+    return `${half} ${num}${suffix}`;
+}
+
+// Generate Key Plays (WPA) section
+// API returns WPA in percentage points (0-100 scale), threshold of 25 = 25pp swing
+function generateWPAHTML(plays) {
+    const WPA_THRESHOLD = 25;
+    const MAX_PLAYS = 3;
+
+    if (!plays || plays.length === 0) return '';
+
+    const notable = plays
+        .filter(p => Math.abs(p.homeTeamWinProbabilityAdded || 0) >= WPA_THRESHOLD)
+        .sort((a, b) => Math.abs(b.homeTeamWinProbabilityAdded) - Math.abs(a.homeTeamWinProbabilityAdded))
+        .slice(0, MAX_PLAYS);
+
+    if (notable.length === 0) return '';
+
+    let html = '<div class="wpa-section">';
+    html += '<div class="wpa-title">Key Plays</div>';
+
+    notable.forEach(play => {
+        const wpaRaw = play.homeTeamWinProbabilityAdded || 0;
+        // Convert from percentage points to conventional WPA decimal (+.31 format)
+        const wpaDisplay = (Math.abs(wpaRaw) / 100).toFixed(2);
+        const inning = formatInning(play.about || {});
+        const desc = (play.result && play.result.description) || '';
+        const event = (play.result && play.result.event) || '';
+        const pitcher = play.matchup && play.matchup.pitcher && play.matchup.pitcher.fullName;
+
+        // Append pitcher only for true batting events
+        let fullDesc = desc;
+        if (pitcher && BATTING_EVENTS.has(event)) {
+            fullDesc += ` (pitcher: ${pitcher})`;
+        }
+
+        html += `<div class="wpa-play">`;
+        html += `<span class="wpa-badge">+${wpaDisplay}</span>`;
+        html += `<span class="wpa-inning">${inning}</span>`;
+        html += `<span class="wpa-desc">${fullDesc}</span>`;
+        html += `</div>`;
+    });
+
+    html += '</div>';
+    return html;
+}
+
 async function generateHTML() {
     const date = getYesterdayDate();
     console.log(`Fetching games for ${date}...`);
@@ -319,6 +394,9 @@ async function generateHTML() {
         console.log(`Fetching boxscore for ${awayTeam.name} @ ${homeTeam.name}...`);
         const boxscore = await fetchBoxscore(gamePk);
 
+        console.log(`Fetching WPA for ${awayTeam.name} @ ${homeTeam.name}...`);
+        const wpaPlays = await fetchWPA(gamePk);
+
         const linescore = game.linescore;
         const decisions = game.decisions;
 
@@ -333,6 +411,7 @@ async function generateHTML() {
         const homeBattingHTML  = generateBattingHTML(boxscore.teams.home, homeTeam.name);
         const homePitchingHTML = generatePitchingHTML(boxscore.teams.home, homeTeam.name);
         const decisionsHTML    = generateDecisionsHTML(decisions);
+        const wpaHTML          = generateWPAHTML(wpaPlays);
 
         gamesHTML += `
         <details class="game-box" id="${gameId}">
@@ -356,6 +435,7 @@ async function generateHTML() {
                     </div>
                 </div>
                 ${decisionsHTML}
+                ${wpaHTML}
             </div>
         </details>`;
 
@@ -630,6 +710,49 @@ async function generateHTML() {
             padding-top: 10px;
             border-top: 1px solid #b7e4c7;
         }
+
+        /* Key Plays (WPA) section */
+        .wpa-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #b7e4c7;
+        }
+        .wpa-title {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #2d6a4f;
+            margin-bottom: 5px;
+        }
+        .wpa-play {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 0.85em;
+            color: #374151;
+            padding: 3px 0;
+            border-bottom: 1px dotted #d1fae5;
+            line-height: 1.4;
+        }
+        .wpa-play:last-child { border-bottom: none; }
+        .wpa-badge {
+            font-family: "Courier New", Courier, monospace;
+            font-weight: bold;
+            color: #ffffff;
+            background: #2d6a4f;
+            padding: 1px 5px;
+            border-radius: 3px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-size: 0.9em;
+        }
+        .wpa-inning {
+            font-family: "Courier New", Courier, monospace;
+            color: #6b7280;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-size: 0.9em;
+        }
+        .wpa-desc { flex: 1; }
 
         .no-games {
             text-align: center;
