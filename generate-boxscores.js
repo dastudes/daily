@@ -364,6 +364,68 @@ function generateWPAHTML(plays, awayAbbr, homeAbbr) {
     return html;
 }
 
+// Build the four daily leaderboard tables
+// wpa values arrive as percentage points (0-100 scale); divide by 100 for display
+function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement) {
+    if (!topLwts.length && !topPAR.length && !topRelief.length && !topExcitement.length) return '';
+
+    function panel(title, headers, rows) {
+        let html = `<div class="lb-panel"><div class="lb-panel-title">${title}</div>`;
+        if (rows.length === 0) {
+            html += '<div class="lb-empty">No data available.</div></div>';
+            return html;
+        }
+        html += '<table class="lb-table"><thead><tr>';
+        headers.forEach(h => { html += `<th>${h}</th>`; });
+        html += '</tr></thead><tbody>';
+        rows.forEach(row => {
+            html += '<tr>';
+            row.forEach((cell, j) => {
+                const cls = j === 0 ? 'lb-rank' : j === 1 ? 'lb-name' : 'lb-num';
+                html += `<td class="${cls}">${cell}</td>`;
+            });
+            html += '</tr>';
+        });
+        html += '</tbody></table></div>';
+        return html;
+    }
+
+    const lwtsRows = topLwts.map((r, i) => [
+        i + 1,
+        `${r.name} <span class="lb-team">${r.team}</span>`,
+        r.lwts.toFixed(2)
+    ]);
+
+    const parRows = topPAR.map((r, i) => [
+        i + 1,
+        `${r.name} <span class="lb-team">${r.team}</span>`,
+        r.ip.toFixed(1),
+        r.par.toFixed(2)
+    ]);
+
+    const reliefRows = topRelief.map((r, i) => [
+        i + 1,
+        `${r.name} <span class="lb-team">${r.team}</span>`,
+        (r.wpa / 100).toFixed(3)
+    ]);
+
+    const excitementRows = topExcitement.map((r, i) => [
+        i + 1,
+        r.label,
+        (r.absWPA / 100).toFixed(2)
+    ]);
+
+    let html = '<div class="lb-section">';
+    html += '<div class="lb-section-title">Daily Leaderboards</div>';
+    html += '<div class="lb-grid">';
+    html += panel('Top Batters (Linear Weights)', ['', 'Player', 'LWTS'], lwtsRows);
+    html += panel('Top Pitchers (PAR)', ['', 'Player', 'IP', 'PAR'], parRows);
+    html += panel('Top Relief Appearances (WPA)', ['', 'Pitcher', 'WPA'], reliefRows);
+    html += panel('Most Exciting Games', ['', 'Game', 'WPA'], excitementRows);
+    html += '</div></div>';
+    return html;
+}
+
 async function generateHTML() {
     const date = getYesterdayDate();
     console.log(`Fetching games for ${date}...`);
@@ -395,6 +457,12 @@ async function generateHTML() {
         hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
     });
 
+    // Leaderboard accumulators (filled during game loop, rendered after)
+    const lwtsAccum    = {};  // { [playerId]: { name, team, lwts } }
+    const parAccum     = {};  // { [playerId]: { name, team, ip, par } }
+    const reliefAccum  = {};  // { [playerId]: { name, team, wpa (pp) } }
+    const excitement   = [];  // [ { label, absWPA (pp) } ]
+
     let gamesHTML = '';
     const jumpLinks = [];
 
@@ -417,6 +485,78 @@ async function generateHTML() {
 
         const linescore = game.linescore;
         const decisions = game.decisions;
+
+        // --- Accumulate leaderboard data ---
+
+        // Starters = first pitcher listed for each team
+        const awayStarterId = boxscore.teams.away.pitchers && boxscore.teams.away.pitchers[0];
+        const homeStarterId = boxscore.teams.home.pitchers && boxscore.teams.home.pitchers[0];
+        const starterIds = new Set([awayStarterId, homeStarterId].filter(Boolean));
+
+        // Linear weights per batter (LWTS coefficients: 1B .47, 2B .77, 3B 1.07, HR 1.40, BB .33, HBP .34, out -.27)
+        for (const side of ['away', 'home']) {
+            const abbr = side === 'away' ? awayAbbr : homeAbbr;
+            const players = boxscore.teams[side].players || {};
+            Object.values(players).forEach(p => {
+                const s = p.stats && p.stats.batting;
+                if (!s) return;
+                const pa = (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0)+(s.sacBunts||0);
+                if (pa === 0) return;
+                const singles = (s.hits||0)-(s.doubles||0)-(s.triples||0)-(s.homeRuns||0);
+                const outs    = (s.atBats||0)-(s.hits||0);
+                const lwts    = singles*0.47 + (s.doubles||0)*0.77 + (s.triples||0)*1.07
+                              + (s.homeRuns||0)*1.40 + (s.baseOnBalls||0)*0.33
+                              + (s.hitByPitch||0)*0.34 + outs*(-0.27);
+                const id = p.person.id;
+                if (!lwtsAccum[id]) lwtsAccum[id] = { name: p.person.fullName, team: abbr, lwts: 0 };
+                lwtsAccum[id].lwts += lwts;
+            });
+        }
+
+        // Single-game PAR per pitcher (game ERA + game FIP blended, same formula as season PAR)
+        for (const side of ['away', 'home']) {
+            const abbr = side === 'away' ? awayAbbr : homeAbbr;
+            const players   = boxscore.teams[side].players || {};
+            const pitcherIds = boxscore.teams[side].pitchers || [];
+            pitcherIds.forEach(pid => {
+                const p = players[`ID${pid}`];
+                if (!p || !p.stats || !p.stats.pitching) return;
+                const s  = p.stats.pitching;
+                const ip = parseFloat(s.inningsPitched || 0);
+                if (ip <= 0) return;
+                const er  = s.earnedRuns   || 0;
+                const bb  = s.baseOnBalls  || 0;
+                const so  = s.strikeOuts   || 0;
+                const hr  = s.homeRuns     || 0;
+                const gameERA = (er / ip) * 9;
+                const gameFIP = (13*hr + 3*bb - 2*so) / ip + 3.2;
+                const par     = (6 - (gameFIP + gameERA) / 2) * ip / 9;
+                const id = p.person.id;
+                if (!parAccum[id]) parAccum[id] = { name: p.person.fullName, team: abbr, ip: 0, par: 0 };
+                parAccum[id].ip  += ip;
+                parAccum[id].par += par;
+            });
+        }
+
+        // Relief WPA and game excitement from WPA plays
+        let gameAbsWPA = 0;
+        (wpaPlays || []).forEach(play => {
+            const wpaRaw = play.homeTeamWinProbabilityAdded || 0;
+            gameAbsWPA += Math.abs(wpaRaw);
+
+            const isTop      = play.about && play.about.isTopInning;
+            const pitcherId  = play.matchup && play.matchup.pitcher && play.matchup.pitcher.id;
+            const pitcherName = play.matchup && play.matchup.pitcher && play.matchup.pitcher.fullName;
+
+            if (pitcherId && !starterIds.has(pitcherId) && pitcherName) {
+                // Positive = pitcher helped their team
+                const pitcherWPA  = isTop ? wpaRaw : -wpaRaw;
+                const pitcherTeam = isTop ? homeAbbr : awayAbbr;
+                if (!reliefAccum[pitcherId]) reliefAccum[pitcherId] = { name: pitcherName, team: pitcherTeam, wpa: 0 };
+                reliefAccum[pitcherId].wpa += pitcherWPA;
+            }
+        });
+        excitement.push({ label: `${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}`, absWPA: gameAbsWPA });
 
         jumpLinks.push({
             id: gameId,
