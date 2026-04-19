@@ -304,7 +304,7 @@ function formatInning(about) {
 
 // Generate Key Plays (WPA) section
 // API returns WPA in percentage points (0-100 scale), threshold of 25 = 25pp swing
-function generateWPAHTML(plays) {
+function generateWPAHTML(plays, awayAbbr, homeAbbr) {
     const WPA_THRESHOLD = 25;
     const MAX_PLAYS = 3;
 
@@ -329,11 +329,19 @@ function generateWPAHTML(plays) {
         const event = (play.result && play.result.event) || '';
         const pitcher = play.matchup && play.matchup.pitcher && play.matchup.pitcher.fullName;
 
+        // Score after the play, labeled with team abbreviations
+        const awayScore = play.result && play.result.awayScore !== undefined ? play.result.awayScore : '';
+        const homeScore = play.result && play.result.homeScore !== undefined ? play.result.homeScore : '';
+        const scoreStr = (awayScore !== '' && homeScore !== '')
+            ? ` -- ${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}`
+            : '';
+
         // Append pitcher only for true batting events
         let fullDesc = desc;
         if (pitcher && BATTING_EVENTS.has(event)) {
             fullDesc += ` (pitcher: ${pitcher})`;
         }
+        fullDesc += `<span class="wpa-score">${scoreStr}</span>`;
 
         html += `<div class="wpa-play">`;
         html += `<span class="wpa-badge">+${wpaDisplay}</span>`;
@@ -411,7 +419,7 @@ async function generateHTML() {
         const homeBattingHTML  = generateBattingHTML(boxscore.teams.home, homeTeam.name);
         const homePitchingHTML = generatePitchingHTML(boxscore.teams.home, homeTeam.name);
         const decisionsHTML    = generateDecisionsHTML(decisions);
-        const wpaHTML          = generateWPAHTML(wpaPlays);
+        const wpaHTML          = generateWPAHTML(wpaPlays, awayAbbr, homeAbbr);
 
         gamesHTML += `
         <details class="game-box" id="${gameId}">
@@ -737,13 +745,10 @@ async function generateHTML() {
         .wpa-badge {
             font-family: "Courier New", Courier, monospace;
             font-weight: bold;
-            color: #ffffff;
-            background: #2d6a4f;
-            padding: 1px 5px;
-            border-radius: 3px;
+            color: #2d6a4f;
             white-space: nowrap;
             flex-shrink: 0;
-            font-size: 0.9em;
+            font-size: 1.0em;
         }
         .wpa-inning {
             font-family: "Courier New", Courier, monospace;
@@ -753,6 +758,11 @@ async function generateHTML() {
             font-size: 0.9em;
         }
         .wpa-desc { flex: 1; }
+        .wpa-score {
+            font-family: "Courier New", Courier, monospace;
+            color: #6b7280;
+            font-size: 0.95em;
+        }
 
         .no-games {
             text-align: center;
