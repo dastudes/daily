@@ -366,8 +366,8 @@ function generateWPAHTML(plays, awayAbbr, homeAbbr) {
 
 // Build the four daily leaderboard tables
 // wpa values arrive as percentage points (0-100 scale); divide by 100 for display
-function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement) {
-    if (!topLwts.length && !topPAR.length && !topRelief.length && !topExcitement.length) return '';
+function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement, topWPAPlays) {
+    if (!topLwts.length && !topPAR.length && !topRelief.length && !topExcitement.length && !topWPAPlays.length) return '';
 
     function panel(title, headers, rows) {
         let html = `<div class="lb-panel"><div class="lb-panel-title">${title}</div>`;
@@ -390,22 +390,26 @@ function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement) {
         return html;
     }
 
+    function playerLink(name, id) {
+        return `<a href="${statcastURL(name, id)}" class="lb-player-link" target="_blank" rel="noopener">${name}</a>`;
+    }
+
     const lwtsRows = topLwts.map((r, i) => [
         i + 1,
-        `${r.name} <span class="lb-team">${r.team}</span>`,
+        `${playerLink(r.name, r.id)} <span class="lb-team">${r.team}</span>`,
         r.lwts.toFixed(2)
     ]);
 
     const parRows = topPAR.map((r, i) => [
         i + 1,
-        `${r.name} <span class="lb-team">${r.team}</span>`,
+        `${playerLink(r.name, r.id)} <span class="lb-team">${r.team}</span>`,
         r.ip.toFixed(1),
         r.par.toFixed(2)
     ]);
 
     const reliefRows = topRelief.map((r, i) => [
         i + 1,
-        `${r.name} <span class="lb-team">${r.team}</span>`,
+        `${playerLink(r.name, r.id)} <span class="lb-team">${r.team}</span>`,
         (r.wpa / 100).toFixed(3)
     ]);
 
@@ -415,6 +419,29 @@ function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement) {
         (r.absWPA / 100).toFixed(2)
     ]);
 
+    // Top WPA plays: wide panel, one row per play
+    let wpaPlaysHTML = '';
+    if (topWPAPlays.length > 0) {
+        wpaPlaysHTML += '<div class="lb-panel lb-panel-wide"><div class="lb-panel-title">Top WPA Plays of the Day</div>';
+        wpaPlaysHTML += '<table class="lb-table"><thead><tr>';
+        wpaPlaysHTML += '<th></th><th>Game</th><th>Inn</th><th>Play</th><th>Score</th><th>WPA</th>';
+        wpaPlaysHTML += '</tr></thead><tbody>';
+        topWPAPlays.forEach((p, i) => {
+            const scoreStr = (p.awayScore !== '' && p.homeScore !== '')
+                ? `${p.awayAbbr} ${p.awayScore}, ${p.homeAbbr} ${p.homeScore}` : '';
+            const wpaDisplay = (p.absWPA / 100).toFixed(3);
+            wpaPlaysHTML += '<tr>';
+            wpaPlaysHTML += `<td class="lb-rank">${i + 1}</td>`;
+            wpaPlaysHTML += `<td class="lb-name">${p.gameLabel}</td>`;
+            wpaPlaysHTML += `<td class="lb-num">${p.inning}</td>`;
+            wpaPlaysHTML += `<td class="lb-desc">${p.desc}</td>`;
+            wpaPlaysHTML += `<td class="lb-num" style="white-space:nowrap">${scoreStr}</td>`;
+            wpaPlaysHTML += `<td class="lb-num">+${wpaDisplay}</td>`;
+            wpaPlaysHTML += '</tr>';
+        });
+        wpaPlaysHTML += '</tbody></table></div>';
+    }
+
     let html = '<div class="lb-section">';
     html += '<div class="lb-section-title">Daily Leaderboards</div>';
     html += '<div class="lb-grid">';
@@ -422,7 +449,9 @@ function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement) {
     html += panel('Top Pitchers (PAR)', ['', 'Player', 'IP', 'PAR'], parRows);
     html += panel('Top Relief Appearances (WPA)', ['', 'Pitcher', 'WPA'], reliefRows);
     html += panel('Most Exciting Games', ['', 'Game', 'WPA'], excitementRows);
-    html += '</div></div>';
+    html += '</div>';
+    html += wpaPlaysHTML;
+    html += '</div>';
     return html;
 }
 
@@ -462,6 +491,7 @@ async function generateHTML() {
     const parAccum     = {};  // { [playerId]: { name, team, ip, par } }
     const reliefAccum  = {};  // { [playerId]: { name, team, wpa (pp) } }
     const excitement   = [];  // [ { label, absWPA (pp) } ]
+    const allWPAPlays  = [];  // top plays across all games for daily WPA leaderboard
 
     let gamesHTML = '';
     const jumpLinks = [];
@@ -508,7 +538,7 @@ async function generateHTML() {
                               + (s.homeRuns||0)*1.40 + (s.baseOnBalls||0)*0.33
                               + (s.hitByPitch||0)*0.34 + outs*(-0.27);
                 const id = p.person.id;
-                if (!lwtsAccum[id]) lwtsAccum[id] = { name: p.person.fullName, team: abbr, lwts: 0 };
+                if (!lwtsAccum[id]) lwtsAccum[id] = { id, name: p.person.fullName, team: abbr, lwts: 0 };
                 lwtsAccum[id].lwts += lwts;
             });
         }
@@ -532,7 +562,7 @@ async function generateHTML() {
                 const gameFIP = (13*hr + 3*bb - 2*so) / ip + 3.2;
                 const par     = (6 - (gameFIP + gameERA) / 2) * ip / 9;
                 const id = p.person.id;
-                if (!parAccum[id]) parAccum[id] = { name: p.person.fullName, team: abbr, ip: 0, par: 0 };
+                if (!parAccum[id]) parAccum[id] = { id, name: p.person.fullName, team: abbr, ip: 0, par: 0 };
                 parAccum[id].ip  += ip;
                 parAccum[id].par += par;
             });
@@ -552,8 +582,24 @@ async function generateHTML() {
                 // Positive = pitcher helped their team
                 const pitcherWPA  = isTop ? wpaRaw : -wpaRaw;
                 const pitcherTeam = isTop ? homeAbbr : awayAbbr;
-                if (!reliefAccum[pitcherId]) reliefAccum[pitcherId] = { name: pitcherName, team: pitcherTeam, wpa: 0 };
+                if (!reliefAccum[pitcherId]) reliefAccum[pitcherId] = { id: pitcherId, name: pitcherName, team: pitcherTeam, wpa: 0 };
                 reliefAccum[pitcherId].wpa += pitcherWPA;
+            }
+
+            // Collect for cross-game top plays leaderboard
+            if (Math.abs(wpaRaw) > 0) {
+                allWPAPlays.push({
+                    absWPA: Math.abs(wpaRaw),
+                    wpaRaw,
+                    gameLabel: `${awayAbbr} @ ${homeAbbr}`,
+                    inning: formatInning(play.about || {}),
+                    desc: (play.result && play.result.description) || '',
+                    event: (play.result && play.result.event) || '',
+                    awayScore: play.result && play.result.awayScore !== undefined ? play.result.awayScore : '',
+                    homeScore: play.result && play.result.homeScore !== undefined ? play.result.homeScore : '',
+                    awayAbbr,
+                    homeAbbr,
+                });
             }
         });
         excitement.push({ label: `${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}`, absWPA: gameAbsWPA });
@@ -610,7 +656,8 @@ async function generateHTML() {
     const topPAR        = Object.values(parAccum).sort((a, b) => b.par - a.par).slice(0, 5);
     const topRelief     = Object.values(reliefAccum).sort((a, b) => b.wpa - a.wpa).slice(0, 5);
     const topExcitement = excitement.sort((a, b) => b.absWPA - a.absWPA).slice(0, 5);
-    const leaderboardsHTML = generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement);
+    const topWPAPlays   = allWPAPlays.sort((a, b) => b.absWPA - a.absWPA).slice(0, 5);
+    const leaderboardsHTML = generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement, topWPAPlays);
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -969,6 +1016,7 @@ async function generateHTML() {
             margin-bottom: 8px;
             padding-bottom: 5px;
             border-bottom: 1px solid #d8f3dc;
+            text-align: center;
         }
         .lb-empty { color: #9ca3af; font-size: 0.85em; padding: 6px 0; }
         .lb-table {
@@ -984,13 +1032,18 @@ async function generateHTML() {
             font-family: Georgia, "Times New Roman", serif;
             font-size: 0.88em;
             border-bottom: 1px solid #b7e4c7;
+            color: #1a1a1a;
         }
-        .lb-table td { padding: 4px 8px; border-bottom: 1px solid #f0f9f3; vertical-align: middle; }
+        .lb-table td { padding: 4px 8px; border-bottom: 1px solid #f0f9f3; vertical-align: middle; color: #1a1a1a; }
         .lb-table tr:last-child td { border-bottom: none; }
-        .lb-rank { color: #9ca3af; font-size: 0.85em; width: 18px; }
+        .lb-rank { color: #6b7280; font-size: 0.85em; width: 18px; }
         .lb-name { font-family: Georgia, "Times New Roman", serif; }
         .lb-num  { text-align: right; }
+        .lb-desc { font-family: Georgia, "Times New Roman", serif; font-size: 0.85em; }
         .lb-team { font-size: 0.8em; color: #6b7280; font-family: Georgia, "Times New Roman", serif; }
+        .lb-panel-wide { margin-top: 16px; }
+        .lb-player-link { color: inherit; text-decoration: none; }
+        .lb-player-link:hover { text-decoration: underline; }
 
     </style>
     <script data-goatcounter="https://baseball-graphs.goatcounter.com/count"
