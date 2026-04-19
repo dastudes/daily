@@ -303,19 +303,29 @@ function formatInning(about) {
 }
 
 // Generate Key Plays (WPA) section
-// API returns WPA in percentage points (0-100 scale), threshold of 25 = 25pp swing
+// API returns WPA in percentage points (0-100 scale), so 20 = 20pp swing = 0.20 WPA
 function generateWPAHTML(plays, awayAbbr, homeAbbr) {
-    const WPA_THRESHOLD = 25;
+    const SECONDARY_THRESHOLD = 20;
     const MAX_PLAYS = 3;
 
     if (!plays || plays.length === 0) return '';
 
-    const notable = plays
-        .filter(p => Math.abs(p.homeTeamWinProbabilityAdded || 0) >= WPA_THRESHOLD)
-        .sort((a, b) => Math.abs(b.homeTeamWinProbabilityAdded) - Math.abs(a.homeTeamWinProbabilityAdded))
-        .slice(0, MAX_PLAYS);
+    // Sort all plays by absolute WPA descending
+    const sorted = plays
+        .filter(p => (p.homeTeamWinProbabilityAdded || 0) !== 0)
+        .sort((a, b) => Math.abs(b.homeTeamWinProbabilityAdded) - Math.abs(a.homeTeamWinProbabilityAdded));
 
-    if (notable.length === 0) return '';
+    if (sorted.length === 0) return '';
+
+    // Always include the top play, then add others over the threshold, up to MAX_PLAYS
+    const notable = [sorted[0]];
+    for (let i = 1; i < sorted.length && notable.length < MAX_PLAYS; i++) {
+        if (Math.abs(sorted[i].homeTeamWinProbabilityAdded) >= SECONDARY_THRESHOLD) {
+            notable.push(sorted[i]);
+        } else {
+            break; // sorted descending, so no point continuing
+        }
+    }
 
     let html = '<div class="wpa-section">';
     html += '<div class="wpa-title">Key Plays</div>';
