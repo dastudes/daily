@@ -605,6 +605,13 @@ async function generateHTML() {
         .map(j => `<a href="#${j.id}" class="jump-link" onclick="expandGame(event,'${j.id}')">${j.text}</a>`)
         .join('');
 
+    // Sort accumulators and take top 5 for each leaderboard
+    const topLwts       = Object.values(lwtsAccum).sort((a, b) => b.lwts - a.lwts).slice(0, 5);
+    const topPAR        = Object.values(parAccum).sort((a, b) => b.par - a.par).slice(0, 5);
+    const topRelief     = Object.values(reliefAccum).sort((a, b) => b.wpa - a.wpa).slice(0, 5);
+    const topExcitement = excitement.sort((a, b) => b.absWPA - a.absWPA).slice(0, 5);
+    const leaderboardsHTML = generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement);
+
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -930,6 +937,61 @@ async function generateHTML() {
             .game-teams { font-size: 0.95em; }
             .game-score { font-size: 1em; }
         }
+        /* Daily Leaderboards */
+        .lb-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #52b788;
+        }
+        .lb-section-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d6a4f;
+            margin-bottom: 16px;
+        }
+        .lb-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 680px) { .lb-grid { grid-template-columns: 1fr; } }
+        .lb-panel {
+            background: white;
+            border: 1px solid #b7e4c7;
+            border-radius: 6px;
+            padding: 12px 14px;
+        }
+        .lb-panel-title {
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #2d6a4f;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #d8f3dc;
+        }
+        .lb-empty { color: #9ca3af; font-size: 0.85em; padding: 6px 0; }
+        .lb-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82em;
+            font-family: "Courier New", Courier, monospace;
+        }
+        .lb-table th {
+            background: #d8f3dc;
+            padding: 4px 8px;
+            text-align: left;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 0.88em;
+            border-bottom: 1px solid #b7e4c7;
+        }
+        .lb-table td { padding: 4px 8px; border-bottom: 1px solid #f0f9f3; vertical-align: middle; }
+        .lb-table tr:last-child td { border-bottom: none; }
+        .lb-rank { color: #9ca3af; font-size: 0.85em; width: 18px; }
+        .lb-name { font-family: Georgia, "Times New Roman", serif; }
+        .lb-num  { text-align: right; }
+        .lb-team { font-size: 0.8em; color: #6b7280; font-family: Georgia, "Times New Roman", serif; }
+
     </style>
     <script data-goatcounter="https://baseball-graphs.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
@@ -958,6 +1020,7 @@ async function generateHTML() {
             <button class="expand-btn" id="expandBtn" onclick="toggleAll()">Expand All</button>
         </div>
         ${gamesHTML}
+        ${leaderboardsHTML}
         ` : '<div class="no-games">No completed games found for ' + displayDate + '.</div>'}
     </div>
 
