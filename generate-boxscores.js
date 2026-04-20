@@ -959,7 +959,7 @@ async function generateHTML() {
         }
         .wpa-inning {
             font-family: "Courier New", Courier, monospace;
-            color: #6b7280;
+            color: #1a1a1a;
             white-space: nowrap;
             flex-shrink: 0;
             font-size: 0.9em;
@@ -967,7 +967,7 @@ async function generateHTML() {
         .wpa-desc { flex: 1; }
         .wpa-score {
             font-family: "Courier New", Courier, monospace;
-            color: #6b7280;
+            color: #1a1a1a;
             font-size: 0.95em;
         }
 
