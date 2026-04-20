@@ -297,7 +297,7 @@ const BATTING_EVENTS = new Set([
 // Format inning string e.g. "top 7th" or "bot 9th"
 function formatInning(about) {
     const num = about.inning || '?';
-    const half = about.isTopInning ? 'top' : 'bot';
+    const half = about.isTopInning ? 'TOP' : 'BOT';
     const suffix = num === 1 ? 'st' : num === 2 ? 'nd' : num === 3 ? 'rd' : 'th';
     return `${half} ${num}${suffix}`;
 }
@@ -376,7 +376,10 @@ function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement, top
             return html;
         }
         html += '<table class="lb-table"><thead><tr>';
-        headers.forEach(h => { html += `<th>${h}</th>`; });
+        headers.forEach((h, j) => {
+            const cls = j === 0 ? 'lb-rank' : j === 1 ? '' : 'lb-th-num';
+            html += `<th${cls ? ` class="${cls}"` : ''}>${h}</th>`;
+        });
         html += '</tr></thead><tbody>';
         rows.forEach(row => {
             html += '<tr>';
@@ -940,7 +943,7 @@ async function generateHTML() {
             align-items: baseline;
             gap: 8px;
             font-size: 0.85em;
-            color: #374151;
+            color: #1a1a1a;
             padding: 3px 0;
             border-bottom: 1px dotted #d1fae5;
             line-height: 1.4;
@@ -1039,7 +1042,8 @@ async function generateHTML() {
         .lb-rank { color: #6b7280; font-size: 0.85em; width: 18px; }
         .lb-name { font-family: Georgia, "Times New Roman", serif; }
         .lb-num  { text-align: right; }
-        .lb-desc { font-family: Georgia, "Times New Roman", serif; font-size: 0.85em; }
+        .lb-th-num { text-align: right; }
+        .lb-desc { font-family: Georgia, "Times New Roman", serif; }
         .lb-team { font-size: 0.8em; color: #6b7280; font-family: Georgia, "Times New Roman", serif; }
         .lb-panel-wide { margin-top: 16px; }
         .lb-player-link { color: inherit; text-decoration: none; }
