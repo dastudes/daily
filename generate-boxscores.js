@@ -1042,7 +1042,7 @@ async function generateHTML() {
         .lb-rank { color: #6b7280; font-size: 0.85em; width: 18px; }
         .lb-name { font-family: Georgia, "Times New Roman", serif; }
         .lb-num  { text-align: right; }
-        .lb-th-num { text-align: right; }
+        .lb-table th.lb-th-num { text-align: right; }
         .lb-desc { font-family: Georgia, "Times New Roman", serif; }
         .lb-team { font-size: 0.8em; color: #6b7280; font-family: Georgia, "Times New Roman", serif; }
         .lb-panel-wide { margin-top: 16px; }
