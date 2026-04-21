@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-04-21T17:44:20.299Z",
+  "updated": "2026-04-21T17:57:23.434Z",
   "batters": [
     {
       "name": "Shea Langeliers",
@@ -3455,33 +3455,6 @@
       "doubles": 3,
       "triples": 0,
       "tb": 24,
-      "rc": 6,
-      "batSide": "R"
-    },
-    {
-      "name": "Royce Lewis",
-      "playerId": 668904,
-      "team": "Minnesota Twins",
-      "teamAbbr": "MIN",
-      "league": "AL",
-      "age": 26,
-      "g": 12,
-      "pa": 45,
-      "ab": 36,
-      "h": 8,
-      "hr": 2,
-      "rbi": 8,
-      "r": 6,
-      "sb": 2,
-      "bb": 8,
-      "so": 12,
-      "avg": 0.222,
-      "obp": 0.378,
-      "slg": 0.444,
-      "ops": 0.822,
-      "doubles": 2,
-      "triples": 0,
-      "tb": 16,
       "rc": 6,
       "batSide": "R"
     },
