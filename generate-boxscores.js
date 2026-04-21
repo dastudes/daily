@@ -299,7 +299,8 @@ function formatInning(about) {
     const num = about.inning || '?';
     const half = about.isTopInning ? 'TOP' : 'BOT';
     const suffix = num === 1 ? 'st' : num === 2 ? 'nd' : num === 3 ? 'rd' : 'th';
-    return `${half} ${num}${suffix}`;
+    const outs = about.outs !== undefined ? `, ${about.outs} out` : '';
+    return `${half} ${num}${suffix}${outs}`;
 }
 
 // Generate Key Plays (WPA) section
@@ -958,7 +959,7 @@ async function generateHTML() {
             font-size: 1.0em;
         }
         .wpa-inning {
-            font-family: "Courier New", Courier, monospace;
+            font-family: Georgia, "Times New Roman", serif;
             color: #1a1a1a;
             white-space: nowrap;
             flex-shrink: 0;
@@ -966,7 +967,7 @@ async function generateHTML() {
         }
         .wpa-desc { flex: 1; }
         .wpa-score {
-            font-family: "Courier New", Courier, monospace;
+            font-family: Georgia, "Times New Roman", serif;
             color: #1a1a1a;
             font-size: 0.95em;
         }
