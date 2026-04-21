@@ -427,7 +427,7 @@ function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement, top
     if (topWPAPlays.length > 0) {
         wpaPlaysHTML += '<div class="lb-panel lb-panel-wide"><div class="lb-panel-title">Top WPA Plays of the Day</div>';
         wpaPlaysHTML += '<table class="lb-table"><thead><tr>';
-        wpaPlaysHTML += '<th></th><th>Game</th><th>Inn</th><th>Play</th><th>Score</th><th>WPA</th>';
+        wpaPlaysHTML += '<th></th><th>Game</th><th class="lb-th-center">Inn</th><th>Play</th><th>Score</th><th class="lb-th-num">WPA</th>';
         wpaPlaysHTML += '</tr></thead><tbody>';
         topWPAPlays.forEach((p, i) => {
             const scoreStr = (p.awayScore !== '' && p.homeScore !== '')
@@ -436,7 +436,7 @@ function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement, top
             wpaPlaysHTML += '<tr>';
             wpaPlaysHTML += `<td class="lb-rank">${i + 1}</td>`;
             wpaPlaysHTML += `<td class="lb-name">${p.gameLabel}</td>`;
-            wpaPlaysHTML += `<td class="lb-num">${p.inning}</td>`;
+            wpaPlaysHTML += `<td class="lb-center">${p.inning}</td>`;
             wpaPlaysHTML += `<td class="lb-desc">${p.desc}</td>`;
             wpaPlaysHTML += `<td class="lb-num" style="white-space:nowrap">${scoreStr}</td>`;
             wpaPlaysHTML += `<td class="lb-num">+${wpaDisplay}</td>`;
@@ -1042,7 +1042,9 @@ async function generateHTML() {
         .lb-rank { color: #6b7280; font-size: 0.85em; width: 18px; }
         .lb-name { font-family: Georgia, "Times New Roman", serif; }
         .lb-num  { text-align: right; }
+        .lb-center { text-align: center; }
         .lb-table th.lb-th-num { text-align: right; }
+        .lb-table th.lb-th-center { text-align: center; }
         .lb-desc { font-family: Georgia, "Times New Roman", serif; }
         .lb-team { font-size: 0.8em; color: #6b7280; font-family: Georgia, "Times New Roman", serif; }
         .lb-panel-wide { margin-top: 16px; }
