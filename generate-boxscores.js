@@ -216,8 +216,13 @@ function generatePitchingHTML(teamData, teamName) {
 
     const pitchers = pitcherIds
         .map(id => players[`ID${id}`])
-        .filter(p => p && p.stats && p.stats.pitching
-            && parseFloat(p.stats.pitching.inningsPitched || 0) > 0);
+        .filter(p => {
+            if (!p || !p.stats || !p.stats.pitching) return false;
+            const s = p.stats.pitching;
+            if (parseFloat(s.inningsPitched || 0) > 0) return true;
+            return (s.hits || 0) + (s.baseOnBalls || 0) + (s.hitByPitch || 0)
+                 + (s.strikeOuts || 0) + (s.runs || 0) > 0;
+        });
 
     if (pitchers.length === 0) return '';
 
