@@ -566,8 +566,9 @@ async function generateHTML() {
                 const bb  = s.baseOnBalls  || 0;
                 const so  = s.strikeOuts   || 0;
                 const hr  = s.homeRuns     || 0;
+                const hbp = s.hitByPitch   || 0;
                 const gameERA = (er / ip) * 9;
-                const gameFIP = (13*hr + 3*bb - 2*so) / ip + 3.2;
+                const gameFIP = (13*hr + 3*(bb+hbp) - 2*so) / ip + 3.10;
                 const par     = (6 - (gameFIP + gameERA) / 2) * ip / 9;
                 const id = p.person.id;
                 if (!parAccum[id]) parAccum[id] = { id, name: p.person.fullName, team: abbr, ip: 0, par: 0 };
