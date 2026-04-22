@@ -19,7 +19,7 @@ async function fetchStandings(season) {
 
 // Fetch today's schedule
 async function fetchTodaysGames(dateStr) {
-    const response = await fetch(`${API_BASE}/schedule?sportId=1&date=${dateStr}`);
+    const response = await fetch(`${API_BASE}/schedule?sportId=1&date=${dateStr}&hydrate=probablePitcher`);
     const data = await response.json();
     const dates = data.dates || [];
     if (dates.length === 0) return [];
@@ -762,13 +762,18 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
         .schedule-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 4px 16px;
+            gap: 0 16px;
             font-family: "Courier New", Courier, monospace;
             font-size: 0.9em;
         }
         .schedule-game {
             white-space: nowrap;
             color: #374151;
+            margin-bottom: 6px;
+        }
+        .schedule-pitchers {
+            font-size: 0.85em;
+            color: #6b7280;
         }
         
         /* Leaderboard Styles */
@@ -1147,7 +1152,12 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
                         minute: '2-digit',
                         timeZone: 'America/Chicago'
                     }) : 'TBD';
-                    return `<div class="schedule-game">${away} @ ${home} &middot; ${timeLabel}</div>`;
+                    const awayPitcher = game.teams.away.probablePitcher;
+                    const homePitcher = game.teams.home.probablePitcher;
+                    const pitcherLine = (awayPitcher && homePitcher)
+                        ? `<div class="schedule-pitchers">${awayPitcher.lastName} vs. ${homePitcher.lastName}</div>`
+                        : '';
+                    return `<div class="schedule-game"><div>${away} @ ${home} &middot; ${timeLabel}</div>${pitcherLine}</div>`;
                 }).join('\n                ')}
             </div>
         </div>
