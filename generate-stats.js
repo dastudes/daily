@@ -183,7 +183,7 @@ async function fetchTeamStandingsMap(season, allTeams) {
 }
 
 async function fetchTeamRoster(teamId, season) {
-    const response = await fetch(`${API_BASE}/teams/${teamId}/roster?season=${season}`);
+    const response = await fetch(`${API_BASE}/teams/${teamId}/roster?rosterType=40Man&season=${season}`);
     const data = await response.json();
     return data.roster || [];
 }
