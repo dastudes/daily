@@ -17,6 +17,15 @@ async function fetchStandings(season) {
     return data.records;
 }
 
+// Fetch today's schedule
+async function fetchTodaysGames(dateStr) {
+    const response = await fetch(`${API_BASE}/schedule?sportId=1&date=${dateStr}`);
+    const data = await response.json();
+    const dates = data.dates || [];
+    if (dates.length === 0) return [];
+    return dates[0].games || [];
+}
+
 // Fetch team stats
 async function fetchTeamStats(teamId, season) {
     const response = await fetch(`${API_BASE}/teams/${teamId}/stats?stats=season&season=${season}&group=hitting,pitching,fielding`);
@@ -363,14 +372,20 @@ async function generateHTML() {
         timeZoneName: 'short'
     });
     const dateTimeStr = dateStr + ' at ' + timeStr;
-    
-    const html = generateHTMLContent(season, dateTimeStr, teamData, playerStats);
+
+    // Fetch today's schedule (date in CT to match the audience)
+    const todayStr = now.toLocaleDateString('en-CA', { timeZone: 'America/Chicago' }); // YYYY-MM-DD
+    console.log(`Fetching today's schedule for ${todayStr}...`);
+    const todaysGames = await fetchTodaysGames(todayStr);
+    console.log(`Found ${todaysGames.length} games today`);
+
+    const html = generateHTMLContent(season, dateTimeStr, teamData, playerStats, todaysGames);
     
     fs.writeFileSync('index.html', html);
     console.log('Generated index.html successfully!');
 }
 
-function generateHTMLContent(season, dateStr, teamData, playerStats) {
+function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames = []) {
     // Debug: log what we received
     const teamCount = Object.keys(teamData).length;
     console.log(`generateHTMLContent received ${teamCount} teams`);
@@ -718,6 +733,33 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         .standings-table td:not(:first-child),
         .standings-table th:not(:first-child) {
             font-family: "Courier New", Courier, monospace;
+        }
+        
+        /* Today's Games */
+        .schedule-box {
+            background: white;
+            border: 4px solid #1e3a8a;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .schedule-box h2 {
+            text-align: center;
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            color: #2F2F2F;
+        }
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px 16px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.9em;
+        }
+        .schedule-game {
+            white-space: nowrap;
+            color: #374151;
         }
         
         /* Leaderboard Styles */
@@ -1080,6 +1122,27 @@ function generateHTMLContent(season, dateStr, teamData, playerStats) {
         </div>
     </div>
     
+    ${todaysGames.length > 0 ? `
+    <div class="page-container" style="margin-top: 0;">
+        <div class="schedule-box">
+            <h2>Today's Games (CT)</h2>
+            <div class="schedule-grid">
+                ${todaysGames.map(game => {
+                    const away = game.teams.away.team.abbreviation || game.teams.away.team.name;
+                    const home = game.teams.home.team.abbreviation || game.teams.home.team.name;
+                    const rawTime = game.gameDate;
+                    const timeLabel = rawTime ? new Date(rawTime).toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        timeZone: 'America/Chicago'
+                    }) : 'TBD';
+                    return `<div class="schedule-game">${away} @ ${home} &middot; ${timeLabel}</div>`;
+                }).join('\n                ')}
+            </div>
+        </div>
+    </div>
+    ` : ''}
+
     <!-- Leaderboards Section -->
     <div class="page-container" style="margin-top: 30px;">
         <div class="leaderboard-header-small">
