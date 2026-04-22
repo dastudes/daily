@@ -336,12 +336,18 @@ async function loadTeamStats(team, season) {
         for (const statGroup of stats) {
             if (statGroup.group.displayName === 'hitting' && statGroup.splits.length > 0) {
                 const hittingStats = statGroup.splits[0].stat;
-                batters.push({ player: enrichedPlayer, stats: hittingStats });
+                const pa = (hittingStats.atBats || 0) + (hittingStats.baseOnBalls || 0) +
+                           (hittingStats.hitByPitch || 0) + (hittingStats.sacFlies || 0);
+                if (pa > 0) {
+                    batters.push({ player: enrichedPlayer, stats: hittingStats });
+                }
             }
             
             if (statGroup.group.displayName === 'pitching' && statGroup.splits.length > 0) {
                 const pitchingStats = statGroup.splits[0].stat;
-                pitchers.push({ player: enrichedPlayer, stats: pitchingStats });
+                if ((pitchingStats.battersFaced || 0) > 0) {
+                    pitchers.push({ player: enrichedPlayer, stats: pitchingStats });
+                }
             }
         }
     }
