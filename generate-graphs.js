@@ -26,6 +26,15 @@ async function fetchTodaysGames(dateStr) {
     return dates[0].games || [];
 }
 
+const TEAM_ABBREV = {
+    108: 'LAA', 109: 'ARI', 110: 'BAL', 111: 'BOS', 112: 'CHC',
+    113: 'CIN', 114: 'CLE', 115: 'COL', 116: 'DET', 117: 'HOU',
+    118: 'KC',  119: 'LAD', 120: 'WSH', 121: 'NYM', 133: 'OAK',
+    134: 'PIT', 135: 'SD',  136: 'SEA', 137: 'SF',  138: 'STL',
+    139: 'TB',  140: 'TEX', 141: 'TOR', 142: 'MIN', 143: 'PHI',
+    144: 'ATL', 145: 'CWS', 146: 'MIA', 147: 'NYY', 158: 'MIL'
+};
+
 // Fetch team stats
 async function fetchTeamStats(teamId, season) {
     const response = await fetch(`${API_BASE}/teams/${teamId}/stats?stats=season&season=${season}&group=hitting,pitching,fielding`);
@@ -1128,8 +1137,10 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
             <h2>Today's Games (CT)</h2>
             <div class="schedule-grid">
                 ${todaysGames.map(game => {
-                    const away = game.teams.away.team.abbreviation || game.teams.away.team.name;
-                    const home = game.teams.home.team.abbreviation || game.teams.home.team.name;
+                    const awayId = game.teams.away.team.id;
+                    const homeId = game.teams.home.team.id;
+                    const away = TEAM_ABBREV[awayId] || game.teams.away.team.name;
+                    const home = TEAM_ABBREV[homeId] || game.teams.home.team.name;
                     const rawTime = game.gameDate;
                     const timeLabel = rawTime ? new Date(rawTime).toLocaleTimeString('en-US', {
                         hour: 'numeric',
