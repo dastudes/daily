@@ -282,26 +282,21 @@ function generateDecisionsHTML(decisions, awayAbbr, awaySubs, homeAbbr, homeSubs
         if (decisions.save)   parts.push(`SV: ${decisions.save.fullName}`);
     }
 
-    // Format subs for one team: "NYM — PR: X · DEF: Y (CF)"
-    function teamSubStr(abbr, subs) {
-        if (!subs || subs.length === 0) return null;
-        const prs  = subs.filter(s => s.type === 'PR').map(s => s.name);
-        const defs = subs.filter(s => s.type === 'DEF').map(s => `${s.name} (${s.pos})`);
-        const subParts = [];
-        if (prs.length)  subParts.push(`PR: ${prs.join(', ')}`);
-        if (defs.length) subParts.push(`DEF: ${defs.join(', ')}`);
-        return subParts.length ? `${abbr} \u2014 ${subParts.join(' \u00b7 ')}` : null;
-    }
+    // Combine subs from both teams, tagging each with their team abbr
+    const allSubs = [
+        ...(awaySubs || []).map(s => ({ ...s, team: awayAbbr })),
+        ...(homeSubs  || []).map(s => ({ ...s, team: homeAbbr })),
+    ];
 
-    const awaySub = teamSubStr(awayAbbr, awaySubs);
-    const homeSub = teamSubStr(homeAbbr, homeSubs);
+    const prs  = allSubs.filter(s => s.type === 'PR') .map(s => `${s.name} (${s.team})`);
+    const defs = allSubs.filter(s => s.type === 'DEF').map(s => `${s.name} (${s.pos}/${s.team})`);
 
-    if (parts.length === 0 && !awaySub && !homeSub) return '';
+    if (parts.length === 0 && !prs.length && !defs.length) return '';
 
     let html = `<div class="decisions">`;
     if (parts.length) html += parts.join(' &nbsp;&bull;&nbsp; ');
-    if (awaySub) html += `${parts.length ? '<br>' : ''}<span class="subs-line">${awaySub}</span>`;
-    if (homeSub) html += `${(parts.length || awaySub) ? '<br>' : ''}<span class="subs-line">${homeSub}</span>`;
+    if (prs.length)  html += `${parts.length ? '<br>' : ''}<span class="subs-line">PR: ${prs.join(' &nbsp;&bull;&nbsp; ')}</span>`;
+    if (defs.length) html += `${(parts.length || prs.length) ? '<br>' : ''}<span class="subs-line">DEF: ${defs.join(' &nbsp;&bull;&nbsp; ')}</span>`;
     html += '</div>';
     return html;
 }
