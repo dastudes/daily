@@ -708,7 +708,7 @@ async function generateHTML() {
     }
 
     const GROUP_ORDER  = ['division', 'league', 'interleague'];
-    const GROUP_LABELS = { division: 'Division', league: 'League', interleague: 'Interleague' };
+    const GROUP_LABELS = { division: 'Same Division', league: 'Same League', interleague: 'Interleague' };
     const groups = { division: [], league: [], interleague: [] };
     jumpLinks.forEach(j => groups[j.gameType].push(j));
     Object.values(groups).forEach(g => g.sort((a, b) => a.awayAbbr.localeCompare(b.awayAbbr)));
@@ -820,16 +820,18 @@ async function generateHTML() {
         .jump-link:hover { background: #eff6ff; border-color: #2563eb; }
 
         .jump-group-label {
-            width: 100%;
+            display: inline-block;
             font-size: 0.72em;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: #9ca3af;
-            margin-top: 8px;
+            margin-left: 14px;
+            margin-right: 2px;
             padding-left: 2px;
+            align-self: center;
         }
-        .jump-group-label:first-child { margin-top: 0; }
+        .jump-group-label:first-child { margin-left: 0; }
 
         .jump-link-notable {
             border: 2px solid #1d4ed8;
@@ -837,6 +839,20 @@ async function generateHTML() {
             font-weight: bold;
         }
         .jump-link-notable:hover { background: #dbeafe; border-color: #1e3a8a; }
+
+        .controls-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .jump-legend {
+            font-size: 0.70em;
+            color: #9ca3af;
+            font-style: italic;
+            white-space: nowrap;
+        }
 
         .expand-btn {
             padding: 8px 18px;
@@ -1169,7 +1185,10 @@ async function generateHTML() {
         ${finalGames.length > 0 ? `
         <div class="controls-bar">
             <div class="jump-links">${jumpLinksHTML}</div>
-            <button class="expand-btn" id="expandBtn" onclick="toggleAll()">Expand All</button>
+            <div class="controls-right">
+                <button class="expand-btn" id="expandBtn" onclick="toggleAll()">Expand All</button>
+                <div class="jump-legend">bold border = close or extra innings</div>
+            </div>
         </div>
         ${gamesHTML}
         ${leaderboardsHTML}
