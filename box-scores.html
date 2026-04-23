@@ -86,6 +86,25 @@
         }
         .jump-link:hover { background: #eff6ff; border-color: #2563eb; }
 
+        .jump-group-label {
+            width: 100%;
+            font-size: 0.72em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+            margin-top: 8px;
+            padding-left: 2px;
+        }
+        .jump-group-label:first-child { margin-top: 0; }
+
+        .jump-link-notable {
+            border: 2px solid #1d4ed8;
+            background: #eff6ff;
+            font-weight: bold;
+        }
+        .jump-link-notable:hover { background: #dbeafe; border-color: #1e3a8a; }
+
         .expand-btn {
             padding: 8px 18px;
             background: linear-gradient(135deg, #2d6a4f, #40916c);
@@ -405,7 +424,7 @@
         <div class="header">
             <h1>Baseball Graphs Box Scores</h1>
             <p>Wednesday, April 22, 2026</p>
-            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: April 23, 2026 at 11:34 AM EDT</p>
+            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: April 23, 2026 at 5:55 PM EDT</p>
         </div>
 
         <div class="nav-bar">
@@ -416,7 +435,7 @@
 
         
         <div class="controls-bar">
-            <div class="jump-links"><a href="#game-823878" class="jump-link" onclick="expandGame(event,'game-823878')">STL 1, MIA 4</a><a href="#game-824449" class="jump-link" onclick="expandGame(event,'game-824449')">HOU 2, CLE 0</a><a href="#game-822993" class="jump-link" onclick="expandGame(event,'game-822993')">CIN 1, TB 6</a><a href="#game-824123" class="jump-link" onclick="expandGame(event,'game-824123')">BAL 8, KC 6</a><a href="#game-824044" class="jump-link" onclick="expandGame(event,'game-824044')">TOR 3, LAA 7</a><a href="#game-823147" class="jump-link" onclick="expandGame(event,'game-823147')">ATH 4, SEA 5</a><a href="#game-824286" class="jump-link" onclick="expandGame(event,'game-824286')">MIL 2, DET 5</a><a href="#game-822748" class="jump-link" onclick="expandGame(event,'game-822748')">ATL 8, WSH 6</a><a href="#game-824774" class="jump-link" onclick="expandGame(event,'game-824774')">NYY 4, BOS 1</a><a href="#game-823641" class="jump-link" onclick="expandGame(event,'game-823641')">MIN 2, NYM 3</a><a href="#game-824688" class="jump-link" onclick="expandGame(event,'game-824688')">PHI 2, CHC 7</a><a href="#game-822913" class="jump-link" onclick="expandGame(event,'game-822913')">PIT 8, TEX 4</a><a href="#game-824367" class="jump-link" onclick="expandGame(event,'game-824367')">SD 3, COL 8</a><a href="#game-825097" class="jump-link" onclick="expandGame(event,'game-825097')">CWS 7, AZ 11</a><a href="#game-823231" class="jump-link" onclick="expandGame(event,'game-823231')">LAD 0, SF 3</a></div>
+            <div class="jump-links"><span class="jump-group-label">Division</span><a href="#game-823147" class="jump-link jump-link-notable" onclick="expandGame(event,'game-823147')">ATH 4, SEA 5</a><a href="#game-822748" class="jump-link jump-link-notable" onclick="expandGame(event,'game-822748')">ATL 8, WSH 6</a><a href="#game-823231" class="jump-link" onclick="expandGame(event,'game-823231')">LAD 0, SF 3</a><a href="#game-824774" class="jump-link" onclick="expandGame(event,'game-824774')">NYY 4, BOS 1</a><a href="#game-824367" class="jump-link" onclick="expandGame(event,'game-824367')">SD 3, COL 8</a><span class="jump-group-label">League</span><a href="#game-824123" class="jump-link jump-link-notable" onclick="expandGame(event,'game-824123')">BAL 8, KC 6</a><a href="#game-824449" class="jump-link jump-link-notable" onclick="expandGame(event,'game-824449')">HOU 2, CLE 0</a><a href="#game-824688" class="jump-link" onclick="expandGame(event,'game-824688')">PHI 2, CHC 7</a><a href="#game-823878" class="jump-link" onclick="expandGame(event,'game-823878')">STL 1, MIA 4</a><a href="#game-824044" class="jump-link" onclick="expandGame(event,'game-824044')">TOR 3, LAA 7</a><span class="jump-group-label">Interleague</span><a href="#game-822993" class="jump-link" onclick="expandGame(event,'game-822993')">CIN 1, TB 6</a><a href="#game-825097" class="jump-link" onclick="expandGame(event,'game-825097')">CWS 7, AZ 11</a><a href="#game-824286" class="jump-link" onclick="expandGame(event,'game-824286')">MIL 2, DET 5</a><a href="#game-823641" class="jump-link jump-link-notable" onclick="expandGame(event,'game-823641')">MIN 2, NYM 3</a><a href="#game-822913" class="jump-link" onclick="expandGame(event,'game-822913')">PIT 8, TEX 4</a></div>
             <button class="expand-btn" id="expandBtn" onclick="toggleAll()">Expand All</button>
         </div>
         
