@@ -110,42 +110,49 @@ function generateLinescoreHTML(linescore, awayAbbr, homeAbbr) {
 }
 
 // Generate batting table for one team
+// Returns { html, subs } where subs = [ { name, type } ] for PR/DEF players who didn't bat
 function generateBattingHTML(teamData, teamName) {
     const players = teamData.players || {};
-    const battingOrder = teamData.battingOrder || [];
 
-    // Build list in batting order, then catch any stragglers with stats
-    const seen = new Set();
-    const batters = [];
+    // Sort all players by their battingOrder property (e.g. "400", "401")
+    // 0 or missing = not a batter (pitcher, PR, DEF sub)
+    const allByOrder = Object.values(players)
+        .filter(p => p.battingOrder && parseInt(p.battingOrder) > 0)
+        .sort((a, b) => parseInt(a.battingOrder) - parseInt(b.battingOrder));
 
-    battingOrder.forEach(playerId => {
-        const key = `ID${playerId}`;
-        if (players[key] && !seen.has(key)) {
-            seen.add(key);
-            batters.push(players[key]);
-        }
+    // A player is a substitute if battingOrder doesn't end in "0" (e.g. "401" not "400")
+    const isSub = p => p.battingOrder && parseInt(p.battingOrder) % 10 !== 0;
+
+    // Players with a battingOrder but zero PAs: PR or defensive subs
+    const nonBatters = allByOrder.filter(p => {
+        const s = p.stats && p.stats.batting;
+        const pa = s ? (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0)+(s.sacBunts||0) : 0;
+        return pa === 0;
+    });
+    const subs = nonBatters.map(p => {
+        const pos = p.position ? p.position.abbreviation : '';
+        const type = pos === 'PR' ? 'PR' : 'DEF';
+        return { name: p.person.fullName, type, pos };
     });
 
-    // Catch edge cases (e.g. DH-swap players not in battingOrder)
-    Object.keys(players).forEach(key => {
-        if (!seen.has(key)) {
-            const p = players[key];
-            const s = p.stats && p.stats.batting;
-            if (s && ((s.atBats || 0) + (s.baseOnBalls || 0) + (s.hitByPitch || 0) + (s.sacFlies || 0)) > 0) {
-                batters.push(p);
-                seen.add(key);
-            }
-        }
-    });
-
-    // Filter to players who actually had a plate appearance
-    const active = batters.filter(p => {
+    // Active batters: had at least one PA
+    const active = allByOrder.filter(p => {
         const s = p.stats && p.stats.batting;
         if (!s) return false;
-        return ((s.atBats || 0) + (s.baseOnBalls || 0) + (s.hitByPitch || 0) + (s.sacFlies || 0) + (s.sacBunts || 0)) > 0;
+        return (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0)+(s.sacBunts||0) > 0;
     });
 
-    if (active.length === 0) return '';
+    // Catch edge cases: players with stats but no battingOrder (rare DH swap etc.)
+    const seenIds = new Set(allByOrder.map(p => p.person.id));
+    Object.values(players).forEach(p => {
+        if (seenIds.has(p.person.id)) return;
+        const s = p.stats && p.stats.batting;
+        if (s && (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0)+(s.sacBunts||0) > 0) {
+            active.push(p);
+        }
+    });
+
+    if (active.length === 0) return { html: '', subs };
 
     const totals = teamData.teamStats && teamData.teamStats.batting ? teamData.teamStats.batting : null;
 
@@ -170,11 +177,14 @@ function generateBattingHTML(teamData, teamName) {
         const pos = p.position ? p.position.abbreviation : '';
         const seasonOPS = p.seasonStats && p.seasonStats.batting
             ? formatOPS(p.seasonStats.batting.ops) : '-';
-
+        const sub = isSub(p);
         const batterURL = statcastURL(p.person.fullName, p.person.id);
-        html += '<tr>';
-        html += `<td class="name-col"><a href="${batterURL}" class="player-link" target="_blank" rel="noopener">${p.person.fullName}</a> <span class="pos-tag">${pos}</span></td>`;
-        const pa = (s.atBats || 0) + (s.baseOnBalls || 0) + (s.hitByPitch || 0) + (s.sacFlies || 0) + (s.sacBunts || 0);
+        const nameCell = sub
+            ? `&nbsp;&nbsp;<a href="${batterURL}" class="player-link" target="_blank" rel="noopener">${p.person.fullName}</a> <span class="pos-tag">${pos}</span>`
+            : `<a href="${batterURL}" class="player-link" target="_blank" rel="noopener">${p.person.fullName}</a> <span class="pos-tag">${pos}</span>`;
+        html += sub ? '<tr class="sub-row">' : '<tr>';
+        html += `<td class="name-col">${nameCell}</td>`;
+        const pa = (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0)+(s.sacBunts||0);
         html += `<td class="stat-num">${pa}</td>`;
         html += `<td class="stat-num">${s.runs || 0}</td>`;
         html += `<td class="stat-num">${s.hits || 0}</td>`;
@@ -191,7 +201,7 @@ function generateBattingHTML(teamData, teamName) {
     if (totals) {
         html += '<tr class="totals-row">';
         html += '<td class="name-col">Totals</td>';
-        const totalPA = (totals.atBats || 0) + (totals.baseOnBalls || 0) + (totals.hitByPitch || 0) + (totals.sacFlies || 0) + (totals.sacBunts || 0);
+        const totalPA = (totals.atBats||0)+(totals.baseOnBalls||0)+(totals.hitByPitch||0)+(totals.sacFlies||0)+(totals.sacBunts||0);
         html += `<td class="stat-num">${totalPA}</td>`;
         html += `<td class="stat-num">${totals.runs || 0}</td>`;
         html += `<td class="stat-num">${totals.hits || 0}</td>`;
@@ -206,7 +216,7 @@ function generateBattingHTML(teamData, teamName) {
     }
 
     html += '</tbody></table></div>';
-    return html;
+    return { html, subs };
 }
 
 // Generate pitching table for one team
@@ -263,17 +273,37 @@ function generatePitchingHTML(teamData, teamName) {
     return html;
 }
 
-// Generate W/L/SV decisions line
-function generateDecisionsHTML(decisions) {
-    if (!decisions) return '';
-
+// Generate W/L/SV decisions line plus PR/DEF subs for each team
+function generateDecisionsHTML(decisions, awayAbbr, awaySubs, homeAbbr, homeSubs) {
     const parts = [];
-    if (decisions.winner) parts.push(`W: ${decisions.winner.fullName}`);
-    if (decisions.loser)  parts.push(`L: ${decisions.loser.fullName}`);
-    if (decisions.save)   parts.push(`SV: ${decisions.save.fullName}`);
+    if (decisions) {
+        if (decisions.winner) parts.push(`W: ${decisions.winner.fullName}`);
+        if (decisions.loser)  parts.push(`L: ${decisions.loser.fullName}`);
+        if (decisions.save)   parts.push(`SV: ${decisions.save.fullName}`);
+    }
 
-    if (parts.length === 0) return '';
-    return `<div class="decisions">${parts.join(' &nbsp;&bull;&nbsp; ')}</div>`;
+    // Format subs for one team: "NYM — PR: X · DEF: Y (CF)"
+    function teamSubStr(abbr, subs) {
+        if (!subs || subs.length === 0) return null;
+        const prs  = subs.filter(s => s.type === 'PR').map(s => s.name);
+        const defs = subs.filter(s => s.type === 'DEF').map(s => `${s.name} (${s.pos})`);
+        const subParts = [];
+        if (prs.length)  subParts.push(`PR: ${prs.join(', ')}`);
+        if (defs.length) subParts.push(`DEF: ${defs.join(', ')}`);
+        return subParts.length ? `${abbr} \u2014 ${subParts.join(' \u00b7 ')}` : null;
+    }
+
+    const awaySub = teamSubStr(awayAbbr, awaySubs);
+    const homeSub = teamSubStr(homeAbbr, homeSubs);
+
+    if (parts.length === 0 && !awaySub && !homeSub) return '';
+
+    let html = `<div class="decisions">`;
+    if (parts.length) html += parts.join(' &nbsp;&bull;&nbsp; ');
+    if (awaySub) html += `${parts.length ? '<br>' : ''}<span class="subs-line">${awaySub}</span>`;
+    if (homeSub) html += `${(parts.length || awaySub) ? '<br>' : ''}<span class="subs-line">${homeSub}</span>`;
+    html += '</div>';
+    return html;
 }
 
 // Fetch win probability data for a game
@@ -423,7 +453,7 @@ function generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement, top
 
     const excitementRows = topExcitement.map((r, i) => [
         i + 1,
-        r.label,
+        r.innings > 9 ? `${r.label} (${r.innings})` : r.label,
         (r.absWPA / 100).toFixed(2)
     ]);
 
@@ -611,7 +641,11 @@ async function generateHTML() {
                 });
             }
         });
-        excitement.push({ label: `${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}`, absWPA: gameAbsWPA });
+        excitement.push({
+            label: `${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}`,
+            absWPA: gameAbsWPA,
+            innings: linescore && linescore.innings ? linescore.innings.length : 9
+        });
 
         jumpLinks.push({
             id: gameId,
@@ -619,11 +653,13 @@ async function generateHTML() {
         });
 
         const linescoreHTML    = generateLinescoreHTML(linescore, awayAbbr, homeAbbr);
-        const awayBattingHTML  = generateBattingHTML(boxscore.teams.away, awayTeam.name);
+        const awayBatting      = generateBattingHTML(boxscore.teams.away, awayTeam.name);
+        const awayBattingHTML  = awayBatting.html;
         const awayPitchingHTML = generatePitchingHTML(boxscore.teams.away, awayTeam.name);
-        const homeBattingHTML  = generateBattingHTML(boxscore.teams.home, homeTeam.name);
+        const homeBatting      = generateBattingHTML(boxscore.teams.home, homeTeam.name);
+        const homeBattingHTML  = homeBatting.html;
         const homePitchingHTML = generatePitchingHTML(boxscore.teams.home, homeTeam.name);
-        const decisionsHTML    = generateDecisionsHTML(decisions);
+        const decisionsHTML    = generateDecisionsHTML(decisions, awayAbbr, awayBatting.subs, homeAbbr, homeBatting.subs);
         const wpaHTML          = generateWPAHTML(wpaPlays, awayAbbr, homeAbbr);
 
         gamesHTML += `
@@ -931,6 +967,11 @@ async function generateHTML() {
             padding-top: 10px;
             border-top: 1px solid #b7e4c7;
         }
+        .subs-line {
+            font-size: 0.88em;
+            color: #374151;
+        }
+        .sub-row td { color: #374151; }
 
         /* Key Plays (WPA) section */
         .wpa-section {
