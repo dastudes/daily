@@ -37,13 +37,21 @@ async function fetchBoxscore(gamePk) {
 }
 
 // Fetch all MLB teams for the season and build an id -> abbreviation map
+// Also returns divMap: id -> { divisionId, leagueId } for grouping jump links
 async function fetchTeamMap(season) {
     const url = `${API_BASE}/teams?sportId=1&season=${season}`;
     const response = await fetch(url);
     const data = await response.json();
-    const map = {};
-    (data.teams || []).forEach(t => { map[t.id] = t.abbreviation; });
-    return map;
+    const abbrMap = {};
+    const divMap = {};
+    (data.teams || []).forEach(t => {
+        abbrMap[t.id] = t.abbreviation;
+        divMap[t.id] = {
+            divisionId: t.division && t.division.id,
+            leagueId:   t.league   && t.league.id
+        };
+    });
+    return { abbrMap, divMap };
 }
 
 // Build a Baseball Savant player URL from name + MLB id
@@ -493,7 +501,7 @@ async function generateHTML() {
     console.log(`Fetching games for ${date}...`);
 
     const season = new Date().getFullYear();
-    const teamMap = await fetchTeamMap(season);
+    const { abbrMap: teamMap, divMap } = await fetchTeamMap(season);
     console.log(`Loaded abbreviations for ${Object.keys(teamMap).length} teams`);
 
     const games = await fetchSchedule(date);
@@ -642,9 +650,21 @@ async function generateHTML() {
             innings: linescore && linescore.innings ? linescore.innings.length : 9
         });
 
+        const awayDiv = divMap[awayTeam.id] || {};
+        const homeDiv = divMap[homeTeam.id] || {};
+        const isDivision  = awayDiv.divisionId && awayDiv.divisionId === homeDiv.divisionId;
+        const isLeague    = !isDivision && awayDiv.leagueId && awayDiv.leagueId === homeDiv.leagueId;
+        const gameType    = isDivision ? 'division' : isLeague ? 'league' : 'interleague';
+        const gameInnings = linescore && linescore.innings ? linescore.innings.length : 9;
+        const scoreDiff   = Math.abs((awayScore || 0) - (homeScore || 0));
+        const isNotable   = gameInnings > 9 || scoreDiff <= 2;
+
         jumpLinks.push({
             id: gameId,
-            text: `${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}${gameNumber}`
+            text: `${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}${gameNumber}`,
+            awayAbbr,
+            gameType,
+            isNotable
         });
 
         const linescoreHTML    = generateLinescoreHTML(linescore, awayAbbr, homeAbbr);
@@ -687,9 +707,21 @@ async function generateHTML() {
         await new Promise(resolve => setTimeout(resolve, 200));
     }
 
-    const jumpLinksHTML = jumpLinks
-        .map(j => `<a href="#${j.id}" class="jump-link" onclick="expandGame(event,'${j.id}')">${j.text}</a>`)
-        .join('');
+    const GROUP_ORDER  = ['division', 'league', 'interleague'];
+    const GROUP_LABELS = { division: 'Division', league: 'League', interleague: 'Interleague' };
+    const groups = { division: [], league: [], interleague: [] };
+    jumpLinks.forEach(j => groups[j.gameType].push(j));
+    Object.values(groups).forEach(g => g.sort((a, b) => a.awayAbbr.localeCompare(b.awayAbbr)));
+
+    let jumpLinksHTML = '';
+    for (const type of GROUP_ORDER) {
+        if (groups[type].length === 0) continue;
+        jumpLinksHTML += `<span class="jump-group-label">${GROUP_LABELS[type]}</span>`;
+        groups[type].forEach(j => {
+            const cls = j.isNotable ? 'jump-link jump-link-notable' : 'jump-link';
+            jumpLinksHTML += `<a href="#${j.id}" class="${cls}" onclick="expandGame(event,'${j.id}')">${j.text}</a>`;
+        });
+    }
 
     // Sort accumulators and take top 5 for each leaderboard
     const topLwts       = Object.values(lwtsAccum).sort((a, b) => b.lwts - a.lwts).slice(0, 5);
@@ -786,6 +818,25 @@ async function generateHTML() {
             white-space: nowrap;
         }
         .jump-link:hover { background: #eff6ff; border-color: #2563eb; }
+
+        .jump-group-label {
+            width: 100%;
+            font-size: 0.72em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+            margin-top: 8px;
+            padding-left: 2px;
+        }
+        .jump-group-label:first-child { margin-top: 0; }
+
+        .jump-link-notable {
+            border: 2px solid #1d4ed8;
+            background: #eff6ff;
+            font-weight: bold;
+        }
+        .jump-link-notable:hover { background: #dbeafe; border-color: #1e3a8a; }
 
         .expand-btn {
             padding: 8px 18px;
