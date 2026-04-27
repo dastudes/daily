@@ -35,7 +35,7 @@ function calcGamePAR(p) {
 function formatBoxscoreForPrompt(boxscore) {
     const lines = [];
     for (const game of boxscore.games) {
-        lines.push(`\n## ${game.away.name} (${game.away.score}) @ ${game.home.name} (${game.home.score})`);
+        lines.push(`\n## ${game.away.name} (${game.away.score}) @ ${game.home.name} (${game.home.score}) at ${game.venue}`);
 
         const innings = game.linescore.innings
             .map(inn => `${inn.inning}: A${inn.away ?? '-'} H${inn.home ?? '-'}`)
