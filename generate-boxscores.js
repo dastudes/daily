@@ -343,14 +343,20 @@ function extractBattingData(teamData) {
     });
     return active.map(p => {
         const s = p.stats.batting;
+        const ab  = s.atBats     || 0;
+        const bb  = s.baseOnBalls || 0;
+        const hbp = s.hitByPitch  || 0;
+        const sf  = s.sacFlies    || 0;
+        const sh  = s.sacBunts    || 0;
         return {
             name: p.person.fullName,
-            AB: s.atBats || 0,
-            R: s.runs || 0,
-            H: s.hits || 0,
+            PA: ab + bb + hbp + sf + sh,
+            AB: ab,
+            R: s.runs     || 0,
+            H: s.hits     || 0,
             HR: s.homeRuns || 0,
-            RBI: s.rbi || 0,
-            BB: (s.baseOnBalls || 0) + (s.hitByPitch || 0),
+            RBI: s.rbi    || 0,
+            BB: bb + hbp,
         };
     });
 }
@@ -785,6 +791,7 @@ async function generateHTML() {
         const lastInn = inningsArr[inningsArr.length - 1];
         gamesData.push({
             gamePk,
+            venue: game.venue ? game.venue.name : null,
             away: { name: awayTeam.name, abbr: awayAbbr, score: awayScore },
             home: { name: homeTeam.name, abbr: homeAbbr, score: homeScore },
             linescore: {
