@@ -3,6 +3,19 @@ const fs = require('fs');
 
 const API_BASE = 'https://statsapi.mlb.com/api/v1';
 
+async function withConcurrency(items, concurrency, fn) {
+    const results = new Array(items.length);
+    let index = 0;
+    async function worker() {
+        while (index < items.length) {
+            const i = index++;
+            results[i] = await fn(items[i], i);
+        }
+    }
+    await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, worker));
+    return results;
+}
+
 // Get yesterday's date in Eastern time (YYYY-MM-DD)
 function getYesterdayDate() {
     const now = new Date();
@@ -537,7 +550,18 @@ async function generateHTML() {
     let gamesHTML = '';
     const jumpLinks = [];
 
-    for (const game of finalGames) {
+    // Fetch all game data in parallel, then process sequentially
+    const gameData = await withConcurrency(finalGames, 5, async (game) => {
+        const awayTeam = game.teams.away.team;
+        const homeTeam = game.teams.home.team;
+        console.log(`Fetching boxscore for ${awayTeam.name} @ ${homeTeam.name}...`);
+        const boxscore = await fetchBoxscore(game.gamePk);
+        console.log(`Fetching WPA for ${awayTeam.name} @ ${homeTeam.name}...`);
+        const wpaPlays = await fetchWPA(game.gamePk);
+        return { game, boxscore, wpaPlays };
+    });
+
+    for (const { game, boxscore, wpaPlays } of gameData) {
         const gamePk = game.gamePk;
         const awayTeam = game.teams.away.team;
         const homeTeam = game.teams.home.team;
@@ -547,12 +571,6 @@ async function generateHTML() {
         const homeScore = game.teams.home.score;
         const gameNumber = game.gameNumber > 1 ? ` - Game ${game.gameNumber}` : '';
         const gameId = `game-${gamePk}`;
-
-        console.log(`Fetching boxscore for ${awayTeam.name} @ ${homeTeam.name}...`);
-        const boxscore = await fetchBoxscore(gamePk);
-
-        console.log(`Fetching WPA for ${awayTeam.name} @ ${homeTeam.name}...`);
-        const wpaPlays = await fetchWPA(gamePk);
 
         const linescore = game.linescore;
         const decisions = game.decisions;
@@ -703,8 +721,6 @@ async function generateHTML() {
             </div>
         </details>`;
 
-        // Small delay to be polite to the API
-        await new Promise(resolve => setTimeout(resolve, 200));
     }
 
     const GROUP_ORDER  = ['division', 'league', 'interleague'];

@@ -3,6 +3,19 @@ const fs = require('fs');
 
 const API_BASE = 'https://statsapi.mlb.com/api/v1';
 
+async function withConcurrency(items, concurrency, fn) {
+    const results = new Array(items.length);
+    let index = 0;
+    async function worker() {
+        while (index < items.length) {
+            const i = index++;
+            results[i] = await fn(items[i], i);
+        }
+    }
+    await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, worker));
+    return results;
+}
+
 // Map MLB team names to Fangraphs URL slugs
 function getTeamFangraphsSlug(teamName) {
     const slugMap = {
@@ -158,14 +171,15 @@ async function fetchTeamStandingsMap(season, allTeams) {
         }
     }
 
-    // One stats call per team for RS/RA
+    // One stats call per team for RS/RA — fetch 5 at a time
     const standingsMap = {};
-    for (const team of allTeams) {
+    const runTotals = await withConcurrency(allTeams, 5, team => fetchTeamRunTotals(team.id, season));
+    for (let i = 0; i < allTeams.length; i++) {
+        const team = allTeams[i];
         const league = team.league && team.league.name === 'American League' ? 'AL' : 'NL';
         const wl = wlMap[team.id] || { w: 0, l: 0 };
-        const { rs, ra } = await fetchTeamRunTotals(team.id, season);
+        const { rs, ra } = runTotals[i];
         standingsMap[team.id] = { w: wl.w, l: wl.l, rs, ra, league };
-        await new Promise(resolve => setTimeout(resolve, 50));
     }
 
     // Compute per-league averages
@@ -317,22 +331,18 @@ async function loadTeamStats(team, season) {
     
     const batters = [];
     const pitchers = [];
-    
-    for (const player of roster) {
-        // Fetch full player details for age and handedness
+
+    const playerResults = await withConcurrency(roster, 5, async (player) => {
         const playerDetails = await fetchPlayerDetails(player.person.id);
-        
-        // Merge the detailed player info with the roster player info
         const enrichedPlayer = {
             ...player,
-            person: {
-                ...player.person,
-                ...(playerDetails || {})
-            }
+            person: { ...player.person, ...(playerDetails || {}) }
         };
-        
         const stats = await fetchPlayerStats(player.person.id, season);
-        
+        return { enrichedPlayer, stats };
+    });
+
+    for (const { enrichedPlayer, stats } of playerResults) {
         for (const statGroup of stats) {
             if (statGroup.group.displayName === 'hitting' && statGroup.splits.length > 0) {
                 const hittingStats = statGroup.splits[0].stat;
@@ -342,7 +352,7 @@ async function loadTeamStats(team, season) {
                     batters.push({ player: enrichedPlayer, stats: hittingStats });
                 }
             }
-            
+
             if (statGroup.group.displayName === 'pitching' && statGroup.splits.length > 0) {
                 const pitchingStats = statGroup.splits[0].stat;
                 if ((pitchingStats.battersFaced || 0) > 0) {
@@ -430,19 +440,18 @@ async function generateHTML() {
     // First pass: count how many teams each player appears on
     console.log('Counting multi-team players...');
     const playerTeamCount = {};
-    
-    for (const team of allTeams) {
-        const roster = await fetchTeamRoster(team.id, season);
+
+    const allRosters = await withConcurrency(allTeams, 5, team => fetchTeamRoster(team.id, season));
+    for (const roster of allRosters) {
         for (const player of roster) {
-            const playerId = player.person.id;
-            playerTeamCount[playerId] = (playerTeamCount[playerId] || 0) + 1;
+            playerTeamCount[player.person.id] = (playerTeamCount[player.person.id] || 0) + 1;
         }
     }
     
-    // Load all team stats
-    for (const team of allTeams) {
+    // Load all team stats — 5 concurrent teams
+    await withConcurrency(allTeams, 5, async (team) => {
         teamData[team.id] = await loadTeamStats(team, season);
-    }
+    });
     
     // ========== Generate JSON for leaderboards ==========
     console.log('Generating player-stats.json for leaderboards...');

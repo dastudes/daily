@@ -3,6 +3,19 @@ const fs = require('fs');
 
 const API_BASE = 'https://statsapi.mlb.com/api/v1';
 
+async function withConcurrency(items, concurrency, fn) {
+    const results = new Array(items.length);
+    let index = 0;
+    async function worker() {
+        while (index < items.length) {
+            const i = index++;
+            results[i] = await fn(items[i], i);
+        }
+    }
+    await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, worker));
+    return results;
+}
+
 // Fetch teams for a season
 async function fetchTeams(season) {
     const response = await fetch(`${API_BASE}/teams?sportId=1&season=${season}`);
@@ -253,35 +266,27 @@ async function generateHTML() {
     }
     
     console.log(`Processing ${Object.keys(standingsMap).length} teams with standings data...`);
-    
+
     // Process each team
     const teamData = {};
     let processedCount = 0;
-    
-    for (const team of teams) {
-        // Skip teams without standings data (e.g., All-Star teams)
-        if (!standingsMap[team.id]) {
-            console.log(`Skipping ${team.name} - no standings data`);
-            continue;
-        }
-        
-        // Skip teams without league info
-        if (!team.league || !team.league.name) {
-            console.log(`Skipping ${team.name} - no league info`);
-            continue;
-        }
-        
+
+    const activeTeams = teams.filter(team => {
+        if (!standingsMap[team.id]) { console.log(`Skipping ${team.name} - no standings data`); return false; }
+        if (!team.league || !team.league.name) { console.log(`Skipping ${team.name} - no league info`); return false; }
+        return true;
+    });
+
+    await withConcurrency(activeTeams, 5, async (team) => {
         const standings = standingsMap[team.id];
-        
         console.log(`Fetching stats for ${team.name}...`);
-        
         try {
             // Get team stats
             const stats = await fetchTeamStats(team.id, season);
             let hittingStats = {};
             let pitchingStats = {};
             let fieldingStats = {};
-            
+
             for (const statGroup of stats) {
                 if (statGroup.group && statGroup.group.displayName === 'hitting' && statGroup.splits && statGroup.splits.length > 0) {
                     hittingStats = statGroup.splits[0].stat;
@@ -293,7 +298,7 @@ async function generateHTML() {
                     fieldingStats = statGroup.splits[0].stat;
                 }
             }
-            
+
             // Merge fielding stats into pitching stats for DER calculation
             if (fieldingStats.errors !== undefined) {
                 pitchingStats.errors = fieldingStats.errors;
@@ -301,14 +306,14 @@ async function generateHTML() {
             if (fieldingStats.doublePlays !== undefined) {
                 pitchingStats.doublePlays = fieldingStats.doublePlays;
             }
-            
+
             const w = standings.w;
             const l = standings.l;
             const pct = (w / (w + l)).toFixed(3).substring(1); // Remove leading 0
             const rs = hittingStats.runs || 0;
             const ra = pitchingStats.runs || 0;
             const gamesPlayed = w + l;
-            
+
             teamData[team.id] = {
                 name: team.name,
                 abbreviation: team.abbreviation,
@@ -335,16 +340,13 @@ async function generateHTML() {
                 fip: calculateFIP(pitchingStats),
                 der: calculateDER(pitchingStats, team.name)
             };
-            
+
             processedCount++;
-            
-            // Add small delay to avoid rate limiting
-            await new Promise(resolve => setTimeout(resolve, 100));
         } catch (error) {
             console.error(`Error processing ${team.name}:`, error.message);
             // Continue with other teams even if one fails
         }
-    }
+    });
     
     console.log(`Successfully processed ${processedCount} teams out of ${teams.length}`);
     
