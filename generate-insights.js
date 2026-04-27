@@ -58,22 +58,25 @@ function formatBoxscoreForPrompt(boxscore) {
         if (game.flags.shutout) flags.push('shutout');
         if (flags.length) lines.push(`Notable: ${flags.join(', ')}`);
 
+        const awaySide = `${game.away.abbr}, away at ${game.venue}`;
+        const homeSide = `${game.home.abbr}, home at ${game.venue}`;
+
         lines.push(`\nAway Batting (${game.away.abbr}):`);
         for (const b of game.batting.away) {
-            lines.push(`  ${b.name}: ${b.AB} AB, ${b.H} H, ${b.HR} HR, ${b.RBI} RBI, ${b.BB} BB, ${b.R} R`);
+            lines.push(`  ${b.name} (${awaySide}): ${b.PA} PA, ${b.AB} AB, ${b.H} H, ${b.HR} HR, ${b.RBI} RBI, ${b.BB} BB, ${b.R} R`);
         }
         lines.push(`\nHome Batting (${game.home.abbr}):`);
         for (const b of game.batting.home) {
-            lines.push(`  ${b.name}: ${b.AB} AB, ${b.H} H, ${b.HR} HR, ${b.RBI} RBI, ${b.BB} BB, ${b.R} R`);
+            lines.push(`  ${b.name} (${homeSide}): ${b.PA} PA, ${b.AB} AB, ${b.H} H, ${b.HR} HR, ${b.RBI} RBI, ${b.BB} BB, ${b.R} R`);
         }
 
         lines.push(`\nAway Pitching (${game.away.abbr}):`);
         for (const p of game.pitching.away) {
-            lines.push(`  ${p.name}: ${p.IP} IP, ${p.H} H, ${p.ER} ER, ${p.BB} BB, ${p.K} K`);
+            lines.push(`  ${p.name} (${awaySide}): ${p.IP} IP, ${p.H} H, ${p.ER} ER, ${p.BB} BB, ${p.K} K`);
         }
         lines.push(`\nHome Pitching (${game.home.abbr}):`);
         for (const p of game.pitching.home) {
-            lines.push(`  ${p.name}: ${p.IP} IP, ${p.H} H, ${p.ER} ER, ${p.BB} BB, ${p.K} K`);
+            lines.push(`  ${p.name} (${homeSide}): ${p.IP} IP, ${p.H} H, ${p.ER} ER, ${p.BB} BB, ${p.K} K`);
         }
 
         if (game.topWPAPlays && game.topWPAPlays.length > 0) {
@@ -269,6 +272,11 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `If the data says the Pirates are away and the Brewers are home at American Family Field, ` +
         `that is correct — do not second-guess it.`;
 
+    const cinematicsNote =
+        `Do not invent or embellish physical details of plays — no descriptions of how a ball moved, ` +
+        `how a fielder reacted, or what a swing looked like unless explicitly stated in the data. ` +
+        `Describe outcomes, not cinematics.`;
+
     const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}`;
 
     const lwtsNote =
@@ -285,7 +293,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Write a narrative recap of today's games, weaving together the most compelling stories — ` +
                 `the outstanding performances, the dramatic moments, the pitching duels and offensive explosions. ` +
                 `Let the best story lead.` +
-                sharedNotes,
+                sharedNotes +
+                `\n\n${cinematicsNote}`,
         },
         {
             title: 'Standings & Power Rankings',
@@ -304,7 +313,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Today is ${dateLabel}. Here are today's highest win-probability-added plays across all games:\n\n${wpaStr}\n\n` +
                 `Write a narrative that brings these pivotal moments to life. The WPA numbers tell you which plays ` +
                 `mattered most; your job is to make the reader feel the weight of each one.` +
-                sharedNotes,
+                sharedNotes +
+                `\n\n${cinematicsNote}`,
         },
         {
             title: "Today's Best Pitchers",
@@ -360,7 +370,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Boxscore data:\n${metsBoxStr}\n\n` +
                 `NL East rivals' games:\n${metsRivalStr}\n\n` +
                 `${metsStandStr}` +
-                sharedNotes,
+                sharedNotes +
+                `\n\n${cinematicsNote}`,
         },
     ];
 }
