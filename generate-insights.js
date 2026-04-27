@@ -311,10 +311,13 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
             system: studemundSystem,
             user:
                 `Today is ${dateLabel}. Here are the complete box scores from today's MLB games:\n\n${boxStr}\n\n` +
-                `IMPORTANT — LENGTH AND SCOPE: Do not attempt to cover every game. This is not a recap service. ` +
-                `Select the 3-4 most compelling stories from the day and write about those. ` +
-                `A good daily overview has 4-5 paragraphs total, not one paragraph per game. ` +
-                `Ignore games that have no compelling narrative angle. Edit ruthlessly.\n\n` +
+                `IMPORTANT — LENGTH AND SCOPE: Cover exactly six games using these selection criteria:\n` +
+                `- 1-3 games with pennant race implications: division rivals, teams within 5 games of a division lead or wild card spot, or games that shifted standings meaningfully\n` +
+                `- 1-3 tight or dramatic games: one-run finishes, walkoffs, extra innings, or late-inning lead changes\n` +
+                `- 1-3 games featuring outstanding individual performances: dominant pitching lines, exceptional hitting, or historic individual efforts\n\n` +
+                `A game can qualify under more than one criterion. Weave all six into a cohesive narrative — do not label them by category. ` +
+                `No introductory or closing paragraph. 4-5 paragraphs total. Edit ruthlessly.\n\n` +
+                `Use the standings data to identify pennant race context — division standings, games back, and wild card position are all relevant.\n\n` +
                 `Write a narrative recap of today's games, weaving together the most compelling stories — ` +
                 `the outstanding performances, the dramatic moments, the pitching duels and offensive explosions. ` +
                 `Let the best story lead.` +
