@@ -82,6 +82,19 @@ function calculateISO(stats) {
     return slg - avg;
 }
 
+// Calculate SLG (Slugging Percentage)
+function calculateSLG(stats) {
+    const ab = stats.atBats || 0;
+    if (ab === 0) return 0;
+    const hits = stats.hits || 0;
+    const doubles = stats.doubles || 0;
+    const triples = stats.triples || 0;
+    const hrs = stats.homeRuns || 0;
+    const singles = hits - doubles - triples - hrs;
+    const tb = singles + (2 * doubles) + (3 * triples) + (4 * hrs);
+    return tb / ab;
+}
+
 // Calculate OBP
 function calculateOBP(stats) {
     const h = stats.hits || 0;
@@ -243,10 +256,16 @@ async function generateHTML() {
                 loggedSample = true;
             }
             
-            // Extract last 10 games record from splitRecords
+            // Extract split records
             const splitRecords = teamRecord.records && teamRecord.records.splitRecords ? teamRecord.records.splitRecords : [];
-            const last10Record = splitRecords.find(r => r.type === 'lastTen');
-            const last10 = last10Record ? `${last10Record.wins}-${last10Record.losses}` : null;
+            const splitStr = r => r ? `${r.wins}-${r.losses}` : null;
+            const last10       = splitStr(splitRecords.find(r => r.type === 'lastTen'));
+            const splitHome    = splitStr(splitRecords.find(r => r.type === 'home'));
+            const splitAway    = splitStr(splitRecords.find(r => r.type === 'away'));
+            const splitDiv     = splitStr(splitRecords.find(r => r.type === 'division'));
+            const splitLeague  = splitStr(splitRecords.find(r => r.type === 'league'));
+            const splitWinners = splitStr(splitRecords.find(r => r.type === 'winners'));
+            const streak = teamRecord.streak && teamRecord.streak.streakCode ? teamRecord.streak.streakCode : null;
 
             standingsMap[teamId] = {
                 w: teamRecord.wins,
@@ -261,7 +280,13 @@ async function generateHTML() {
                 league: league,
                 division: divisionName,
                 divisionAbbrev: divisionAbbrev,
-                last10: last10
+                last10,
+                splitHome,
+                splitAway,
+                splitDiv,
+                splitLeague,
+                splitWinners,
+                streak,
             };
         }
     }
@@ -315,6 +340,11 @@ async function generateHTML() {
             const ra = pitchingStats.runs || 0;
             const gamesPlayed = w + l;
 
+            const obp = calculateOBP(hittingStats);
+            const slg = calculateSLG(hittingStats);
+            const pythWins = gamesPlayed > 0 && (rs + ra) > 0
+                ? (Math.pow(rs, 2) / (Math.pow(rs, 2) + Math.pow(ra, 2))) * gamesPlayed
+                : 0;
             teamData[team.id] = {
                 name: team.name,
                 abbreviation: team.abbreviation,
@@ -329,14 +359,24 @@ async function generateHTML() {
                 wcRank: standings.wcRank,
                 clinchIndicator: standings.clinchIndicator,
                 last10: standings.last10,
+                streak: standings.streak,
+                splitHome: standings.splitHome,
+                splitAway: standings.splitAway,
+                splitDiv: standings.splitDiv,
+                splitLeague: standings.splitLeague,
+                splitWinners: standings.splitWinners,
                 rs: rs,
                 ra: ra,
+                rd: rs - ra,
                 gamesPlayed: gamesPlayed,
+                pythWins: pythWins,
                 pythVar: calculatePythVar(w, l, rs, ra),
                 // Stats for graphs
                 rsPerGame: gamesPlayed > 0 ? rs / gamesPlayed : 0,
                 raPerGame: gamesPlayed > 0 ? ra / gamesPlayed : 0,
-                obp: calculateOBP(hittingStats),
+                obp: obp,
+                slg: slg,
+                ops: obp + slg,
                 iso: calculateISO(hittingStats),
                 fip: calculateFIP(pitchingStats),
                 der: calculateDER(pitchingStats, team.name)
@@ -395,6 +435,47 @@ async function generateHTML() {
     
     fs.writeFileSync('index.html', html);
     console.log('Generated index.html successfully!');
+
+    const standingsJson = {
+        season,
+        generatedAt: dateTimeStr,
+        teams: Object.values(teamData).map(t => ({
+            name: t.name,
+            abbreviation: t.abbreviation,
+            division: t.division,
+            league: t.league,
+            w: t.w,
+            l: t.l,
+            pct: t.pct,
+            gb: t.gb,
+            wcGb: t.wcGb || null,
+            wcRank: t.wcRank || null,
+            clinchIndicator: t.clinchIndicator || null,
+            rs: t.rs,
+            ra: t.ra,
+            rd: t.rd,
+            pythWins: parseFloat(t.pythWins.toFixed(1)),
+            pythVar: parseFloat(t.pythVar.toFixed(2)),
+            streak: t.streak || null,
+            splits: {
+                last10: t.last10 || null,
+                home: t.splitHome || null,
+                away: t.splitAway || null,
+                division: t.splitDiv || null,
+                league: t.splitLeague || null,
+                winners: t.splitWinners || null,
+            },
+            stats: {
+                obp: parseFloat(t.obp.toFixed(3)),
+                slg: parseFloat(t.slg.toFixed(3)),
+                ops: parseFloat(t.ops.toFixed(3)),
+                fip: parseFloat(t.fip.toFixed(2)),
+                der: parseFloat(t.der.toFixed(3)),
+            },
+        })),
+    };
+    fs.writeFileSync('standings-data.json', JSON.stringify(standingsJson, null, 2));
+    console.log('Generated standings-data.json successfully!');
 }
 
 function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames = []) {
