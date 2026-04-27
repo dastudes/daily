@@ -323,6 +323,63 @@ function generateDecisionsHTML(decisions, awayAbbr, awaySubs, homeAbbr, homeSubs
     return html;
 }
 
+// Extract batting stats for JSON output
+function extractBattingData(teamData) {
+    const players = teamData.players || {};
+    const allByOrder = Object.values(players)
+        .filter(p => p.battingOrder && parseInt(p.battingOrder) > 0)
+        .sort((a, b) => parseInt(a.battingOrder) - parseInt(b.battingOrder));
+    const seenIds = new Set(allByOrder.map(p => p.person.id));
+    const active = allByOrder.filter(p => {
+        const s = p.stats && p.stats.batting;
+        if (!s) return false;
+        return (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0)+(s.sacBunts||0) > 0;
+    });
+    Object.values(players).forEach(p => {
+        if (seenIds.has(p.person.id)) return;
+        const s = p.stats && p.stats.batting;
+        if (s && (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0)+(s.sacBunts||0) > 0)
+            active.push(p);
+    });
+    return active.map(p => {
+        const s = p.stats.batting;
+        return {
+            name: p.person.fullName,
+            AB: s.atBats || 0,
+            R: s.runs || 0,
+            H: s.hits || 0,
+            HR: s.homeRuns || 0,
+            RBI: s.rbi || 0,
+            BB: (s.baseOnBalls || 0) + (s.hitByPitch || 0),
+        };
+    });
+}
+
+// Extract pitching stats for JSON output
+function extractPitchingData(teamData) {
+    const players = teamData.players || {};
+    const pitcherIds = teamData.pitchers || [];
+    return pitcherIds
+        .map(id => players[`ID${id}`])
+        .filter(p => {
+            if (!p || !p.stats || !p.stats.pitching) return false;
+            const s = p.stats.pitching;
+            return parseFloat(s.inningsPitched || 0) > 0 ||
+                (s.hits||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.strikeOuts||0)+(s.runs||0) > 0;
+        })
+        .map(p => {
+            const s = p.stats.pitching;
+            return {
+                name: p.person.fullName,
+                IP: parseFloat(s.inningsPitched || 0),
+                H: s.hits || 0,
+                ER: s.earnedRuns || 0,
+                BB: s.baseOnBalls || 0,
+                K: s.strikeOuts || 0,
+            };
+        });
+}
+
 // Fetch win probability data for a game
 async function fetchWPA(gamePk) {
     try {
@@ -547,6 +604,7 @@ async function generateHTML() {
     const reliefAccum  = {};  // { [playerId]: { name, team, wpa (pp) } }
     const excitement   = [];  // [ { label, absWPA (pp) } ]
     const allWPAPlays  = [];  // top plays across all games for daily WPA leaderboard
+    const gamesData    = [];  // structured data for boxscore-data.json
 
     let gamesHTML = '';
     const jumpLinks = [];
@@ -721,6 +779,63 @@ async function generateHTML() {
                 ${wpaHTML}
             </div>
         </details>`;
+
+        // --- Build JSON game record ---
+        const inningsArr = linescore && linescore.innings ? linescore.innings : [];
+        const lastInn = inningsArr[inningsArr.length - 1];
+        gamesData.push({
+            gamePk,
+            away: { name: awayTeam.name, abbr: awayAbbr, score: awayScore },
+            home: { name: homeTeam.name, abbr: homeAbbr, score: homeScore },
+            linescore: {
+                innings: inningsArr.map((inn, i) => ({
+                    inning: i + 1,
+                    away: inn.away && inn.away.runs !== undefined ? inn.away.runs : null,
+                    home: inn.home && inn.home.runs !== undefined ? inn.home.runs : null,
+                })),
+                totals: {
+                    away: linescore && linescore.teams && linescore.teams.away
+                        ? { runs: linescore.teams.away.runs, hits: linescore.teams.away.hits, errors: linescore.teams.away.errors }
+                        : null,
+                    home: linescore && linescore.teams && linescore.teams.home
+                        ? { runs: linescore.teams.home.runs, hits: linescore.teams.home.hits, errors: linescore.teams.home.errors }
+                        : null,
+                },
+            },
+            batting: {
+                away: extractBattingData(boxscore.teams.away),
+                home: extractBattingData(boxscore.teams.home),
+            },
+            pitching: {
+                away: extractPitchingData(boxscore.teams.away),
+                home: extractPitchingData(boxscore.teams.home),
+            },
+            decisions: decisions ? {
+                winner: decisions.winner ? decisions.winner.fullName : null,
+                loser:  decisions.loser  ? decisions.loser.fullName  : null,
+                save:   decisions.save   ? decisions.save.fullName   : null,
+            } : null,
+            topWPAPlays: [...(wpaPlays || [])]
+                .filter(p => (p.homeTeamWinProbabilityAdded || 0) !== 0)
+                .sort((a, b) => Math.abs(b.homeTeamWinProbabilityAdded) - Math.abs(a.homeTeamWinProbabilityAdded))
+                .slice(0, 5)
+                .map(p => ({
+                    wpa: parseFloat((Math.abs(p.homeTeamWinProbabilityAdded) / 100).toFixed(3)),
+                    inning: formatInning(p.about || {}),
+                    description: (p.result && p.result.description) || '',
+                    awayScore: p.result && p.result.awayScore !== undefined ? p.result.awayScore : null,
+                    homeScore: p.result && p.result.homeScore !== undefined ? p.result.homeScore : null,
+                })),
+            flags: {
+                walkoff: homeScore > awayScore &&
+                    !!lastInn && !!lastInn.home &&
+                    lastInn.home.runs !== undefined && lastInn.home.runs > 0,
+                extraInnings: inningsArr.length > 9,
+                shutout: Math.min(awayScore || 0, homeScore || 0) === 0 &&
+                    Math.max(awayScore || 0, homeScore || 0) > 0,
+                sweep: false,
+            },
+        });
 
     }
 
@@ -1242,6 +1357,24 @@ async function generateHTML() {
 
     fs.writeFileSync('box-scores.html', html);
     console.log('Generated box-scores.html successfully!');
+
+    const boxscoreJson = {
+        date,
+        generatedAt: updatedStr,
+        games: gamesData,
+        topWPAPlaysAllGames: topWPAPlays.map(p => ({
+            game: p.gameLabel,
+            wpa: parseFloat((p.absWPA / 100).toFixed(3)),
+            inning: p.inning,
+            description: p.desc,
+            awayAbbr: p.awayAbbr,
+            homeAbbr: p.homeAbbr,
+            awayScore: p.awayScore !== '' ? p.awayScore : null,
+            homeScore: p.homeScore !== '' ? p.homeScore : null,
+        })),
+    };
+    fs.writeFileSync('boxscore-data.json', JSON.stringify(boxscoreJson, null, 2));
+    console.log('Generated boxscore-data.json successfully!');
 }
 
 generateHTML().catch(console.error);
