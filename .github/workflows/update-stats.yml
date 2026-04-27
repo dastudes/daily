@@ -27,7 +27,7 @@ jobs:
       - name: Back up current output
         run: |
           mkdir -p .backup
-          for f in index.html player_stats.html player-stats.json graphs.html box-scores.html; do
+          for f in index.html player_stats.html player-stats.json graphs.html box-scores.html insights.html; do
             [ -f "$f" ] && cp "$f" ".backup/$f" || true
           done
 
@@ -40,10 +40,15 @@ jobs:
       - name: Generate box scores page
         run: node generate-boxscores.js
 
+      - name: Generate insights page
+        run: node generate-insights.js
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
       - name: Validate output
         run: |
           failed=0
-          for f in index.html player_stats.html graphs.html box-scores.html; do
+          for f in index.html player_stats.html graphs.html box-scores.html insights.html; do
             size=$(stat -c%s "$f" 2>/dev/null || echo 0)
             if [ "$size" -lt 10000 ]; then
               echo "ERROR: $f is suspiciously small (${size} bytes)"
@@ -58,7 +63,7 @@ jobs:
         if: failure()
         run: |
           echo "Generation failed — restoring previous output to keep site live"
-          for f in index.html player_stats.html player-stats.json graphs.html box-scores.html; do
+          for f in index.html player_stats.html player-stats.json graphs.html box-scores.html insights.html; do
             [ -f ".backup/$f" ] && cp ".backup/$f" "$f" && echo "Restored $f" || echo "No backup for $f"
           done
 
@@ -66,5 +71,5 @@ jobs:
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add index.html player_stats.html player-stats.json graphs.html box-scores.html boxscore-data.json standings-data.json
+          git add index.html player_stats.html player-stats.json graphs.html box-scores.html boxscore-data.json standings-data.json insights.html
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats and graphs - $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
