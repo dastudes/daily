@@ -307,10 +307,14 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
 
     return [
         {
-            title: "Today's Games",
+            title: "Today's Top Games",
             system: studemundSystem,
             user:
                 `Today is ${dateLabel}. Here are the complete box scores from today's MLB games:\n\n${boxStr}\n\n` +
+                `IMPORTANT — LENGTH AND SCOPE: Do not attempt to cover every game. This is not a recap service. ` +
+                `Select the 3-4 most compelling stories from the day and write about those. ` +
+                `A good daily overview has 4-5 paragraphs total, not one paragraph per game. ` +
+                `Ignore games that have no compelling narrative angle. Edit ruthlessly.\n\n` +
                 `Write a narrative recap of today's games, weaving together the most compelling stories — ` +
                 `the outstanding performances, the dramatic moments, the pitching duels and offensive explosions. ` +
                 `Let the best story lead.` +
