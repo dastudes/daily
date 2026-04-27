@@ -337,7 +337,10 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
             user:
                 `Today is ${dateLabel}. Here are today's highest win-probability-added plays across all games:\n\n${wpaStr}\n\n` +
                 `Write a narrative that brings these pivotal moments to life. The WPA numbers tell you which plays ` +
-                `mattered most; your job is to make the reader feel the weight of each one.` +
+                `mattered most; your job is to make the reader feel the weight of each one.\n\n` +
+                `IMPORTANT — LENGTH AND SCOPE: Cover 4-5 games maximum. No introductory paragraph and no ` +
+                `closing summary paragraph — go straight into the games and end after the last one. ` +
+                `Each game gets two short paragraphs maximum. Edit ruthlessly.` +
                 sharedNotes +
                 `\n\n${cinematicsNote}`,
         },
@@ -413,12 +416,58 @@ async function callClaude(client, prompt) {
 }
 
 function textToHtml(text) {
-    return text
-        .split(/\n\n+/)
-        .map(p => p.trim())
-        .filter(p => p.length > 0)
-        .map(p => `<p>${p.replace(/\n/g, ' ')}</p>`)
-        .join('\n');
+    const applyInline = s =>
+        s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+    const blocks = text.split(/\n\n+/);
+    const parts = [];
+
+    for (const block of blocks) {
+        const trimmed = block.trim();
+        if (!trimmed) continue;
+
+        const lines = trimmed.split('\n');
+
+        // Heading: #, ##, or ### → bold line
+        if (/^#{1,3} /.test(lines[0])) {
+            const headingText = lines[0].replace(/^#{1,3} /, '');
+            parts.push(`<p><strong>${applyInline(headingText)}</strong></p>`);
+            if (lines.length > 1) {
+                parts.push(`<p>${lines.slice(1).map(applyInline).join(' ')}</p>`);
+            }
+            continue;
+        }
+
+        // List block: every line starts with - or *
+        if (lines.every(l => /^[-*] /.test(l.trim()))) {
+            const items = lines.map(l => `<li>${applyInline(l.trim().replace(/^[-*] /, ''))}</li>`).join('');
+            parts.push(`<ul>${items}</ul>`);
+            continue;
+        }
+
+        // Mixed block: some list lines, some prose — split and emit separately
+        if (lines.some(l => /^[-*] /.test(l.trim()))) {
+            let listLines = [];
+            let proseLines = [];
+            for (const l of lines) {
+                if (/^[-*] /.test(l.trim())) {
+                    if (proseLines.length) { parts.push(`<p>${proseLines.map(applyInline).join(' ')}</p>`); proseLines = []; }
+                    listLines.push(l);
+                } else {
+                    if (listLines.length) { parts.push(`<ul>${listLines.map(l => `<li>${applyInline(l.trim().replace(/^[-*] /, ''))}</li>`).join('')}</ul>`); listLines = []; }
+                    proseLines.push(l);
+                }
+            }
+            if (listLines.length) parts.push(`<ul>${listLines.map(l => `<li>${applyInline(l.trim().replace(/^[-*] /, ''))}</li>`).join('')}</ul>`);
+            if (proseLines.length) parts.push(`<p>${proseLines.map(applyInline).join(' ')}</p>`);
+            continue;
+        }
+
+        // Plain paragraph
+        parts.push(`<p>${applyInline(lines.join(' '))}</p>`);
+    }
+
+    return parts.join('\n');
 }
 
 function generateHTML(date, updatedStr, narratives) {
@@ -526,6 +575,8 @@ function generateHTML(date, updatedStr, narratives) {
         }
         .insight-body p { line-height: 1.75; font-size: 1rem; color: #3b1e08; margin-bottom: 1.1em; }
         .insight-body p:last-child { margin-bottom: 0; }
+        .insight-body ul { margin: 0.5em 0 0.5em 1.5em; }
+        .insight-body li { margin-bottom: 0.3em; line-height: 1.75; }
         footer {
             text-align: center;
             padding: 2rem 1rem;
