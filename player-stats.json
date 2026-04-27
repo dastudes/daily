@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-04-27T19:29:47.125Z",
+  "updated": "2026-04-27T19:52:23.835Z",
   "batters": [
     {
       "name": "Shea Langeliers",
@@ -19880,6 +19880,30 @@
       "par": 10,
       "h": 8,
       "er": 1,
+      "pitchHand": "R"
+    },
+    {
+      "name": "Jimmy Herget",
+      "playerId": 623474,
+      "team": "Colorado Rockies",
+      "teamAbbr": "COL",
+      "league": "NL",
+      "age": 32,
+      "g": 11,
+      "gs": 3,
+      "ip": 12,
+      "w": 0,
+      "l": 1,
+      "sv": 1,
+      "hr": 0,
+      "k": 11,
+      "bb": 2,
+      "era": 1.5,
+      "whip": 0.83,
+      "fip": 2.02,
+      "par": 6,
+      "h": 8,
+      "er": 2,
       "pitchHand": "R"
     },
     {
