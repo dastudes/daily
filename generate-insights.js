@@ -248,6 +248,15 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         'like they were at the ballpark. Avoid clichés. Each paragraph should earn its place. ' +
         'Output 3–5 paragraphs of polished prose. No headers, no bullet points.';
 
+    const studemundSystem =
+        'Write in the style of Dave Studenmund of The Hardball Times — ' +
+        'conversational but authoritative, building arguments step by step, ' +
+        'showing reasoning not just conclusions, comfortable with math and ' +
+        'metrics but never showing off, occasionally personal, with dry ' +
+        'understated wit. Use bullet points where they genuinely help ' +
+        'break up dense information. Write for a knowledgeable baseball ' +
+        'fan who appreciates clear explanation.';
+
     const jamesSystem =
         'You are a baseball analyst in the tradition of Bill James — sharp, curious, willing ' +
         'to challenge conventional wisdom, with a gift for illuminating the numbers without ' +
@@ -278,17 +287,28 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `how a fielder reacted, or what a swing looked like unless explicitly stated in the data. ` +
         `Describe outcomes, not cinematics.`;
 
-    const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}`;
+    const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}`;
 
     const lwtsNote =
         `IMPORTANT: Linear weights are context-neutral — they do not account for game situation, ` +
         `leverage, or timing. Do not imply or suggest that a high LWTS reflects a clutch or ` +
         `high-leverage performance. Report only what the batting line shows.`;
 
+    const teamIdNote =
+        `When mentioning a player for the first time in a narrative, always identify their team. ` +
+        `Use natural phrasing like "Milwaukee's Kyle Harrison" or "Kyle Harrison of the Brewers" ` +
+        `rather than just the player's name alone. Subsequent mentions can use the name alone.`;
+
+    const coorsNote =
+        `CRITICAL: Do not mention Coors Field, altitude, or Colorado's home ballpark unless the ` +
+        `game being discussed was actually played at Coors Field. A Rockies pitcher pitching on ` +
+        `the road has nothing to do with Coors Field. Never use a pitcher's team identity to ` +
+        `infer ballpark context — only use the venue field in the data.`;
+
     return [
         {
             title: "Today's Games",
-            system: angellSystem,
+            system: studemundSystem,
             user:
                 `Today is ${dateLabel}. Here are the complete box scores from today's MLB games:\n\n${boxStr}\n\n` +
                 `Write a narrative recap of today's games, weaving together the most compelling stories — ` +
@@ -309,7 +329,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         },
         {
             title: 'Biggest Moments',
-            system: angellSystem,
+            system: studemundSystem,
             user:
                 `Today is ${dateLabel}. Here are today's highest win-probability-added plays across all games:\n\n${wpaStr}\n\n` +
                 `Write a narrative that brings these pivotal moments to life. The WPA numbers tell you which plays ` +
@@ -324,7 +344,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Today is ${dateLabel}. Here are today's most effective pitchers, with their game lines and season context:\n\n${topPitchersStr}\n\n` +
                 `Analyze what made today's top pitching performances exceptional. How do they fit into each pitcher's ` +
                 `season arc? What patterns do you see?` +
-                sharedNotes,
+                sharedNotes +
+                `\n\n${coorsNote}`,
         },
         {
             title: "Today's Best Batters",
