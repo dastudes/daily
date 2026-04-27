@@ -258,8 +258,13 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `If something is not explicitly in the data provided, do not write it.`;
 
     const homeAwayNote =
-        `Pay careful attention to which team is home and which is away. ` +
-        `Do not assume a team is playing at their home ballpark unless the data confirms it.`;
+        `CRITICAL: Each game record contains "venue", "home", and "away" fields. ` +
+        `These are ground truth — always use them. The home team is the team listed under "home". ` +
+        `The away team is listed under "away". The game was played at the venue named in "venue". ` +
+        `Never override these fields with your own knowledge of where teams play. ` +
+        `Never infer home/away from team names or cities. ` +
+        `If the data says the Pirates are away and the Brewers are home at American Family Field, ` +
+        `that is correct — do not second-guess it.`;
 
     const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}`;
 
