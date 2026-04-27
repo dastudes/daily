@@ -1011,16 +1011,16 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
         <div class="standings-box">
             <div class="league-selector">
                 <label>
-                    <input type="radio" name="league" value="AL" checked onchange="updateLeague()">
+                    <input type="radio" name="league" value="AL" onchange="updateLeague()">
                     American League
                 </label>
                 <label>
-                    <input type="radio" name="league" value="NL" onchange="updateLeague()">
+                    <input type="radio" name="league" value="NL" checked onchange="updateLeague()">
                     National League
                 </label>
             </div>
             
-            <div id="alStandings">
+            <div id="alStandings" style="display: none;">
                 <h2>${season} American League Standings</h2>
                 ${alStandingsHTML}
                 <div class="footer-note">
@@ -1030,7 +1030,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
                 </div>
             </div>
             
-            <div id="nlStandings" style="display: none;">
+            <div id="nlStandings">
                 <h2>${season} National League Standings</h2>
                 ${nlStandingsHTML}
                 <div class="footer-note">
@@ -1309,7 +1309,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
         const nlData = ${nlTeamsData};
         const batterData = ${JSON.stringify(playerStats.batters)};
         const pitcherData = ${JSON.stringify(playerStats.pitchers)};
-        let currentLeague = 'AL';
+        let currentLeague = 'NL';
         let chart1, chart2, chart3;
         
         // Leaderboard sort state
