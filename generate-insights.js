@@ -162,7 +162,7 @@ function getTopPitchersForPrompt(boxscore, playerStats) {
     for (const game of boxscore.games) {
         for (const side of ['away', 'home']) {
             for (const p of game.pitching[side]) {
-                if (p.IP >= 1) allPitchers.push({ ...p, par: calcGamePAR(p) });
+                if (p.IP >= 1) allPitchers.push({ ...p, par: calcGamePAR(p), venue: game.venue, side });
             }
         }
     }
@@ -180,14 +180,15 @@ function getTopPitchersForPrompt(boxscore, playerStats) {
     const lines = ["Today's top pitchers by game PAR, with season stats:"];
     for (const p of top10) {
         const s = seasonMap[p.name];
+        const context = s ? `${s.team}, ${p.side} at ${p.venue}` : `${p.side} at ${p.venue}`;
         const today = `Today: ${p.IP} IP, ${p.H} H, ${p.ER} ER, ${p.BB} BB, ${p.K} K (PAR ${p.par.toFixed(2)})`;
         if (s) {
             lines.push(
-                `${p.name} (${s.team}): ${today}` +
+                `${p.name} (${context}): ${today}` +
                 ` | Season: ${s.W}-${s.L} ERA ${s.ERA} WHIP ${s.WHIP} ${s.SO}K in ${s.IP} IP`
             );
         } else {
-            lines.push(`${p.name}: ${today}`);
+            lines.push(`${p.name} (${context}): ${today}`);
         }
     }
     return lines.join('\n');
