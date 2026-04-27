@@ -247,6 +247,27 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         'losing sight of the game. Write incisive analytical prose. ' +
         '3–5 paragraphs. No headers or bullet points.';
 
+    const fipNote =
+        `IMPORTANT: FIP values in this dataset are missing the standard 3.10 constant. ` +
+        `You MUST add 3.10 to every FIP value before using, referencing, or interpreting it. ` +
+        `A stored FIP of 0.57 should be treated and cited as 3.67. ` +
+        `Never reference the raw stored value.`;
+
+    const dataIntegrityNote =
+        `Do not infer, assume, or embellish details not present in the data. ` +
+        `If something is not explicitly in the data provided, do not write it.`;
+
+    const homeAwayNote =
+        `Pay careful attention to which team is home and which is away. ` +
+        `Do not assume a team is playing at their home ballpark unless the data confirms it.`;
+
+    const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}`;
+
+    const lwtsNote =
+        `IMPORTANT: Linear weights are context-neutral — they do not account for game situation, ` +
+        `leverage, or timing. Do not imply or suggest that a high LWTS reflects a clutch or ` +
+        `high-leverage performance. Report only what the batting line shows.`;
+
     return [
         {
             title: "Today's Games",
@@ -255,7 +276,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Today is ${dateLabel}. Here are the complete box scores from today's MLB games:\n\n${boxStr}\n\n` +
                 `Write a narrative recap of today's games, weaving together the most compelling stories — ` +
                 `the outstanding performances, the dramatic moments, the pitching duels and offensive explosions. ` +
-                `Let the best story lead.`,
+                `Let the best story lead.` +
+                sharedNotes,
         },
         {
             title: 'Standings & Power Rankings',
@@ -264,7 +286,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Today is ${dateLabel}. Here is the current MLB standings data:\n\n${standStr}\n\n` +
                 `Analyze where each team stands right now. Who is overachieving their Pythagorean expectation? ` +
                 `Who is getting by on a weak division? Who looks like a genuine contender, and who is in trouble? ` +
-                `Be specific and direct.`,
+                `Be specific and direct.` +
+                sharedNotes,
         },
         {
             title: 'Biggest Moments',
@@ -272,7 +295,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
             user:
                 `Today is ${dateLabel}. Here are today's highest win-probability-added plays across all games:\n\n${wpaStr}\n\n` +
                 `Write a narrative that brings these pivotal moments to life. The WPA numbers tell you which plays ` +
-                `mattered most; your job is to make the reader feel the weight of each one.`,
+                `mattered most; your job is to make the reader feel the weight of each one.` +
+                sharedNotes,
         },
         {
             title: "Today's Best Pitchers",
@@ -280,7 +304,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
             user:
                 `Today is ${dateLabel}. Here are today's most effective pitchers, with their game lines and season context:\n\n${topPitchersStr}\n\n` +
                 `Analyze what made today's top pitching performances exceptional. How do they fit into each pitcher's ` +
-                `season arc? What patterns do you see?`,
+                `season arc? What patterns do you see?` +
+                sharedNotes,
         },
         {
             title: "Today's Best Batters",
@@ -288,7 +313,9 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
             user:
                 `Today is ${dateLabel}. Here are today's most productive hitters, with their game lines and season stats:\n\n${topBattersStr}\n\n` +
                 `Analyze the standout offensive performances. Who is getting hot at the right time? ` +
-                `Whose production is genuinely surprising given their season numbers?`,
+                `Whose production is genuinely surprising given their season numbers?` +
+                sharedNotes +
+                `\n\n${lwtsNote}`,
         },
         {
             title: 'Mets Daily Briefing',
@@ -318,15 +345,14 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `and what the off day meant in context.\n\n` +
                 `Tone: write as someone who genuinely cares how this turns out, ` +
                 `but with clear eyes. Don't cheerlead. Don't catastrophize.\n\n` +
-                `Note: FIP values do not include the standard 3.10 constant — ` +
-                `add 3.10 before interpreting.\n` +
                 `PAR (Pitching Above Replacement) = ` +
-                `Math.round((6.00 - (fip + era) / 2) * ip / 9)\n` +
+                `Math.round((6.00 - (fip + era) / 2) * ip / 9). ` +
                 `Higher PAR is better. A replacement level pitcher scores 0.\n\n` +
                 `Yesterday's date: ${dateLabel}\n\n` +
                 `Boxscore data:\n${metsBoxStr}\n\n` +
                 `NL East rivals' games:\n${metsRivalStr}\n\n` +
-                `${metsStandStr}`,
+                `${metsStandStr}` +
+                sharedNotes,
         },
     ];
 }
