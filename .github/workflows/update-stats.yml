@@ -23,19 +23,48 @@ jobs:
       
       - name: Install dependencies
         run: npm install
-      
+
+      - name: Back up current output
+        run: |
+          mkdir -p .backup
+          for f in index.html player_stats.html player-stats.json graphs.html box-scores.html; do
+            [ -f "$f" ] && cp "$f" ".backup/$f" || true
+          done
+
       - name: Fetch stats and generate HTML
         run: node generate-stats.js
-      
+
       - name: Generate graphs page
         run: node generate-graphs.js
-      
+
       - name: Generate box scores page
         run: node generate-boxscores.js
-      
+
+      - name: Validate output
+        run: |
+          failed=0
+          for f in index.html player_stats.html graphs.html box-scores.html; do
+            size=$(stat -c%s "$f" 2>/dev/null || echo 0)
+            if [ "$size" -lt 10000 ]; then
+              echo "ERROR: $f is suspiciously small (${size} bytes)"
+              failed=1
+            else
+              echo "OK: $f (${size} bytes)"
+            fi
+          done
+          exit $failed
+
+      - name: Restore backup on failure
+        if: failure()
+        run: |
+          echo "Generation failed — restoring previous output to keep site live"
+          for f in index.html player_stats.html player-stats.json graphs.html box-scores.html; do
+            [ -f ".backup/$f" ] && cp ".backup/$f" "$f" && echo "Restored $f" || echo "No backup for $f"
+          done
+
       - name: Commit and push if changed
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add index.html player_stats.html player-stats.json box-scores.html
+          git add index.html player_stats.html player-stats.json graphs.html box-scores.html
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats and graphs - $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
