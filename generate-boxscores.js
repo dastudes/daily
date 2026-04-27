@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const fs = require('fs');
+const config = require('./config.json');
 
 const API_BASE = 'https://statsapi.mlb.com/api/v1';
 
@@ -551,7 +552,7 @@ async function generateHTML() {
     const jumpLinks = [];
 
     // Fetch all game data in parallel, then process sequentially
-    const gameData = await withConcurrency(finalGames, 5, async (game) => {
+    const gameData = await withConcurrency(finalGames, config.concurrency, async (game) => {
         const awayTeam = game.teams.away.team;
         const homeTeam = game.teams.home.team;
         console.log(`Fetching boxscore for ${awayTeam.name} @ ${homeTeam.name}...`);
@@ -740,11 +741,11 @@ async function generateHTML() {
     }
 
     // Sort accumulators and take top 5 for each leaderboard
-    const topLwts       = Object.values(lwtsAccum).sort((a, b) => b.lwts - a.lwts).slice(0, 5);
-    const topPAR        = Object.values(parAccum).sort((a, b) => b.par - a.par).slice(0, 5);
-    const topRelief     = Object.values(reliefAccum).sort((a, b) => b.wpa - a.wpa).slice(0, 5);
-    const topExcitement = excitement.sort((a, b) => b.absWPA - a.absWPA).slice(0, 5);
-    const topWPAPlays   = allWPAPlays.sort((a, b) => b.absWPA - a.absWPA).slice(0, 5);
+    const topLwts       = Object.values(lwtsAccum).sort((a, b) => b.lwts - a.lwts).slice(0, config.leaderboardSize);
+    const topPAR        = Object.values(parAccum).sort((a, b) => b.par - a.par).slice(0, config.leaderboardSize);
+    const topRelief     = Object.values(reliefAccum).sort((a, b) => b.wpa - a.wpa).slice(0, config.leaderboardSize);
+    const topExcitement = excitement.sort((a, b) => b.absWPA - a.absWPA).slice(0, config.leaderboardSize);
+    const topWPAPlays   = allWPAPlays.sort((a, b) => b.absWPA - a.absWPA).slice(0, config.leaderboardSize);
     const leaderboardsHTML = generateLeaderboardsHTML(topLwts, topPAR, topRelief, topExcitement, topWPAPlays);
 
     const html = `<!DOCTYPE html>

@@ -1,0 +1,7 @@
+{
+  "concurrency": 5,
+  "rosterType": "40Man",
+  "defaultMinPA": 0,
+  "defaultMinIP": 0,
+  "leaderboardSize": 5
+}

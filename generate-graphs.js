@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const fs = require('fs');
+const config = require('./config.json');
 
 const API_BASE = 'https://statsapi.mlb.com/api/v1';
 
@@ -277,7 +278,7 @@ async function generateHTML() {
         return true;
     });
 
-    await withConcurrency(activeTeams, 5, async (team) => {
+    await withConcurrency(activeTeams, config.concurrency, async (team) => {
         const standings = standingsMap[team.id];
         console.log(`Fetching stats for ${team.name}...`);
         try {

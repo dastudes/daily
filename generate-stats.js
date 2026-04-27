@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const fs = require('fs');
+const config = require('./config.json');
 
 const API_BASE = 'https://statsapi.mlb.com/api/v1';
 
@@ -173,7 +174,7 @@ async function fetchTeamStandingsMap(season, allTeams) {
 
     // One stats call per team for RS/RA — fetch 5 at a time
     const standingsMap = {};
-    const runTotals = await withConcurrency(allTeams, 5, team => fetchTeamRunTotals(team.id, season));
+    const runTotals = await withConcurrency(allTeams, config.concurrency, team => fetchTeamRunTotals(team.id, season));
     for (let i = 0; i < allTeams.length; i++) {
         const team = allTeams[i];
         const league = team.league && team.league.name === 'American League' ? 'AL' : 'NL';
@@ -197,7 +198,7 @@ async function fetchTeamStandingsMap(season, allTeams) {
 }
 
 async function fetchTeamRoster(teamId, season) {
-    const response = await fetch(`${API_BASE}/teams/${teamId}/roster?rosterType=40Man&season=${season}`);
+    const response = await fetch(`${API_BASE}/teams/${teamId}/roster?rosterType=${config.rosterType}&season=${season}`);
     const data = await response.json();
     return data.roster || [];
 }
@@ -332,7 +333,7 @@ async function loadTeamStats(team, season) {
     const batters = [];
     const pitchers = [];
 
-    const playerResults = await withConcurrency(roster, 5, async (player) => {
+    const playerResults = await withConcurrency(roster, config.concurrency, async (player) => {
         const playerDetails = await fetchPlayerDetails(player.person.id);
         const enrichedPlayer = {
             ...player,
@@ -441,15 +442,15 @@ async function generateHTML() {
     console.log('Counting multi-team players...');
     const playerTeamCount = {};
 
-    const allRosters = await withConcurrency(allTeams, 5, team => fetchTeamRoster(team.id, season));
+    const allRosters = await withConcurrency(allTeams, config.concurrency, team => fetchTeamRoster(team.id, season));
     for (const roster of allRosters) {
         for (const player of roster) {
             playerTeamCount[player.person.id] = (playerTeamCount[player.person.id] || 0) + 1;
         }
     }
     
-    // Load all team stats — 5 concurrent teams
-    await withConcurrency(allTeams, 5, async (team) => {
+    // Load all team stats
+    await withConcurrency(allTeams, config.concurrency, async (team) => {
         teamData[team.id] = await loadTeamStats(team, season);
     });
     
@@ -1241,11 +1242,11 @@ async function generateHTML() {
             <div class="nav-group filters-group">
                 <div class="filter-item">
                     <label for="minPA">Min PA:</label>
-                    <input type="number" id="minPA" value="0">
+                    <input type="number" id="minPA" value="${config.defaultMinPA}">
                 </div>
                 <div class="filter-item">
                     <label for="minIP">Min IP:</label>
-                    <input type="number" id="minIP" value="0">
+                    <input type="number" id="minIP" value="${config.defaultMinIP}">
                 </div>
                 <button onclick="applyFilters()">Apply</button>
                 <button onclick="resetFilters()">Reset</button>
@@ -1327,8 +1328,8 @@ async function generateHTML() {
         }
         
         function resetFilters() {
-            document.getElementById('minPA').value = '0';
-            document.getElementById('minIP').value = '0';
+            document.getElementById('minPA').value = '${config.defaultMinPA}';
+            document.getElementById('minIP').value = '${config.defaultMinIP}';
             document.querySelectorAll('.data-row').forEach(row => {
                 row.classList.remove('hidden');
             });
