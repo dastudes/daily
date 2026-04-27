@@ -287,17 +287,17 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `how a fielder reacted, or what a swing looked like unless explicitly stated in the data. ` +
         `Describe outcomes, not cinematics.`;
 
+    const teamIdNote =
+        `When mentioning a player for the first time in a narrative, always identify their team. ` +
+        `Use natural phrasing like "Milwaukee's Kyle Harrison" or "Kyle Harrison of the Brewers" ` +
+        `rather than just the player's name alone. Subsequent mentions can use the name alone.`;
+
     const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}`;
 
     const lwtsNote =
         `IMPORTANT: Linear weights are context-neutral — they do not account for game situation, ` +
         `leverage, or timing. Do not imply or suggest that a high LWTS reflects a clutch or ` +
         `high-leverage performance. Report only what the batting line shows.`;
-
-    const teamIdNote =
-        `When mentioning a player for the first time in a narrative, always identify their team. ` +
-        `Use natural phrasing like "Milwaukee's Kyle Harrison" or "Kyle Harrison of the Brewers" ` +
-        `rather than just the player's name alone. Subsequent mentions can use the name alone.`;
 
     const coorsNote =
         `CRITICAL: Do not mention Coors Field, altitude, or Colorado's home ballpark unless the ` +
