@@ -33,7 +33,10 @@ function calcGamePAR(p) {
 }
 
 function formatBoxscoreForPrompt(boxscore) {
-    const lines = [];
+    const lines = ['Games and venues:'];
+    for (const game of boxscore.games) {
+        lines.push(`- ${game.away.name} (away) vs ${game.home.name} (home) at ${game.venue}`);
+    }
     for (const game of boxscore.games) {
         lines.push(`\n## ${game.away.name} (${game.away.score}) @ ${game.home.name} (${game.home.score}) at ${game.venue}`);
 
