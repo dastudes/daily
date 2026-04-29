@@ -1,6 +1,6 @@
 {
   "date": "2026-04-28",
-  "generatedAt": "April 29, 2026 at 6:45 AM EDT",
+  "generatedAt": "April 29, 2026 at 9:56 AM EDT",
   "games": [
     {
       "gamePk": 824447,
@@ -300,7 +300,8 @@
             "H": 3,
             "ER": 0,
             "BB": 1,
-            "K": 4
+            "K": 4,
+            "par": 4.94
           },
           {
             "name": "Ian Seymour",
@@ -308,7 +309,8 @@
             "H": 0,
             "ER": 0,
             "BB": 2,
-            "K": 1
+            "K": 1,
+            "par": -0.09
           },
           {
             "name": "Kevin Kelly",
@@ -316,7 +318,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.07
           },
           {
             "name": "Cole Sulser",
@@ -324,7 +327,8 @@
             "H": 1,
             "ER": 0,
             "BB": 1,
-            "K": 2
+            "K": 2,
+            "par": 0.72
           }
         ],
         "home": [
@@ -334,7 +338,8 @@
             "H": 4,
             "ER": 1,
             "BB": 3,
-            "K": 6
+            "K": 6,
+            "par": 3
           },
           {
             "name": "Tim Herrin",
@@ -342,7 +347,8 @@
             "H": 0,
             "ER": 0,
             "BB": 1,
-            "K": 0
+            "K": 0,
+            "par": 0.63
           },
           {
             "name": "Connor Brogdon",
@@ -350,7 +356,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.73
           },
           {
             "name": "Peyton Pallette",
@@ -358,7 +365,8 @@
             "H": 0,
             "ER": 0,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": 0.61
           }
         ]
       },
@@ -404,6 +412,7 @@
           "homeScore": 0
         }
       ],
+      "totalWPASwing": 3.09,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -689,7 +698,8 @@
             "H": 5,
             "ER": 2,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 1.22
           },
           {
             "name": "Steven Okert",
@@ -697,7 +707,8 @@
             "H": 2,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.07
           },
           {
             "name": "Ryan Weiss",
@@ -705,7 +716,8 @@
             "H": 2,
             "ER": 3,
             "BB": 2,
-            "K": 3
+            "K": 3,
+            "par": -0.09
           },
           {
             "name": "Bennett Sousa",
@@ -713,7 +725,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 3
+            "K": 3,
+            "par": 1
           }
         ],
         "home": [
@@ -723,7 +736,8 @@
             "H": 6,
             "ER": 1,
             "BB": 1,
-            "K": 6
+            "K": 6,
+            "par": 2.74
           },
           {
             "name": "Rico Garcia",
@@ -731,7 +745,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.18
           },
           {
             "name": "Andrew Kittredge",
@@ -739,7 +754,8 @@
             "H": 2,
             "ER": 0,
             "BB": 1,
-            "K": 3
+            "K": 3,
+            "par": 0.83
           },
           {
             "name": "Anthony Nunez",
@@ -747,7 +763,8 @@
             "H": 3,
             "ER": 2,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": -0.11
           },
           {
             "name": "Ryan Helsley",
@@ -755,7 +772,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           }
         ]
       },
@@ -801,6 +819,7 @@
           "homeScore": 2
         }
       ],
+      "totalWPASwing": 2.45,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -1096,7 +1115,8 @@
             "H": 5,
             "ER": 4,
             "BB": 1,
-            "K": 4
+            "K": 4,
+            "par": 0.89
           },
           {
             "name": "Tanner Gordon",
@@ -1104,7 +1124,8 @@
             "H": 6,
             "ER": 3,
             "BB": 0,
-            "K": 3
+            "K": 3,
+            "par": 0.11
           }
         ],
         "home": [
@@ -1114,7 +1135,8 @@
             "H": 7,
             "ER": 2,
             "BB": 1,
-            "K": 9
+            "K": 9,
+            "par": 3.11
           },
           {
             "name": "Graham Ashcraft",
@@ -1122,7 +1144,8 @@
             "H": 2,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           },
           {
             "name": "Tony Santillan",
@@ -1130,7 +1153,8 @@
             "H": 1,
             "ER": 0,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": 0.61
           },
           {
             "name": "Brock Burke",
@@ -1138,7 +1162,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 0.89
           }
         ]
       },
@@ -1184,6 +1209,7 @@
           "homeScore": 4
         }
       ],
+      "totalWPASwing": 2.44,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -1479,7 +1505,8 @@
             "H": 9,
             "ER": 3,
             "BB": 0,
-            "K": 7
+            "K": 7,
+            "par": 1.23
           },
           {
             "name": "Gordon Graceffo",
@@ -1487,7 +1514,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.8
           },
           {
             "name": "Justin Bruihl",
@@ -1495,7 +1523,8 @@
             "H": 3,
             "ER": 2,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": -0.39
           },
           {
             "name": "Matt Svanson",
@@ -1503,7 +1532,8 @@
             "H": 1,
             "ER": 1,
             "BB": 0,
-            "K": 3
+            "K": 3,
+            "par": -0.22
           }
         ],
         "home": [
@@ -1513,7 +1543,8 @@
             "H": 6,
             "ER": 6,
             "BB": 3,
-            "K": 7
+            "K": 7,
+            "par": -1.43
           },
           {
             "name": "Hunter Barco",
@@ -1521,7 +1552,8 @@
             "H": 6,
             "ER": 5,
             "BB": 2,
-            "K": 3
+            "K": 3,
+            "par": 0.13
           }
         ]
       },
@@ -1567,6 +1599,7 @@
           "homeScore": 0
         }
       ],
+      "totalWPASwing": 1.82,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -1852,7 +1885,8 @@
             "H": 6,
             "ER": 5,
             "BB": 3,
-            "K": 3
+            "K": 3,
+            "par": 0.67
           },
           {
             "name": "Matt Gage",
@@ -1860,7 +1894,8 @@
             "H": 1,
             "ER": 0,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": 0.61
           },
           {
             "name": "Blade Tidwell",
@@ -1868,7 +1903,8 @@
             "H": 4,
             "ER": 2,
             "BB": 1,
-            "K": 2
+            "K": 2,
+            "par": 0.39
           }
         ],
         "home": [
@@ -1878,7 +1914,8 @@
             "H": 2,
             "ER": 0,
             "BB": 0,
-            "K": 8
+            "K": 8,
+            "par": 5.56
           },
           {
             "name": "Orion Kerkering",
@@ -1886,7 +1923,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 0.89
           },
           {
             "name": "Tim Mayza",
@@ -1894,7 +1932,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 0.89
           }
         ]
       },
@@ -1940,6 +1979,7 @@
           "homeScore": 0
         }
       ],
+      "totalWPASwing": 1.55,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -2225,7 +2265,8 @@
             "H": 3,
             "ER": 3,
             "BB": 4,
-            "K": 4
+            "K": 4,
+            "par": 1.08
           },
           {
             "name": "Zack Kelly",
@@ -2233,7 +2274,8 @@
             "H": 1,
             "ER": 0,
             "BB": 1,
-            "K": 2
+            "K": 2,
+            "par": 0.72
           },
           {
             "name": "Tyler Samaniego",
@@ -2241,7 +2283,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.13
           },
           {
             "name": "Ryan Watson",
@@ -2249,7 +2292,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.74
           }
         ],
         "home": [
@@ -2259,7 +2303,8 @@
             "H": 4,
             "ER": 0,
             "BB": 0,
-            "K": 3
+            "K": 3,
+            "par": 3.73
           },
           {
             "name": "Mason Fluharty",
@@ -2267,7 +2312,8 @@
             "H": 0,
             "ER": 0,
             "BB": 1,
-            "K": 0
+            "K": 0,
+            "par": -0.03
           },
           {
             "name": "Jeff Hoffman",
@@ -2275,7 +2321,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 0.89
           },
           {
             "name": "Tyler Rogers",
@@ -2283,7 +2330,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.78
           },
           {
             "name": "Louis Varland",
@@ -2291,7 +2339,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 3
+            "K": 3,
+            "par": 1
           }
         ]
       },
@@ -2337,6 +2386,7 @@
           "homeScore": 0
         }
       ],
+      "totalWPASwing": 1.45,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -2622,7 +2672,8 @@
             "H": 5,
             "ER": 4,
             "BB": 3,
-            "K": 1
+            "K": 1,
+            "par": -1.7
           },
           {
             "name": "Brad Lord",
@@ -2630,7 +2681,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 1.51
           },
           {
             "name": "Andre Granillo",
@@ -2638,7 +2690,8 @@
             "H": 0,
             "ER": 0,
             "BB": 2,
-            "K": 1
+            "K": 1,
+            "par": 1.11
           }
         ],
         "home": [
@@ -2648,7 +2701,8 @@
             "H": 3,
             "ER": 0,
             "BB": 1,
-            "K": 6
+            "K": 6,
+            "par": 4.5
           },
           {
             "name": "Tobias Myers",
@@ -2656,7 +2710,8 @@
             "H": 0,
             "ER": 0,
             "BB": 1,
-            "K": 2
+            "K": 2,
+            "par": 1.39
           },
           {
             "name": "Craig Kimbrel",
@@ -2664,7 +2719,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 3
+            "K": 3,
+            "par": 1
           }
         ]
       },
@@ -2710,6 +2766,7 @@
           "homeScore": 5
         }
       ],
+      "totalWPASwing": 1.02,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -3025,7 +3082,8 @@
             "H": 3,
             "ER": 2,
             "BB": 1,
-            "K": 3
+            "K": 3,
+            "par": 0.57
           },
           {
             "name": "Brant Hurter",
@@ -3033,7 +3091,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 1.58
           },
           {
             "name": "Burch Smith",
@@ -3041,7 +3100,8 @@
             "H": 2,
             "ER": 1,
             "BB": 1,
-            "K": 4
+            "K": 4,
+            "par": 1.11
           },
           {
             "name": "Tyler Holton",
@@ -3049,7 +3109,8 @@
             "H": 4,
             "ER": 2,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": -0.94
           }
         ],
         "home": [
@@ -3059,7 +3120,8 @@
             "H": 2,
             "ER": 0,
             "BB": 4,
-            "K": 5
+            "K": 5,
+            "par": 3.22
           },
           {
             "name": "Didier Fuentes",
@@ -3067,7 +3129,8 @@
             "H": 0,
             "ER": 0,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": 1.28
           },
           {
             "name": "Tyler Kinley",
@@ -3075,7 +3138,8 @@
             "H": 2,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 0.89
           },
           {
             "name": "Aaron Bummer",
@@ -3083,7 +3147,8 @@
             "H": 2,
             "ER": 2,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": -1.06
           }
         ]
       },
@@ -3129,6 +3194,7 @@
           "homeScore": 0
         }
       ],
+      "totalWPASwing": 1.76,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -3414,7 +3480,8 @@
             "H": 6,
             "ER": 1,
             "BB": 1,
-            "K": 4
+            "K": 4,
+            "par": 2.22
           },
           {
             "name": "Eduard Bazardo",
@@ -3422,7 +3489,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           },
           {
             "name": "Gabe Speier",
@@ -3430,7 +3498,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           },
           {
             "name": "Matt Brash",
@@ -3438,7 +3507,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 0.89
           },
           {
             "name": "Cooper Criswell",
@@ -3446,7 +3516,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.78
           }
         ],
         "home": [
@@ -3456,7 +3527,8 @@
             "H": 6,
             "ER": 2,
             "BB": 1,
-            "K": 6
+            "K": 6,
+            "par": 3.5
           },
           {
             "name": "Kody Funderburk",
@@ -3464,7 +3536,8 @@
             "H": 1,
             "ER": 1,
             "BB": 1,
-            "K": 0
+            "K": 0,
+            "par": 0.07
           },
           {
             "name": "Cole Sands",
@@ -3472,7 +3545,8 @@
             "H": 3,
             "ER": 2,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": -1.48
           },
           {
             "name": "Luis García",
@@ -3480,7 +3554,8 @@
             "H": 2,
             "ER": 2,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": -0.5
           }
         ]
       },
@@ -3526,6 +3601,7 @@
           "homeScore": 1
         }
       ],
+      "totalWPASwing": 3.07,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -3851,7 +3927,8 @@
             "H": 6,
             "ER": 3,
             "BB": 3,
-            "K": 6
+            "K": 6,
+            "par": 0.56
           },
           {
             "name": "Brent Suter",
@@ -3859,7 +3936,8 @@
             "H": 1,
             "ER": 1,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": -0.44
           },
           {
             "name": "Joey Lucchesi",
@@ -3867,7 +3945,8 @@
             "H": 2,
             "ER": 1,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": -0.49
           },
           {
             "name": "José Fermin",
@@ -3875,7 +3954,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.58
           }
         ],
         "home": [
@@ -3885,7 +3965,8 @@
             "H": 7,
             "ER": 1,
             "BB": 1,
-            "K": 7
+            "K": 7,
+            "par": 3.41
           },
           {
             "name": "Sean Newcomb",
@@ -3893,7 +3974,8 @@
             "H": 1,
             "ER": 0,
             "BB": 1,
-            "K": 3
+            "K": 3,
+            "par": 0.9
           },
           {
             "name": "Jordan Leasure",
@@ -3901,7 +3983,8 @@
             "H": 1,
             "ER": 1,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": -0.33
           },
           {
             "name": "Seranthony Domínguez",
@@ -3909,7 +3992,8 @@
             "H": 0,
             "ER": 0,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": 0.61
           }
         ]
       },
@@ -3955,6 +4039,7 @@
           "homeScore": 1
         }
       ],
+      "totalWPASwing": 2.25,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -4027,7 +4112,7 @@
           "away": {
             "runs": 2,
             "hits": 3,
-            "errors": 0
+            "errors": 1
           },
           "home": {
             "runs": 13,
@@ -4280,7 +4365,8 @@
             "H": 6,
             "ER": 5,
             "BB": 5,
-            "K": 1
+            "K": 1,
+            "par": -0.61
           },
           {
             "name": "Andrew Hoffmann",
@@ -4288,7 +4374,8 @@
             "H": 8,
             "ER": 8,
             "BB": 1,
-            "K": 0
+            "K": 0,
+            "par": -4.1
           },
           {
             "name": "Ryan Thompson",
@@ -4296,7 +4383,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.24
           },
           {
             "name": "Taylor Clarke",
@@ -4304,7 +4392,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           },
           {
             "name": "James McCann",
@@ -4312,7 +4401,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           }
         ],
         "home": [
@@ -4322,7 +4412,8 @@
             "H": 1,
             "ER": 2,
             "BB": 5,
-            "K": 5
+            "K": 5,
+            "par": 2.06
           },
           {
             "name": "Shane Drohan",
@@ -4330,7 +4421,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.78
           },
           {
             "name": "Jake Woodford",
@@ -4338,7 +4430,8 @@
             "H": 2,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 2.22
           }
         ]
       },
@@ -4384,6 +4477,7 @@
           "homeScore": 3
         }
       ],
+      "totalWPASwing": 1.97,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -4689,7 +4783,8 @@
             "H": 3,
             "ER": 0,
             "BB": 2,
-            "K": 8
+            "K": 8,
+            "par": 4.56
           },
           {
             "name": "Brent Headrick",
@@ -4697,7 +4792,8 @@
             "H": 1,
             "ER": 0,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": 0.61
           },
           {
             "name": "Fernando Cruz",
@@ -4705,7 +4801,8 @@
             "H": 1,
             "ER": 0,
             "BB": 1,
-            "K": 2
+            "K": 2,
+            "par": 0.72
           },
           {
             "name": "David Bednar",
@@ -4713,7 +4810,8 @@
             "H": 2,
             "ER": 1,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0
           }
         ],
         "home": [
@@ -4723,7 +4821,8 @@
             "H": 3,
             "ER": 1,
             "BB": 0,
-            "K": 5
+            "K": 5,
+            "par": 4.06
           },
           {
             "name": "Jalen Beeks",
@@ -4731,7 +4830,8 @@
             "H": 1,
             "ER": 1,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": -0.44
           },
           {
             "name": "Jakob Junis",
@@ -4739,7 +4839,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           },
           {
             "name": "Cole Winn",
@@ -4747,7 +4848,8 @@
             "H": 1,
             "ER": 1,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": -0.44
           }
         ]
       },
@@ -4793,6 +4895,7 @@
           "homeScore": 0
         }
       ],
+      "totalWPASwing": 3.19,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -5113,7 +5216,8 @@
             "H": 4,
             "ER": 1,
             "BB": 4,
-            "K": 6
+            "K": 6,
+            "par": 2.67
           },
           {
             "name": "John Schreiber",
@@ -5121,7 +5225,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           },
           {
             "name": "Daniel Lynch IV",
@@ -5129,7 +5234,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           },
           {
             "name": "Matt Strahm",
@@ -5137,7 +5243,8 @@
             "H": 2,
             "ER": 0,
             "BB": 1,
-            "K": 2
+            "K": 2,
+            "par": 0.72
           },
           {
             "name": "Nick Mears",
@@ -5145,7 +5252,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 0.89
           },
           {
             "name": "Lucas Erceg",
@@ -5153,7 +5261,8 @@
             "H": 1,
             "ER": 0,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": 0.61
           }
         ],
         "home": [
@@ -5163,7 +5272,8 @@
             "H": 5,
             "ER": 0,
             "BB": 1,
-            "K": 3
+            "K": 3,
+            "par": 3.5
           },
           {
             "name": "Hogan Harris",
@@ -5171,7 +5281,8 @@
             "H": 1,
             "ER": 1,
             "BB": 2,
-            "K": 1
+            "K": 1,
+            "par": -1.31
           },
           {
             "name": "Scott Barlow",
@@ -5179,7 +5290,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.68
           },
           {
             "name": "Mark Leiter Jr.",
@@ -5187,7 +5299,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.78
           },
           {
             "name": "Jack Perkins",
@@ -5195,7 +5308,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.78
           },
           {
             "name": "Justin Sterner",
@@ -5203,7 +5317,8 @@
             "H": 2,
             "ER": 2,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": -1.06
           }
         ]
       },
@@ -5249,6 +5364,7 @@
           "homeScore": 1
         }
       ],
+      "totalWPASwing": 4.11,
       "flags": {
         "walkoff": false,
         "extraInnings": true,
@@ -5554,7 +5670,8 @@
             "H": 6,
             "ER": 3,
             "BB": 1,
-            "K": 7
+            "K": 7,
+            "par": 1.69
           },
           {
             "name": "Hoby Milner",
@@ -5562,7 +5679,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.84
           },
           {
             "name": "Ryan Rolison",
@@ -5570,7 +5688,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 1.56
           }
         ],
         "home": [
@@ -5580,7 +5699,8 @@
             "H": 3,
             "ER": 2,
             "BB": 3,
-            "K": 4
+            "K": 4,
+            "par": 1.58
           },
           {
             "name": "Kyle Hart",
@@ -5588,7 +5708,8 @@
             "H": 1,
             "ER": 2,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": -0.92
           },
           {
             "name": "David Morgan",
@@ -5596,7 +5717,8 @@
             "H": 1,
             "ER": 1,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": -0.42
           },
           {
             "name": "Wandy Peralta",
@@ -5604,7 +5726,8 @@
             "H": 2,
             "ER": 3,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": -1.72
           },
           {
             "name": "Ron Marinaccio",
@@ -5612,7 +5735,8 @@
             "H": 1,
             "ER": 0,
             "BB": 1,
-            "K": 1
+            "K": 1,
+            "par": 1.28
           }
         ]
       },
@@ -5658,6 +5782,7 @@
           "homeScore": 3
         }
       ],
+      "totalWPASwing": 2.87,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -5933,7 +6058,8 @@
             "H": 3,
             "ER": 0,
             "BB": 1,
-            "K": 4
+            "K": 4,
+            "par": 4.28
           },
           {
             "name": "Anthony Bender",
@@ -5941,7 +6067,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           },
           {
             "name": "Michael Petersen",
@@ -5949,7 +6076,8 @@
             "H": 3,
             "ER": 1,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": -0.43
           },
           {
             "name": "John King",
@@ -5957,7 +6085,8 @@
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.13
           },
           {
             "name": "Tyler Phillips",
@@ -5965,7 +6094,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 0
+            "K": 0,
+            "par": 0.67
           }
         ],
         "home": [
@@ -5975,7 +6105,8 @@
             "H": 5,
             "ER": 1,
             "BB": 3,
-            "K": 9
+            "K": 9,
+            "par": 3.83
           },
           {
             "name": "Tanner Scott",
@@ -5983,7 +6114,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.78
           },
           {
             "name": "Blake Treinen",
@@ -5991,7 +6123,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 1
+            "K": 1,
+            "par": 0.78
           },
           {
             "name": "Jack Dreyer",
@@ -5999,7 +6132,8 @@
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 2
+            "K": 2,
+            "par": 0.89
           }
         ]
       },
@@ -6045,6 +6179,7 @@
           "homeScore": 0
         }
       ],
+      "totalWPASwing": 2.91,
       "flags": {
         "walkoff": false,
         "extraInnings": false,

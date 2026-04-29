@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-04-29T10:45:37.271Z",
+  "updated": "2026-04-29T13:56:16.706Z",
   "batters": [
     {
       "name": "Shea Langeliers",
@@ -4321,33 +4321,6 @@
       "tb": 10,
       "rc": 2,
       "batSide": "L"
-    },
-    {
-      "name": "Randal Grichuk",
-      "playerId": 545341,
-      "team": "New York Yankees",
-      "teamAbbr": "NYY",
-      "league": "AL",
-      "age": 34,
-      "g": 16,
-      "pa": 33,
-      "ab": 31,
-      "h": 6,
-      "hr": 0,
-      "rbi": 2,
-      "r": 8,
-      "sb": 0,
-      "bb": 1,
-      "so": 10,
-      "avg": 0.194,
-      "obp": 0.212,
-      "slg": 0.323,
-      "ops": 0.535,
-      "doubles": 4,
-      "triples": 0,
-      "tb": 10,
-      "rc": 2,
-      "batSide": "R"
     },
     {
       "name": "Jasson Domínguez",
