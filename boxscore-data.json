@@ -1,6 +1,6 @@
 {
   "date": "2026-04-28",
-  "generatedAt": "April 29, 2026 at 11:07 AM EDT",
+  "generatedAt": "April 29, 2026 at 12:41 PM EDT",
   "games": [
     {
       "gamePk": 824447,
@@ -4372,10 +4372,10 @@
             "name": "Andrew Hoffmann",
             "IP": 0.1,
             "H": 8,
-            "ER": 8,
+            "ER": 7,
             "BB": 1,
             "K": 0,
-            "par": -4.12
+            "par": -3.62
           },
           {
             "name": "Ryan Thompson",

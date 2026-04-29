@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-04-29T15:07:02.674Z",
+  "updated": "2026-04-29T16:41:09.747Z",
   "batters": [
     {
       "name": "Shea Langeliers",
@@ -18596,6 +18596,30 @@
       "pitchHand": "R"
     },
     {
+      "name": "Andrew Hoffmann",
+      "playerId": 694851,
+      "team": "Arizona Diamondbacks",
+      "teamAbbr": "AZ",
+      "league": "NL",
+      "age": 26,
+      "g": 8,
+      "gs": 0,
+      "ip": 11.2,
+      "w": 1,
+      "l": 0,
+      "sv": 0,
+      "hr": 3,
+      "k": 12,
+      "bb": 8,
+      "era": 8.04,
+      "whip": 2.14,
+      "fip": 6.85,
+      "par": -2,
+      "h": 16,
+      "er": 10,
+      "pitchHand": "R"
+    },
+    {
       "name": "James McCann",
       "playerId": 543510,
       "team": "Arizona Diamondbacks",
@@ -18641,30 +18665,6 @@
       "par": -2,
       "h": 28,
       "er": 22,
-      "pitchHand": "R"
-    },
-    {
-      "name": "Andrew Hoffmann",
-      "playerId": 694851,
-      "team": "Arizona Diamondbacks",
-      "teamAbbr": "AZ",
-      "league": "NL",
-      "age": 26,
-      "g": 8,
-      "gs": 0,
-      "ip": 11.2,
-      "w": 1,
-      "l": 0,
-      "sv": 0,
-      "hr": 3,
-      "k": 12,
-      "bb": 8,
-      "era": 8.84,
-      "whip": 2.14,
-      "fip": 6.85,
-      "par": -2,
-      "h": 16,
-      "er": 11,
       "pitchHand": "R"
     },
     {
