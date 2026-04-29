@@ -833,6 +833,7 @@ async function generateHTML() {
                     awayScore: p.result && p.result.awayScore !== undefined ? p.result.awayScore : null,
                     homeScore: p.result && p.result.homeScore !== undefined ? p.result.homeScore : null,
                 })),
+            totalWPASwing: parseFloat((gameAbsWPA / 100).toFixed(2)),
             flags: {
                 walkoff: homeScore > awayScore &&
                     !!lastInn && !!lastInn.home &&

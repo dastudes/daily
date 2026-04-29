@@ -32,13 +32,19 @@ function calcGamePAR(p) {
     return (6 - (gameFIP + gameERA) / 2) * ip / 9;
 }
 
+function cleanVenue(v) {
+    if (!v) return v;
+    if (v.includes('Dodger Stadium')) return 'Dodger Stadium';
+    return v;
+}
+
 function formatBoxscoreForPrompt(boxscore) {
     const lines = ['Games and venues:'];
     for (const game of boxscore.games) {
-        lines.push(`- ${game.away.name} (away) vs ${game.home.name} (home) at ${game.venue}`);
+        lines.push(`- ${game.away.name} (away) vs ${game.home.name} (home) at ${cleanVenue(game.venue)}`);
     }
     for (const game of boxscore.games) {
-        lines.push(`\n## ${game.away.name} (${game.away.score}) @ ${game.home.name} (${game.home.score}) at ${game.venue}`);
+        lines.push(`\n## ${game.away.name} (${game.away.score}) @ ${game.home.name} (${game.home.score}) at ${cleanVenue(game.venue)}`);
 
         const innings = game.linescore.innings
             .map(inn => `${inn.inning}: A${inn.away ?? '-'} H${inn.home ?? '-'}`)
@@ -57,9 +63,12 @@ function formatBoxscoreForPrompt(boxscore) {
         if (game.flags.extraInnings) flags.push('extra innings');
         if (game.flags.shutout) flags.push('shutout');
         if (flags.length) lines.push(`Notable: ${flags.join(', ')}`);
+        if (game.totalWPASwing !== undefined) {
+            lines.push(`Total WPA Swing: ${game.totalWPASwing.toFixed(2)}`);
+        }
 
-        const awaySide = `${game.away.abbr}, away at ${game.venue}`;
-        const homeSide = `${game.home.abbr}, home at ${game.venue}`;
+        const awaySide = `${game.away.abbr}, away at ${cleanVenue(game.venue)}`;
+        const homeSide = `${game.home.abbr}, home at ${cleanVenue(game.venue)}`;
 
         lines.push(`\nAway Batting (${game.away.abbr}):`);
         for (const b of game.batting.away) {
@@ -162,7 +171,7 @@ function getTopPitchersForPrompt(boxscore, playerStats) {
     for (const game of boxscore.games) {
         for (const side of ['away', 'home']) {
             for (const p of game.pitching[side]) {
-                if (p.IP >= 1) allPitchers.push({ ...p, par: calcGamePAR(p), venue: game.venue, side });
+                if (p.IP >= 1) allPitchers.push({ ...p, par: calcGamePAR(p), venue: cleanVenue(game.venue), side });
             }
         }
     }
@@ -292,7 +301,10 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `Use natural phrasing like "Milwaukee's Kyle Harrison" or "Kyle Harrison of the Brewers" ` +
         `rather than just the player's name alone. Subsequent mentions can use the name alone.`;
 
-    const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}`;
+    const boldNamesNote =
+        `Bold all player names using **Player Name** format throughout your response.`;
+
+    const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}`;
 
     const lwtsNote =
         `IMPORTANT: Linear weights are context-neutral — they do not account for game situation, ` +
@@ -304,6 +316,25 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `game being discussed was actually played at Coors Field. A Rockies pitcher pitching on ` +
         `the road has nothing to do with Coors Field. Never use a pitcher's team identity to ` +
         `infer ballpark context — only use the venue field in the data.`;
+
+    const walksNote =
+        `When mentioning a batter's performance, always include walks separately from hits. ` +
+        `A player who went 2-for-3 with a walk had 4 plate appearances, not 3 at-bats. ` +
+        `Always describe batting performances in terms of plate appearances when walks are involved. ` +
+        `Never omit walks from a batting line.`;
+
+    const leaderContextNote =
+        `When mentioning a pitcher's performance, reference their season ERA, strikeout total, and PAR rank ` +
+        `if they are among the league leaders. When mentioning a batter's performance, reference their season ` +
+        `HR total, OPS, doubles, runs, or RBI if they are among the league leaders. ` +
+        `Example: 'Pujols hit his league-leading 40th home run.'`;
+
+    const wpaSwingNote =
+        `Use total WPA swing for each game as a measure of drama and volatility. ` +
+        `A game with a high total WPA swing was exciting and volatile. ` +
+        `Reference it when describing how dramatic or one-sided a game was.`;
+
+    const performanceNotes = `\n\n${walksNote}\n\n${leaderContextNote}\n\n${wpaSwingNote}`;
 
     return [
         {
@@ -322,7 +353,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `the outstanding performances, the dramatic moments, the pitching duels and offensive explosions. ` +
                 `Let the best story lead.` +
                 sharedNotes +
-                `\n\n${cinematicsNote}`,
+                `\n\n${cinematicsNote}` +
+                performanceNotes,
         },
         {
             title: 'Standings & Power Rankings',
@@ -345,7 +377,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `closing summary paragraph — go straight into the games and end after the last one. ` +
                 `Each game gets two short paragraphs maximum. Edit ruthlessly.` +
                 sharedNotes +
-                `\n\n${cinematicsNote}`,
+                `\n\n${cinematicsNote}` +
+                performanceNotes,
         },
         {
             title: "Today's Best Pitchers",
@@ -355,7 +388,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Analyze what made today's top pitching performances exceptional. How do they fit into each pitcher's ` +
                 `season arc? What patterns do you see?` +
                 sharedNotes +
-                `\n\n${coorsNote}`,
+                `\n\n${coorsNote}` +
+                performanceNotes,
         },
         {
             title: "Today's Best Batters",
@@ -365,7 +399,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Analyze the standout offensive performances. Who is getting hot at the right time? ` +
                 `Whose production is genuinely surprising given their season numbers?` +
                 sharedNotes +
-                `\n\n${lwtsNote}`,
+                `\n\n${lwtsNote}` +
+                performanceNotes,
         },
         {
             title: 'Mets Daily Briefing',
@@ -403,7 +438,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `NL East rivals' games:\n${metsRivalStr}\n\n` +
                 `${metsStandStr}` +
                 sharedNotes +
-                `\n\n${cinematicsNote}`,
+                `\n\n${cinematicsNote}` +
+                performanceNotes,
         },
     ];
 }
