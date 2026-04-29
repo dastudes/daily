@@ -1,6 +1,6 @@
 {
   "date": "2026-04-28",
-  "generatedAt": "April 29, 2026 at 10:27 AM EDT",
+  "generatedAt": "April 29, 2026 at 10:45 AM EDT",
   "games": [
     {
       "gamePk": 824447,
@@ -2733,7 +2733,7 @@
         {
           "wpa": 0.127,
           "inning": "BOT 4th",
-          "description": "Marcus Semien reaches on a fielding error by third baseman Jorbit Vivas. MJ Melendez scores. Mark Vientos scores. Brett Baty to 3rd. Marcus Semien to 2nd.",
+          "description": "Marcus Semien reaches on a fielder's choice, fielded by third baseman Jorbit Vivas. MJ Melendez scores. Mark Vientos scores. Brett Baty to 3rd. Marcus Semien to 2nd. Fielding error by third baseman Jorbit Vivas.",
           "awayScore": 0,
           "homeScore": 3
         },

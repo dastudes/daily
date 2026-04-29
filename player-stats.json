@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-04-29T14:27:23.036Z",
+  "updated": "2026-04-29T14:45:28.158Z",
   "batters": [
     {
       "name": "Shea Langeliers",
@@ -19025,30 +19025,6 @@
       "par": 1,
       "h": 5,
       "er": 2,
-      "pitchHand": "R"
-    },
-    {
-      "name": "Carlos Carrasco",
-      "playerId": 471911,
-      "team": "Atlanta Braves",
-      "teamAbbr": "ATL",
-      "league": "NL",
-      "age": 39,
-      "g": 1,
-      "gs": 0,
-      "ip": 1,
-      "w": 0,
-      "l": 0,
-      "sv": 0,
-      "hr": 0,
-      "k": 1,
-      "bb": 0,
-      "era": 0,
-      "whip": 0,
-      "fip": 1.1,
-      "par": 1,
-      "h": 0,
-      "er": 0,
       "pitchHand": "R"
     },
     {
