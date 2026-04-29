@@ -72,11 +72,11 @@ function formatBoxscoreForPrompt(boxscore) {
 
         lines.push(`\nAway Batting (${game.away.abbr}):`);
         for (const b of game.batting.away) {
-            lines.push(`  ${b.name} (${awaySide}): ${b.PA} PA, ${b.AB} AB, ${b.H} H, ${b.HR} HR, ${b.RBI} RBI, ${b.BB} BB, ${b.R} R`);
+            lines.push(`  ${b.name} (${awaySide}): ${b.PA} PA, ${b.AB} AB, ${b.H} H, ${b.HR} HR, ${b.BB} BB, ${b.R} R`);
         }
         lines.push(`\nHome Batting (${game.home.abbr}):`);
         for (const b of game.batting.home) {
-            lines.push(`  ${b.name} (${homeSide}): ${b.PA} PA, ${b.AB} AB, ${b.H} H, ${b.HR} HR, ${b.RBI} RBI, ${b.BB} BB, ${b.R} R`);
+            lines.push(`  ${b.name} (${homeSide}): ${b.PA} PA, ${b.AB} AB, ${b.H} H, ${b.HR} HR, ${b.BB} BB, ${b.R} R`);
         }
 
         lines.push(`\nAway Pitching (${game.away.abbr}):`);
@@ -525,8 +525,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Write a 4-5 paragraph daily briefing on the New York Mets for a ` +
                 `devoted fan's morning read. Cover:\n\n` +
                 `- Yesterday's game: a narrative account of what happened, the key ` +
-                `moments and turning points, standout individual performances with ` +
-                `full batting or pitching lines\n` +
+                `moments and turning points, standout individual performances — ` +
+                `player stats will be inserted automatically, do not cite them\n` +
                 `- Current standings: where the Mets sit in the NL East, games back ` +
                 `or games ahead, recent streak\n` +
                 `- Division rivals: how the other NL East teams did yesterday and ` +
