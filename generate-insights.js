@@ -243,26 +243,23 @@ function buildPlayerIndex(boxscore, playerStats) {
 
 function formatStatBlock(entry) {
     const { type, gameStats: g, seasonStats: s } = entry;
-    const fmtRate = v => parseFloat(v).toFixed(3).replace('0.', '.');
 
     if (type === 'batter') {
         const parts = [`${g.H}-${g.AB}`];
         if (g.BB) parts.push(`${g.BB} BB`);
         if (g.HR) parts.push(`${g.HR} HR`);
         const gamePart = parts.join(', ');
-        if (!s) return `[${gamePart}]`;
-        const seasonParts = [];
-        if (s.obp != null) seasonParts.push(`${fmtRate(s.obp)} OBP`);
-        if (s.slg != null) seasonParts.push(`${fmtRate(s.slg)} SLG`);
-        if (s.rc  != null) seasonParts.push(`RC ${s.rc}`);
-        return seasonParts.length ? `[${gamePart} | ${seasonParts.join(', ')}]` : `[${gamePart}]`;
+        if (!s || s.rc == null) return `[${gamePart}]`;
+        return `[${gamePart} | RC ${s.rc}]`;
     }
 
     if (type === 'pitcher') {
-        const parStr = g.par !== null && g.par !== undefined ? `, PAR ${g.par}` : '';
-        const gamePart = `${g.IP} IP, ${g.ER} ER, ${g.K} K${parStr}`;
+        const gamePart = `${g.IP} IP, ${g.ER} ER, ${g.K} K`;
         if (!s) return `[${gamePart}]`;
-        return `[${gamePart} | ${s.era} ERA]`;
+        const era = parseFloat(s.era).toFixed(2);
+        const seasonParts = [`${era} ERA`];
+        if (s.par != null) seasonParts.push(`PAR ${s.par}`);
+        return `[${gamePart} | ${seasonParts.join(', ')}]`;
     }
 
     return '';
