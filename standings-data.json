@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generatedAt": "Wednesday, April 29, 2026 at 5:58 PM EDT",
+  "generatedAt": "Wednesday, April 29, 2026 at 6:14 PM EDT",
   "teams": [
     {
       "name": "Los Angeles Angels",
@@ -169,7 +169,7 @@
         "slg": 0.426,
         "ops": 0.779,
         "fip": 4.1,
-        "der": 0.72
+        "der": 0.721
       }
     },
     {
@@ -573,11 +573,11 @@
         "winners": "4-3"
       },
       "stats": {
-        "obp": 0.31,
-        "slg": 0.387,
-        "ops": 0.696,
-        "fip": 3.67,
-        "der": 0.691
+        "obp": 0.309,
+        "slg": 0.386,
+        "ops": 0.694,
+        "fip": 3.68,
+        "der": 0.692
       }
     },
     {
