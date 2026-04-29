@@ -203,6 +203,152 @@ function getTopPitchersForPrompt(boxscore, playerStats) {
     return lines.join('\n');
 }
 
+function normalizeForMatch(str) {
+    return str.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+}
+
+function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function buildPlayerIndex(boxscore, playerStats) {
+    const index = new Map(); // normalized full name -> { type, fullName, gameStats, seasonStats }
+
+    for (const game of boxscore.games) {
+        for (const side of ['away', 'home']) {
+            for (const b of game.batting[side]) {
+                const key = normalizeForMatch(b.name);
+                if (!index.has(key))
+                    index.set(key, { type: 'batter', fullName: b.name, gameStats: b, seasonStats: null });
+            }
+            for (const p of game.pitching[side]) {
+                const key = normalizeForMatch(p.name);
+                if (!index.has(key))
+                    index.set(key, { type: 'pitcher', fullName: p.name, gameStats: p, seasonStats: null });
+            }
+        }
+    }
+
+    for (const b of (playerStats.batters || [])) {
+        const key = normalizeForMatch(b.name);
+        if (index.has(key)) index.get(key).seasonStats = b;
+    }
+    for (const p of (playerStats.pitchers || [])) {
+        const key = normalizeForMatch(p.name);
+        if (index.has(key)) index.get(key).seasonStats = p;
+    }
+
+    return index;
+}
+
+function formatStatBlock(entry) {
+    const { type, gameStats: g, seasonStats: s } = entry;
+
+    if (type === 'batter') {
+        const parts = [`${g.AB}-${g.H}`];
+        if (g.BB) parts.push(`${g.BB} BB`);
+        if (g.HR) parts.push(`${g.HR} HR`);
+        const gamePart = parts.join(', ');
+        if (!s) return `[${gamePart}]`;
+        const seasonParts = [];
+        if (s.OBP) seasonParts.push(`.${s.OBP} OBP`);
+        if (s.SLG) seasonParts.push(`.${s.SLG} SLG`);
+        if (s.RBI !== undefined) seasonParts.push(`RC ${s.RBI}`);
+        return seasonParts.length ? `[${gamePart} | ${seasonParts.join(', ')}]` : `[${gamePart}]`;
+    }
+
+    if (type === 'pitcher') {
+        const parStr = g.par !== null && g.par !== undefined ? `, PAR ${g.par}` : '';
+        const gamePart = `${g.IP} IP, ${g.ER} ER, ${g.K} K${parStr}`;
+        if (!s) return `[${gamePart}]`;
+        return `[${gamePart} | ${s.ERA} ERA]`;
+    }
+
+    return '';
+}
+
+function injectStats(text, playerIndex) {
+    const seen = new Set();
+
+    // Build last-name index; null = ambiguous (multiple players share last name)
+    const lastNameIndex = new Map();
+    for (const [key, entry] of playerIndex) {
+        const normLast = normalizeForMatch(entry.fullName.split(' ').pop());
+        if (lastNameIndex.has(normLast)) {
+            lastNameIndex.set(normLast, null);
+        } else {
+            lastNameIndex.set(normLast, { key, entry });
+        }
+    }
+
+    // Process longest names first to avoid partial matches
+    const sorted = [...playerIndex.entries()]
+        .sort((a, b) => b[1].fullName.length - a[1].fullName.length);
+
+    let result = text;
+
+    for (const [key, entry] of sorted) {
+        if (seen.has(key)) continue;
+
+        const statBlock = formatStatBlock(entry);
+        if (!statBlock) continue;
+
+        const { fullName } = entry;
+        // Try original name and de-accented variant
+        const deAccented = fullName.normalize('NFD').replace(/[̀-ͯ]/g, '');
+        const variants = deAccented === fullName ? [fullName] : [fullName, deAccented];
+
+        let matched = false;
+
+        // Full name: bold then plain
+        for (const v of variants) {
+            const esc = escapeRegex(v);
+            if (new RegExp(`(\\*\\*${esc}\\*\\*)`, 'i').test(result)) {
+                result = result.replace(new RegExp(`(\\*\\*${esc}\\*\\*)`, 'i'), `$1 ${statBlock}`);
+                seen.add(key); matched = true; break;
+            }
+        }
+        if (!matched) {
+            for (const v of variants) {
+                const esc = escapeRegex(v);
+                if (new RegExp(`(?<![\\w*])(${esc})(?![\\w*])`, 'i').test(result)) {
+                    result = result.replace(new RegExp(`(?<![\\w*])(${esc})(?![\\w*])`, 'i'), `$1 ${statBlock}`);
+                    seen.add(key); matched = true; break;
+                }
+            }
+        }
+
+        // Last-name fallback (only when last name is unique across today's players)
+        if (!matched) {
+            const lastName = fullName.split(' ').pop();
+            const normLast = normalizeForMatch(lastName);
+            const lastEntry = lastNameIndex.get(normLast);
+            if (lastEntry && lastEntry.key === key) {
+                const deAccLast = lastName.normalize('NFD').replace(/[̀-ͯ]/g, '');
+                const lastVariants = deAccLast === lastName ? [lastName] : [lastName, deAccLast];
+                for (const v of lastVariants) {
+                    const esc = escapeRegex(v);
+                    if (new RegExp(`(\\*\\*${esc}\\*\\*)`, 'i').test(result)) {
+                        result = result.replace(new RegExp(`(\\*\\*${esc}\\*\\*)`, 'i'), `$1 ${statBlock}`);
+                        seen.add(key); matched = true; break;
+                    }
+                }
+                if (!matched) {
+                    for (const v of lastVariants) {
+                        const esc = escapeRegex(v);
+                        if (new RegExp(`(?<![\\w*])(${v})(?![\\w*])`, 'i').test(result)) {
+                            result = result.replace(new RegExp(`(?<![\\w*])(${esc})(?![\\w*])`, 'i'), `$1 ${statBlock}`);
+                            seen.add(key); break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
 function formatMetsData(boxscore, standings) {
     const nlEastAbbrs = new Set(
         standings.teams
@@ -302,7 +448,13 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `PAR has been pre-calculated for each pitcher in the data. ` +
         `Use the par field directly — do not recalculate it yourself.`;
 
-    const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}`;
+    const noStatsNote =
+        `Do not cite any statistics in the narrative — no batting lines, no ERAs, ` +
+        `no hit totals, no walk counts. Player stats will be inserted automatically ` +
+        `next to each player name. Focus entirely on observation, analysis, and ` +
+        `storytelling. Write as if the reader can already see the numbers.`;
+
+    const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}\n\n${noStatsNote}`;
 
     const lwtsNote =
         `IMPORTANT: Linear weights are context-neutral — they do not account for game situation, ` +
@@ -663,6 +815,10 @@ async function main() {
     const { metsBoxStr, metsRivalStr, metsStandStr } = formatMetsData(boxscore, standings);
     const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr);
 
+    // Build player index for stat injection
+    const playerIndex = buildPlayerIndex(boxscore, playerStats);
+    console.log(`Player index built: ${playerIndex.size} players`);
+
     // Source data for verification passes
     const metsGames = boxscore.games.filter(g => g.away.abbr === 'NYM' || g.home.abbr === 'NYM');
     const nlEastTeams = standings.teams.filter(t => t.division === 'National League East');
@@ -677,8 +833,10 @@ async function main() {
         const title = prompts[i].title;
         console.log(`  [${i + 1}/${prompts.length}] ${title}...`);
         const text = await callClaude(client, prompts[i]);
-        console.log(`  Generated (${text.length} chars), verifying...`);
-        const verified = await verifyNarrative(client, text, verifySourceData[title]);
+        console.log(`  Generated (${text.length} chars), injecting stats...`);
+        const withStats = injectStats(text, playerIndex);
+        console.log(`  Stats injected, verifying...`);
+        const verified = await verifyNarrative(client, withStats, verifySourceData[title]);
         console.log(`  Verified (${verified.length} chars)`);
         narratives.push({ title, text: verified });
     }
