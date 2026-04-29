@@ -1,6 +1,6 @@
 {
   "date": "2026-04-28",
-  "generatedAt": "April 29, 2026 at 10:59 AM EDT",
+  "generatedAt": "April 29, 2026 at 11:07 AM EDT",
   "games": [
     {
       "gamePk": 824447,
@@ -4862,7 +4862,7 @@
         {
           "wpa": 0.343,
           "inning": "BOT 9th",
-          "description": "Rangers challenged (force play), call on the field was upheld: Corey Seager grounds into a double play, second baseman Jazz Chisholm Jr. to shortstop José Caballero to first baseman Ben Rice. Josh Jung out at 2nd. Corey Seager out at 1st.",
+          "description": "Umpire reviewed (force play), call on the field was upheld: Corey Seager grounds into a double play, second baseman Jazz Chisholm Jr. to shortstop José Caballero to first baseman Ben Rice. Josh Jung out at 2nd. Corey Seager out at 1st.",
           "awayScore": 3,
           "homeScore": 2
         },
@@ -6203,7 +6203,7 @@
       "game": "NYY @ TEX",
       "wpa": 0.343,
       "inning": "BOT 9th",
-      "description": "Rangers challenged (force play), call on the field was upheld: Corey Seager grounds into a double play, second baseman Jazz Chisholm Jr. to shortstop José Caballero to first baseman Ben Rice. Josh Jung out at 2nd. Corey Seager out at 1st.",
+      "description": "Umpire reviewed (force play), call on the field was upheld: Corey Seager grounds into a double play, second baseman Jazz Chisholm Jr. to shortstop José Caballero to first baseman Ben Rice. Josh Jung out at 2nd. Corey Seager out at 1st.",
       "awayAbbr": "NYY",
       "homeAbbr": "TEX",
       "awayScore": 3,
