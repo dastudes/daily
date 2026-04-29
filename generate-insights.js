@@ -304,7 +304,11 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
     const boldNamesNote =
         `Bold all player names using **Player Name** format throughout your response.`;
 
-    const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}`;
+    const parNote =
+        `PAR has been pre-calculated for each pitcher in the data. ` +
+        `Use the par field directly — do not recalculate it yourself.`;
+
+    const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}`;
 
     const lwtsNote =
         `IMPORTANT: Linear weights are context-neutral — they do not account for game situation, ` +
@@ -522,6 +526,7 @@ function generateHTML(date, updatedStr, narratives) {
             </button>
             <div class="insight-body" id="insight-${i}" hidden>
                 ${textToHtml(n.text)}
+                <p><em>By the way, I'm not infallible. Wish I had an editor.</em></p>
             </div>
         </div>`).join('\n');
 

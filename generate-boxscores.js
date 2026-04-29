@@ -375,13 +375,26 @@ function extractPitchingData(teamData) {
         })
         .map(p => {
             const s = p.stats.pitching;
+            const ip  = parseFloat(s.inningsPitched || 0);
+            const er  = s.earnedRuns  || 0;
+            const bb  = s.baseOnBalls || 0;
+            const k   = s.strikeOuts  || 0;
+            const hr  = s.homeRuns    || 0;
+            const hbp = s.hitByPitch  || 0;
+            let par = null;
+            if (ip > 0) {
+                const era = (er / ip) * 9;
+                const fip = ((13 * hr) + (3 * (bb + hbp)) - (2 * k)) / ip;
+                par = Math.round((6.00 - (fip + era) / 2) * ip / 9 * 100) / 100;
+            }
             return {
                 name: p.person.fullName,
-                IP: parseFloat(s.inningsPitched || 0),
+                IP: ip,
                 H: s.hits || 0,
-                ER: s.earnedRuns || 0,
-                BB: s.baseOnBalls || 0,
-                K: s.strikeOuts || 0,
+                ER: er,
+                BB: bb,
+                K: k,
+                par,
             };
         });
 }
