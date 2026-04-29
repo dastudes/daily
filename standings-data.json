@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generatedAt": "Wednesday, April 29, 2026 at 2:10 PM EDT",
+  "generatedAt": "Wednesday, April 29, 2026 at 5:36 PM EDT",
   "teams": [
     {
       "name": "Los Angeles Angels",
@@ -8,32 +8,32 @@
       "division": "American League West",
       "league": "American League",
       "w": 12,
-      "l": 19,
-      "pct": ".387",
-      "gb": "4.0",
-      "wcGb": "3.0",
+      "l": 20,
+      "pct": ".375",
+      "gb": "4.5",
+      "wcGb": "4.0",
       "wcRank": "11",
       "clinchIndicator": null,
-      "rs": 149,
-      "ra": 159,
-      "rd": -10,
-      "pythWins": 14.5,
-      "pythVar": -2.49,
-      "streak": "L5",
+      "rs": 150,
+      "ra": 161,
+      "rd": -11,
+      "pythWins": 14.9,
+      "pythVar": -2.87,
+      "streak": "L6",
       "splits": {
         "last10": "1-9",
         "home": "5-7",
-        "away": "7-12",
+        "away": "7-13",
         "division": null,
         "league": null,
-        "winners": "2-2"
+        "winners": "4-3"
       },
       "stats": {
-        "obp": 0.335,
-        "slg": 0.401,
-        "ops": 0.736,
-        "fip": 4.3,
-        "der": 0.69
+        "obp": 0.332,
+        "slg": 0.398,
+        "ops": 0.73,
+        "fip": 4.29,
+        "der": 0.692
       }
     },
     {
@@ -78,9 +78,9 @@
       "w": 14,
       "l": 15,
       "pct": ".483",
-      "gb": "5.5",
-      "wcGb": "-",
-      "wcRank": "4",
+      "gb": "5.0",
+      "wcGb": "0.5",
+      "wcRank": "5",
       "clinchIndicator": null,
       "rs": 130,
       "ra": 143,
@@ -94,7 +94,7 @@
         "away": "6-7",
         "division": null,
         "league": null,
-        "winners": null
+        "winners": "1-3"
       },
       "stats": {
         "obp": 0.321,
@@ -112,15 +112,15 @@
       "w": 12,
       "l": 18,
       "pct": ".400",
-      "gb": "8.0",
-      "wcGb": "2.5",
+      "gb": "7.5",
+      "wcGb": "3.0",
       "wcRank": "10",
       "clinchIndicator": null,
-      "rs": 122,
-      "ra": 131,
-      "rd": -9,
-      "pythWins": 13.9,
-      "pythVar": -1.93,
+      "rs": 123,
+      "ra": 139,
+      "rd": -16,
+      "pythWins": 13.2,
+      "pythVar": -1.17,
       "streak": "L1",
       "splits": {
         "last10": "4-6",
@@ -132,10 +132,10 @@
       },
       "stats": {
         "obp": 0.31,
-        "slg": 0.35,
-        "ops": 0.66,
-        "fip": 4.47,
-        "der": 0.705
+        "slg": 0.352,
+        "ops": 0.662,
+        "fip": 4.55,
+        "der": 0.706
       }
     },
     {
@@ -150,11 +150,11 @@
       "wcGb": "+1.5",
       "wcRank": "2",
       "clinchIndicator": null,
-      "rs": 164,
-      "ra": 130,
+      "rs": 167,
+      "ra": 133,
       "rd": 34,
       "pythWins": 18.4,
-      "pythVar": -0.42,
+      "pythVar": -0.36,
       "streak": "W1",
       "splits": {
         "last10": "7-3",
@@ -166,10 +166,10 @@
       },
       "stats": {
         "obp": 0.353,
-        "slg": 0.424,
-        "ops": 0.777,
-        "fip": 4.06,
-        "der": 0.716
+        "slg": 0.426,
+        "ops": 0.778,
+        "fip": 4.1,
+        "der": 0.72
       }
     },
     {
@@ -211,33 +211,33 @@
       "abbreviation": "CLE",
       "division": "American League Central",
       "league": "American League",
-      "w": 15,
+      "w": 16,
       "l": 16,
-      "pct": ".484",
-      "gb": "0.5",
+      "pct": ".500",
+      "gb": "-",
       "wcGb": "-",
-      "wcRank": "2",
+      "wcRank": null,
       "clinchIndicator": null,
-      "rs": 120,
-      "ra": 130,
-      "rd": -10,
-      "pythWins": 14.3,
-      "pythVar": 0.74,
-      "streak": "L4",
+      "rs": 123,
+      "ra": 131,
+      "rd": -8,
+      "pythWins": 15,
+      "pythVar": 1.01,
+      "streak": "W1",
       "splits": {
         "last10": "4-6",
-        "home": "8-7",
+        "home": "9-7",
         "away": "7-9",
         "division": null,
         "league": null,
-        "winners": "0-2"
+        "winners": "3-4"
       },
       "stats": {
         "obp": 0.314,
-        "slg": 0.373,
-        "ops": 0.687,
-        "fip": 4.08,
-        "der": 0.71
+        "slg": 0.371,
+        "ops": 0.685,
+        "fip": 3.98,
+        "der": 0.709
       }
     },
     {
@@ -284,7 +284,7 @@
       "pct": ".500",
       "gb": "-",
       "wcGb": "-",
-      "wcRank": null,
+      "wcRank": "3",
       "clinchIndicator": null,
       "rs": 134,
       "ra": 127,
@@ -317,7 +317,7 @@
       "l": 19,
       "pct": ".367",
       "gb": "4.5",
-      "wcGb": "3.5",
+      "wcGb": "4.0",
       "wcRank": "12",
       "clinchIndicator": null,
       "rs": 154,
@@ -332,7 +332,7 @@
         "away": "3-11",
         "division": null,
         "league": null,
-        "winners": "2-4"
+        "winners": "4-9"
       },
       "stats": {
         "obp": 0.344,
@@ -351,7 +351,7 @@
       "l": 17,
       "pct": ".414",
       "gb": "2.5",
-      "wcGb": "2.0",
+      "wcGb": "2.5",
       "wcRank": "9",
       "clinchIndicator": null,
       "rs": 121,
@@ -366,7 +366,7 @@
         "away": "3-10",
         "division": null,
         "league": null,
-        "winners": "1-6"
+        "winners": "2-8"
       },
       "stats": {
         "obp": 0.321,
@@ -388,11 +388,11 @@
       "wcGb": "-",
       "wcRank": null,
       "clinchIndicator": null,
-      "rs": 165,
-      "ra": 98,
-      "rd": 67,
-      "pythWins": 22.2,
-      "pythVar": -2.18,
+      "rs": 167,
+      "ra": 101,
+      "rd": 66,
+      "pythWins": 22,
+      "pythVar": -1.97,
       "streak": "L1",
       "splits": {
         "last10": "5-5",
@@ -403,10 +403,10 @@
         "winners": "5-1"
       },
       "stats": {
-        "obp": 0.35,
-        "slg": 0.457,
-        "ops": 0.807,
-        "fip": 3.49,
+        "obp": 0.349,
+        "slg": 0.452,
+        "ops": 0.801,
+        "fip": 3.56,
         "der": 0.73
       }
     },
@@ -502,7 +502,7 @@
         "away": "10-8",
         "division": null,
         "league": null,
-        "winners": "2-1"
+        "winners": "4-2"
       },
       "stats": {
         "obp": 0.317,
@@ -558,11 +558,11 @@
       "wcGb": "+3.0",
       "wcRank": "1",
       "clinchIndicator": null,
-      "rs": 135,
-      "ra": 126,
+      "rs": 138,
+      "ra": 129,
       "rd": 9,
       "pythWins": 15.5,
-      "pythVar": 3.5,
+      "pythVar": 3.52,
       "streak": "L1",
       "splits": {
         "last10": "6-4",
@@ -573,11 +573,11 @@
         "winners": "4-3"
       },
       "stats": {
-        "obp": 0.312,
-        "slg": 0.386,
-        "ops": 0.698,
-        "fip": 3.6,
-        "der": 0.69
+        "obp": 0.31,
+        "slg": 0.387,
+        "ops": 0.697,
+        "fip": 3.66,
+        "der": 0.691
       }
     },
     {
@@ -585,33 +585,33 @@
       "abbreviation": "SEA",
       "division": "American League West",
       "league": "American League",
-      "w": 15,
+      "w": 16,
       "l": 16,
-      "pct": ".484",
-      "gb": "1.0",
+      "pct": ".500",
+      "gb": "0.5",
       "wcGb": "-",
-      "wcRank": "3",
+      "wcRank": "2",
       "clinchIndicator": null,
-      "rs": 129,
-      "ra": 124,
-      "rd": 5,
-      "pythWins": 16.1,
-      "pythVar": -1.11,
-      "streak": "W1",
+      "rs": 134,
+      "ra": 127,
+      "rd": 7,
+      "pythWins": 16.9,
+      "pythVar": -0.86,
+      "streak": "W2",
       "splits": {
         "last10": "7-3",
         "home": "10-7",
-        "away": "5-9",
+        "away": "6-9",
         "division": null,
         "league": null,
-        "winners": "2-4"
+        "winners": "4-6"
       },
       "stats": {
-        "obp": 0.323,
-        "slg": 0.38,
-        "ops": 0.703,
-        "fip": 3.76,
-        "der": 0.685
+        "obp": 0.324,
+        "slg": 0.381,
+        "ops": 0.705,
+        "fip": 3.72,
+        "der": 0.681
       }
     },
     {
@@ -688,32 +688,32 @@
       "division": "American League East",
       "league": "American League",
       "w": 18,
-      "l": 11,
-      "pct": ".621",
+      "l": 12,
+      "pct": ".600",
       "gb": "1.5",
-      "wcGb": "+4.0",
+      "wcGb": "+3.0",
       "wcRank": "1",
       "clinchIndicator": null,
-      "rs": 136,
-      "ra": 135,
-      "rd": 1,
-      "pythWins": 14.6,
-      "pythVar": 3.39,
-      "streak": "W6",
+      "rs": 137,
+      "ra": 138,
+      "rd": -1,
+      "pythWins": 14.9,
+      "pythVar": 3.11,
+      "streak": "L1",
       "splits": {
-        "last10": "7-3",
+        "last10": "6-4",
         "home": "8-4",
-        "away": "10-7",
+        "away": "10-8",
         "division": null,
         "league": null,
-        "winners": "3-0"
+        "winners": "5-1"
       },
       "stats": {
-        "obp": 0.33,
-        "slg": 0.385,
-        "ops": 0.716,
-        "fip": 4.44,
-        "der": 0.724
+        "obp": 0.327,
+        "slg": 0.379,
+        "ops": 0.705,
+        "fip": 4.37,
+        "der": 0.721
       }
     },
     {
@@ -721,33 +721,33 @@
       "abbreviation": "TEX",
       "division": "American League West",
       "league": "American League",
-      "w": 14,
+      "w": 15,
       "l": 16,
-      "pct": ".467",
-      "gb": "1.5",
+      "pct": ".484",
+      "gb": "1.0",
       "wcGb": "0.5",
-      "wcRank": "5",
+      "wcRank": "4",
       "clinchIndicator": null,
-      "rs": 117,
+      "rs": 120,
       "ra": 112,
-      "rd": 5,
-      "pythWins": 15.7,
-      "pythVar": -1.65,
-      "streak": "L3",
+      "rd": 8,
+      "pythWins": 16.6,
+      "pythVar": -1.57,
+      "streak": "W1",
       "splits": {
-        "last10": "3-7",
-        "home": "6-8",
+        "last10": "4-6",
+        "home": "7-8",
         "away": "8-8",
         "division": null,
         "league": null,
-        "winners": "3-6"
+        "winners": "8-8"
       },
       "stats": {
-        "obp": 0.314,
-        "slg": 0.379,
-        "ops": 0.693,
-        "fip": 4.15,
-        "der": 0.712
+        "obp": 0.315,
+        "slg": 0.376,
+        "ops": 0.691,
+        "fip": 4.08,
+        "der": 0.713
       }
     },
     {
@@ -758,15 +758,15 @@
       "w": 13,
       "l": 16,
       "pct": ".448",
-      "gb": "6.5",
-      "wcGb": "1.0",
-      "wcRank": "6",
+      "gb": "6.0",
+      "wcGb": "1.5",
+      "wcRank": "7",
       "clinchIndicator": null,
-      "rs": 113,
-      "ra": 138,
-      "rd": -25,
-      "pythWins": 11.6,
-      "pythVar": 1.36,
+      "rs": 121,
+      "ra": 139,
+      "rd": -18,
+      "pythWins": 12.5,
+      "pythVar": 0.5,
       "streak": "W1",
       "splits": {
         "last10": "6-4",
@@ -774,14 +774,14 @@
         "away": "4-8",
         "division": null,
         "league": null,
-        "winners": "3-0"
+        "winners": "5-1"
       },
       "stats": {
-        "obp": 0.309,
-        "slg": 0.375,
-        "ops": 0.685,
-        "fip": 3.78,
-        "der": 0.676
+        "obp": 0.312,
+        "slg": 0.379,
+        "ops": 0.691,
+        "fip": 3.8,
+        "der": 0.677
       }
     },
     {
@@ -790,32 +790,32 @@
       "division": "American League Central",
       "league": "American League",
       "w": 13,
-      "l": 17,
-      "pct": ".433",
-      "gb": "2.0",
-      "wcGb": "1.5",
-      "wcRank": "7",
+      "l": 18,
+      "pct": ".419",
+      "gb": "2.5",
+      "wcGb": "2.5",
+      "wcRank": "8",
       "clinchIndicator": null,
-      "rs": 144,
-      "ra": 143,
-      "rd": 1,
-      "pythWins": 15.1,
-      "pythVar": -2.1,
-      "streak": "L1",
+      "rs": 147,
+      "ra": 148,
+      "rd": -1,
+      "pythWins": 15.4,
+      "pythVar": -2.39,
+      "streak": "L2",
       "splits": {
         "last10": "2-8",
-        "home": "8-7",
+        "home": "8-8",
         "away": "5-10",
         "division": null,
         "league": null,
-        "winners": "5-5"
+        "winners": "6-7"
       },
       "stats": {
-        "obp": 0.326,
+        "obp": 0.327,
         "slg": 0.379,
-        "ops": 0.705,
-        "fip": 3.9,
-        "der": 0.684
+        "ops": 0.706,
+        "fip": 3.92,
+        "der": 0.685
       }
     },
     {
@@ -891,22 +891,22 @@
       "abbreviation": "CWS",
       "division": "American League Central",
       "league": "American League",
-      "w": 13,
+      "w": 14,
       "l": 17,
-      "pct": ".433",
-      "gb": "2.0",
+      "pct": ".452",
+      "gb": "1.5",
       "wcGb": "1.5",
-      "wcRank": "8",
+      "wcRank": "6",
       "clinchIndicator": null,
-      "rs": 127,
-      "ra": 152,
-      "rd": -25,
-      "pythWins": 12.3,
-      "pythVar": 0.67,
-      "streak": "W2",
+      "rs": 129,
+      "ra": 153,
+      "rd": -24,
+      "pythWins": 12.9,
+      "pythVar": 1.12,
+      "streak": "W3",
       "splits": {
-        "last10": "6-4",
-        "home": "6-8",
+        "last10": "7-3",
+        "home": "7-8",
         "away": "7-9",
         "division": null,
         "league": null,
@@ -914,10 +914,10 @@
       },
       "stats": {
         "obp": 0.319,
-        "slg": 0.383,
-        "ops": 0.702,
-        "fip": 4.52,
-        "der": 0.698
+        "slg": 0.38,
+        "ops": 0.699,
+        "fip": 4.49,
+        "der": 0.7
       }
     },
     {
@@ -932,11 +932,11 @@
       "wcGb": "2.5",
       "wcRank": "7",
       "clinchIndicator": null,
-      "rs": 132,
-      "ra": 132,
-      "rd": 0,
-      "pythWins": 15,
-      "pythVar": -1,
+      "rs": 135,
+      "ra": 134,
+      "rd": 1,
+      "pythWins": 15.1,
+      "pythVar": -1.11,
       "streak": "W1",
       "splits": {
         "last10": "5-5",
@@ -947,10 +947,10 @@
         "winners": "7-8"
       },
       "stats": {
-        "obp": 0.331,
-        "slg": 0.381,
-        "ops": 0.712,
-        "fip": 3.95,
+        "obp": 0.332,
+        "slg": 0.382,
+        "ops": 0.714,
+        "fip": 3.91,
         "der": 0.706
       }
     },
@@ -960,30 +960,30 @@
       "division": "American League East",
       "league": "American League",
       "w": 20,
-      "l": 10,
-      "pct": ".667",
+      "l": 11,
+      "pct": ".645",
       "gb": "-",
       "wcGb": "-",
       "wcRank": null,
       "clinchIndicator": null,
       "rs": 153,
-      "ra": 103,
-      "rd": 50,
-      "pythWins": 20.6,
-      "pythVar": -0.64,
-      "streak": "W2",
+      "ra": 106,
+      "rd": 47,
+      "pythWins": 20.9,
+      "pythVar": -0.95,
+      "streak": "L1",
       "splits": {
-        "last10": "9-1",
+        "last10": "8-2",
         "home": "8-5",
-        "away": "12-5",
+        "away": "12-6",
         "division": null,
         "league": null,
-        "winners": "1-5"
+        "winners": "3-6"
       },
       "stats": {
-        "obp": 0.327,
-        "slg": 0.433,
-        "ops": 0.76,
+        "obp": 0.324,
+        "slg": 0.424,
+        "ops": 0.749,
         "fip": 3.45,
         "der": 0.711
       }
