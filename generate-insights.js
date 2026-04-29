@@ -243,17 +243,18 @@ function buildPlayerIndex(boxscore, playerStats) {
 
 function formatStatBlock(entry) {
     const { type, gameStats: g, seasonStats: s } = entry;
+    const fmtRate = v => parseFloat(v).toFixed(3).replace('0.', '.');
 
     if (type === 'batter') {
-        const parts = [`${g.AB}-${g.H}`];
+        const parts = [`${g.H}-${g.AB}`];
         if (g.BB) parts.push(`${g.BB} BB`);
         if (g.HR) parts.push(`${g.HR} HR`);
         const gamePart = parts.join(', ');
         if (!s) return `[${gamePart}]`;
         const seasonParts = [];
-        if (s.OBP) seasonParts.push(`.${s.OBP} OBP`);
-        if (s.SLG) seasonParts.push(`.${s.SLG} SLG`);
-        if (s.RBI !== undefined) seasonParts.push(`RC ${s.RBI}`);
+        if (s.obp != null) seasonParts.push(`${fmtRate(s.obp)} OBP`);
+        if (s.slg != null) seasonParts.push(`${fmtRate(s.slg)} SLG`);
+        if (s.rc  != null) seasonParts.push(`RC ${s.rc}`);
         return seasonParts.length ? `[${gamePart} | ${seasonParts.join(', ')}]` : `[${gamePart}]`;
     }
 
@@ -261,7 +262,7 @@ function formatStatBlock(entry) {
         const parStr = g.par !== null && g.par !== undefined ? `, PAR ${g.par}` : '';
         const gamePart = `${g.IP} IP, ${g.ER} ER, ${g.K} K${parStr}`;
         if (!s) return `[${gamePart}]`;
-        return `[${gamePart} | ${s.ERA} ERA]`;
+        return `[${gamePart} | ${s.era} ERA]`;
     }
 
     return '';
@@ -576,7 +577,9 @@ async function verifyNarrative(client, text, sourceData) {
         `3. Correct any errors by replacing wrong values with the correct ones from the data\n` +
         `4. Do not change the writing style, tone, structure, or any sentence that is factually correct\n` +
         `5. Do not add new information not in the original narrative\n` +
-        `6. Return only the corrected narrative, nothing else\n\n` +
+        `6. Return ONLY the corrected narrative text. Do not include any fact-checking notes, ` +
+        `reasoning, corrections list, headers like 'Corrected Narrative:', or any other text. ` +
+        `Just the narrative itself, exactly as it should appear to readers.\n\n` +
         `If you find no errors, return the narrative unchanged.\n\n` +
         `Source data:\n${sourceData}\n\n` +
         `Narrative to verify:\n${text}`;
