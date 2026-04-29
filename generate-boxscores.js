@@ -384,7 +384,7 @@ function extractPitchingData(teamData) {
             let par = null;
             if (ip > 0) {
                 const era = (er / ip) * 9;
-                const fip = ((13 * hr) + (3 * (bb + hbp)) - (2 * k)) / ip;
+                const fip = ((13 * hr) + (3 * (bb + hbp)) - (2 * k)) / ip + 3.10;
                 par = Math.round((6.00 - (fip + era) / 2) * ip / 9 * 100) / 100;
             }
             return {
