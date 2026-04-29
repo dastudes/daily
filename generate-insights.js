@@ -342,69 +342,33 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
 
     return [
         {
-            title: "Today's Top Games",
+            title: 'Ten Things to Know',
             system: studemundSystem,
             user:
-                `Today is ${dateLabel}. Here are the complete box scores from today's MLB games:\n\n${boxStr}\n\n` +
-                `IMPORTANT — LENGTH AND SCOPE: Cover exactly six games using these selection criteria:\n` +
-                `- 1-3 games with pennant race implications: division rivals, teams within 5 games of a division lead or wild card spot, or games that shifted standings meaningfully\n` +
-                `- 1-3 tight or dramatic games: one-run finishes, walkoffs, extra innings, or late-inning lead changes\n` +
-                `- 1-3 games featuring outstanding individual performances: dominant pitching lines, exceptional hitting, or historic individual efforts\n\n` +
-                `A game can qualify under more than one criterion. Weave all six into a cohesive narrative — do not label them by category. ` +
-                `No introductory or closing paragraph. 4-5 paragraphs total. Edit ruthlessly.\n\n` +
-                `Use the standings data to identify pennant race context — division standings, games back, and wild card position are all relevant.\n\n` +
-                `Write a narrative recap of today's games, weaving together the most compelling stories — ` +
-                `the outstanding performances, the dramatic moments, the pitching duels and offensive explosions. ` +
-                `Let the best story lead.` +
-                sharedNotes +
-                `\n\n${cinematicsNote}` +
-                performanceNotes,
-        },
-        {
-            title: 'Standings & Power Rankings',
-            system: jamesSystem,
-            user:
-                `Today is ${dateLabel}. Here is the current MLB standings data:\n\n${standStr}\n\n` +
-                `Analyze where each team stands right now. Who is overachieving their Pythagorean expectation? ` +
-                `Who is getting by on a weak division? Who looks like a genuine contender, and who is in trouble? ` +
-                `Be specific and direct.` +
+                `Today is ${dateLabel}.\n\n` +
+                `Box scores:\n${boxStr}\n\n` +
+                `Standings:\n${standStr}\n\n` +
+                `Top WPA plays:\n${wpaStr}\n\n` +
+                `Top pitchers:\n${topPitchersStr}\n\n` +
+                `Top batters:\n${topBattersStr}\n\n` +
+                `Write exactly ten things worth knowing from yesterday's MLB ` +
+                `action. Draw from across all the data — games, standings, ` +
+                `individual performances, team trends, Pythagorean outliers, ` +
+                `pennant race movement, outstanding pitching or hitting.\n\n` +
+                `Each item should be 2-4 sentences — long enough to give context, ` +
+                `short enough to stay interesting. No introductory or closing ` +
+                `paragraph. Just the ten items, numbered.\n\n` +
+                `Use the standings data to identify pennant race context. ` +
+                `Reference season leaders when relevant — ERA, strikeout, ` +
+                `PAR, HR, OPS leaders add meaning to individual performances.\n` +
+                `Bold all player names.\n` +
+                `When mentioning a batter's day always include walks separately.\n` +
+                `PAR has been pre-calculated — use the par field directly.\n` +
+                `Do not mention Coors Field unless the game was at Coors Field.\n` +
+                `Always identify a player's team on first mention.\n\n` +
+                `IMPORTANT: FIP values are missing the 3.10 constant — ` +
+                `add 3.10 before interpreting any FIP value.` +
                 sharedNotes,
-        },
-        {
-            title: 'Biggest Moments',
-            system: studemundSystem,
-            user:
-                `Today is ${dateLabel}. Here are today's highest win-probability-added plays across all games:\n\n${wpaStr}\n\n` +
-                `Write a narrative that brings these pivotal moments to life. The WPA numbers tell you which plays ` +
-                `mattered most; your job is to make the reader feel the weight of each one.\n\n` +
-                `IMPORTANT — LENGTH AND SCOPE: Cover 4-5 games maximum. No introductory paragraph and no ` +
-                `closing summary paragraph — go straight into the games and end after the last one. ` +
-                `Each game gets two short paragraphs maximum. Edit ruthlessly.` +
-                sharedNotes +
-                `\n\n${cinematicsNote}` +
-                performanceNotes,
-        },
-        {
-            title: "Today's Best Pitchers",
-            system: jamesSystem,
-            user:
-                `Today is ${dateLabel}. Here are today's most effective pitchers, with their game lines and season context:\n\n${topPitchersStr}\n\n` +
-                `Analyze what made today's top pitching performances exceptional. How do they fit into each pitcher's ` +
-                `season arc? What patterns do you see?` +
-                sharedNotes +
-                `\n\n${coorsNote}` +
-                performanceNotes,
-        },
-        {
-            title: "Today's Best Batters",
-            system: jamesSystem,
-            user:
-                `Today is ${dateLabel}. Here are today's most productive hitters, with their game lines and season stats:\n\n${topBattersStr}\n\n` +
-                `Analyze the standout offensive performances. Who is getting hot at the right time? ` +
-                `Whose production is genuinely surprising given their season numbers?` +
-                sharedNotes +
-                `\n\n${lwtsNote}` +
-                performanceNotes,
         },
         {
             title: 'Mets Daily Briefing',
