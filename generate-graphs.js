@@ -119,8 +119,7 @@ function calculateFIP(stats) {
     const hbp = stats.hitByPitch || 0;
     const k = stats.strikeOuts || 0;
     
-    // FIP formula without league adjustment constant
-    return (13 * hr + 3 * (bb + hbp) - 2 * k) / ip;
+    return (13 * hr + 3 * (bb + hbp) - 2 * k) / ip + 3.10;
 }
 
 // Calculate DER (Defensive Efficiency Record)
@@ -1203,7 +1202,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
                             <summary>About This Graph</summary>
                             <div class="content">
                                 <p><strong>Separating the Impact of Pitching and Fielding</strong></p>
-                                <p class="mb-2">The easiest way to judge the effectiveness of pitching is to isolate those things that don't involve fielders: Strikeouts, Walks and Home Runs. That's what FIP ((HRA*13+BB*3-K*2)/IP) measures. (Technical note: I don't add the league adjustment to FIP, because it doesn't matter for graphing purposes.)</p>
+                                <p class="mb-2">The easiest way to judge the effectiveness of pitching is to isolate those things that don't involve fielders: Strikeouts, Walks and Home Runs. That's what FIP ((HRA*13+BB*3-K*2)/IP+3.10) measures.</p>
                             
                                 <p class="mb-2">All other batting events are batted balls that involve fielders. To measure what happens on those balls, we use Defense Efficiency Ratio (DER), which is simply the percent of batted balls (not including home runs) turned into outs by fielders. DER reflects a lot of complex stuff, such the quality of the fielders, the gloves, the ballpark configurations, how hard the ball was hit, where it was hit, and probably a few more things I haven't thought of. So it isn't a perfect measure of fielding excellence but it's not bad and it's easy to calculate.</p> 
 

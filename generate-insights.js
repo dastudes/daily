@@ -272,12 +272,6 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         'losing sight of the game. Write incisive analytical prose. ' +
         '3–5 paragraphs. No headers or bullet points.';
 
-    const fipNote =
-        `IMPORTANT: FIP values in this dataset are missing the standard 3.10 constant. ` +
-        `You MUST add 3.10 to every FIP value before using, referencing, or interpreting it. ` +
-        `A stored FIP of 0.57 should be treated and cited as 3.67. ` +
-        `Never reference the raw stored value.`;
-
     const dataIntegrityNote =
         `Do not infer, assume, or embellish details not present in the data. ` +
         `If something is not explicitly in the data provided, do not write it.`;
@@ -308,7 +302,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `PAR has been pre-calculated for each pitcher in the data. ` +
         `Use the par field directly — do not recalculate it yourself.`;
 
-    const sharedNotes = `\n\n${fipNote}\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}`;
+    const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}`;
 
     const lwtsNote =
         `IMPORTANT: Linear weights are context-neutral — they do not account for game situation, ` +
@@ -365,9 +359,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `When mentioning a batter's day always include walks separately.\n` +
                 `PAR has been pre-calculated — use the par field directly.\n` +
                 `Do not mention Coors Field unless the game was at Coors Field.\n` +
-                `Always identify a player's team on first mention.\n\n` +
-                `IMPORTANT: FIP values are missing the 3.10 constant — ` +
-                `add 3.10 before interpreting any FIP value.` +
+                `Always identify a player's team on first mention.` +
                 sharedNotes,
         },
         {
