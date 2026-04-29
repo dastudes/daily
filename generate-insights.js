@@ -422,6 +422,29 @@ async function callClaude(client, prompt) {
     return message.content[0].type === 'text' ? message.content[0].text : '';
 }
 
+async function verifyNarrative(client, text, sourceData) {
+    const userContent =
+        `You are a meticulous fact-checker for a baseball analytics website.\n` +
+        `Below is a narrative and the source data it was generated from.\n\n` +
+        `Your job:\n` +
+        `1. Find every statistic, count, or factual claim in the narrative\n` +
+        `2. Verify each one against the source data\n` +
+        `3. Correct any errors by replacing wrong values with the correct ones from the data\n` +
+        `4. Do not change the writing style, tone, structure, or any sentence that is factually correct\n` +
+        `5. Do not add new information not in the original narrative\n` +
+        `6. Return only the corrected narrative, nothing else\n\n` +
+        `If you find no errors, return the narrative unchanged.\n\n` +
+        `Source data:\n${sourceData}\n\n` +
+        `Narrative to verify:\n${text}`;
+
+    const message = await client.messages.create({
+        model: MODEL,
+        max_tokens: MAX_TOKENS,
+        messages: [{ role: 'user', content: userContent }],
+    });
+    return message.content[0].type === 'text' ? message.content[0].text : text;
+}
+
 function textToHtml(text) {
     const applyInline = s =>
         s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
@@ -648,13 +671,24 @@ async function main() {
     const { metsBoxStr, metsRivalStr, metsStandStr } = formatMetsData(boxscore, standings);
     const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr);
 
+    // Source data for verification passes
+    const metsGames = boxscore.games.filter(g => g.away.abbr === 'NYM' || g.home.abbr === 'NYM');
+    const nlEastTeams = standings.teams.filter(t => t.division === 'National League East');
+    const verifySourceData = {
+        'Ten Things to Know': JSON.stringify({ games: boxscore.games, standings: standings.teams }, null, 2),
+        'Mets Daily Briefing': JSON.stringify({ metsGames, nlEastStandings: nlEastTeams }, null, 2),
+    };
+
     console.log(`Generating ${prompts.length} narratives via Claude (${MODEL})...`);
     const narratives = [];
     for (let i = 0; i < prompts.length; i++) {
-        console.log(`  [${i + 1}/${prompts.length}] ${prompts[i].title}...`);
+        const title = prompts[i].title;
+        console.log(`  [${i + 1}/${prompts.length}] ${title}...`);
         const text = await callClaude(client, prompts[i]);
-        narratives.push({ title: prompts[i].title, text });
-        console.log(`  Done (${text.length} chars)`);
+        console.log(`  Generated (${text.length} chars), verifying...`);
+        const verified = await verifyNarrative(client, text, verifySourceData[title]);
+        console.log(`  Verified (${verified.length} chars)`);
+        narratives.push({ title, text: verified });
     }
 
     const html = generateHTML(date, updatedStr, narratives);
