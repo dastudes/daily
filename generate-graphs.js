@@ -435,43 +435,71 @@ async function generateHTML() {
     fs.writeFileSync('index.html', html);
     console.log('Generated index.html successfully!');
 
+    // Read yesterday's GB values before overwriting
+    let prevGbByTeam = {};
+    if (fs.existsSync('standings-data.json')) {
+        try {
+            const prev = JSON.parse(fs.readFileSync('standings-data.json', 'utf8'));
+            for (const team of (prev.teams || [])) {
+                if (team.abbreviation) {
+                    prevGbByTeam[team.abbreviation] = { gb: team.gb, wcGb: team.wcGb };
+                }
+            }
+        } catch (e) {
+            console.warn('Could not parse existing standings-data.json for previous GB values:', e.message);
+        }
+    }
+
     const standingsJson = {
         season,
         generatedAt: dateTimeStr,
-        teams: Object.values(teamData).map(t => ({
-            name: t.name,
-            abbreviation: t.abbreviation,
-            division: t.division,
-            league: t.league,
-            w: t.w,
-            l: t.l,
-            pct: t.pct,
-            gb: t.gb,
-            wcGb: t.wcGb || null,
-            wcRank: t.wcRank || null,
-            clinchIndicator: t.clinchIndicator || null,
-            rs: t.rs,
-            ra: t.ra,
-            rd: t.rd,
-            pythWins: parseFloat(t.pythWins.toFixed(1)),
-            pythVar: parseFloat(t.pythVar.toFixed(2)),
-            streak: t.streak || null,
-            splits: {
-                last10: t.last10 || null,
-                home: t.splitHome || null,
-                away: t.splitAway || null,
-                division: t.splitDiv || null,
-                league: t.splitLeague || null,
-                winners: t.splitWinners || null,
-            },
-            stats: {
-                obp: parseFloat(t.obp.toFixed(3)),
-                slg: parseFloat(t.slg.toFixed(3)),
-                ops: parseFloat(t.ops.toFixed(3)),
-                fip: parseFloat(t.fip.toFixed(2)),
-                der: parseFloat(t.der.toFixed(3)),
-            },
-        })),
+        teams: Object.values(teamData).map(t => {
+            const prev = prevGbByTeam[t.abbreviation] || null;
+            const previousGb = prev ? prev.gb : null;
+            const previousWcGb = prev ? prev.wcGb : null;
+            const todayGb = t.gb;
+            const todayWcGb = t.wcGb || null;
+            const gbChange = (previousGb !== null && todayGb !== null) ? parseFloat((previousGb - todayGb).toFixed(1)) : null;
+            const wcGbChange = (previousWcGb !== null && todayWcGb !== null) ? parseFloat((previousWcGb - todayWcGb).toFixed(1)) : null;
+            return {
+                name: t.name,
+                abbreviation: t.abbreviation,
+                division: t.division,
+                league: t.league,
+                w: t.w,
+                l: t.l,
+                pct: t.pct,
+                gb: todayGb,
+                previousGb,
+                gbChange,
+                wcGb: todayWcGb,
+                previousWcGb,
+                wcGbChange,
+                wcRank: t.wcRank || null,
+                clinchIndicator: t.clinchIndicator || null,
+                rs: t.rs,
+                ra: t.ra,
+                rd: t.rd,
+                pythWins: parseFloat(t.pythWins.toFixed(1)),
+                pythVar: parseFloat(t.pythVar.toFixed(2)),
+                streak: t.streak || null,
+                splits: {
+                    last10: t.last10 || null,
+                    home: t.splitHome || null,
+                    away: t.splitAway || null,
+                    division: t.splitDiv || null,
+                    league: t.splitLeague || null,
+                    winners: t.splitWinners || null,
+                },
+                stats: {
+                    obp: parseFloat(t.obp.toFixed(3)),
+                    slg: parseFloat(t.slg.toFixed(3)),
+                    ops: parseFloat(t.ops.toFixed(3)),
+                    fip: parseFloat(t.fip.toFixed(2)),
+                    der: parseFloat(t.der.toFixed(3)),
+                },
+            };
+        }),
     };
     fs.writeFileSync('standings-data.json', JSON.stringify(standingsJson, null, 2));
     console.log('Generated standings-data.json successfully!');
@@ -1571,10 +1599,10 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
             const raValues = teams.map(t => t.ra);
             const rsPad = (Math.max(...rsValues) - Math.min(...rsValues)) * 0.10;
             const raPad = (Math.max(...raValues) - Math.min(...raValues)) * 0.10;
-            const xMin = Math.floor(Math.min(...rsValues) - rsPad);
-            const xMax = Math.ceil(Math.max(...rsValues) + rsPad);
-            const yMin = Math.floor(Math.min(...raValues) - raPad);
-            const yMax = Math.ceil(Math.max(...raValues) + raPad);
+            const xMin = Math.round(Math.min(...rsValues) - rsPad);
+            const xMax = Math.round(Math.max(...rsValues) + rsPad);
+            const yMin = Math.round(Math.min(...raValues) - raPad);
+            const yMax = Math.round(Math.max(...raValues) + raPad);
             
             chart1 = new Chart(ctx, {
                 type: 'scatter',
@@ -1792,8 +1820,8 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
             const maxFIP = Math.max(...teams.map(t => t.fip));
             const minDER = Math.min(...teams.map(t => t.der));
             const maxDER = Math.max(...teams.map(t => t.der));
-            const fipPad = (maxFIP - minFIP) * 0.15;
-            const derPad = (maxDER - minDER) * 0.15;
+            const fipPad = (maxFIP - minFIP) * 0.10;
+            const derPad = (maxDER - minDER) * 0.10;
             
             chart3 = new Chart(ctx, {
                 type: 'scatter',

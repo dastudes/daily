@@ -602,6 +602,15 @@ async function generateHTML() {
         g.status.statusCode !== 'PPD'
     );
 
+    // Collect postponed / cancelled games for display in jump links
+    const PPD_CODES = new Set(['PPD', 'DR', 'CO']);
+    const deferredGames = games.filter(g =>
+        g.status && (
+            PPD_CODES.has(g.status.statusCode) ||
+            (g.status.detailedState && /postponed|cancelled/i.test(g.status.detailedState))
+        )
+    );
+
     console.log(`Found ${finalGames.length} final games on ${date}`);
 
     // Format dates for display
@@ -860,6 +869,29 @@ async function generateHTML() {
 
     }
 
+    // Add PPD / cancelled game entries to jump links
+    for (const g of deferredGames) {
+        const awayTeam = g.teams.away.team;
+        const homeTeam = g.teams.home.team;
+        const awayAbbr = teamMap[awayTeam.id] || awayTeam.abbreviation || awayTeam.name;
+        const homeAbbr = teamMap[homeTeam.id] || homeTeam.abbreviation || homeTeam.name;
+        const gameNumber = g.gameNumber > 1 ? ` - Game ${g.gameNumber}` : '';
+        const label = g.status.statusCode === 'CO' ? 'CNCL' : 'PPD';
+        const awayDiv = divMap[awayTeam.id] || {};
+        const homeDiv = divMap[homeTeam.id] || {};
+        const isDivision = awayDiv.divisionId && awayDiv.divisionId === homeDiv.divisionId;
+        const isLeague   = !isDivision && awayDiv.leagueId && awayDiv.leagueId === homeDiv.leagueId;
+        const gameType   = isDivision ? 'division' : isLeague ? 'league' : 'interleague';
+        jumpLinks.push({
+            id: null,
+            text: `${awayAbbr} vs ${homeAbbr}${gameNumber} - ${label}`,
+            awayAbbr,
+            gameType,
+            isNotable: false,
+            isDeferred: true,
+        });
+    }
+
     const GROUP_ORDER  = ['division', 'league', 'interleague'];
     const GROUP_LABELS = { division: 'Same Division', league: 'Same League', interleague: 'Interleague' };
     const groups = { division: [], league: [], interleague: [] };
@@ -871,8 +903,12 @@ async function generateHTML() {
         if (groups[type].length === 0) continue;
         jumpLinksHTML += `<span class="jump-group-label">${GROUP_LABELS[type]}</span>`;
         groups[type].forEach(j => {
-            const cls = j.isNotable ? 'jump-link jump-link-notable' : 'jump-link';
-            jumpLinksHTML += `<a href="#${j.id}" class="${cls}" onclick="expandGame(event,'${j.id}')">${j.text}</a>`;
+            if (j.isDeferred) {
+                jumpLinksHTML += `<span class="jump-link jump-link-deferred">${j.text}</span>`;
+            } else {
+                const cls = j.isNotable ? 'jump-link jump-link-notable' : 'jump-link';
+                jumpLinksHTML += `<a href="#${j.id}" class="${cls}" onclick="expandGame(event,'${j.id}')">${j.text}</a>`;
+            }
         });
     }
 
@@ -992,6 +1028,14 @@ async function generateHTML() {
             font-weight: bold;
         }
         .jump-link-notable:hover { background: #dbeafe; border-color: #1e3a8a; }
+
+        .jump-link-deferred {
+            color: #6b7280;
+            border-color: #d1d5db;
+            background: #f9fafb;
+            cursor: default;
+            font-style: italic;
+        }
 
         .controls-right {
             display: flex;
