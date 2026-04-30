@@ -654,8 +654,12 @@ async function generateHTML() {
         const homeTeam = game.teams.home.team;
         const awayAbbr = teamMap[awayTeam.id] || awayTeam.abbreviation || awayTeam.name;
         const homeAbbr = teamMap[homeTeam.id] || homeTeam.abbreviation || homeTeam.name;
-        const awayScore = game.teams.away.score;
-        const homeScore = game.teams.home.score;
+        const awayScore = game.teams.away.score !== undefined ? game.teams.away.score : game.linescore?.teams?.away?.runs;
+        const homeScore = game.teams.home.score !== undefined ? game.teams.home.score : game.linescore?.teams?.home?.runs;
+        if (awayScore === undefined || homeScore === undefined) {
+            console.warn(`Skipping game ${game.gamePk} (${awayTeam.name} @ ${homeTeam.name}): scores unavailable`);
+            continue;
+        }
         const gameNumber = game.gameNumber > 1 ? ` - Game ${game.gameNumber}` : '';
         const gameId = `game-${gamePk}`;
 
