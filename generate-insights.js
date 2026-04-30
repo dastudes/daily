@@ -488,10 +488,19 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
     sections.push(s4.join('\n'));
 
     // Section 5 — season league leaders
+    const gamesPlayed = Math.max(...(standingsData.teams || []).map(t => (t.w || 0) + (t.l || 0)), 0);
+    const minPA = gamesPlayed * 3.1;
+    const minIP = gamesPlayed * 1.0;
+
     const alBatters  = (playerStatsData.batters  || []).filter(b => b.league === 'AL');
     const nlBatters  = (playerStatsData.batters  || []).filter(b => b.league === 'NL');
-    const alPitchers = (playerStatsData.pitchers || []).filter(p => p.league === 'AL' && (p.ip || 0) >= 20);
-    const nlPitchers = (playerStatsData.pitchers || []).filter(p => p.league === 'NL' && (p.ip || 0) >= 20);
+    const alPitchers = (playerStatsData.pitchers || []).filter(p => p.league === 'AL');
+    const nlPitchers = (playerStatsData.pitchers || []).filter(p => p.league === 'NL');
+
+    const alQBatters  = alBatters.filter(b => (b.pa || 0) >= minPA);
+    const nlQBatters  = nlBatters.filter(b => (b.pa || 0) >= minPA);
+    const alQPitchers = alPitchers.filter(p => (p.ip || 0) >= minIP);
+    const nlQPitchers = nlPitchers.filter(p => (p.ip || 0) >= minIP);
 
     function top3(arr, field, asc = false) {
         return [...arr]
@@ -507,24 +516,24 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
     const s5 = ['SECTION 5 — CURRENT LEAGUE LEADERS:',
         '\nAL BATTING LEADERS:',
         `HR: ${top3(alBatters, 'hr')}`,
-        `OPS: ${top3(alBatters, 'ops')}`,
-        `SLG: ${top3(alBatters, 'slg')}`,
+        `OPS: ${top3(alQBatters, 'ops')}`,
+        `SLG: ${top3(alQBatters, 'slg')}`,
         `RC: ${top3(alBatters, 'rc')}`,
         '\nAL PITCHING LEADERS:',
-        `ERA: ${top3(alPitchers, 'era', true)}`,
+        `ERA: ${top3(alQPitchers, 'era', true)}`,
         `PAR: ${top3(alPitchers, 'par')}`,
         `K: ${top3(alPitchers, 'k')}`,
-        `FIP: ${top3(alPitchers, 'fip', true)}`,
+        `FIP: ${top3(alQPitchers, 'fip', true)}`,
         '\nNL BATTING LEADERS:',
         `HR: ${top3(nlBatters, 'hr')}`,
-        `OPS: ${top3(nlBatters, 'ops')}`,
-        `SLG: ${top3(nlBatters, 'slg')}`,
+        `OPS: ${top3(nlQBatters, 'ops')}`,
+        `SLG: ${top3(nlQBatters, 'slg')}`,
         `RC: ${top3(nlBatters, 'rc')}`,
         '\nNL PITCHING LEADERS:',
-        `ERA: ${top3(nlPitchers, 'era', true)}`,
+        `ERA: ${top3(nlQPitchers, 'era', true)}`,
         `PAR: ${top3(nlPitchers, 'par')}`,
         `K: ${top3(nlPitchers, 'k')}`,
-        `FIP: ${top3(nlPitchers, 'fip', true)}`,
+        `FIP: ${top3(nlQPitchers, 'fip', true)}`,
     ];
     sections.push(s5.join('\n'));
 
