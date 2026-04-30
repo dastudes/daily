@@ -40,7 +40,7 @@ jobs:
       - name: Generate box scores page
         run: node generate-boxscores.js
 
-      - name: "Generate insights page (2 narratives: Ten Things to Know, Mets Daily Briefing)"
+      - name: "Generate insights page (2 narratives: What to Know, Mets Daily Briefing)"
         run: node generate-insights.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

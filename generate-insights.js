@@ -483,7 +483,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
 
     return [
         {
-            title: 'Ten Things to Know',
+            title: 'What to Know',
             system: studemundSystem,
             user:
                 `Today is ${dateLabel}.\n\n` +
@@ -492,16 +492,23 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Top WPA plays:\n${wpaStr}\n\n` +
                 `Top pitchers:\n${topPitchersStr}\n\n` +
                 `Top batters:\n${topBattersStr}\n\n` +
-                `Write exactly ten things worth knowing from yesterday's MLB ` +
-                `action. Draw from across all the data — games, standings, ` +
-                `individual performances, team trends, Pythagorean outliers, ` +
-                `pennant race movement, outstanding pitching or hitting.\n\n` +
-                `Each item should be 2-4 sentences — long enough to give context, ` +
-                `short enough to stay interesting. No introductory or closing ` +
-                `paragraph. Just the ten items, numbered.\n\n` +
-                `Use the standings data to identify pennant race context. ` +
-                `Reference season leaders when relevant — ERA, strikeout, ` +
-                `PAR, HR, OPS leaders add meaning to individual performances.` +
+                `Write a daily baseball column in four sections, flowing naturally ` +
+                `from one to the next with no section headers or labels.\n\n` +
+                `SECTION 1 — PENNANT RACE GAMES: Discuss 2-4 games with the most ` +
+                `pennant race significance. Use the standings data to identify which ` +
+                `games mattered most in division or wild card races. For each game, ` +
+                `write 2-3 sentences about what the result means for the teams involved.\n\n` +
+                `SECTION 2 — MOST DRAMATIC GAMES: Identify the 2-3 most dramatic or ` +
+                `memorable games from yesterday. Use Total WPA Swing as one measure of ` +
+                `drama. For each, write 2-3 sentences describing what made it memorable.\n\n` +
+                `SECTION 3 — STANDOUT PERFORMANCES: Write 1-4 bullet points. One bullet ` +
+                `per outstanding individual performance — batter or pitcher. Brief and ` +
+                `specific. Draw from the top batters and top pitchers data.\n\n` +
+                `SECTION 4 — STANDINGS AND TRENDS: Write 2-3 sentences on what the day's ` +
+                `results mean for the overall league picture — division races, Pythagorean ` +
+                `outliers, teams moving in the right or wrong direction.\n\n` +
+                `Do not label the sections. Write as a continuous column that happens to ` +
+                `follow this order. No introductory or closing paragraph.` +
                 sharedNotes,
         },
         {
@@ -806,7 +813,7 @@ async function main() {
     const metsGames = boxscore.games.filter(g => g.away.abbr === 'NYM' || g.home.abbr === 'NYM');
     const nlEastTeams = standings.teams.filter(t => t.division === 'National League East');
     const verifySourceData = {
-        'Ten Things to Know': JSON.stringify({ games: boxscore.games, standings: standings.teams }, null, 2),
+        'What to Know': JSON.stringify({ games: boxscore.games, standings: standings.teams }, null, 2),
         'Mets Daily Briefing': JSON.stringify({ metsGames, nlEastStandings: nlEastTeams }, null, 2),
     };
 
