@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generatedAt": "Wednesday, April 29, 2026 at 8:12 PM EDT",
+  "generatedAt": "Wednesday, April 29, 2026 at 8:29 PM EDT",
   "teams": [
     {
       "name": "Los Angeles Angels",
@@ -49,10 +49,10 @@
       "wcRank": "5",
       "clinchIndicator": null,
       "rs": 134,
-      "ra": 151,
-      "rd": -17,
-      "pythWins": 12.3,
-      "pythVar": 2.66,
+      "ra": 152,
+      "rd": -18,
+      "pythWins": 12.2,
+      "pythVar": 2.76,
       "streak": "L1",
       "splits": {
         "last10": "5-5",
@@ -64,10 +64,10 @@
       },
       "stats": {
         "obp": 0.307,
-        "slg": 0.415,
-        "ops": 0.723,
-        "fip": 4.64,
-        "der": 0.698
+        "slg": 0.414,
+        "ops": 0.722,
+        "fip": 4.62,
+        "der": 0.697
       }
     },
     {
@@ -199,10 +199,10 @@
         "winners": "1-2"
       },
       "stats": {
-        "obp": 0.308,
+        "obp": 0.309,
         "slg": 0.38,
-        "ops": 0.688,
-        "fip": 4.45,
+        "ops": 0.69,
+        "fip": 4.43,
         "der": 0.703
       }
     },
@@ -267,11 +267,11 @@
         "winners": "3-9"
       },
       "stats": {
-        "obp": 0.319,
-        "slg": 0.396,
-        "ops": 0.715,
-        "fip": 4.42,
-        "der": 0.685
+        "obp": 0.318,
+        "slg": 0.395,
+        "ops": 0.713,
+        "fip": 4.43,
+        "der": 0.684
       }
     },
     {
@@ -302,8 +302,8 @@
       },
       "stats": {
         "obp": 0.332,
-        "slg": 0.416,
-        "ops": 0.748,
+        "slg": 0.415,
+        "ops": 0.746,
         "fip": 3.83,
         "der": 0.689
       }
@@ -422,11 +422,11 @@
       "wcGb": "3.5",
       "wcRank": "9",
       "clinchIndicator": null,
-      "rs": 159,
+      "rs": 165,
       "ra": 180,
-      "rd": -21,
-      "pythWins": 13.1,
-      "pythVar": -0.15,
+      "rd": -15,
+      "pythWins": 13.7,
+      "pythVar": -0.7,
       "streak": "L1",
       "splits": {
         "last10": "4-6",
@@ -437,11 +437,11 @@
         "winners": "9-11"
       },
       "stats": {
-        "obp": 0.322,
-        "slg": 0.386,
-        "ops": 0.707,
-        "fip": 5.35,
-        "der": 0.686
+        "obp": 0.324,
+        "slg": 0.39,
+        "ops": 0.714,
+        "fip": 5.33,
+        "der": 0.685
       }
     },
     {
@@ -457,10 +457,10 @@
       "wcRank": "11",
       "clinchIndicator": null,
       "rs": 101,
-      "ra": 125,
-      "rd": -24,
-      "pythWins": 11.5,
-      "pythVar": -1.45,
+      "ra": 128,
+      "rd": -27,
+      "pythWins": 11.1,
+      "pythVar": -1.13,
       "streak": "W1",
       "splits": {
         "last10": "3-7",
@@ -473,9 +473,9 @@
       "stats": {
         "obp": 0.289,
         "slg": 0.341,
-        "ops": 0.63,
-        "fip": 3.63,
-        "der": 0.697
+        "ops": 0.631,
+        "fip": 3.69,
+        "der": 0.695
       }
     },
     {
@@ -540,9 +540,9 @@
       },
       "stats": {
         "obp": 0.324,
-        "slg": 0.379,
-        "ops": 0.703,
-        "fip": 3.64,
+        "slg": 0.378,
+        "ops": 0.702,
+        "fip": 3.65,
         "der": 0.706
       }
     },
@@ -676,10 +676,10 @@
       },
       "stats": {
         "obp": 0.324,
-        "slg": 0.399,
-        "ops": 0.723,
-        "fip": 4.71,
-        "der": 0.698
+        "slg": 0.398,
+        "ops": 0.721,
+        "fip": 4.69,
+        "der": 0.697
       }
     },
     {
@@ -880,10 +880,10 @@
       },
       "stats": {
         "obp": 0.339,
-        "slg": 0.456,
-        "ops": 0.795,
-        "fip": 3.89,
-        "der": 0.734
+        "slg": 0.455,
+        "ops": 0.794,
+        "fip": 3.88,
+        "der": 0.735
       }
     },
     {
@@ -1000,11 +1000,11 @@
       "wcGb": "0.5",
       "wcRank": "4",
       "clinchIndicator": null,
-      "rs": 146,
+      "rs": 147,
       "ra": 115,
-      "rd": 31,
-      "pythWins": 17.3,
-      "pythVar": -2.28,
+      "rd": 32,
+      "pythWins": 17.4,
+      "pythVar": -2.37,
       "streak": "W2",
       "splits": {
         "last10": "5-5",
@@ -1015,11 +1015,11 @@
         "winners": "2-2"
       },
       "stats": {
-        "obp": 0.335,
-        "slg": 0.358,
-        "ops": 0.693,
-        "fip": 3.64,
-        "der": 0.695
+        "obp": 0.336,
+        "slg": 0.359,
+        "ops": 0.695,
+        "fip": 3.65,
+        "der": 0.696
       }
     }
   ]
