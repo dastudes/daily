@@ -1,6 +1,6 @@
 {
   "date": "2026-04-29",
-  "generatedAt": "April 30, 2026 at 2:32 PM EDT",
+  "generatedAt": "April 30, 2026 at 2:49 PM EDT",
   "games": [
     {
       "gamePk": 824445,
@@ -5382,78 +5382,6 @@
         }
       ],
       "totalWPASwing": 1.66,
-      "flags": {
-        "walkoff": false,
-        "extraInnings": false,
-        "shutout": false,
-        "sweep": false
-      }
-    },
-    {
-      "gamePk": 823471,
-      "venue": "Citizens Bank Park",
-      "away": {
-        "name": "San Francisco Giants",
-        "abbr": "SF"
-      },
-      "home": {
-        "name": "Philadelphia Phillies",
-        "abbr": "PHI"
-      },
-      "linescore": {
-        "innings": [],
-        "totals": {
-          "away": null,
-          "home": null
-        }
-      },
-      "batting": {
-        "away": [],
-        "home": []
-      },
-      "pitching": {
-        "away": [],
-        "home": []
-      },
-      "decisions": null,
-      "topWPAPlays": [],
-      "totalWPASwing": 0,
-      "flags": {
-        "walkoff": false,
-        "extraInnings": false,
-        "shutout": false,
-        "sweep": false
-      }
-    },
-    {
-      "gamePk": 824850,
-      "venue": "Oriole Park at Camden Yards",
-      "away": {
-        "name": "Houston Astros",
-        "abbr": "HOU"
-      },
-      "home": {
-        "name": "Baltimore Orioles",
-        "abbr": "BAL"
-      },
-      "linescore": {
-        "innings": [],
-        "totals": {
-          "away": null,
-          "home": null
-        }
-      },
-      "batting": {
-        "away": [],
-        "home": []
-      },
-      "pitching": {
-        "away": [],
-        "home": []
-      },
-      "decisions": null,
-      "topWPAPlays": [],
-      "totalWPASwing": 0,
       "flags": {
         "walkoff": false,
         "extraInnings": false,

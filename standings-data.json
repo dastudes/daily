@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generatedAt": "Thursday, April 30, 2026 at 2:32 PM EDT",
+  "generatedAt": "Thursday, April 30, 2026 at 2:49 PM EDT",
   "teams": [
     {
       "name": "Los Angeles Angels",
@@ -57,10 +57,10 @@
       "wcRank": "4",
       "clinchIndicator": null,
       "rs": 140,
-      "ra": 155,
-      "rd": -15,
-      "pythWins": 13,
-      "pythVar": 2.97,
+      "ra": 158,
+      "rd": -18,
+      "pythWins": 12.8,
+      "pythVar": 3.25,
       "streak": "W1",
       "splits": {
         "last10": "5-5",
@@ -72,10 +72,10 @@
       },
       "stats": {
         "obp": 0.309,
-        "slg": 0.422,
-        "ops": 0.731,
-        "fip": 4.56,
-        "der": 0.699
+        "slg": 0.423,
+        "ops": 0.732,
+        "fip": 4.61,
+        "der": 0.698
       }
     },
     {
@@ -94,11 +94,11 @@
       "wcGbChange": null,
       "wcRank": "5",
       "clinchIndicator": null,
-      "rs": 135,
-      "ra": 143,
-      "rd": -8,
-      "pythWins": 13.7,
-      "pythVar": 0.33,
+      "rs": 140,
+      "ra": 144,
+      "rd": -4,
+      "pythWins": 14.1,
+      "pythVar": -0.09,
       "streak": "W1",
       "splits": {
         "last10": "5-5",
@@ -109,11 +109,11 @@
         "winners": "1-3"
       },
       "stats": {
-        "obp": 0.321,
-        "slg": 0.401,
-        "ops": 0.723,
+        "obp": 0.323,
+        "slg": 0.404,
+        "ops": 0.728,
         "fip": 4.1,
-        "der": 0.673
+        "der": 0.672
       }
     },
     {
@@ -208,11 +208,11 @@
       "wcGbChange": null,
       "wcRank": null,
       "clinchIndicator": null,
-      "rs": 131,
+      "rs": 133,
       "ra": 134,
-      "rd": -3,
-      "pythWins": 14.7,
-      "pythVar": 4.34,
+      "rd": -1,
+      "pythWins": 14.9,
+      "pythVar": 4.11,
       "streak": "L1",
       "splits": {
         "last10": "7-3",
@@ -223,10 +223,10 @@
         "winners": "1-2"
       },
       "stats": {
-        "obp": 0.31,
-        "slg": 0.386,
-        "ops": 0.696,
-        "fip": 4.47,
+        "obp": 0.311,
+        "slg": 0.388,
+        "ops": 0.699,
+        "fip": 4.45,
         "der": 0.699
       }
     },
@@ -285,10 +285,10 @@
       "wcRank": "9",
       "clinchIndicator": null,
       "rs": 135,
-      "ra": 142,
-      "rd": -7,
-      "pythWins": 14.7,
-      "pythVar": -0.72,
+      "ra": 144,
+      "rd": -9,
+      "pythWins": 14.5,
+      "pythVar": -0.5,
       "streak": "W1",
       "splits": {
         "last10": "6-4",
@@ -303,7 +303,7 @@
         "slg": 0.401,
         "ops": 0.723,
         "fip": 4.46,
-        "der": 0.685
+        "der": 0.684
       }
     },
     {
@@ -322,11 +322,11 @@
       "wcGbChange": null,
       "wcRank": "4",
       "clinchIndicator": null,
-      "rs": 139,
+      "rs": 140,
       "ra": 133,
-      "rd": 6,
-      "pythWins": 16.2,
-      "pythVar": -1.18,
+      "rd": 7,
+      "pythWins": 16.3,
+      "pythVar": -1.29,
       "streak": "L2",
       "splits": {
         "last10": "4-6",
@@ -337,11 +337,11 @@
         "winners": null
       },
       "stats": {
-        "obp": 0.332,
-        "slg": 0.41,
-        "ops": 0.742,
-        "fip": 3.8,
-        "der": 0.689
+        "obp": 0.331,
+        "slg": 0.409,
+        "ops": 0.74,
+        "fip": 3.79,
+        "der": 0.69
       }
     },
     {
@@ -360,11 +360,11 @@
       "wcGbChange": 0,
       "wcRank": "12",
       "clinchIndicator": null,
-      "rs": 154,
-      "ra": 184,
-      "rd": -30,
-      "pythWins": 12.4,
-      "pythVar": -1.36,
+      "rs": 155,
+      "ra": 189,
+      "rd": -34,
+      "pythWins": 12.1,
+      "pythVar": -1.06,
       "streak": "L1",
       "splits": {
         "last10": "3-7",
@@ -376,9 +376,9 @@
       },
       "stats": {
         "obp": 0.343,
-        "slg": 0.435,
+        "slg": 0.436,
         "ops": 0.778,
-        "fip": 5.29,
+        "fip": 5.36,
         "der": 0.674
       }
     },
@@ -475,10 +475,10 @@
       "wcRank": "8",
       "clinchIndicator": null,
       "rs": 173,
-      "ra": 184,
-      "rd": -11,
+      "ra": 185,
+      "rd": -12,
       "pythWins": 14.5,
-      "pythVar": -0.55,
+      "pythVar": -0.46,
       "streak": "W1",
       "splits": {
         "last10": "5-5",
@@ -489,11 +489,11 @@
         "winners": "9-11"
       },
       "stats": {
-        "obp": 0.324,
-        "slg": 0.392,
-        "ops": 0.717,
+        "obp": 0.325,
+        "slg": 0.391,
+        "ops": 0.716,
         "fip": 5.26,
-        "der": 0.686
+        "der": 0.687
       }
     },
     {
@@ -512,11 +512,11 @@
       "wcGbChange": 0,
       "wcRank": "12",
       "clinchIndicator": null,
-      "rs": 105,
+      "rs": 106,
       "ra": 139,
-      "rd": -34,
-      "pythWins": 10.9,
-      "pythVar": -0.9,
+      "rd": -33,
+      "pythWins": 11,
+      "pythVar": -1.03,
       "streak": "L1",
       "splits": {
         "last10": "3-7",
@@ -527,11 +527,11 @@
         "winners": "4-11"
       },
       "stats": {
-        "obp": 0.288,
-        "slg": 0.34,
-        "ops": 0.628,
-        "fip": 3.65,
-        "der": 0.69
+        "obp": 0.289,
+        "slg": 0.341,
+        "ops": 0.63,
+        "fip": 3.67,
+        "der": 0.691
       }
     },
     {
@@ -604,10 +604,10 @@
       },
       "stats": {
         "obp": 0.326,
-        "slg": 0.376,
-        "ops": 0.702,
-        "fip": 3.64,
-        "der": 0.701
+        "slg": 0.375,
+        "ops": 0.7,
+        "fip": 3.65,
+        "der": 0.703
       }
     },
     {
@@ -718,9 +718,9 @@
       },
       "stats": {
         "obp": 0.289,
-        "slg": 0.362,
-        "ops": 0.651,
-        "fip": 3.97,
+        "slg": 0.363,
+        "ops": 0.652,
+        "fip": 3.96,
         "der": 0.701
       }
     },
@@ -757,9 +757,9 @@
       "stats": {
         "obp": 0.324,
         "slg": 0.4,
-        "ops": 0.724,
-        "fip": 4.69,
-        "der": 0.696
+        "ops": 0.725,
+        "fip": 4.68,
+        "der": 0.697
       }
     },
     {
@@ -945,10 +945,10 @@
         "winners": "3-13"
       },
       "stats": {
-        "obp": 0.299,
-        "slg": 0.366,
-        "ops": 0.665,
-        "fip": 3.71,
+        "obp": 0.298,
+        "slg": 0.365,
+        "ops": 0.663,
+        "fip": 3.7,
         "der": 0.639
       }
     },
@@ -969,10 +969,10 @@
       "wcRank": null,
       "clinchIndicator": null,
       "rs": 177,
-      "ra": 108,
-      "rd": 69,
-      "pythWins": 22.6,
-      "pythVar": -0.59,
+      "ra": 109,
+      "rd": 68,
+      "pythWins": 22.5,
+      "pythVar": -0.48,
       "streak": "W3",
       "splits": {
         "last10": "8-2",
@@ -984,9 +984,9 @@
       },
       "stats": {
         "obp": 0.337,
-        "slg": 0.451,
-        "ops": 0.789,
-        "fip": 3.82,
+        "slg": 0.45,
+        "ops": 0.787,
+        "fip": 3.81,
         "der": 0.732
       }
     },
@@ -1120,11 +1120,11 @@
       "wcGbChange": 0,
       "wcRank": "5",
       "clinchIndicator": null,
-      "rs": 150,
+      "rs": 153,
       "ra": 121,
-      "rd": 29,
-      "pythWins": 17.6,
-      "pythVar": -2.57,
+      "rd": 32,
+      "pythWins": 17.8,
+      "pythVar": -2.84,
       "streak": "L1",
       "splits": {
         "last10": "4-6",
@@ -1135,9 +1135,9 @@
         "winners": "2-3"
       },
       "stats": {
-        "obp": 0.334,
-        "slg": 0.356,
-        "ops": 0.689,
+        "obp": 0.335,
+        "slg": 0.36,
+        "ops": 0.695,
         "fip": 3.8,
         "der": 0.696
       }
