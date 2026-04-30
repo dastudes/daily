@@ -390,7 +390,148 @@ function formatMetsData(boxscore, standings) {
     return { metsBoxStr, metsRivalStr, metsStandStr: standLines.join('\n') };
 }
 
-function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr) {
+function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
+    const sections = [];
+
+    // Section 1 — game results
+    const s1 = ['SECTION 1 — VERIFIED GAME RESULTS:'];
+    for (const game of boxscoreData.games) {
+        const awayWon = game.away.score > game.home.score;
+        const winner  = awayWon ? game.away : game.home;
+        const loser   = awayWon ? game.home : game.away;
+        s1.push(`- ${winner.name} def. ${loser.name} ${winner.score}-${loser.score} (${cleanVenue(game.venue) || 'unknown venue'})`);
+    }
+    sections.push(s1.join('\n'));
+
+    // Section 2 — pennant race impact (skip if no previous GB data)
+    const hasPrevData = standingsData.teams.some(t => t.gbChange !== null || t.wcGbChange !== null);
+    if (hasPrevData) {
+        const teamGame = {};
+        for (const game of boxscoreData.games) {
+            const awayWon = game.away.score > game.home.score;
+            teamGame[game.away.abbr] = { won: awayWon, opp: game.home.abbr };
+            teamGame[game.home.abbr] = { won: !awayWon, opp: game.away.abbr };
+        }
+
+        const s2 = [];
+        for (const team of standingsData.teams) {
+            const { gbChange, wcGbChange, gb, wcGb, wcRank, abbreviation, name, division, league } = team;
+            const gbNum   = parseFloat(gb);
+            const wcGbNum = parseFloat(wcGb);
+            const inDivRace = gb === '-' || (!isNaN(gbNum) && gbNum <= 6);
+            const inWcRace  = (typeof wcRank === 'number' && wcRank <= 3) || (!isNaN(wcGbNum) && wcGbNum <= 4);
+            if (!inDivRace && !inWcRace) continue;
+
+            const g          = teamGame[abbreviation];
+            const prefix     = g ? `${abbreviation} ${g.won ? 'def.' : 'lost to'} ${g.opp}: ` : '';
+            const divShort   = division.replace('American League', 'AL').replace('National League', 'NL');
+            const leagShort  = league.replace(' League', '');
+
+            if (gbChange !== null && gbChange !== 0 && inDivRace) {
+                const dir    = gbChange > 0 ? 'gained' : 'lost';
+                const amount = Math.abs(gbChange);
+                s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${divShort} division race`);
+            } else if (wcGbChange !== null && wcGbChange !== 0 && inWcRace) {
+                const dir    = wcGbChange > 0 ? 'gained' : 'lost';
+                const amount = Math.abs(wcGbChange);
+                s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${leagShort} wild card race`);
+            }
+        }
+        if (s2.length > 0) sections.push('SECTION 2 — PENNANT RACE IMPACT:\n' + s2.join('\n'));
+    }
+
+    // Section 3 — top performers (today)
+    const gamePitchers = [];
+    for (const game of boxscoreData.games) {
+        for (const side of ['away', 'home']) {
+            for (const p of game.pitching[side]) {
+                if ((p.IP || 0) >= 1) gamePitchers.push({ ...p, par: calcGamePAR(p) });
+            }
+        }
+    }
+    gamePitchers.sort((a, b) => b.par - a.par);
+
+    const gameBatters = [];
+    for (const game of boxscoreData.games) {
+        for (const side of ['away', 'home']) {
+            for (const b of game.batting[side]) {
+                gameBatters.push({ ...b, lwts: calcLWTS(b) });
+            }
+        }
+    }
+    gameBatters.sort((a, b) => b.lwts - a.lwts);
+
+    const pSeasonMap = {};
+    for (const p of (playerStatsData.pitchers || [])) pSeasonMap[p.name] = p;
+    const bSeasonMap = {};
+    for (const b of (playerStatsData.batters || [])) bSeasonMap[b.name] = b;
+
+    const s3 = ['SECTION 3 — TOP PERFORMERS:', '\nTOP PITCHERS BY PAR:'];
+    gamePitchers.slice(0, 5).forEach((p, i) => {
+        const team = (pSeasonMap[p.name] || {}).teamAbbr || '?';
+        s3.push(`${i + 1}. ${p.name} (${team}): PAR ${p.par.toFixed(2)}, ${p.IP} IP, ${p.ER} ER, ${p.K} K`);
+    });
+    s3.push('\nTOP BATTERS BY LWTS:');
+    gameBatters.slice(0, 5).forEach((b, i) => {
+        const team = (bSeasonMap[b.name] || {}).teamAbbr || '?';
+        s3.push(`${i + 1}. ${b.name} (${team}): LWTS ${b.lwts.toFixed(2)}, ${b.H}-${b.AB}, ${b.HR} HR`);
+    });
+    sections.push(s3.join('\n'));
+
+    // Section 4 — most dramatic games
+    const s4 = ['SECTION 4 — MOST DRAMATIC GAMES BY WPA SWING:'];
+    [...boxscoreData.games]
+        .filter(g => g.totalWPASwing != null)
+        .sort((a, b) => b.totalWPASwing - a.totalWPASwing)
+        .slice(0, 5)
+        .forEach((g, i) => s4.push(`${i + 1}. ${g.away.name}-${g.home.name}: ${g.totalWPASwing.toFixed(2)} WPA swing`));
+    sections.push(s4.join('\n'));
+
+    // Section 5 — season league leaders
+    const alBatters  = (playerStatsData.batters  || []).filter(b => b.league === 'AL');
+    const nlBatters  = (playerStatsData.batters  || []).filter(b => b.league === 'NL');
+    const alPitchers = (playerStatsData.pitchers || []).filter(p => p.league === 'AL' && (p.ip || 0) >= 20);
+    const nlPitchers = (playerStatsData.pitchers || []).filter(p => p.league === 'NL' && (p.ip || 0) >= 20);
+
+    function top3(arr, field, asc = false) {
+        return [...arr]
+            .filter(x => x[field] != null)
+            .sort((a, b) => asc
+                ? parseFloat(a[field]) - parseFloat(b[field])
+                : parseFloat(b[field]) - parseFloat(a[field]))
+            .slice(0, 3)
+            .map(x => `${x.name.split(' ').pop()} (${x.teamAbbr}) ${x[field]}`)
+            .join(', ') || '—';
+    }
+
+    const s5 = ['SECTION 5 — CURRENT LEAGUE LEADERS:',
+        '\nAL BATTING LEADERS:',
+        `HR: ${top3(alBatters, 'hr')}`,
+        `OPS: ${top3(alBatters, 'ops')}`,
+        `SLG: ${top3(alBatters, 'slg')}`,
+        `RC: ${top3(alBatters, 'rc')}`,
+        '\nAL PITCHING LEADERS:',
+        `ERA: ${top3(alPitchers, 'era', true)}`,
+        `PAR: ${top3(alPitchers, 'par')}`,
+        `K: ${top3(alPitchers, 'k')}`,
+        `FIP: ${top3(alPitchers, 'fip', true)}`,
+        '\nNL BATTING LEADERS:',
+        `HR: ${top3(nlBatters, 'hr')}`,
+        `OPS: ${top3(nlBatters, 'ops')}`,
+        `SLG: ${top3(nlBatters, 'slg')}`,
+        `RC: ${top3(nlBatters, 'rc')}`,
+        '\nNL PITCHING LEADERS:',
+        `ERA: ${top3(nlPitchers, 'era', true)}`,
+        `PAR: ${top3(nlPitchers, 'par')}`,
+        `K: ${top3(nlPitchers, 'k')}`,
+        `FIP: ${top3(nlPitchers, 'fip', true)}`,
+    ];
+    sections.push(s5.join('\n'));
+
+    return sections.join('\n\n');
+}
+
+function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr, factSheet) {
     const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     });
@@ -481,11 +622,18 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
 
     const performanceNotes = `\n\n${walksNote}\n\n${wpaSwingNote}`;
 
+    const factSheetPrefix = factSheet
+        ? `VERIFIED FACTS — use these as ground truth for all specific claims about game results, ` +
+          `standings movement, top performers, and league leaders. Do not contradict anything in this section.\n\n` +
+          `${factSheet}\n\n`
+        : '';
+
     return [
         {
             title: 'What to Know',
             system: studemundSystem,
             user:
+                factSheetPrefix +
                 `Today is ${dateLabel}.\n\n` +
                 `Box scores:\n${boxStr}\n\n` +
                 `Standings:\n${standStr}\n\n` +
@@ -515,6 +663,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
             title: 'Mets Daily Briefing',
             system: angellSystem,
             user:
+                factSheetPrefix +
                 `Write a 4-5 paragraph daily briefing on the New York Mets for a ` +
                 `devoted fan's morning read. Cover:\n\n` +
                 `- Yesterday's game: a narrative account of what happened, the key ` +
@@ -634,10 +783,23 @@ function textToHtml(text) {
     return parts.join('\n');
 }
 
-function generateHTML(date, updatedStr, narratives) {
+function generateHTML(date, updatedStr, narratives, factSheet) {
     const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     });
+
+    const escHtml = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    const factSheetPanel = factSheet ? `
+        <div class="insight-card">
+            <button class="insight-toggle" aria-expanded="false" onclick="toggleInsight('factsheet')">
+                <span class="insight-title">Today's Fact Sheet</span>
+                <span class="insight-chevron">&#9660;</span>
+            </button>
+            <div class="insight-body" id="insight-factsheet" hidden>
+                <pre class="factsheet-pre">${escHtml(factSheet)}</pre>
+            </div>
+        </div>` : '';
 
     const panels = narratives.map((n, i) => `
         <div class="insight-card">
@@ -742,6 +904,15 @@ function generateHTML(date, updatedStr, narratives) {
         .insight-body p:last-child { margin-bottom: 0; }
         .insight-body ul { margin: 0.5em 0 0.5em 1.5em; }
         .insight-body li { margin-bottom: 0.3em; line-height: 1.75; }
+        .factsheet-pre {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #3b1e08;
+            margin: 0;
+        }
         footer {
             text-align: center;
             padding: 2rem 1rem;
@@ -768,6 +939,7 @@ function generateHTML(date, updatedStr, narratives) {
     <main class="main-content">
         <h1>Daily Insights — ${dateLabel}</h1>
         <p class="updated">Generated ${updatedStr}</p>
+        ${factSheetPanel}
         ${panels}
     </main>
     <footer>Generated by Claude AI &bull; ${updatedStr}</footer>
@@ -803,7 +975,8 @@ async function main() {
     const topPitchersStr = getTopPitchersForPrompt(boxscore, playerStats);
 
     const { metsBoxStr, metsRivalStr, metsStandStr } = formatMetsData(boxscore, standings);
-    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr);
+    const factSheet = buildFactSheet(boxscore, standings, playerStats);
+    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr, factSheet);
 
     // Build player index for stat injection
     const playerIndex = buildPlayerIndex(boxscore, playerStats);
@@ -831,7 +1004,7 @@ async function main() {
         narratives.push({ title, text: verified });
     }
 
-    const html = generateHTML(date, updatedStr, narratives);
+    const html = generateHTML(date, updatedStr, narratives, factSheet);
     fs.writeFileSync('insights.html', html);
     console.log('Generated insights.html successfully!');
 }
