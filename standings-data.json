@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generatedAt": "Wednesday, April 29, 2026 at 8:29 PM EDT",
+  "generatedAt": "Wednesday, April 29, 2026 at 8:38 PM EDT",
   "teams": [
     {
       "name": "Los Angeles Angels",
@@ -48,11 +48,11 @@
       "wcGb": "0.5",
       "wcRank": "5",
       "clinchIndicator": null,
-      "rs": 134,
+      "rs": 135,
       "ra": 152,
-      "rd": -18,
-      "pythWins": 12.2,
-      "pythVar": 2.76,
+      "rd": -17,
+      "pythWins": 12.3,
+      "pythVar": 2.65,
       "streak": "L1",
       "splits": {
         "last10": "5-5",
@@ -63,9 +63,9 @@
         "winners": "3-7"
       },
       "stats": {
-        "obp": 0.307,
-        "slg": 0.414,
-        "ops": 0.722,
+        "obp": 0.309,
+        "slg": 0.419,
+        "ops": 0.728,
         "fip": 4.62,
         "der": 0.697
       }
@@ -185,10 +185,10 @@
       "wcRank": null,
       "clinchIndicator": null,
       "rs": 125,
-      "ra": 124,
-      "rd": 1,
-      "pythWins": 14.6,
-      "pythVar": 4.38,
+      "ra": 126,
+      "rd": -1,
+      "pythWins": 14.4,
+      "pythVar": 4.62,
       "streak": "W1",
       "splits": {
         "last10": "8-2",
@@ -201,9 +201,9 @@
       "stats": {
         "obp": 0.309,
         "slg": 0.38,
-        "ops": 0.69,
-        "fip": 4.43,
-        "der": 0.703
+        "ops": 0.689,
+        "fip": 4.48,
+        "der": 0.7
       }
     },
     {
@@ -252,11 +252,11 @@
       "wcGb": "3.5",
       "wcRank": "10",
       "clinchIndicator": null,
-      "rs": 125,
+      "rs": 127,
       "ra": 136,
-      "rd": -11,
-      "pythWins": 13.7,
-      "pythVar": -0.74,
+      "rd": -9,
+      "pythWins": 14,
+      "pythVar": -0.97,
       "streak": "L1",
       "splits": {
         "last10": "6-4",
@@ -267,11 +267,11 @@
         "winners": "3-9"
       },
       "stats": {
-        "obp": 0.318,
-        "slg": 0.395,
-        "ops": 0.713,
-        "fip": 4.43,
-        "der": 0.684
+        "obp": 0.32,
+        "slg": 0.402,
+        "ops": 0.722,
+        "fip": 4.42,
+        "der": 0.685
       }
     },
     {
@@ -302,7 +302,7 @@
       },
       "stats": {
         "obp": 0.332,
-        "slg": 0.415,
+        "slg": 0.414,
         "ops": 0.746,
         "fip": 3.83,
         "der": 0.689
@@ -439,7 +439,7 @@
       "stats": {
         "obp": 0.324,
         "slg": 0.39,
-        "ops": 0.714,
+        "ops": 0.713,
         "fip": 5.33,
         "der": 0.685
       }
@@ -457,10 +457,10 @@
       "wcRank": "11",
       "clinchIndicator": null,
       "rs": 101,
-      "ra": 128,
-      "rd": -27,
-      "pythWins": 11.1,
-      "pythVar": -1.13,
+      "ra": 131,
+      "rd": -30,
+      "pythWins": 10.8,
+      "pythVar": -0.81,
       "streak": "W1",
       "splits": {
         "last10": "3-7",
@@ -474,7 +474,7 @@
         "obp": 0.289,
         "slg": 0.341,
         "ops": 0.631,
-        "fip": 3.69,
+        "fip": 3.68,
         "der": 0.695
       }
     },
@@ -543,7 +543,7 @@
         "slg": 0.378,
         "ops": 0.702,
         "fip": 3.65,
-        "der": 0.706
+        "der": 0.705
       }
     },
     {
@@ -660,11 +660,11 @@
       "wcGb": "-",
       "wcRank": "3",
       "clinchIndicator": null,
-      "rs": 143,
+      "rs": 144,
       "ra": 150,
-      "rd": -7,
-      "pythWins": 13.8,
-      "pythVar": 2.19,
+      "rd": -6,
+      "pythWins": 13.9,
+      "pythVar": 2.09,
       "streak": "W2",
       "splits": {
         "last10": "5-5",
@@ -675,9 +675,9 @@
         "winners": "2-0"
       },
       "stats": {
-        "obp": 0.324,
+        "obp": 0.325,
         "slg": 0.398,
-        "ops": 0.721,
+        "ops": 0.722,
         "fip": 4.69,
         "der": 0.697
       }
@@ -882,7 +882,7 @@
         "obp": 0.339,
         "slg": 0.455,
         "ops": 0.794,
-        "fip": 3.88,
+        "fip": 3.89,
         "der": 0.735
       }
     },
@@ -1001,10 +1001,10 @@
       "wcRank": "4",
       "clinchIndicator": null,
       "rs": 147,
-      "ra": 115,
-      "rd": 32,
-      "pythWins": 17.4,
-      "pythVar": -2.37,
+      "ra": 116,
+      "rd": 31,
+      "pythWins": 17.3,
+      "pythVar": -2.26,
       "streak": "W2",
       "splits": {
         "last10": "5-5",
@@ -1015,11 +1015,11 @@
         "winners": "2-2"
       },
       "stats": {
-        "obp": 0.336,
+        "obp": 0.335,
         "slg": 0.359,
-        "ops": 0.695,
-        "fip": 3.65,
-        "der": 0.696
+        "ops": 0.694,
+        "fip": 3.69,
+        "der": 0.694
       }
     }
   ]
