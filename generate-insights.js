@@ -397,8 +397,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
 
     const angellSystem =
         'You are a baseball writer in the tradition of Roger Angell — lyrical, unhurried, ' +
-        'attentive to detail and human drama. Write vivid prose that makes the reader feel ' +
-        'like they were at the ballpark. Avoid clichés. Each paragraph should earn its place. ' +
+        'attentive to detail and human drama. Avoid clichés. Each paragraph should earn its place. ' +
         'Output 3–5 paragraphs of polished prose. No headers, no bullet points.';
 
     const studemundSystem =
@@ -452,8 +451,6 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `next to each player name. Focus entirely on observation, analysis, and ` +
         `storytelling. Write as if the reader can already see the numbers.`;
 
-    const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}\n\n${noStatsNote}`;
-
     const lwtsNote =
         `IMPORTANT: Linear weights are context-neutral — they do not account for game situation, ` +
         `leverage, or timing. Do not imply or suggest that a high LWTS reflects a clutch or ` +
@@ -465,24 +462,20 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `the road has nothing to do with Coors Field. Never use a pitcher's team identity to ` +
         `infer ballpark context — only use the venue field in the data.`;
 
+    const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}\n\n${noStatsNote}\n\n${coorsNote}\n\n${lwtsNote}`;
+
     const walksNote =
         `When mentioning a batter's performance, always include walks separately from hits. ` +
         `A player who went 2-for-3 with a walk had 4 plate appearances, not 3 at-bats. ` +
         `Always describe batting performances in terms of plate appearances when walks are involved. ` +
         `Never omit walks from a batting line.`;
 
-    const leaderContextNote =
-        `When mentioning a pitcher's performance, reference their season ERA, strikeout total, and PAR rank ` +
-        `if they are among the league leaders. When mentioning a batter's performance, reference their season ` +
-        `HR total, OPS, doubles, runs, or RBI if they are among the league leaders. ` +
-        `Example: 'Pujols hit his league-leading 40th home run.'`;
-
     const wpaSwingNote =
         `Use total WPA swing for each game as a measure of drama and volatility. ` +
         `A game with a high total WPA swing was exciting and volatile. ` +
         `Reference it when describing how dramatic or one-sided a game was.`;
 
-    const performanceNotes = `\n\n${walksNote}\n\n${leaderContextNote}\n\n${wpaSwingNote}`;
+    const performanceNotes = `\n\n${walksNote}\n\n${wpaSwingNote}`;
 
     return [
         {
@@ -504,23 +497,12 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `paragraph. Just the ten items, numbered.\n\n` +
                 `Use the standings data to identify pennant race context. ` +
                 `Reference season leaders when relevant — ERA, strikeout, ` +
-                `PAR, HR, OPS leaders add meaning to individual performances.\n` +
-                `Bold all player names.\n` +
-                `When mentioning a batter's day always include walks separately.\n` +
-                `PAR has been pre-calculated — use the par field directly.\n` +
-                `Do not mention Coors Field unless the game was at Coors Field.\n` +
-                `Always identify a player's team on first mention.` +
+                `PAR, HR, OPS leaders add meaning to individual performances.` +
                 sharedNotes,
         },
         {
             title: 'Mets Daily Briefing',
-            system:
-                `You are writing in the style of Roger Angell — lyrical and unhurried, ` +
-                `evoking the atmosphere and human drama of the game as much as the ` +
-                `statistics, with beautifully crafted sentences and a deep reverence ` +
-                `for baseball's rhythms and history. Angell was a lifelong New Yorker ` +
-                `with a particular tenderness for the Mets — channel that affection ` +
-                `without sentimentality.`,
+            system: angellSystem,
             user:
                 `Write a 4-5 paragraph daily briefing on the New York Mets for a ` +
                 `devoted fan's morning read. Cover:\n\n` +
@@ -540,9 +522,6 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `and what the off day meant in context.\n\n` +
                 `Tone: write as someone who genuinely cares how this turns out, ` +
                 `but with clear eyes. Don't cheerlead. Don't catastrophize.\n\n` +
-                `PAR (Pitching Above Replacement) = ` +
-                `Math.round((6.00 - (fip + era) / 2) * ip / 9). ` +
-                `Higher PAR is better. A replacement level pitcher scores 0.\n\n` +
                 `Yesterday's date: ${dateLabel}\n\n` +
                 `Boxscore data:\n${metsBoxStr}\n\n` +
                 `NL East rivals' games:\n${metsRivalStr}\n\n` +
