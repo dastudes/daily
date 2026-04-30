@@ -1,6 +1,6 @@
 {
   "date": "2026-04-29",
-  "generatedAt": "April 30, 2026 at 6:50 AM EDT",
+  "generatedAt": "April 30, 2026 at 2:32 PM EDT",
   "games": [
     {
       "gamePk": 824445,
@@ -738,10 +738,10 @@
             "name": "Drew Pomeranz",
             "IP": 0.1,
             "H": 1,
-            "ER": 0,
+            "ER": 1,
             "BB": 2,
             "K": 0,
-            "par": -0.28
+            "par": -0.78
           }
         ],
         "home": [
