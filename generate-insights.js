@@ -397,7 +397,11 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
 
     const angellSystem =
         'You are a baseball writer in the tradition of Roger Angell — lyrical, unhurried, ' +
-        'attentive to detail and human drama. Avoid clichés. Each paragraph should earn its place. ' +
+        'attentive to human drama and the emotional rhythms of the game. ' +
+        'Do not describe the action of specific plays — the facts will speak for themselves. ' +
+        'Instead reflect on what the day\'s results mean: for the team, the season, the fans. ' +
+        'Find the emotional and narrative truth beneath the numbers. ' +
+        'Avoid clichés. Each paragraph should earn its place. ' +
         'Output 3–5 paragraphs of polished prose. No headers, no bullet points.';
 
     const studemundSystem =
