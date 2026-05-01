@@ -1016,6 +1016,26 @@ async function main() {
     const html = generateHTML(date, updatedStr, narratives, factSheet);
     fs.writeFileSync('insights.html', html);
     console.log('Generated insights.html successfully!');
+
+    const snippetMeta = [
+        { filename: 'whats-to-know-snippet.html', id: 'index-insight-0' },
+        { filename: 'mets-snippet.html',           id: 'index-insight-1' },
+    ];
+    narratives.forEach((n, i) => {
+        const { filename, id } = snippetMeta[i];
+        const snippet = `<div class="insight-card">
+            <button class="insight-toggle" aria-expanded="false" onclick="toggleInsight('${id}')">
+                <span class="insight-title">${n.title}</span>
+                <span class="insight-chevron">&#9660;</span>
+            </button>
+            <div class="insight-body" id="${id}" hidden>
+                ${textToHtml(n.text)}
+                <p><em>By the way, I'm not infallible. Wish I had an editor.</em></p>
+            </div>
+        </div>`;
+        fs.writeFileSync(filename, snippet);
+        console.log(`Generated ${filename}`);
+    });
 }
 
 main().catch(err => {

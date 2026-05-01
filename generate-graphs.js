@@ -506,6 +506,11 @@ async function generateHTML() {
 }
 
 function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames = []) {
+    const wtkSnippet = fs.existsSync('whats-to-know-snippet.html')
+        ? fs.readFileSync('whats-to-know-snippet.html', 'utf8') : '';
+    const metsSnippet = fs.existsSync('mets-snippet.html')
+        ? fs.readFileSync('mets-snippet.html', 'utf8') : '';
+
     // Debug: log what we received
     const teamCount = Object.keys(teamData).length;
     console.log(`generateHTMLContent received ${teamCount} teams`);
@@ -1095,6 +1100,44 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
             text-decoration: underline;
             color: #1e40af;
         }
+        .insight-card {
+            border: 2px solid #b45309;
+            border-radius: 6px;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+        }
+        .insight-toggle {
+            width: 100%;
+            background: #fff7ed;
+            border: none;
+            cursor: pointer;
+            padding: 0.9rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: Georgia, serif;
+            font-size: 1.05rem;
+            color: #78350f;
+            font-weight: bold;
+            text-align: left;
+            transition: background 0.15s;
+        }
+        .insight-toggle:hover { background: rgba(253,230,138,0.2); }
+        .insight-toggle[aria-expanded="true"] {
+            background: linear-gradient(135deg, #78350f, #92400e);
+            color: #fff;
+        }
+        .insight-chevron { font-size: 0.75rem; transition: transform 0.2s; }
+        .insight-toggle[aria-expanded="true"] .insight-chevron { transform: rotate(180deg); }
+        .insight-body {
+            padding: 1.5rem 1.75rem;
+            background: #fffbf5;
+            border-top: 1px solid #f6d28d;
+        }
+        .insight-body p { line-height: 1.75; font-size: 1rem; color: #3b1e08; margin-bottom: 1.1em; }
+        .insight-body p:last-child { margin-bottom: 0; }
+        .insight-body ul { margin: 0.5em 0 0.5em 1.5em; }
+        .insight-body li { margin-bottom: 0.3em; line-height: 1.75; }
     </style>
     <script data-goatcounter="https://baseball-graphs.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
@@ -1148,7 +1191,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
                 </div>
             </div>
         </div>
-        
+        ${wtkSnippet}
         <div class="tab-container">
             <div class="tab-buttons">
                 <button class="tab-button active" onclick="switchTab(1)">Run Differential</button>
@@ -1242,7 +1285,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
             </div>
         </div>
     </div>
-    
+    ${metsSnippet}
     ${todaysGames.length > 0 ? `
     <div class="page-container" style="margin-top: 0;">
         <div class="schedule-box">
@@ -2212,6 +2255,14 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
         updateAllCharts();
         updateBatterLeaderboard();
         updatePitcherLeaderboard();
+
+        function toggleInsight(i) {
+            const body = document.getElementById(i);
+            const btn = body.previousElementSibling;
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', String(!expanded));
+            body.hidden = expanded;
+        }
     </script>
 </body>
 </html>`;
