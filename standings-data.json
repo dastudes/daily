@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generatedAt": "Friday, May 1, 2026 at 2:53 PM EDT",
+  "generatedAt": "Friday, May 1, 2026 at 3:12 PM EDT",
   "teams": [
     {
       "name": "Los Angeles Angels",
@@ -56,11 +56,11 @@
       "wcGbChange": 0,
       "wcRank": "5",
       "clinchIndicator": null,
-      "rs": 141,
+      "rs": 142,
       "ra": 168,
-      "rd": -27,
-      "pythWins": 12.4,
-      "pythVar": 3.6,
+      "rd": -26,
+      "pythWins": 12.5,
+      "pythVar": 3.5,
       "streak": "L1",
       "splits": {
         "last10": "4-6",
@@ -71,11 +71,11 @@
         "winners": "4-8"
       },
       "stats": {
-        "obp": 0.307,
-        "slg": 0.417,
-        "ops": 0.724,
+        "obp": 0.308,
+        "slg": 0.418,
+        "ops": 0.726,
         "fip": 4.65,
-        "der": 0.691
+        "der": 0.693
       }
     },
     {
@@ -171,10 +171,10 @@
       "wcRank": "2",
       "clinchIndicator": null,
       "rs": 172,
-      "ra": 134,
-      "rd": 38,
-      "pythWins": 19.3,
-      "pythVar": -0.29,
+      "ra": 135,
+      "rd": 37,
+      "pythWins": 19.2,
+      "pythVar": -0.18,
       "streak": "W2",
       "splits": {
         "last10": "7-3",
@@ -186,10 +186,10 @@
       },
       "stats": {
         "obp": 0.354,
-        "slg": 0.428,
-        "ops": 0.782,
-        "fip": 4.08,
-        "der": 0.721
+        "slg": 0.427,
+        "ops": 0.78,
+        "fip": 4.07,
+        "der": 0.72
       }
     },
     {
