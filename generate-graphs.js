@@ -1285,7 +1285,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
             </div>
         </div>
     </div>
-    ${metsSnippet}
+    ${metsSnippet ? `<div class="page-container">${metsSnippet}</div>` : ''}
     ${todaysGames.length > 0 ? `
     <div class="page-container" style="margin-top: 0;">
         <div class="schedule-box">
