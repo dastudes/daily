@@ -1,6 +1,6 @@
 {
   "date": "2026-04-30",
-  "generatedAt": "May 1, 2026 at 6:19 AM EDT",
+  "generatedAt": "May 1, 2026 at 2:32 PM EDT",
   "games": [
     {
       "gamePk": 824929,
@@ -4347,7 +4347,7 @@
           },
           "home": {
             "runs": 7,
-            "hits": 6,
+            "hits": 7,
             "errors": 0
           }
         }
@@ -4481,7 +4481,7 @@
             "PA": 4,
             "AB": 4,
             "R": 2,
-            "H": 1,
+            "H": 2,
             "HR": 1,
             "RBI": 2,
             "BB": 0
@@ -4571,11 +4571,11 @@
           {
             "name": "Mason Fluharty",
             "IP": 0.1,
-            "H": 2,
-            "ER": 1,
+            "H": 3,
+            "ER": 3,
             "BB": 2,
             "K": 1,
-            "par": -0.67
+            "par": -1.67
           },
           {
             "name": "Joe Mantiply",
