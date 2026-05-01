@@ -3,7 +3,7 @@
 const fs = require('fs');
 const Anthropic = require('@anthropic-ai/sdk');
 
-const MODEL = 'claude-sonnet-4-5';
+const MODEL = 'claude-opus-4-7';
 const MAX_TOKENS = 3000;
 
 function loadData() {
