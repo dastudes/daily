@@ -34,9 +34,6 @@ jobs:
       - name: Fetch stats and generate HTML
         run: node generate-stats.js
 
-      - name: Generate graphs page
-        run: node generate-graphs.js
-
       - name: Generate box scores page
         run: node generate-boxscores.js
 
@@ -44,6 +41,9 @@ jobs:
         run: node generate-insights.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Generate graphs page
+        run: node generate-graphs.js
 
       - name: Validate output
         run: |
