@@ -661,13 +661,14 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `write 2-3 sentences about what the result means for the teams involved.\n\n` +
                 `SECTION 2 — MOST DRAMATIC GAMES: Identify the 2-3 most dramatic or ` +
                 `memorable games from yesterday. Use Total WPA Swing as one measure of ` +
-                `drama. Another measure would be walkoff games. For each, write 2-3 sentences describing what made it memorable.\n\n` +
+                `drama. Other measures would be walkoff or comeback games. '+
+                'For each, write 2-3 sentences describing what made it memorable.\n\n` +
                 `SECTION 3 — STANDOUT PERFORMANCES: Write 1-4 bullet points. One bullet ` +
                 `per outstanding individual performance — batter or pitcher. Brief and ` +
                 `specific. Draw from the top batters and top pitchers data.\n\n` +
                 `SECTION 4 — STANDINGS AND TRENDS: Write 2-3 sentences on what the day's ` +
                 `results mean for the overall league picture — division races, Pythagorean ` +
-                `outliers, teams moving in the right or wrong direction.\n\n` +
+                `outliers, teams moving in the right or wrong direction or other oddities.\n\n` +
                 `Do not label the sections. Write as a continuous column that happens to ` +
                 `follow this order. No introductory or closing paragraph.` +
                 sharedNotes,
