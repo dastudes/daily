@@ -653,8 +653,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `from one to the next with no section headers or labels.\n\n` +
                 `SECTION 1 — PENNANT RACE GAMES: Discuss 2-4 games with the most ` +
                 `pennant race significance. Use the standings data to identify which ` +
-                `games mattered most in division or wild card races. After 100 games have been played, '+
-                'note when teams high in wild card rankings played each other. For each game, ` +
+                `games mattered most in division or wild card races, such as teams close in divisions '+
+                'or teams close in the wild card rankings. For each game, ` +
                 `write 2-3 sentences about what the result means for the teams involved.\n\n` +
                 `SECTION 2 — MOST DRAMATIC GAMES: Identify the 2-3 most dramatic or ` +
                 `memorable games from yesterday. Use Total WPA Swing as one measure of ` +
