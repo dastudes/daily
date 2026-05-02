@@ -379,7 +379,7 @@ function formatMetsData(boxscore, standings) {
         const rd = t.rd > 0 ? `+${t.rd}` : String(t.rd);
         const pv = t.pythVar > 0 ? `+${t.pythVar}` : String(t.pythVar);
         standLines.push(
-            `${t.abbreviation}: ${t.w}-${t.l} .${t.pct} GB: ${t.gb}` +
+            `${t.abbreviation} (${t.division}): ${t.w}-${t.l} .${t.pct} GB: ${t.gb}` +
             ` | RS/RA: ${t.rs}/${t.ra} RD: ${rd}` +
             ` | pyW: ${t.pythWins} (${pv})` +
             ` | Streak: ${t.streak || '?'} L10: ${t.splits.last10 || '?'}` +
@@ -430,7 +430,7 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
             if (gbChange !== null && gbChange !== 0 && inDivRace) {
                 const dir    = gbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(gbChange);
-                s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${divShort} division race`);
+                s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${division} race`);
             } else if (wcGbChange !== null && wcGbChange !== 0 && inWcRace) {
                 const dir    = wcGbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(wcGbChange);
@@ -653,11 +653,12 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `from one to the next with no section headers or labels.\n\n` +
                 `SECTION 1 — PENNANT RACE GAMES: Discuss 2-4 games with the most ` +
                 `pennant race significance. Use the standings data to identify which ` +
-                `games mattered most in division or wild card races. For each game, ` +
+                `games mattered most in division or wild card races. After 100 games have been played, '+
+                'note when teams high in wild card rankings played each other. For each game, ` +
                 `write 2-3 sentences about what the result means for the teams involved.\n\n` +
                 `SECTION 2 — MOST DRAMATIC GAMES: Identify the 2-3 most dramatic or ` +
                 `memorable games from yesterday. Use Total WPA Swing as one measure of ` +
-                `drama. For each, write 2-3 sentences describing what made it memorable.\n\n` +
+                `drama. Another measure would be walkoff games. For each, write 2-3 sentences describing what made it memorable.\n\n` +
                 `SECTION 3 — STANDOUT PERFORMANCES: Write 1-4 bullet points. One bullet ` +
                 `per outstanding individual performance — batter or pitcher. Brief and ` +
                 `specific. Draw from the top batters and top pitchers data.\n\n` +
