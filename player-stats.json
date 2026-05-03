@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-05-03T10:00:32.634Z",
+  "updated": "2026-05-03T15:28:34.289Z",
   "batters": [
     {
       "name": "Shea Langeliers",
@@ -19681,30 +19681,6 @@
       "fip": 4.01,
       "par": 1,
       "h": 1,
-      "er": 0,
-      "pitchHand": "R"
-    },
-    {
-      "name": "Yacksel Ríos",
-      "playerId": 605441,
-      "team": "Chicago Cubs",
-      "teamAbbr": "CHC",
-      "league": "NL",
-      "age": 32,
-      "g": 1,
-      "gs": 0,
-      "ip": 1.2,
-      "w": 0,
-      "l": 0,
-      "sv": 0,
-      "hr": 0,
-      "k": 2,
-      "bb": 0,
-      "era": 0,
-      "whip": 0,
-      "fip": -0.23,
-      "par": 1,
-      "h": 0,
       "er": 0,
       "pitchHand": "R"
     },
