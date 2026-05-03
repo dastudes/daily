@@ -316,26 +316,27 @@ function injectStats(text, playerIndex) {
             }
         }
 
-        // Last-name fallback (only when last name is unique across today's players)
+        // Last-name fallback (only when last name is unique across today's players,
+        // at least 6 chars to avoid matching common English words, and capitalized in text)
         if (!matched) {
             const lastName = fullName.split(' ').pop();
             const normLast = normalizeForMatch(lastName);
             const lastEntry = lastNameIndex.get(normLast);
-            if (lastEntry && lastEntry.key === key) {
+            if (lastEntry && lastEntry.key === key && lastName.length >= 6) {
                 const deAccLast = lastName.normalize('NFD').replace(/[̀-ͯ]/g, '');
                 const lastVariants = deAccLast === lastName ? [lastName] : [lastName, deAccLast];
                 for (const v of lastVariants) {
                     const esc = escapeRegex(v);
-                    if (new RegExp(`(\\*\\*${esc}\\*\\*)`, 'i').test(result)) {
-                        result = result.replace(new RegExp(`(\\*\\*${esc}\\*\\*)`, 'i'), `$1 ${statBlock}`);
+                    if (new RegExp(`(\\*\\*${esc}\\*\\*)`).test(result)) {
+                        result = result.replace(new RegExp(`(\\*\\*${esc}\\*\\*)`), `$1 ${statBlock}`);
                         seen.add(key); matched = true; break;
                     }
                 }
                 if (!matched) {
                     for (const v of lastVariants) {
                         const esc = escapeRegex(v);
-                        if (new RegExp(`(?<![\\w*])(${v})(?![\\w*])`, 'i').test(result)) {
-                            result = result.replace(new RegExp(`(?<![\\w*])(${esc})(?![\\w*])`, 'i'), `$1 ${statBlock}`);
+                        if (new RegExp(`(?<![\\w*])(${v})(?![\\w*])`).test(result)) {
+                            result = result.replace(new RegExp(`(?<![\\w*])(${esc})(?![\\w*])`), `$1 ${statBlock}`);
                             seen.add(key); break;
                         }
                     }
@@ -513,6 +514,14 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
             .join(', ') || '—';
     }
 
+    function teamNickname(fullName) {
+        const twoWordCities = ['Los Angeles', 'San Francisco', 'San Diego', 'Kansas City', 'Tampa Bay', 'St. Louis', 'New York'];
+        for (const city of twoWordCities) {
+            if (fullName.startsWith(city + ' ')) return fullName.slice(city.length + 1);
+        }
+        return fullName.split(' ').slice(1).join(' ') || fullName;
+    }
+
     const s5 = ['SECTION 5 — CURRENT LEAGUE LEADERS:',
         '\nAL BATTING LEADERS:',
         `HR: ${top3(alBatters, 'hr')}`,
@@ -536,6 +545,29 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
         `FIP: ${top3(nlQPitchers, 'fip', true)}`,
     ];
     sections.push(s5.join('\n'));
+
+    // Section 6 — division standings summary (pre-computed so Claude never has to rank or calculate GB)
+    const DIVISIONS = [
+        'American League East', 'American League Central', 'American League West',
+        'National League East', 'National League Central', 'National League West',
+    ];
+    const s6 = ['SECTION 6 — DIVISION STANDINGS:'];
+    for (const div of DIVISIONS) {
+        const divTeams = (standingsData.teams || [])
+            .filter(t => t.division === div)
+            .sort((a, b) => parseFloat(b.pct) - parseFloat(a.pct) || (b.w || 0) - (a.w || 0));
+        if (divTeams.length === 0) continue;
+        const divShort = div.replace('American League', 'AL').replace('National League', 'NL').toUpperCase();
+        s6.push(`\n${divShort} STANDINGS:`);
+        for (let i = 0; i < divTeams.length; i++) {
+            const t = divTeams[i];
+            const gbStr = t.gb === '-' ? 'first place' : `${t.gb} GB`;
+            s6.push(`${i + 1}. ${teamNickname(t.name)}: ${t.w}-${t.l} (${gbStr})`);
+        }
+        const above = divTeams.filter(t => parseFloat(t.pct) > 0.5);
+        s6.push(`Teams above .500: ${above.length > 0 ? above.map(t => teamNickname(t.name)).join(', ') + ` (${above.length})` : 'none (0)'}`);
+    }
+    sections.push(s6.join('\n'));
 
     return sections.join('\n\n');
 }
