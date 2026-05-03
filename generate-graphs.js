@@ -506,11 +506,6 @@ async function generateHTML() {
 }
 
 function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames = []) {
-    const wtkSnippet = fs.existsSync('whats-to-know-snippet.html')
-        ? fs.readFileSync('whats-to-know-snippet.html', 'utf8') : '';
-    const metsSnippet = fs.existsSync('mets-snippet.html')
-        ? fs.readFileSync('mets-snippet.html', 'utf8') : '';
-
     // Debug: log what we received
     const teamCount = Object.keys(teamData).length;
     console.log(`generateHTMLContent received ${teamCount} teams`);
@@ -1191,7 +1186,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
                 </div>
             </div>
         </div>
-        ${wtkSnippet}
+        <!-- WTK_SNIPPET -->
         <div class="tab-container">
             <div class="tab-buttons">
                 <button class="tab-button active" onclick="switchTab(1)">Run Differential</button>
@@ -1285,7 +1280,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
             </div>
         </div>
     </div>
-    ${metsSnippet ? `<div class="page-container">${metsSnippet}</div>` : ''}
+    <!-- METS_SNIPPET -->
     ${todaysGames.length > 0 ? `
     <div class="page-container" style="margin-top: 0;">
         <div class="schedule-box">
