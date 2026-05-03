@@ -416,23 +416,17 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
 
         const s2 = [];
         for (const team of standingsData.teams) {
-            const { gbChange, wcGbChange, gb, wcGb, wcRank, abbreviation, name, division, league } = team;
-            const gbNum   = parseFloat(gb);
-            const wcGbNum = parseFloat(wcGb);
-            const inDivRace = gb === '-' || (!isNaN(gbNum) && gbNum <= 10);
-            const inWcRace  = (typeof wcRank === 'number' && wcRank <= 5) || (!isNaN(wcGbNum) && wcGbNum <= 6);
-            if (!inDivRace && !inWcRace) continue;
+            const { gbChange, wcGbChange, abbreviation, name, division, league } = team;
 
-            const g          = teamGame[abbreviation];
-            const prefix     = g ? `${abbreviation} ${g.won ? 'def.' : 'lost to'} ${g.opp}: ` : '';
-            const divShort   = division.replace('American League', 'AL').replace('National League', 'NL');
-            const leagShort  = league.replace(' League', '');
+            const g         = teamGame[abbreviation];
+            const prefix    = g ? `${abbreviation} ${g.won ? 'def.' : 'lost to'} ${g.opp}: ` : '';
+            const leagShort = league.replace(' League', '');
 
-            if (gbChange !== null && Math.abs(gbChange) >= 0.5 && inDivRace) {
+            if (gbChange !== null && Math.abs(gbChange) >= 0.5) {
                 const dir    = gbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(gbChange);
                 s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${division} race`);
-            } else if (wcGbChange !== null && Math.abs(wcGbChange) >= 0.5 && inWcRace) {
+            } else if (wcGbChange !== null && Math.abs(wcGbChange) >= 0.5) {
                 const dir    = wcGbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(wcGbChange);
                 s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${leagShort} wild card race`);
