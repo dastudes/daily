@@ -1,6 +1,6 @@
 {
   "date": "2026-05-02",
-  "generatedAt": "May 3, 2026 at 11:57 AM EDT",
+  "generatedAt": "May 3, 2026 at 12:14 PM EDT",
   "games": [
     {
       "gamePk": 823554,
@@ -5410,7 +5410,7 @@
           "home": {
             "runs": 4,
             "hits": 12,
-            "errors": 0
+            "errors": 1
           }
         }
       },

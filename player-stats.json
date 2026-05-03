@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-05-03T15:57:30.622Z",
+  "updated": "2026-05-03T16:14:32.171Z",
   "batters": [
     {
       "name": "Shea Langeliers",
@@ -10416,11 +10416,11 @@
       "so": 32,
       "avg": 0.185,
       "obp": 0.254,
-      "slg": 0.306,
-      "ops": 0.56,
-      "doubles": 4,
+      "slg": 0.296,
+      "ops": 0.551,
+      "doubles": 3,
       "triples": 0,
-      "tb": 33,
+      "tb": 32,
       "rc": 8,
       "batSide": "R"
     },

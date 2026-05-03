@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generatedAt": "Sunday, May 3, 2026 at 11:57 AM EDT",
+  "generatedAt": "Sunday, May 3, 2026 at 12:14 PM EDT",
   "teams": [
     {
       "name": "Los Angeles Angels",
@@ -604,7 +604,7 @@
       },
       "stats": {
         "obp": 0.34,
-        "slg": 0.398,
+        "slg": 0.397,
         "ops": 0.738,
         "fip": 3.61,
         "der": 0.7
