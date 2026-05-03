@@ -419,8 +419,8 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
             const { gbChange, wcGbChange, gb, wcGb, wcRank, abbreviation, name, division, league } = team;
             const gbNum   = parseFloat(gb);
             const wcGbNum = parseFloat(wcGb);
-            const inDivRace = gb === '-' || (!isNaN(gbNum) && gbNum <= 6);
-            const inWcRace  = (typeof wcRank === 'number' && wcRank <= 3) || (!isNaN(wcGbNum) && wcGbNum <= 4);
+            const inDivRace = gb === '-' || (!isNaN(gbNum) && gbNum <= 10);
+            const inWcRace  = (typeof wcRank === 'number' && wcRank <= 5) || (!isNaN(wcGbNum) && wcGbNum <= 6);
             if (!inDivRace && !inWcRace) continue;
 
             const g          = teamGame[abbreviation];
@@ -428,11 +428,11 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
             const divShort   = division.replace('American League', 'AL').replace('National League', 'NL');
             const leagShort  = league.replace(' League', '');
 
-            if (gbChange !== null && gbChange !== 0 && inDivRace) {
+            if (gbChange !== null && Math.abs(gbChange) >= 0.5 && inDivRace) {
                 const dir    = gbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(gbChange);
                 s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${division} race`);
-            } else if (wcGbChange !== null && wcGbChange !== 0 && inWcRace) {
+            } else if (wcGbChange !== null && Math.abs(wcGbChange) >= 0.5 && inWcRace) {
                 const dir    = wcGbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(wcGbChange);
                 s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${leagShort} wild card race`);
