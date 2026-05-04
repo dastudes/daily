@@ -513,7 +513,7 @@
         <a href="index.html">Graphs &amp; Standings</a>
         <a href="player_stats.html">Player Stats</a>
         <a href="box-scores.html">Box Scores</a>
-        <a href="fantasy.html" class="active">Fantasy</a>
+        <a href="woody.html" class="active">Woody</a>
     </div>
 
     <!-- Status bar -->
@@ -689,13 +689,25 @@
 </div><!-- end container -->
 
 <script>
+(function() {
+    const pass = localStorage.getItem('woody_pass');
+    if (pass !== 'woody') {
+        const entered = prompt('Password required:');
+        if (entered !== 'woody') {
+            document.body.innerHTML = '<p style="font-family:Georgia;padding:40px;">Access denied.</p>';
+            throw new Error('Access denied');
+        }
+        localStorage.setItem('woody_pass', 'woody');
+    }
+})();
+
 // ══════════════════════════════════════════════
 //  Config — adjust these defaults if you like
 // ══════════════════════════════════════════════
 const DEFAULT_OWNER  = 'dastudes';
 const DEFAULT_REPO   = 'daily';
 const DEFAULT_BRANCH = 'main';
-const DEFAULT_PATH   = 'fantasy-roster.json';
+const DEFAULT_PATH   = 'woody-roster.json';
 const MLB_API        = 'https://statsapi.mlb.com/api/v1';
 const SEASON         = new Date().getFullYear();
 
