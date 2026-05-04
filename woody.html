@@ -618,21 +618,25 @@
                     <tr>
                         <th class="sortable" data-col="0">Name</th>
                         <th class="sortable" data-col="1">Team</th>
-                        <th class="sortable stat-num" data-col="2">G</th>
-                        <th class="sortable stat-num" data-col="3">AB</th>
-                        <th class="sortable stat-num" data-col="4">R</th>
-                        <th class="sortable stat-num" data-col="5">H</th>
-                        <th class="sortable stat-num" data-col="6">2B</th>
-                        <th class="sortable stat-num" data-col="7">3B</th>
-                        <th class="sortable stat-num" data-col="8">HR</th>
-                        <th class="sortable stat-num" data-col="9">RBI</th>
-                        <th class="sortable stat-num" data-col="10">BB</th>
-                        <th class="sortable stat-num" data-col="11">SB</th>
-                        <th class="sortable stat-num" data-col="12">AVG</th>
-                        <th class="sortable stat-num" data-col="13">OBP</th>
-                        <th class="sortable stat-num" data-col="14">SLG</th>
-                        <th class="sortable stat-num" data-col="15">OPS</th>
-                        <th class="sortable stat-num" data-col="16">RC</th>
+                        <th class="sortable stat-num" data-col="2">Age</th>
+                        <th class="sortable" data-col="3">Pos</th>
+                        <th class="sortable stat-num" data-col="4">G</th>
+                        <th class="sortable stat-num" data-col="5">RC</th>
+                        <th class="sortable stat-num" data-col="6">PA</th>
+                        <th class="sortable stat-num" data-col="7">R</th>
+                        <th class="sortable stat-num" data-col="8">RBI</th>
+                        <th class="sortable stat-num" data-col="9">BA</th>
+                        <th class="sortable stat-num" data-col="10">OBP</th>
+                        <th class="sortable stat-num" data-col="11">SLG</th>
+                        <th class="sortable stat-num" data-col="12">H</th>
+                        <th class="sortable stat-num" data-col="13">2B</th>
+                        <th class="sortable stat-num" data-col="14">3B</th>
+                        <th class="sortable stat-num" data-col="15">HR</th>
+                        <th class="sortable stat-num" data-col="16">TB</th>
+                        <th class="sortable stat-num" data-col="17">BB</th>
+                        <th class="sortable stat-num" data-col="18">SO</th>
+                        <th class="sortable stat-num" data-col="19">SB</th>
+                        <th class="sortable stat-num" data-col="20">CS</th>
                     </tr>
                 </thead>
                 <tbody id="batting-tbody"></tbody>
@@ -646,20 +650,23 @@
                     <tr>
                         <th class="sortable green-th" data-col="0">Name</th>
                         <th class="sortable green-th" data-col="1">Team</th>
-                        <th class="sortable green-th stat-num" data-col="2">G</th>
-                        <th class="sortable green-th stat-num" data-col="3">GS</th>
+                        <th class="sortable green-th stat-num" data-col="2">Age</th>
+                        <th class="sortable green-th stat-num" data-col="3">PAR</th>
                         <th class="sortable green-th stat-num" data-col="4">IP</th>
-                        <th class="sortable green-th stat-num" data-col="5">W</th>
-                        <th class="sortable green-th stat-num" data-col="6">L</th>
-                        <th class="sortable green-th stat-num" data-col="7">SV</th>
-                        <th class="sortable green-th stat-num" data-col="8">H</th>
-                        <th class="sortable green-th stat-num" data-col="9">ER</th>
-                        <th class="sortable green-th stat-num" data-col="10">BB</th>
-                        <th class="sortable green-th stat-num" data-col="11">K</th>
-                        <th class="sortable green-th stat-num" data-col="12">ERA</th>
-                        <th class="sortable green-th stat-num" data-col="13">WHIP</th>
-                        <th class="sortable green-th stat-num" data-col="14">FIP</th>
-                        <th class="sortable green-th stat-num" data-col="15">PAR</th>
+                        <th class="sortable green-th stat-num" data-col="5">ERA</th>
+                        <th class="sortable green-th stat-num" data-col="6">FIP</th>
+                        <th class="sortable green-th stat-num" data-col="7">WHIP</th>
+                        <th class="sortable green-th stat-num" data-col="8">G</th>
+                        <th class="sortable green-th stat-num" data-col="9">GS</th>
+                        <th class="sortable green-th stat-num" data-col="10">W</th>
+                        <th class="sortable green-th stat-num" data-col="11">L</th>
+                        <th class="sortable green-th stat-num" data-col="12">SV</th>
+                        <th class="sortable green-th stat-num" data-col="13">H</th>
+                        <th class="sortable green-th stat-num" data-col="14">R</th>
+                        <th class="sortable green-th stat-num" data-col="15">ER</th>
+                        <th class="sortable green-th stat-num" data-col="16">HR</th>
+                        <th class="sortable green-th stat-num" data-col="17">BB</th>
+                        <th class="sortable green-th stat-num" data-col="18">SO</th>
                     </tr>
                 </thead>
                 <tbody id="pitching-tbody"></tbody>
@@ -1016,17 +1023,27 @@ async function fetchAndRenderStats() {
     try {
         const allIds   = [...batters, ...pitchers].map(p => p.id);
         const statsMap = {};
+        const ageMap   = {};
 
-        await Promise.all(allIds.map(async id => {
-            try {
-                const res  = await fetch(`${MLB_API}/people/${id}/stats?stats=season&season=${SEASON}&group=hitting,pitching`);
-                const data = await res.json();
-                statsMap[id] = data.stats || [];
-            } catch { statsMap[id] = []; }
-        }));
+        // Fetch stats and ages in parallel
+        const [, ageRes] = await Promise.all([
+            Promise.all(allIds.map(async id => {
+                try {
+                    const res  = await fetch(`${MLB_API}/people/${id}/stats?stats=season&season=${SEASON}&group=hitting,pitching`);
+                    const data = await res.json();
+                    statsMap[id] = data.stats || [];
+                } catch { statsMap[id] = []; }
+            })),
+            fetch(`${MLB_API}/people?personIds=${allIds.join(',')}&hydrate=currentAge`)
+        ]);
 
-        renderBatting(batters, statsMap);
-        renderPitching(pitchers, statsMap);
+        if (ageRes.ok) {
+            const ageData = await ageRes.json();
+            (ageData.people || []).forEach(p => { ageMap[p.id] = p.currentAge || '—'; });
+        }
+
+        renderBatting(batters, statsMap, ageMap);
+        renderPitching(pitchers, statsMap, ageMap);
 
         document.getElementById('page-updated').textContent =
             `Stats as of ${new Date().toLocaleString()}`;
@@ -1107,9 +1124,21 @@ function savantLink(id, name) {
 }
 
 // ══════════════════════════════════════
+//  Stat helpers
+// ══════════════════════════════════════
+function calcTB(s) {
+    const sg=(s.hits||0)-(s.doubles||0)-(s.triples||0)-(s.homeRuns||0);
+    return sg+2*(s.doubles||0)+3*(s.triples||0)+4*(s.homeRuns||0);
+}
+
+function calcPA(s) {
+    return (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0);
+}
+
+// ══════════════════════════════════════
 //  Render batting table
 // ══════════════════════════════════════
-function renderBatting(players, statsMap) {
+function renderBatting(players, statsMap, ageMap) {
     const tbody = document.getElementById('batting-tbody');
     const rows  = [];
 
@@ -1120,34 +1149,37 @@ function renderBatting(players, statsMap) {
         if (splits.length === 0) { rows.push({ player, s: null }); return; }
         splits.forEach(split => {
             const s  = split.stat;
-            const pa = (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0);
-            if (pa > 0) rows.push({ player, s });
+            if (calcPA(s) > 0) rows.push({ player, s });
         });
     });
 
     if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="17" style="color:#64748b;font-style:italic;padding:12px;">No batting stats available yet this season.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="21" style="color:#64748b;font-style:italic;padding:12px;">No batting stats available yet this season.</td></tr>';
     } else {
         tbody.innerHTML = rows.map(({ player, s }) => !s
-            ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(15)}</tr>`
+            ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(19)}</tr>`
             : `<tr>
                 <td>${savantLink(player.id,player.name)}</td>
                 <td>${esc(player.team)}</td>
+                <td class="stat-num">${ageMap[player.id]||'—'}</td>
+                <td>${esc(player.position||'—')}</td>
                 <td class="stat-num">${s.gamesPlayed||0}</td>
-                <td class="stat-num">${s.atBats||0}</td>
+                <td class="stat-num">${calcRC(s)}</td>
+                <td class="stat-num">${calcPA(s)}</td>
                 <td class="stat-num">${s.runs||0}</td>
+                <td class="stat-num">${s.rbi||0}</td>
+                <td class="stat-num">${calcAVG(s)}</td>
+                <td class="stat-num">${calcOBP(s)}</td>
+                <td class="stat-num">${calcSLG(s)}</td>
                 <td class="stat-num">${s.hits||0}</td>
                 <td class="stat-num">${s.doubles||0}</td>
                 <td class="stat-num">${s.triples||0}</td>
                 <td class="stat-num">${s.homeRuns||0}</td>
-                <td class="stat-num">${s.rbi||0}</td>
+                <td class="stat-num">${calcTB(s)}</td>
                 <td class="stat-num">${s.baseOnBalls||0}</td>
+                <td class="stat-num">${s.strikeOuts||0}</td>
                 <td class="stat-num">${s.stolenBases||0}</td>
-                <td class="stat-num">${calcAVG(s)}</td>
-                <td class="stat-num">${calcOBP(s)}</td>
-                <td class="stat-num">${calcSLG(s)}</td>
-                <td class="stat-num">${calcOPS(s)}</td>
-                <td class="stat-num">${calcRC(s)}</td>
+                <td class="stat-num">${s.caughtStealing||0}</td>
             </tr>`
         ).join('');
     }
@@ -1158,7 +1190,7 @@ function renderBatting(players, statsMap) {
 // ══════════════════════════════════════
 //  Render pitching table
 // ══════════════════════════════════════
-function renderPitching(players, statsMap) {
+function renderPitching(players, statsMap, ageMap) {
     const tbody = document.getElementById('pitching-tbody');
     const rows  = [];
 
@@ -1174,27 +1206,30 @@ function renderPitching(players, statsMap) {
     });
 
     if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="16" style="color:#64748b;font-style:italic;padding:12px;">No pitching stats available yet this season.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="19" style="color:#64748b;font-style:italic;padding:12px;">No pitching stats available yet this season.</td></tr>';
     } else {
         tbody.innerHTML = rows.map(({ player, s }) => !s
-            ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(14)}</tr>`
+            ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(17)}</tr>`
             : `<tr>
                 <td>${savantLink(player.id,player.name)}</td>
                 <td>${esc(player.team)}</td>
+                <td class="stat-num">${ageMap[player.id]||'—'}</td>
+                <td class="stat-num">${calcPAR(s)}</td>
+                <td class="stat-num">${s.inningsPitched||'0.0'}</td>
+                <td class="stat-num">${calcERA(s)}</td>
+                <td class="stat-num">${calcFIP(s)}</td>
+                <td class="stat-num">${calcWHIP(s)}</td>
                 <td class="stat-num">${s.gamesPlayed||0}</td>
                 <td class="stat-num">${s.gamesStarted||0}</td>
-                <td class="stat-num">${s.inningsPitched||'0.0'}</td>
                 <td class="stat-num">${s.wins||0}</td>
                 <td class="stat-num">${s.losses||0}</td>
                 <td class="stat-num">${s.saves||0}</td>
                 <td class="stat-num">${s.hits||0}</td>
+                <td class="stat-num">${s.runs||0}</td>
                 <td class="stat-num">${s.earnedRuns||0}</td>
+                <td class="stat-num">${s.homeRuns||0}</td>
                 <td class="stat-num">${s.baseOnBalls||0}</td>
                 <td class="stat-num">${s.strikeOuts||0}</td>
-                <td class="stat-num">${calcERA(s)}</td>
-                <td class="stat-num">${calcWHIP(s)}</td>
-                <td class="stat-num">${calcFIP(s)}</td>
-                <td class="stat-num">${calcPAR(s)}</td>
             </tr>`
         ).join('');
     }
