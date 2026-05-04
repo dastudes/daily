@@ -1,5 +1,19 @@
 {
-  "teamName": "Woody's Team",
-  "batters": [],
-  "pitchers": []
+  "teamName": "Cooperstown Phillies",
+  "batters": [
+    {
+      "id": 668901,
+      "name": "Mark Vientos",
+      "team": "—",
+      "position": "1B"
+    }
+  ],
+  "pitchers": [
+    {
+      "id": 690997,
+      "name": "Nolan McLean",
+      "team": "—",
+      "position": "P"
+    }
+  ]
 }
