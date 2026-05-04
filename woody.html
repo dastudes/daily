@@ -1026,31 +1026,34 @@ async function fetchAndRenderStats() {
         const ageMap   = {};
         const teamMap  = {};
 
+        // Build team lookup from player-stats.json (already on the site, always current)
+        try {
+            const psUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/player-stats.json?t=${Date.now()}`;
+            const psRes = await fetch(psUrl);
+            if (psRes.ok) {
+                const ps = await psRes.json();
+                [...(ps.batters||[]), ...(ps.pitchers||[])].forEach(p => {
+                    if (p.playerId && p.teamAbbr) teamMap[p.playerId] = p.teamAbbr;
+                });
+            }
+        } catch { /* non-fatal */ }
+
         // Fetch stats and ages in parallel
-        const [, ageRes] = await Promise.all([
-            Promise.all(allIds.map(async id => {
-                try {
-                    const res  = await fetch(`${MLB_API}/people/${id}/stats?stats=season&season=${SEASON}&group=hitting,pitching`);
-                    const data = await res.json();
-                    statsMap[id] = data.stats || [];
-                    // Extract team from the first split that has one
-                    for (const group of statsMap[id]) {
-                        const split = (group.splits||[]).find(s => s.team?.abbreviation);
-                        if (split) { teamMap[id] = split.team.abbreviation; break; }
-                    }
-                } catch { statsMap[id] = []; }
-            })),
-            fetch(`${MLB_API}/people?personIds=${allIds.join(',')}&hydrate=currentAge`)
-        ]);
-
-        if (ageRes.ok) {
-            const ageData = await ageRes.json();
-            (ageData.people || []).forEach(p => {
-                ageMap[p.id] = p.currentAge || '—';
-                if (p.currentTeam?.abbreviation) teamMap[p.id] = p.currentTeam.abbreviation;
-            });
-        }
-
+        await Promise.all(allIds.map(async id => {
+            try {
+                const [statsRes, personRes] = await Promise.all([
+                    fetch(`${MLB_API}/people/${id}/stats?stats=season&season=${SEASON}&group=hitting,pitching`),
+                    fetch(`${MLB_API}/people/${id}`)
+                ]);
+                const statsData = await statsRes.json();
+                statsMap[id] = statsData.stats || [];
+                if (personRes.ok) {
+                    const personData = await personRes.json();
+                    const p = (personData.people || [])[0];
+                    if (p?.currentAge) ageMap[id] = p.currentAge;
+                }
+            } catch { statsMap[id] = []; }
+        }));
         renderBatting(batters, statsMap, ageMap, teamMap);
         renderPitching(pitchers, statsMap, ageMap, teamMap);
 
