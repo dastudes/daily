@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baseball Graphs — Fantasy Team</title>
+    <style>
+        /* ── Base ── */
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            background-color: #f5f2eb;
+            color: #111;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, #0d2340 0%, #1a3a5c 100%);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .header h1 {
+            margin: 0 0 4px 0;
+            font-size: 1.7em;
+            color: #c8860a;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 0.85em;
+            opacity: 0.75;
+        }
+
+        .breadcrumb {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .breadcrumb a { color: #0d2340; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        /* ── Nav ── */
+        .nav-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .nav-bar a {
+            display: inline-block;
+            padding: 6px 14px;
+            background-color: #0d2340;
+            color: #c8860a;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .nav-bar a:hover { background-color: #1a3a5c; }
+        .nav-bar a.active { background-color: #c8860a; color: white; }
+
+        /* ── Section headers ── */
+        .section-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #1e5c32;
+            border-bottom: 2px solid #1e5c32;
+            padding-bottom: 5px;
+            margin: 20px 0 10px 0;
+        }
+
+        /* ── Tables ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88em;
+            margin-bottom: 20px;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        th {
+            background-color: #d4edda;
+            padding: 7px 5px;
+            text-align: left;
+            border-bottom: 2px solid #1e5c32;
+            color: #1a1a1a;
+            font-weight: bold;
+            font-family: Georgia, "Times New Roman", serif;
+            white-space: nowrap;
+        }
+
+        th.sortable { cursor: pointer; user-select: none; }
+        th.sortable:hover { background-color: #b8dfc4; }
+        th.sorted { background-color: #a3d4b0; }
+
+        td {
+            padding: 5px 5px;
+            border-bottom: 1px solid #d4edda;
+            color: #111;
+        }
+
+        tr:hover { background-color: #f0faf3; }
+        .stat-num { text-align: right; }
+
+        td a { color: #0d2340; text-decoration: none; }
+        td a:hover { text-decoration: underline; color: #1a3a5c; }
+        td:first-child { font-family: Georgia, "Times New Roman", serif; }
+
+        /* ── Loading / status ── */
+        #status-bar {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 6px;
+            padding: 10px 16px;
+            margin-bottom: 16px;
+            font-size: 0.9em;
+            color: #78350f;
+            display: none;
+        }
+
+        #status-bar.error {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #7f1d1d;
+        }
+
+        #status-bar.success {
+            background: #f0fdf4;
+            border-color: #86efac;
+            color: #14532d;
+        }
+
+        /* ── Admin toggle button ── */
+        .admin-toggle-btn {
+            background: transparent;
+            border: 1px solid rgba(200,134,10,0.5);
+            color: #c8860a;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-family: Georgia, serif;
+            letter-spacing: 0.03em;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .admin-toggle-btn:hover { background: rgba(200,134,10,0.1); }
+
+        /* ── Admin panel ── */
+        #admin-panel {
+            background: white;
+            border: 2px solid #c8860a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        #admin-panel.open { display: block; }
+
+        .admin-section-title {
+            font-size: 0.8em;
+            font-weight: bold;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #0d2340;
+            border-bottom: 2px solid #0d2340;
+            padding-bottom: 5px;
+            margin: 16px 0 10px 0;
+        }
+
+        .admin-section-title:first-of-type { margin-top: 0; }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
+        }
+
+        .settings-grid .full-width { grid-column: 1 / -1; }
+
+        .field-label {
+            display: block;
+            font-size: 0.75em;
+            font-weight: bold;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 3px;
+        }
+
+        .admin-input {
+            width: 100%;
+            border: 1px solid #d4cfc4;
+            border-radius: 4px;
+            padding: 6px 9px;
+            font-size: 0.85em;
+            font-family: monospace;
+            background: #fafaf7;
+        }
+
+        .admin-note {
+            font-size: 0.75em;
+            color: #9ca3af;
+            margin: 6px 0 0 0;
+        }
+
+        /* Toolbar */
+        .admin-toolbar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-navy {
+            background: #0d2340;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 7px 16px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            font-family: Georgia, serif;
+        }
+
+        .btn-navy:hover { background: #1a3a5c; }
+        .btn-navy:disabled { opacity: 0.5; cursor: default; }
+
+        .btn-green {
+            background: #1e5c32;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 7px 16px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            font-family: Georgia, serif;
+        }
+
+        .btn-green:hover { background: #2d7a47; }
+        .btn-green:disabled { opacity: 0.5; cursor: default; }
+
+        .btn-amber {
+            background: #c8860a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 7px 16px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            font-family: Georgia, serif;
+        }
+
+        .btn-amber:hover { background: #a86d08; }
+
+        .btn-drop {
+            background: transparent;
+            color: #9b1c1c;
+            border: 1px solid #fca5a5;
+            border-radius: 3px;
+            padding: 2px 8px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-family: Georgia, serif;
+        }
+
+        .btn-drop:hover { background: #fef2f2; }
+
+        /* Search */
+        .search-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .search-input {
+            flex: 1;
+            border: 1px solid #d4cfc4;
+            border-radius: 4px;
+            padding: 7px 10px;
+            font-size: 0.9em;
+            font-family: Georgia, serif;
+            background: #fafaf7;
+        }
+
+        .search-results {
+            border: 1px solid #d4cfc4;
+            border-radius: 4px;
+            overflow: hidden;
+            font-size: 0.85em;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px 10px;
+            border-bottom: 1px solid #f0ede6;
+        }
+
+        .result-row:last-child { border-bottom: none; }
+        .result-row:hover { background: #fafaf7; }
+
+        .result-name { font-weight: bold; color: #0d2340; }
+        .result-meta { color: #6b7280; font-size: 0.9em; margin-left: 6px; }
+
+        .btn-add-b {
+            background: #0d2340;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 3px 9px;
+            cursor: pointer;
+            font-size: 0.75em;
+            margin-left: 4px;
+        }
+
+        .btn-add-p {
+            background: #1e5c32;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 3px 9px;
+            cursor: pointer;
+            font-size: 0.75em;
+            margin-left: 4px;
+        }
+
+        .btn-add-other {
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 3px 9px;
+            cursor: pointer;
+            font-size: 0.75em;
+            margin-left: 4px;
+        }
+
+        /* Roster lists in admin */
+        .roster-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .roster-card {
+            border: 1px solid #d4cfc4;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .roster-card-header {
+            padding: 6px 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .roster-card-header.navy { background: #0d2340; }
+        .roster-card-header.green { background: #1e5c32; }
+
+        .roster-player-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 12px;
+            border-bottom: 1px solid #f0ede6;
+            font-size: 0.85em;
+        }
+
+        .roster-player-row:last-child { border-bottom: none; }
+
+        .roster-player-name { font-weight: bold; color: #0d2340; }
+        .roster-player-meta { color: #6b7280; font-size: 0.85em; }
+        .roster-empty { padding: 12px; color: #9ca3af; font-style: italic; font-size: 0.85em; }
+
+        /* Team name editable */
+        #team-name-display {
+            display: inline-block;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #c8860a;
+        }
+
+        #team-name-edit {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0d2340;
+            border: none;
+            border-bottom: 2px solid #c8860a;
+            background: transparent;
+            outline: none;
+            font-family: Georgia, serif;
+            width: 300px;
+            display: none;
+        }
+
+        /* JSON preview */
+        details.json-preview { margin-top: 16px; }
+
+        details.json-preview summary {
+            cursor: pointer;
+            font-size: 0.8em;
+            color: #6b7280;
+            user-select: none;
+        }
+
+        details.json-preview pre {
+            background: #0d2340;
+            color: #7dd3fc;
+            font-size: 0.75em;
+            padding: 14px;
+            border-radius: 6px;
+            margin-top: 6px;
+            overflow: auto;
+            max-height: 240px;
+        }
+
+        /* Stats page heading */
+        .team-heading {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #0d2340;
+            margin: 0 0 4px 0;
+        }
+
+        .stats-meta {
+            font-size: 0.82em;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .no-stats-msg {
+            color: #6b7280;
+            font-style: italic;
+            font-size: 0.9em;
+            padding: 12px 0;
+        }
+
+        /* About section */
+        details.about-section {
+            margin-bottom: 16px;
+            border: 1px solid #d4cfc4;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        details.about-section summary {
+            padding: 8px 14px;
+            cursor: pointer;
+            background: #f5f2eb;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #0d2340;
+            user-select: none;
+        }
+
+        details.about-section .about-content {
+            padding: 12px 16px;
+            font-size: 0.85em;
+            line-height: 1.6;
+            background: white;
+        }
+
+        details.about-section ul { margin: 6px 0; padding-left: 20px; }
+        details.about-section li { margin-bottom: 4px; }
+
+        @media (max-width: 700px) {
+            .settings-grid { grid-template-columns: 1fr; }
+            .roster-grid { grid-template-columns: 1fr; }
+            table { font-size: 0.75em; }
+            th, td { padding: 4px 3px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="breadcrumb">
+        <a href="https://www.baseballgraphs.com/">← Baseball Graphs Home</a>
+    </div>
+
+    <div class="header">
+        <h1>⚾ <span id="page-team-name">Fantasy Team</span></h1>
+        <p id="page-updated">Loading…</p>
+    </div>
+
+    <div class="nav-bar">
+        <a href="index.html">Graphs &amp; Standings</a>
+        <a href="player_stats.html">Player Stats</a>
+        <a href="box-scores.html">Box Scores</a>
+        <a href="fantasy.html" class="active">Fantasy</a>
+    </div>
+
+    <!-- Status bar -->
+    <div id="status-bar"></div>
+
+    <!-- Admin toggle -->
+    <div style="margin-bottom: 14px;">
+        <button class="admin-toggle-btn" onclick="toggleAdmin()">⚙ Manage Roster</button>
+        <span style="font-size:0.8em; color:#9ca3af; margin-left:8px;" id="roster-count"></span>
+    </div>
+
+    <!-- ═══════════════ ADMIN PANEL ═══════════════ -->
+    <div id="admin-panel">
+
+        <!-- GitHub settings -->
+        <div class="admin-section-title">GitHub Settings</div>
+        <div class="settings-grid">
+            <div class="full-width">
+                <label class="field-label">Personal Access Token (repo write scope)</label>
+                <input class="admin-input" type="password" id="cfg-pat" placeholder="ghp_…"
+                       oninput="saveSettings()">
+            </div>
+            <div>
+                <label class="field-label">Owner</label>
+                <input class="admin-input" type="text" id="cfg-owner" placeholder="dastudes"
+                       oninput="saveSettings()">
+            </div>
+            <div>
+                <label class="field-label">Repository</label>
+                <input class="admin-input" type="text" id="cfg-repo" placeholder="daily"
+                       oninput="saveSettings()">
+            </div>
+            <div>
+                <label class="field-label">Branch</label>
+                <input class="admin-input" type="text" id="cfg-branch" placeholder="main"
+                       oninput="saveSettings()">
+            </div>
+            <div>
+                <label class="field-label">File path</label>
+                <input class="admin-input" type="text" id="cfg-path" placeholder="fantasy-roster.json"
+                       oninput="saveSettings()">
+            </div>
+        </div>
+        <p class="admin-note">PAT is stored in browser localStorage only — never in the repo or visible in source.</p>
+
+        <!-- Toolbar -->
+        <div class="admin-section-title">Actions</div>
+        <div class="admin-toolbar">
+            <button class="btn-navy" id="btn-load" onclick="loadFromGitHub()">↓ Load from GitHub</button>
+            <button class="btn-green" id="btn-save" onclick="saveToGitHub()">↑ Commit to GitHub</button>
+            <button class="btn-amber" onclick="refreshStats()">↻ Refresh Stats</button>
+        </div>
+
+        <!-- Team name -->
+        <div class="admin-section-title">Team Name</div>
+        <div style="margin-bottom:12px;">
+            <span id="team-name-display" onclick="startEditName()"></span>
+            <input id="team-name-edit" type="text" onblur="finishEditName()" onkeydown="if(event.key==='Enter') finishEditName()">
+            <span style="font-size:0.75em; color:#9ca3af; margin-left:8px;">(click to edit)</span>
+        </div>
+
+        <!-- Search -->
+        <div class="admin-section-title">Add Player</div>
+        <div class="search-row">
+            <input class="search-input" type="text" id="search-input"
+                   placeholder="Search by last name (e.g. Alonso, Ohtani)…"
+                   onkeydown="if(event.key==='Enter') searchPlayers()">
+            <button class="btn-amber" id="btn-search" onclick="searchPlayers()">Search</button>
+        </div>
+        <div id="search-results" class="search-results" style="display:none;"></div>
+
+        <!-- Roster lists -->
+        <div class="admin-section-title">Current Roster</div>
+        <div class="roster-grid">
+            <div class="roster-card">
+                <div class="roster-card-header navy">Batters (<span id="batter-count">0</span>)</div>
+                <div id="batter-list"></div>
+            </div>
+            <div class="roster-card">
+                <div class="roster-card-header green">Pitchers (<span id="pitcher-count">0</span>)</div>
+                <div id="pitcher-list"></div>
+            </div>
+        </div>
+
+        <!-- JSON preview -->
+        <details class="json-preview">
+            <summary>Preview JSON</summary>
+            <pre id="json-preview-content"></pre>
+        </details>
+
+    </div>
+    <!-- end admin panel -->
+
+    <!-- ═══════════════ STATS DISPLAY ═══════════════ -->
+    <div id="stats-area">
+        <div id="stats-loading" style="color:#6b7280; font-style:italic; padding:20px 0; display:none;">
+            Loading stats from MLB API…
+        </div>
+
+        <details class="about-section">
+            <summary>About these Stats</summary>
+            <div class="about-content">
+                <p>Stats are pulled live from the official MLB Stats API. Player names link to their Baseball Savant profiles.</p>
+                <ul>
+                    <li><strong>RC (Runs Created)</strong> = OBP × TB</li>
+                    <li><strong>FIP (Fielding Independent Pitching)</strong> = ((13×HR)+(3×(BB+HBP))−(2×K))/IP + 3.10</li>
+                    <li><strong>PAR (Pitching Above Replacement)</strong> = (6−(FIP+ERA)/2)×IP/9</li>
+                </ul>
+                <p>These are approximations. For the real stuff, see <a href="https://www.fangraphs.com/" target="_blank">Fangraphs</a> or <a href="https://www.baseball-reference.com/" target="_blank">Baseball Reference</a>.</p>
+            </div>
+        </details>
+
+        <div id="batting-section" style="display:none;">
+            <div class="section-title">Batting</div>
+            <table id="batting-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-col="0">Name</th>
+                        <th class="sortable" data-col="1">Team</th>
+                        <th class="sortable stat-num" data-col="2">G</th>
+                        <th class="sortable stat-num" data-col="3">AB</th>
+                        <th class="sortable stat-num" data-col="4">R</th>
+                        <th class="sortable stat-num" data-col="5">H</th>
+                        <th class="sortable stat-num" data-col="6">2B</th>
+                        <th class="sortable stat-num" data-col="7">3B</th>
+                        <th class="sortable stat-num" data-col="8">HR</th>
+                        <th class="sortable stat-num" data-col="9">RBI</th>
+                        <th class="sortable stat-num" data-col="10">BB</th>
+                        <th class="sortable stat-num" data-col="11">SB</th>
+                        <th class="sortable stat-num" data-col="12">AVG</th>
+                        <th class="sortable stat-num" data-col="13">OBP</th>
+                        <th class="sortable stat-num" data-col="14">SLG</th>
+                        <th class="sortable stat-num" data-col="15">OPS</th>
+                        <th class="sortable stat-num" data-col="16">RC</th>
+                    </tr>
+                </thead>
+                <tbody id="batting-tbody"></tbody>
+            </table>
+        </div>
+
+        <div id="pitching-section" style="display:none;">
+            <div class="section-title">Pitching</div>
+            <table id="pitching-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-col="0">Name</th>
+                        <th class="sortable" data-col="1">Team</th>
+                        <th class="sortable stat-num" data-col="2">G</th>
+                        <th class="sortable stat-num" data-col="3">GS</th>
+                        <th class="sortable stat-num" data-col="4">IP</th>
+                        <th class="sortable stat-num" data-col="5">W</th>
+                        <th class="sortable stat-num" data-col="6">L</th>
+                        <th class="sortable stat-num" data-col="7">SV</th>
+                        <th class="sortable stat-num" data-col="8">H</th>
+                        <th class="sortable stat-num" data-col="9">ER</th>
+                        <th class="sortable stat-num" data-col="10">BB</th>
+                        <th class="sortable stat-num" data-col="11">K</th>
+                        <th class="sortable stat-num" data-col="12">ERA</th>
+                        <th class="sortable stat-num" data-col="13">WHIP</th>
+                        <th class="sortable stat-num" data-col="14">FIP</th>
+                        <th class="sortable stat-num" data-col="15">PAR</th>
+                    </tr>
+                </thead>
+                <tbody id="pitching-tbody"></tbody>
+            </table>
+        </div>
+
+        <div id="no-roster-msg" class="no-stats-msg" style="display:none;">
+            No roster loaded. Click "Manage Roster" above to get started.
+        </div>
+    </div>
+
+</div><!-- end container -->
+
+<script>
+// ══════════════════════════════════════════════
+//  Config — adjust these defaults if you like
+// ══════════════════════════════════════════════
+const DEFAULT_OWNER  = 'dastudes';
+const DEFAULT_REPO   = 'daily';
+const DEFAULT_BRANCH = 'main';
+const DEFAULT_PATH   = 'fantasy-roster.json';
+const MLB_API        = 'https://statsapi.mlb.com/api/v1';
+const SEASON         = new Date().getFullYear();
+
+// ══════════════════════════════════════════════
+//  State
+// ══════════════════════════════════════════════
+let roster = { teamName: 'My Fantasy Team', batters: [], pitchers: [] };
+let fileSha = null;
+let adminOpen = false;
+
+// ══════════════════════════════════════════════
+//  Initialise
+// ══════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+    loadSettingsToForm();
+    renderAdminRoster();
+    updatePageTitle();
+    // Auto-load roster from public raw URL (no auth needed)
+    autoLoadRoster();
+});
+
+// ══════════════════════════════════════════════
+//  Settings (localStorage)
+// ══════════════════════════════════════════════
+function loadSettingsToForm() {
+    const s = getSavedSettings();
+    document.getElementById('cfg-pat').value    = s.pat    || '';
+    document.getElementById('cfg-owner').value  = s.owner  || DEFAULT_OWNER;
+    document.getElementById('cfg-repo').value   = s.repo   || DEFAULT_REPO;
+    document.getElementById('cfg-branch').value = s.branch || DEFAULT_BRANCH;
+    document.getElementById('cfg-path').value   = s.path   || DEFAULT_PATH;
+}
+
+function getSavedSettings() {
+    try { return JSON.parse(localStorage.getItem('fg_settings') || '{}'); } catch { return {}; }
+}
+
+function saveSettings() {
+    const s = {
+        pat:    document.getElementById('cfg-pat').value,
+        owner:  document.getElementById('cfg-owner').value  || DEFAULT_OWNER,
+        repo:   document.getElementById('cfg-repo').value   || DEFAULT_REPO,
+        branch: document.getElementById('cfg-branch').value || DEFAULT_BRANCH,
+        path:   document.getElementById('cfg-path').value   || DEFAULT_PATH,
+    };
+    localStorage.setItem('fg_settings', JSON.stringify(s));
+}
+
+function cfg(key) {
+    const s = getSavedSettings();
+    const defaults = { owner: DEFAULT_OWNER, repo: DEFAULT_REPO, branch: DEFAULT_BRANCH, path: DEFAULT_PATH };
+    return s[key] || defaults[key] || '';
+}
+
+// ══════════════════════════════════════════════
+//  Status bar
+// ══════════════════════════════════════════════
+let statusTimer;
+function showStatus(msg, type='info', persist=false) {
+    const bar = document.getElementById('status-bar');
+    bar.textContent = msg;
+    bar.className = type;
+    bar.style.display = 'block';
+    clearTimeout(statusTimer);
+    if (!persist) statusTimer = setTimeout(() => { bar.style.display = 'none'; }, 5000);
+}
+
+function clearStatus() { document.getElementById('status-bar').style.display = 'none'; }
+
+// ══════════════════════════════════════════════
+//  Admin panel toggle
+// ══════════════════════════════════════════════
+function toggleAdmin() {
+    adminOpen = !adminOpen;
+    document.getElementById('admin-panel').classList.toggle('open', adminOpen);
+}
+
+// ══════════════════════════════════════════════
+//  Team name editing
+// ══════════════════════════════════════════════
+function updatePageTitle() {
+    const name = roster.teamName || 'Fantasy Team';
+    document.getElementById('page-team-name').textContent = name;
+    document.getElementById('team-name-display').textContent = name;
+}
+
+function startEditName() {
+    const display = document.getElementById('team-name-display');
+    const input   = document.getElementById('team-name-edit');
+    input.value   = roster.teamName;
+    display.style.display = 'none';
+    input.style.display   = 'inline-block';
+    input.focus();
+    input.select();
+}
+
+function finishEditName() {
+    const display = document.getElementById('team-name-display');
+    const input   = document.getElementById('team-name-edit');
+    const val     = input.value.trim();
+    if (val) roster.teamName = val;
+    display.style.display   = '';
+    input.style.display     = 'none';
+    updatePageTitle();
+    updateJsonPreview();
+}
+
+// ══════════════════════════════════════════════
+//  GitHub: auto-load (public raw URL, no auth)
+// ══════════════════════════════════════════════
+async function autoLoadRoster() {
+    const owner  = cfg('owner');
+    const repo   = cfg('repo');
+    const branch = cfg('branch');
+    const path   = cfg('path');
+    if (!owner || !repo) {
+        document.getElementById('no-roster-msg').style.display = '';
+        return;
+    }
+    const url = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}?t=${Date.now()}`;
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`${res.status}`);
+        const json = await res.json();
+        roster = json;
+        renderAdminRoster();
+        updatePageTitle();
+        fetchAndRenderStats();
+    } catch (e) {
+        // File may not exist yet — that's fine on first run
+        document.getElementById('no-roster-msg').style.display = '';
+        document.getElementById('page-updated').textContent = 'No roster file found yet.';
+    }
+}
+
+// ══════════════════════════════════════════════
+//  GitHub: load via API (gets SHA for saving)
+// ══════════════════════════════════════════════
+async function loadFromGitHub() {
+    const pat    = cfg('pat');
+    const owner  = cfg('owner');
+    const repo   = cfg('repo');
+    const branch = cfg('branch');
+    const path   = cfg('path');
+
+    if (!pat) { showStatus('Enter a GitHub PAT in settings above.', 'error'); return; }
+
+    const btn = document.getElementById('btn-load');
+    btn.disabled = true;
+    btn.textContent = 'Loading…';
+    showStatus('Loading from GitHub…', 'info', true);
+
+    try {
+        const res = await fetch(
+            `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,
+            { headers: { Authorization: `token ${pat}`, Accept: 'application/vnd.github.v3+json' } }
+        );
+        if (!res.ok) throw new Error(`GitHub ${res.status}: ${res.statusText}`);
+        const data = await res.json();
+        fileSha = data.sha;
+        roster  = JSON.parse(atob(data.content.replace(/\n/g, '')));
+        renderAdminRoster();
+        updatePageTitle();
+        showStatus('Roster loaded from GitHub.', 'success');
+        fetchAndRenderStats();
+    } catch (e) {
+        showStatus('Load failed: ' + e.message, 'error', true);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '↓ Load from GitHub';
+    }
+}
+
+// ══════════════════════════════════════════════
+//  GitHub: save via API
+// ══════════════════════════════════════════════
+async function saveToGitHub() {
+    const pat    = cfg('pat');
+    const owner  = cfg('owner');
+    const repo   = cfg('repo');
+    const branch = cfg('branch');
+    const path   = cfg('path');
+
+    if (!pat) { showStatus('Enter a GitHub PAT in settings above.', 'error'); return; }
+
+    const btn = document.getElementById('btn-save');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    showStatus('Committing to GitHub…', 'info', true);
+
+    try {
+        const body = {
+            message: `Update fantasy roster (${new Date().toLocaleDateString()})`,
+            content: btoa(JSON.stringify(roster, null, 2)),
+            branch,
+            ...(fileSha ? { sha: fileSha } : {}),
+        };
+        const res = await fetch(
+            `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+            {
+                method: 'PUT',
+                headers: {
+                    Authorization: `token ${pat}`,
+                    Accept: 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            }
+        );
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.message || `GitHub ${res.status}`);
+        }
+        const data = await res.json();
+        fileSha = data.content.sha;
+        showStatus('Roster committed to GitHub ✓', 'success');
+    } catch (e) {
+        showStatus('Save failed: ' + e.message, 'error', true);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '↑ Commit to GitHub';
+    }
+}
+
+// ══════════════════════════════════════════════
+//  MLB Player Search
+// ══════════════════════════════════════════════
+async function searchPlayers() {
+    const q   = document.getElementById('search-input').value.trim();
+    const btn = document.getElementById('btn-search');
+    const box = document.getElementById('search-results');
+
+    if (q.length < 2) return;
+    btn.disabled = true;
+    btn.textContent = '…';
+    box.style.display = 'none';
+    box.innerHTML = '';
+
+    try {
+        const res  = await fetch(`${MLB_API}/people/search?names=${encodeURIComponent(q)}&sportId=1&limit=20`);
+        const data = await res.json();
+        const people = (data.people || []).filter(p => p.active !== false).slice(0, 12);
+
+        if (people.length === 0) {
+            box.innerHTML = '<div class="result-row" style="color:#9ca3af;font-style:italic;">No active players found.</div>';
+        } else {
+            box.innerHTML = people.map(p => {
+                const pos     = p.primaryPosition?.abbreviation || '—';
+                const team    = p.currentTeam?.abbreviation || p.currentTeam?.name || '—';
+                const isPitch = isPitcher(pos);
+                const addB    = `<button class="btn-add-b" onclick="addPlayer(${p.id},'${esc(p.fullName)}','${team}','${pos}','B')">+Batter</button>`;
+                const addP    = `<button class="btn-add-p" onclick="addPlayer(${p.id},'${esc(p.fullName)}','${team}','${pos}','P')">+Pitcher</button>`;
+                const altBtn  = isPitch
+                    ? `<button class="btn-add-other" onclick="addPlayer(${p.id},'${esc(p.fullName)}','${team}','${pos}','B')">+Batter?</button>`
+                    : `<button class="btn-add-other" onclick="addPlayer(${p.id},'${esc(p.fullName)}','${team}','${pos}','P')">+Pitcher?</button>`;
+                const primary = isPitch ? addP : addB;
+                return `<div class="result-row">
+                    <div>
+                        <span class="result-name">${esc(p.fullName)}</span>
+                        <span class="result-meta">${team} · ${pos}</span>
+                    </div>
+                    <div>${primary}${altBtn}</div>
+                </div>`;
+            }).join('');
+        }
+        box.style.display = '';
+    } catch (e) {
+        showStatus('MLB search failed: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Search';
+    }
+}
+
+function isPitcher(pos) {
+    return ['P','SP','RP','CP','CL'].includes((pos || '').toUpperCase());
+}
+
+function esc(str) {
+    return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+function addPlayer(id, name, team, position, type) {
+    const key   = type === 'P' ? 'pitchers' : 'batters';
+    if (roster[key].some(p => p.id === id)) {
+        showStatus(`${name} is already on the roster.`, 'info');
+        return;
+    }
+    roster[key].push({ id, name, team, position });
+    renderAdminRoster();
+    updateJsonPreview();
+    showStatus(`Added ${name} to ${type === 'P' ? 'pitchers' : 'batters'}.`, 'success');
+}
+
+function dropPlayer(id, key) {
+    const player = roster[key].find(p => p.id === id);
+    roster[key]  = roster[key].filter(p => p.id !== id);
+    renderAdminRoster();
+    updateJsonPreview();
+    if (player) showStatus(`Dropped ${player.name}.`, 'info');
+}
+
+// ══════════════════════════════════════════════
+//  Render admin roster lists
+// ══════════════════════════════════════════════
+function renderAdminRoster() {
+    const batters  = roster.batters  || [];
+    const pitchers = roster.pitchers || [];
+
+    document.getElementById('batter-count').textContent  = batters.length;
+    document.getElementById('pitcher-count').textContent = pitchers.length;
+    document.getElementById('roster-count').textContent  =
+        `${batters.length + pitchers.length} players on roster`;
+
+    function renderList(players, key) {
+        if (players.length === 0)
+            return '<div class="roster-empty">None yet.</div>';
+        return players.map(p =>
+            `<div class="roster-player-row">
+                <div>
+                    <span class="roster-player-name">${esc(p.name)}</span>
+                    <span class="roster-player-meta"> · ${p.team} · ${p.position}</span>
+                </div>
+                <button class="btn-drop" onclick="dropPlayer(${p.id},'${key}')">Drop</button>
+            </div>`
+        ).join('');
+    }
+
+    document.getElementById('batter-list').innerHTML  = renderList(batters,  'batters');
+    document.getElementById('pitcher-list').innerHTML = renderList(pitchers, 'pitchers');
+
+    document.getElementById('team-name-display').textContent = roster.teamName || 'My Fantasy Team';
+
+    // No-roster message
+    const total = batters.length + pitchers.length;
+    document.getElementById('no-roster-msg').style.display = total === 0 ? '' : 'none';
+
+    updateJsonPreview();
+}
+
+function updateJsonPreview() {
+    const pre = document.getElementById('json-preview-content');
+    if (pre) pre.textContent = JSON.stringify(roster, null, 2);
+}
+
+// ══════════════════════════════════════════════
+//  Stats: fetch from MLB API
+// ══════════════════════════════════════════════
+async function fetchAndRenderStats() {
+    const batters  = roster.batters  || [];
+    const pitchers = roster.pitchers || [];
+    const total    = batters.length + pitchers.length;
+
+    if (total === 0) {
+        document.getElementById('batting-section').style.display  = 'none';
+        document.getElementById('pitching-section').style.display = 'none';
+        document.getElementById('no-roster-msg').style.display    = '';
+        document.getElementById('page-updated').textContent       = 'No players on roster.';
+        return;
+    }
+
+    document.getElementById('stats-loading').style.display = '';
+    document.getElementById('batting-section').style.display  = 'none';
+    document.getElementById('pitching-section').style.display = 'none';
+    document.getElementById('no-roster-msg').style.display    = 'none';
+
+    try {
+        // Fetch all players in parallel
+        const allIds     = [...batters, ...pitchers].map(p => p.id);
+        const statsMap   = {};
+
+        await Promise.all(allIds.map(async id => {
+            try {
+                const res  = await fetch(`${MLB_API}/people/${id}/stats?stats=season&season=${SEASON}&group=hitting,pitching`);
+                const data = await res.json();
+                statsMap[id] = data.stats || [];
+            } catch { statsMap[id] = []; }
+        }));
+
+        renderBatting(batters, statsMap);
+        renderPitching(pitchers, statsMap);
+
+        const now = new Date();
+        document.getElementById('page-updated').textContent =
+            `Stats as of ${now.toLocaleString()}`;
+
+    } catch (e) {
+        showStatus('Error fetching stats: ' + e.message, 'error');
+    } finally {
+        document.getElementById('stats-loading').style.display = 'none';
+    }
+}
+
+async function refreshStats() {
+    showStatus('Refreshing stats…', 'info', true);
+    await fetchAndRenderStats();
+    clearStatus();
+}
+
+// ══════════════════════════════════════════════
+//  Stat calculators (match generate-stats.js)
+// ══════════════════════════════════════════════
+function calcAVG(h, ab) {
+    if (!ab) return '.000';
+    const v = (h / ab).toFixed(3);
+    return v.startsWith('0') ? v.slice(1) : v;
+}
+
+function calcOBP(s) {
+    const h = s.hits||0, bb = s.baseOnBalls||0, hbp = s.hitByPitch||0,
+          ab = s.atBats||0, sf = s.sacFlies||0;
+    const d = ab + bb + hbp + sf;
+    if (!d) return '.000';
+    const v = ((h+bb+hbp)/d).toFixed(3);
+    return v.startsWith('0') ? v.slice(1) : v;
+}
+
+function calcSLG(s) {
+    const ab = s.atBats||0;
+    if (!ab) return '.000';
+    const sg = (s.hits||0)-(s.doubles||0)-(s.triples||0)-(s.homeRuns||0);
+    const tb = sg + 2*(s.doubles||0) + 3*(s.triples||0) + 4*(s.homeRuns||0);
+    const v  = (tb/ab).toFixed(3);
+    return v.startsWith('0') ? v.slice(1) : v;
+}
+
+function calcOPS(s) {
+    const obp = parseFloat('0'+calcOBP(s));
+    const slg = parseFloat('0'+calcSLG(s));
+    const v   = (obp+slg).toFixed(3);
+    return v.startsWith('0') ? v.slice(1) : v;
+}
+
+function calcRC(s) {
+    const h=s.hits||0, bb=s.baseOnBalls||0, hbp=s.hitByPitch||0,
+          ab=s.atBats||0, sf=s.sacFlies||0;
+    const d = ab+bb+hbp+sf;
+    if (!d) return '0.0';
+    const obp = (h+bb+hbp)/d;
+    const sg  = h-(s.doubles||0)-(s.triples||0)-(s.homeRuns||0);
+    const tb  = sg + 2*(s.doubles||0) + 3*(s.triples||0) + 4*(s.homeRuns||0);
+    return (obp*tb).toFixed(1);
+}
+
+function calcFIP(s) {
+    const ip = parseFloat(s.inningsPitched)||0;
+    if (!ip) return '—';
+    const v = ((13*(s.homeRuns||0)+3*((s.baseOnBalls||0)+(s.hitByPitch||0))-2*(s.strikeOuts||0))/ip + 3.10).toFixed(2);
+    return v;
+}
+
+function calcPAR(s) {
+    const ip  = parseFloat(s.inningsPitched)||0;
+    if (!ip) return '—';
+    const fip = parseFloat(calcFIP(s));
+    const era = ip>0 ? ((s.earnedRuns||0)*9/ip) : 0;
+    return Math.round((6-(fip+era)/2)*ip/9);
+}
+
+function calcERA(s) {
+    const ip = parseFloat(s.inningsPitched)||0;
+    if (!ip) return '0.00';
+    return (((s.earnedRuns||0)*9)/ip).toFixed(2);
+}
+
+function calcWHIP(s) {
+    const ip = parseFloat(s.inningsPitched)||0;
+    if (!ip) return '0.00';
+    return (((s.baseOnBalls||0)+(s.hits||0))/ip).toFixed(2);
+}
+
+function savantLink(id, name) {
+    return `<a href="https://baseballsavant.mlb.com/savant-player/${id}" target="_blank">${esc(name)}</a>`;
+}
+
+// ══════════════════════════════════════════════
+//  Render batting table
+// ══════════════════════════════════════════════
+function renderBatting(players, statsMap) {
+    const tbody = document.getElementById('batting-tbody');
+    let rows = [];
+
+    players.forEach(player => {
+        const groups  = statsMap[player.id] || [];
+        const hitting = groups.find(g => g.group?.displayName === 'hitting');
+        const splits  = hitting?.splits || [];
+
+        if (splits.length === 0) {
+            // No stats yet — show empty row
+            rows.push({ player, s: null, pa: 0 });
+            return;
+        }
+
+        splits.forEach(split => {
+            const s  = split.stat;
+            const pa = (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0);
+            if (pa === 0) return;
+            rows.push({ player, s, pa });
+        });
+    });
+
+    if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="17" style="color:#9ca3af;font-style:italic;padding:12px;">No batting stats available yet.</td></tr>';
+        document.getElementById('batting-section').style.display = '';
+        return;
+    }
+
+    tbody.innerHTML = rows.map(({ player, s }) => {
+        if (!s) return `<tr>
+            <td>${savantLink(player.id, player.name)}</td>
+            <td>${esc(player.team)}</td>
+            ${'<td class="stat-num">—</td>'.repeat(15)}
+        </tr>`;
+
+        return `<tr>
+            <td>${savantLink(player.id, player.name)}</td>
+            <td>${esc(player.team)}</td>
+            <td class="stat-num">${s.gamesPlayed||0}</td>
+            <td class="stat-num">${s.atBats||0}</td>
+            <td class="stat-num">${s.runs||0}</td>
+            <td class="stat-num">${s.hits||0}</td>
+            <td class="stat-num">${s.doubles||0}</td>
+            <td class="stat-num">${s.triples||0}</td>
+            <td class="stat-num">${s.homeRuns||0}</td>
+            <td class="stat-num">${s.rbi||0}</td>
+            <td class="stat-num">${s.baseOnBalls||0}</td>
+            <td class="stat-num">${s.stolenBases||0}</td>
+            <td class="stat-num">${calcAVG(s.hits||0, s.atBats||0)}</td>
+            <td class="stat-num">${calcOBP(s)}</td>
+            <td class="stat-num">${calcSLG(s)}</td>
+            <td class="stat-num">${calcOPS(s)}</td>
+            <td class="stat-num">${calcRC(s)}</td>
+        </tr>`;
+    }).join('');
+
+    document.getElementById('batting-section').style.display = '';
+    initSortableTable('batting-table');
+}
+
+// ══════════════════════════════════════════════
+//  Render pitching table
+// ══════════════════════════════════════════════
+function renderPitching(players, statsMap) {
+    const tbody = document.getElementById('pitching-tbody');
+    let rows = [];
+
+    players.forEach(player => {
+        const groups   = statsMap[player.id] || [];
+        const pitching = groups.find(g => g.group?.displayName === 'pitching');
+        const splits   = pitching?.splits || [];
+
+        if (splits.length === 0) {
+            rows.push({ player, s: null });
+            return;
+        }
+
+        splits.forEach(split => {
+            const s  = split.stat;
+            const bf = s.battersFaced||0;
+            if (bf === 0) return;
+            rows.push({ player, s });
+        });
+    });
+
+    if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="16" style="color:#9ca3af;font-style:italic;padding:12px;">No pitching stats available yet.</td></tr>';
+        document.getElementById('pitching-section').style.display = '';
+        return;
+    }
+
+    tbody.innerHTML = rows.map(({ player, s }) => {
+        if (!s) return `<tr>
+            <td>${savantLink(player.id, player.name)}</td>
+            <td>${esc(player.team)}</td>
+            ${'<td class="stat-num">—</td>'.repeat(14)}
+        </tr>`;
+
+        return `<tr>
+            <td>${savantLink(player.id, player.name)}</td>
+            <td>${esc(player.team)}</td>
+            <td class="stat-num">${s.gamesPlayed||0}</td>
+            <td class="stat-num">${s.gamesStarted||0}</td>
+            <td class="stat-num">${s.inningsPitched||'0.0'}</td>
+            <td class="stat-num">${s.wins||0}</td>
+            <td class="stat-num">${s.losses||0}</td>
+            <td class="stat-num">${s.saves||0}</td>
+            <td class="stat-num">${s.hits||0}</td>
+            <td class="stat-num">${s.earnedRuns||0}</td>
+            <td class="stat-num">${s.baseOnBalls||0}</td>
+            <td class="stat-num">${s.strikeOuts||0}</td>
+            <td class="stat-num">${calcERA(s)}</td>
+            <td class="stat-num">${calcWHIP(s)}</td>
+            <td class="stat-num">${calcFIP(s)}</td>
+            <td class="stat-num">${calcPAR(s)}</td>
+        </tr>`;
+    }).join('');
+
+    document.getElementById('pitching-section').style.display = '';
+    initSortableTable('pitching-table');
+}
+
+// ══════════════════════════════════════════════
+//  Sortable tables
+// ══════════════════════════════════════════════
+function initSortableTable(tableId) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const headers = table.querySelectorAll('th.sortable');
+    let lastCol = -1, lastAsc = true;
+
+    headers.forEach(th => {
+        th.addEventListener('click', () => {
+            const col = parseInt(th.dataset.col);
+            const asc = (col === lastCol) ? !lastAsc : false; // default desc for stats
+            lastCol = col; lastAsc = asc;
+
+            headers.forEach(h => h.classList.remove('sorted'));
+            th.classList.add('sorted');
+
+            const tbody = table.querySelector('tbody');
+            const rows  = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const av = a.cells[col]?.textContent.trim() || '';
+                const bv = b.cells[col]?.textContent.trim() || '';
+                const an = parseFloat(av.replace(/[^0-9.\-]/g, ''));
+                const bn = parseFloat(bv.replace(/[^0-9.\-]/g, ''));
+                let cmp;
+                if (!isNaN(an) && !isNaN(bn)) {
+                    cmp = an - bn;
+                } else {
+                    cmp = av.localeCompare(bv);
+                }
+                return asc ? cmp : -cmp;
+            });
+
+            rows.forEach(r => tbody.appendChild(r));
+        });
+    });
+}
+</script>
+</body>
+</html>
