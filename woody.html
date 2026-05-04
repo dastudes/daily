@@ -1033,9 +1033,14 @@ async function fetchAndRenderStats() {
                     const res  = await fetch(`${MLB_API}/people/${id}/stats?stats=season&season=${SEASON}&group=hitting,pitching`);
                     const data = await res.json();
                     statsMap[id] = data.stats || [];
+                    // Extract team from the first split that has one
+                    for (const group of statsMap[id]) {
+                        const split = (group.splits||[]).find(s => s.team?.abbreviation);
+                        if (split) { teamMap[id] = split.team.abbreviation; break; }
+                    }
                 } catch { statsMap[id] = []; }
             })),
-            fetch(`${MLB_API}/people?personIds=${allIds.join(',')}&hydrate=currentAge,currentTeam`)
+            fetch(`${MLB_API}/people?personIds=${allIds.join(',')}&hydrate=currentAge`)
         ]);
 
         if (ageRes.ok) {
