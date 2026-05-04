@@ -1024,6 +1024,7 @@ async function fetchAndRenderStats() {
         const allIds   = [...batters, ...pitchers].map(p => p.id);
         const statsMap = {};
         const ageMap   = {};
+        const teamMap  = {};
 
         // Fetch stats and ages in parallel
         const [, ageRes] = await Promise.all([
@@ -1034,16 +1035,19 @@ async function fetchAndRenderStats() {
                     statsMap[id] = data.stats || [];
                 } catch { statsMap[id] = []; }
             })),
-            fetch(`${MLB_API}/people?personIds=${allIds.join(',')}&hydrate=currentAge`)
+            fetch(`${MLB_API}/people?personIds=${allIds.join(',')}&hydrate=currentAge,currentTeam`)
         ]);
 
         if (ageRes.ok) {
             const ageData = await ageRes.json();
-            (ageData.people || []).forEach(p => { ageMap[p.id] = p.currentAge || '—'; });
+            (ageData.people || []).forEach(p => {
+                ageMap[p.id] = p.currentAge || '—';
+                if (p.currentTeam?.abbreviation) teamMap[p.id] = p.currentTeam.abbreviation;
+            });
         }
 
-        renderBatting(batters, statsMap, ageMap);
-        renderPitching(pitchers, statsMap, ageMap);
+        renderBatting(batters, statsMap, ageMap, teamMap);
+        renderPitching(pitchers, statsMap, ageMap, teamMap);
 
         document.getElementById('page-updated').textContent =
             `Stats as of ${new Date().toLocaleString()}`;
@@ -1092,7 +1096,7 @@ function calcRC(s) {
     const obp=(h+bb+hbp)/d;
     const sg=h-(s.doubles||0)-(s.triples||0)-(s.homeRuns||0);
     const tb=sg+2*(s.doubles||0)+3*(s.triples||0)+4*(s.homeRuns||0);
-    return (obp*tb).toFixed(1);
+    return Math.round(obp*tb);
 }
 
 function calcFIP(s) {
@@ -1138,7 +1142,7 @@ function calcPA(s) {
 // ══════════════════════════════════════
 //  Render batting table
 // ══════════════════════════════════════
-function renderBatting(players, statsMap, ageMap) {
+function renderBatting(players, statsMap, ageMap, teamMap) {
     const tbody = document.getElementById('batting-tbody');
     const rows  = [];
 
@@ -1160,7 +1164,7 @@ function renderBatting(players, statsMap, ageMap) {
             ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(19)}</tr>`
             : `<tr>
                 <td>${savantLink(player.id,player.name)}</td>
-                <td>${esc(player.team)}</td>
+                <td>${esc(teamMap[player.id]||player.team||'—')}</td>
                 <td class="stat-num">${ageMap[player.id]||'—'}</td>
                 <td>${esc(player.position||'—')}</td>
                 <td class="stat-num">${s.gamesPlayed||0}</td>
@@ -1190,7 +1194,7 @@ function renderBatting(players, statsMap, ageMap) {
 // ══════════════════════════════════════
 //  Render pitching table
 // ══════════════════════════════════════
-function renderPitching(players, statsMap, ageMap) {
+function renderPitching(players, statsMap, ageMap, teamMap) {
     const tbody = document.getElementById('pitching-tbody');
     const rows  = [];
 
@@ -1212,7 +1216,7 @@ function renderPitching(players, statsMap, ageMap) {
             ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(17)}</tr>`
             : `<tr>
                 <td>${savantLink(player.id,player.name)}</td>
-                <td>${esc(player.team)}</td>
+                <td>${esc(teamMap[player.id]||player.team||'—')}</td>
                 <td class="stat-num">${ageMap[player.id]||'—'}</td>
                 <td class="stat-num">${calcPAR(s)}</td>
                 <td class="stat-num">${s.inningsPitched||'0.0'}</td>
