@@ -566,6 +566,71 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
     return sections.join('\n\n');
 }
 
+function buildDailyLeaderboard(playerStatsData, standingsData, dayOfWeek) {
+    const STAT_CONFIG = {
+        1: { stat: 'hr',  label: 'Home Runs',   type: 'batter',  qualified: false, asc: false },
+        2: { stat: 'era', label: 'ERA',          type: 'pitcher', qualified: true,  asc: true  },
+        3: { stat: 'rc',  label: 'Runs Created', type: 'batter',  qualified: false, asc: false },
+        4: { stat: 'fip', label: 'FIP',          type: 'pitcher', qualified: true,  asc: true  },
+        5: { stat: 'ops', label: 'OPS',          type: 'batter',  qualified: true,  asc: false },
+        6: { stat: 'par', label: 'PAR',          type: 'pitcher', qualified: false, asc: false },
+        0: { stat: 'slg', label: 'SLG',          type: 'batter',  qualified: true,  asc: false },
+    };
+
+    const cfg = STAT_CONFIG[dayOfWeek];
+    if (!cfg) return '';
+
+    const gamesPlayed = Math.max(...(standingsData.teams || []).map(t => (t.w || 0) + (t.l || 0)), 0);
+    const minPA = gamesPlayed * 3.1;
+    const minIP = gamesPlayed * 1.0;
+
+    const pool = cfg.type === 'batter' ? (playerStatsData.batters || []) : (playerStatsData.pitchers || []);
+
+    function getTop5(league) {
+        let players = pool.filter(p => p.league === league && p[cfg.stat] != null);
+        if (cfg.qualified) {
+            if (cfg.type === 'batter')  players = players.filter(p => (p.pa || 0) >= minPA);
+            if (cfg.type === 'pitcher') players = players.filter(p => (p.ip || 0) >= minIP);
+        }
+        return [...players]
+            .sort((a, b) => cfg.asc
+                ? parseFloat(a[cfg.stat]) - parseFloat(b[cfg.stat])
+                : parseFloat(b[cfg.stat]) - parseFloat(a[cfg.stat]))
+            .slice(0, 5);
+    }
+
+    function fmtVal(val) {
+        const f = parseFloat(val);
+        if (cfg.stat === 'hr' || cfg.stat === 'rc' || cfg.stat === 'par') return String(Math.round(f));
+        if (cfg.stat === 'ops' || cfg.stat === 'slg') return f.toFixed(3).replace(/^0\./, '.');
+        return f.toFixed(2);
+    }
+
+    const alTop = getTop5('AL');
+    const nlTop = getTop5('NL');
+    const rows = Math.max(alTop.length, nlTop.length);
+
+    const rowHtml = [];
+    for (let i = 0; i < rows; i++) {
+        const al = alTop[i];
+        const nl = nlTop[i];
+        const alName = al ? `${al.name.split(' ').pop()} (${al.teamAbbr})` : '';
+        const alVal  = al ? fmtVal(al[cfg.stat]) : '';
+        const nlName = nl ? `${nl.name.split(' ').pop()} (${nl.teamAbbr})` : '';
+        const nlVal  = nl ? fmtVal(nl[cfg.stat]) : '';
+        rowHtml.push(`    <tr><td>${alName}</td><td>${alVal}</td><td>${nlName}</td><td>${nlVal}</td></tr>`);
+    }
+
+    const qualLabel = cfg.qualified ? ' (Qual.)' : '';
+    return `<div class="daily-leaderboard">
+  <h3>Today's Leaderboard: ${cfg.label}${qualLabel}</h3>
+  <table>
+    <tr><th>AL</th><th></th><th>NL</th><th></th></tr>
+${rowHtml.join('\n')}
+  </table>
+</div>`;
+}
+
 function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr, factSheet) {
     const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
@@ -823,6 +888,14 @@ function textToHtml(text) {
     return parts.join('\n');
 }
 
+function injectLeaderboard(narrativeHtml, leaderboardHtml) {
+    if (!leaderboardHtml) return narrativeHtml;
+    const lastUlEnd = narrativeHtml.lastIndexOf('</ul>');
+    if (lastUlEnd < 0) return narrativeHtml + '\n' + leaderboardHtml;
+    const insertAt = lastUlEnd + 5;
+    return narrativeHtml.slice(0, insertAt) + '\n' + leaderboardHtml + narrativeHtml.slice(insertAt);
+}
+
 function generateHTML(date, updatedStr, narratives, factSheet) {
     const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
@@ -841,17 +914,22 @@ function generateHTML(date, updatedStr, narratives, factSheet) {
             </div>
         </div>` : '';
 
-    const panels = narratives.map((n, i) => `
+    const panels = narratives.map((n, i) => {
+        const bodyHtml = n.leaderboardHtml
+            ? injectLeaderboard(textToHtml(n.text), n.leaderboardHtml)
+            : textToHtml(n.text);
+        return `
         <div class="insight-card">
             <button class="insight-toggle" aria-expanded="false" onclick="toggleInsight(${i})">
                 <span class="insight-title">${n.title}</span>
                 <span class="insight-chevron">&#9660;</span>
             </button>
             <div class="insight-body" id="insight-${i}" hidden>
-                ${textToHtml(n.text)}
+                ${bodyHtml}
                 <p><em>By the way, I'm not infallible. Wish I had an editor.</em></p>
             </div>
-        </div>`).join('\n');
+        </div>`;
+    }).join('\n');
 
     return `<!DOCTYPE html>
 <html lang="en">
@@ -953,6 +1031,13 @@ function generateHTML(date, updatedStr, narratives, factSheet) {
             color: #3b1e08;
             margin: 0;
         }
+        .daily-leaderboard { margin: 1.25rem 0; font-family: system-ui, sans-serif; }
+        .daily-leaderboard h3 { font-size: 0.8rem; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+        .daily-leaderboard table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        .daily-leaderboard th { background: #92400e; color: #fff; padding: 0.3rem 0.75rem; text-align: left; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.05em; }
+        .daily-leaderboard td { padding: 0.28rem 0.75rem; color: #3b1e08; border-bottom: 1px solid #f6d28d; }
+        .daily-leaderboard tr:nth-child(even) td { background: #fff7ed; }
+        .daily-leaderboard td:nth-child(2), .daily-leaderboard td:nth-child(4) { font-weight: 700; color: #78350f; text-align: right; font-family: 'Courier New', monospace; white-space: nowrap; }
         footer {
             text-align: center;
             padding: 2rem 1rem;
@@ -1016,6 +1101,7 @@ async function main() {
 
     const { metsBoxStr, metsRivalStr, metsStandStr } = formatMetsData(boxscore, standings);
     const factSheet = buildFactSheet(boxscore, standings, playerStats);
+    const leaderboardHtml = buildDailyLeaderboard(playerStats, standings, new Date().getDay());
     const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr, factSheet);
 
     // Build player index for stat injection
@@ -1041,7 +1127,7 @@ async function main() {
         console.log(`  Stats injected, verifying...`);
         const verified = await verifyNarrative(client, withStats, verifySourceData[title]);
         console.log(`  Verified (${verified.length} chars)`);
-        narratives.push({ title, text: verified });
+        narratives.push({ title, text: verified, leaderboardHtml: title === 'What to Know' ? leaderboardHtml : null });
     }
 
     const html = generateHTML(date, updatedStr, narratives, factSheet);
@@ -1054,13 +1140,16 @@ async function main() {
     ];
     narratives.forEach((n, i) => {
         const { filename, id } = snippetMeta[i];
+        const bodyHtml = n.leaderboardHtml
+            ? injectLeaderboard(textToHtml(n.text), n.leaderboardHtml)
+            : textToHtml(n.text);
         const snippet = `<div class="insight-card">
             <button class="insight-toggle" aria-expanded="false" onclick="toggleInsight('${id}')">
                 <span class="insight-title">${n.title}</span>
                 <span class="insight-chevron">&#9660;</span>
             </button>
             <div class="insight-body" id="${id}" hidden>
-                ${textToHtml(n.text)}
+                ${bodyHtml}
                 <p><em>By the way, I'm not infallible. Wish I had an editor.</em></p>
             </div>
         </div>`;
