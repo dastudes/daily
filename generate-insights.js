@@ -618,14 +618,15 @@ function buildDailyLeaderboard(playerStatsData, standingsData, dayOfWeek) {
         const alVal  = al ? fmtVal(al[cfg.stat]) : '';
         const nlName = nl ? `${nl.name.split(' ').pop()} (${nl.teamAbbr})` : '';
         const nlVal  = nl ? fmtVal(nl[cfg.stat]) : '';
-        rowHtml.push(`    <tr><td>${alName}</td><td>${alVal}</td><td>${nlName}</td><td>${nlVal}</td></tr>`);
+        rowHtml.push(`    <tr><td>${alName}</td><td>${alVal}</td><td class="div-td"></td><td>${nlName}</td><td>${nlVal}</td></tr>`);
     }
 
     const qualLabel = cfg.qualified ? ' (Qual.)' : '';
     return `<div class="daily-leaderboard">
   <h3>Today's Leaderboard: ${cfg.label}${qualLabel}</h3>
   <table>
-    <tr><th>AL</th><th></th><th>NL</th><th></th></tr>
+    <colgroup><col class="col-name"><col class="col-val"><col class="col-div"><col class="col-name"><col class="col-val"></colgroup>
+    <tr><th colspan="2">AL</th><th class="div-th"></th><th colspan="2">NL</th></tr>
 ${rowHtml.join('\n')}
   </table>
 </div>`;
@@ -1032,12 +1033,17 @@ function generateHTML(date, updatedStr, narratives, factSheet) {
             margin: 0;
         }
         .daily-leaderboard { margin: 1.25rem 0; font-family: system-ui, sans-serif; }
-        .daily-leaderboard h3 { font-size: 0.8rem; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
-        .daily-leaderboard table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-        .daily-leaderboard th { background: #92400e; color: #fff; padding: 0.3rem 0.75rem; text-align: left; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.05em; }
-        .daily-leaderboard td { padding: 0.28rem 0.75rem; color: #3b1e08; border-bottom: 1px solid #f6d28d; }
+        .daily-leaderboard h3 { font-size: 0.8rem; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 0.3rem; }
+        .daily-leaderboard table { border-collapse: collapse; font-size: 0.8rem; table-layout: fixed; }
+        .daily-leaderboard col.col-name { width: 150px; }
+        .daily-leaderboard col.col-val { width: 55px; }
+        .daily-leaderboard col.col-div { width: 14px; }
+        .daily-leaderboard th { background: #92400e; color: #fff; padding: 0.25rem 0.5rem; text-align: left; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em; }
+        .daily-leaderboard th.div-th { background: transparent; padding: 0; border: none; }
+        .daily-leaderboard td { padding: 0.22rem 0.5rem; color: #3b1e08; border-bottom: 1px solid #f6d28d; text-align: left; }
         .daily-leaderboard tr:nth-child(even) td { background: #fff7ed; }
-        .daily-leaderboard td:nth-child(2), .daily-leaderboard td:nth-child(4) { font-weight: 700; color: #78350f; text-align: right; font-family: 'Courier New', monospace; white-space: nowrap; }
+        .daily-leaderboard td:nth-child(2), .daily-leaderboard td:nth-child(5) { font-weight: 700; color: #78350f; text-align: right; font-family: 'Courier New', monospace; white-space: nowrap; }
+        .daily-leaderboard td.div-td { background: transparent !important; border: none; padding: 0; }
         footer {
             text-align: center;
             padding: 2rem 1rem;
