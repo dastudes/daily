@@ -905,6 +905,7 @@ async function generateHTML() {
     let jumpLinksHTML = '';
     for (const type of GROUP_ORDER) {
         if (groups[type].length === 0) continue;
+        jumpLinksHTML += `<div class="jump-group">`;
         jumpLinksHTML += `<span class="jump-group-label">${GROUP_LABELS[type]}</span>`;
         groups[type].forEach(j => {
             if (j.isDeferred) {
@@ -914,6 +915,7 @@ async function generateHTML() {
                 jumpLinksHTML += `<a href="#${j.id}" class="${cls}" onclick="expandGame(event,'${j.id}')">${j.text}</a>`;
             }
         });
+        jumpLinksHTML += `</div>`;
     }
 
     // Sort accumulators and take top 5 for each leaderboard
@@ -1011,6 +1013,14 @@ async function generateHTML() {
             white-space: nowrap;
         }
         .jump-link:hover { background: #eff6ff; border-color: #2563eb; }
+
+        .jump-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            width: 100%;
+        }
 
         .jump-group-label {
             display: inline-block;
