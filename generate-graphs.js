@@ -1133,6 +1133,13 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
         .insight-body p:last-child { margin-bottom: 0; }
         .insight-body ul { margin: 0.5em 0 0.5em 1.5em; }
         .insight-body li { margin-bottom: 0.3em; line-height: 1.75; }
+        .daily-leaderboard { margin: 1.25rem 0; font-family: system-ui, sans-serif; }
+        .daily-leaderboard h3 { font-size: 0.8rem; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+        .daily-leaderboard table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        .daily-leaderboard th { background: #92400e; color: #fff; padding: 0.3rem 0.75rem; text-align: left; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.05em; }
+        .daily-leaderboard td { padding: 0.28rem 0.75rem; color: #3b1e08; border-bottom: 1px solid #f6d28d; }
+        .daily-leaderboard tr:nth-child(even) td { background: #fff7ed; }
+        .daily-leaderboard td:nth-child(2), .daily-leaderboard td:nth-child(4) { font-weight: 700; color: #78350f; text-align: right; font-family: 'Courier New', monospace; white-space: nowrap; }
     </style>
     <script data-goatcounter="https://baseball-graphs.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
