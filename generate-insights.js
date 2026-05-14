@@ -823,6 +823,8 @@ async function verifyNarrative(client, text, sourceData) {
         `reasoning, corrections list, headers like 'Corrected Narrative:', or any other text. ` +
         `Just the narrative itself, exactly as it should appear to readers.\n\n` +
         `If you find no errors, return the narrative unchanged.\n\n` +
+        `Stat blocks in square brackets (e.g., [2-4, 1 BB | RC 45] or [6 IP, 0 ER, 7 K | 2.85 ERA, PAR 8]) ` +
+        `have been pre-verified and injected by a separate system. Do not modify, remove, or recalculate them.\n\n` +
         `Source data:\n${sourceData}\n\n` +
         `Narrative to verify:\n${text}`;
 
