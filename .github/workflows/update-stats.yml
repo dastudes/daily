@@ -40,7 +40,7 @@ jobs:
       - name: Generate box scores page
         run: node generate-boxscores.js
 
-      - name: "Generate insights page (2 narratives: What to Know, Mets Daily Briefing)"
+      - name: "Generate insights page (What to Know)"
         run: node generate-insights.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -74,5 +74,5 @@ jobs:
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add index.html player_stats.html player-stats.json graphs.html box-scores.html boxscore-data.json standings-data.json insights.html whats-to-know-snippet.html mets-snippet.html
+          git add index.html player_stats.html player-stats.json graphs.html box-scores.html boxscore-data.json standings-data.json insights.html whats-to-know-snippet.html
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats and graphs - $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)

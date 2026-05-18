@@ -1292,7 +1292,6 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
             </div>
         </div>
     </div>
-    <!-- METS_SNIPPET -->
     ${todaysGames.length > 0 ? `
     <div class="page-container" style="margin-top: 0;">
         <div class="schedule-box">

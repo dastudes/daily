@@ -6,6 +6,18 @@ const Anthropic = require('@anthropic-ai/sdk');
 const MODEL = 'claude-opus-4-7';
 const MAX_TOKENS = 3000;
 
+function getDisclaimerLine() {
+    const lines = [
+        "By the way, I'm not infallible. Wish I had an editor.",
+        "Don't bet your fantasy lineup on this. I've been wrong before.",
+        "These opinions are my own. My fact-checker is also me.",
+        "I contain multitudes. Some of them are incorrect.",
+        "Accuracy not guaranteed. Enthusiasm is.",
+        "Handle with care. I was trained on the internet.",
+    ];
+    return lines[Math.floor(Math.random() * lines.length)];
+}
+
 function loadData() {
     const boxscore = JSON.parse(fs.readFileSync('boxscore-data.json', 'utf8'));
     const standings = JSON.parse(fs.readFileSync('standings-data.json', 'utf8'));
@@ -348,49 +360,6 @@ function injectStats(text, playerIndex) {
     return result;
 }
 
-function formatMetsData(boxscore, standings) {
-    const nlEastAbbrs = new Set(
-        standings.teams
-            .filter(t => t.division === 'National League East')
-            .map(t => t.abbreviation)
-    );
-
-    const metsGames = boxscore.games.filter(g =>
-        g.away.abbr === 'NYM' || g.home.abbr === 'NYM'
-    );
-    const rivalGames = boxscore.games.filter(g =>
-        (nlEastAbbrs.has(g.away.abbr) || nlEastAbbrs.has(g.home.abbr)) &&
-        !metsGames.includes(g)
-    );
-
-    const metsBoxStr = metsGames.length > 0
-        ? formatBoxscoreForPrompt({ games: metsGames })
-        : 'The Mets did not play yesterday.';
-
-    const metsRivalStr = rivalGames.length > 0
-        ? formatBoxscoreForPrompt({ games: rivalGames })
-        : 'No other NL East games yesterday.';
-
-    const nlEastTeams = standings.teams
-        .filter(t => t.division === 'National League East')
-        .sort((a, b) => parseFloat(b.pct) - parseFloat(a.pct));
-
-    const standLines = ['NL East Standings:'];
-    for (const t of nlEastTeams) {
-        const rd = t.rd > 0 ? `+${t.rd}` : String(t.rd);
-        const pv = t.pythVar > 0 ? `+${t.pythVar}` : String(t.pythVar);
-        standLines.push(
-            `${t.abbreviation} (${t.division}): ${t.w}-${t.l} .${t.pct} GB: ${t.gb}` +
-            ` | RS/RA: ${t.rs}/${t.ra} RD: ${rd}` +
-            ` | pyW: ${t.pythWins} (${pv})` +
-            ` | Streak: ${t.streak || '?'} L10: ${t.splits.last10 || '?'}` +
-            ` | OPS: ${t.stats.ops} FIP: ${t.stats.fip} DER: ${t.stats.der}`
-        );
-    }
-
-    return { metsBoxStr, metsRivalStr, metsStandStr: standLines.join('\n') };
-}
-
 function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
     const sections = [];
 
@@ -632,7 +601,7 @@ ${rowHtml.join('\n')}
 </div>`;
 }
 
-function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr, factSheet) {
+function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet) {
     const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     });
@@ -735,7 +704,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
     return [
         {
             title: 'What to Know',
-            system: studemundSystem,
+            system: angellSystem,
             user:
                 factSheetPrefix +
                 `Today is ${dateLabel}.\n\n` +
@@ -744,57 +713,13 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Top WPA plays:\n${wpaStr}\n\n` +
                 `Top pitchers:\n${topPitchersStr}\n\n` +
                 `Top batters:\n${topBattersStr}\n\n` +
-                `Write a daily baseball column in four sections, flowing naturally ` +
-                `from one to the next with no section headers or labels.\n\n` +
-                `SECTION 1 — PENNANT RACE GAMES: Discuss 2-4 games with the most ` +
-                `pennant race significance. Use the standings data to identify which ` +
-                `games mattered most in division or wild card races, such as teams close in divisions '+
-                'or teams close in the wild card rankings. For each game, ` +
-                `write 2-3 sentences about what the result means for the teams involved.\n\n` +
-                `SECTION 2 — MOST DRAMATIC GAMES: Identify the 2-3 most dramatic or ` +
-                `memorable games from yesterday. Use Total WPA Swing as one measure of ` +
-                `drama. Other measures would be walkoff or comeback games. '+
-                'For each, write 2-3 sentences describing what made it memorable.\n\n` +
-                `SECTION 3 — STANDOUT PERFORMANCES: Write 1-4 bullet points. One bullet ` +
-                `per outstanding individual performance — batter or pitcher. Brief and ` +
-                `specific. Draw from the top batters and top pitchers data.\n\n` +
-                `SECTION 4 — STANDINGS AND TRENDS: Write 2-3 sentences on what the day's ` +
-                `results mean for the overall league picture — division races, Pythagorean ` +
-                `outliers, teams moving in the right or wrong direction or other oddities.\n\n` +
-                `Do not label the sections. Write as a continuous column that happens to ` +
-                `follow this order. No introductory or closing paragraph.` +
+                `Write a daily baseball column covering: the games with the most pennant race ` +
+                `significance, the most dramatic or memorable games, standout individual ` +
+                `performances, and what the day's results mean for the overall league picture. ` +
+                `Let the column find its own shape — don't feel obligated to march through these ` +
+                `in order or give each equal weight. Follow the story. ` +
+                `No introductory or closing paragraph.` +
                 sharedNotes,
-        },
-        {
-            title: 'Mets Daily Briefing',
-            system: angellSystem,
-            user:
-                factSheetPrefix +
-                `Write a 4-5 paragraph daily briefing on the New York Mets for a ` +
-                `devoted fan's morning read. Cover:\n\n` +
-                `- Yesterday's game: a narrative account of what happened, the key ` +
-                `moments and turning points, standout individual performances — ` +
-                `player stats will be inserted automatically, do not cite them\n` +
-                `- Current standings: where the Mets sit in the NL East, games back ` +
-                `or games ahead, recent streak\n` +
-                `- Division rivals: how the other NL East teams did yesterday and ` +
-                `what it means for the race\n` +
-                `- Team trajectory: are the Mets over or underperforming their ` +
-                `Pythagorean expectation, any patterns worth noting in recent ` +
-                `performance\n` +
-                `- Individual standouts: any Mets player with a performance worth ` +
-                `singling out beyond the game narrative\n\n` +
-                `If the Mets had no game yesterday, focus on the division landscape ` +
-                `and what the off day meant in context.\n\n` +
-                `Tone: write as someone who genuinely cares how this turns out, ` +
-                `but with clear eyes. Don't cheerlead. Don't catastrophize.\n\n` +
-                `Yesterday's date: ${dateLabel}\n\n` +
-                `Boxscore data:\n${metsBoxStr}\n\n` +
-                `NL East rivals' games:\n${metsRivalStr}\n\n` +
-                `${metsStandStr}` +
-                sharedNotes +
-                `\n\n${cinematicsNote}` +
-                performanceNotes,
         },
     ];
 }
@@ -929,7 +854,7 @@ function generateHTML(date, updatedStr, narratives, factSheet) {
             </button>
             <div class="insight-body" id="insight-${i}" hidden>
                 ${bodyHtml}
-                <p><em>By the way, I'm not infallible. Wish I had an editor.</em></p>
+                <p><em>${getDisclaimerLine()}</em></p>
             </div>
         </div>`;
     }).join('\n');
@@ -1107,21 +1032,17 @@ async function main() {
     const topBattersStr = getTopBattersForPrompt(boxscore, playerStats);
     const topPitchersStr = getTopPitchersForPrompt(boxscore, playerStats);
 
-    const { metsBoxStr, metsRivalStr, metsStandStr } = formatMetsData(boxscore, standings);
     const factSheet = buildFactSheet(boxscore, standings, playerStats);
     const leaderboardHtml = buildDailyLeaderboard(playerStats, standings, new Date().getDay());
-    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, metsBoxStr, metsRivalStr, metsStandStr, factSheet);
+    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet);
 
     // Build player index for stat injection
     const playerIndex = buildPlayerIndex(boxscore, playerStats);
     console.log(`Player index built: ${playerIndex.size} players`);
 
     // Source data for verification passes
-    const metsGames = boxscore.games.filter(g => g.away.abbr === 'NYM' || g.home.abbr === 'NYM');
-    const nlEastTeams = standings.teams.filter(t => t.division === 'National League East');
     const verifySourceData = {
         'What to Know': JSON.stringify({ games: boxscore.games, standings: standings.teams }, null, 2),
-        'Mets Daily Briefing': JSON.stringify({ metsGames, nlEastStandings: nlEastTeams }, null, 2),
     };
 
     console.log(`Generating ${prompts.length} narratives via Claude (${MODEL})...`);
@@ -1144,7 +1065,6 @@ async function main() {
 
     const snippetMeta = [
         { filename: 'whats-to-know-snippet.html', id: 'index-insight-0' },
-        { filename: 'mets-snippet.html',           id: 'index-insight-1' },
     ];
     narratives.forEach((n, i) => {
         const { filename, id } = snippetMeta[i];
@@ -1158,7 +1078,7 @@ async function main() {
             </button>
             <div class="insight-body" id="${id}" hidden>
                 ${bodyHtml}
-                <p><em>By the way, I'm not infallible. Wish I had an editor.</em></p>
+                <p><em>${getDisclaimerLine()}</em></p>
             </div>
         </div>`;
         fs.writeFileSync(filename, snippet);
