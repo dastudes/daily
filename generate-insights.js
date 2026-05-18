@@ -718,6 +718,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `performances, and what the day's results mean for the overall league picture. ` +
                 `Let the column find its own shape — don't feel obligated to march through these ` +
                 `in order or give each equal weight. Follow the story. ` +
+                `When highlighting individual standout performances, present them as a short bulleted list ` +
+                `using "- " prefix for each item. Everything else should be prose. ` +
                 `No introductory or closing paragraph.` +
                 sharedNotes,
         },
