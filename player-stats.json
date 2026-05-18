@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-05-18T12:24:57.911Z",
+  "updated": "2026-05-18T20:32:53.342Z",
   "batters": [
     {
       "name": "Shea Langeliers",
@@ -13772,30 +13772,6 @@
       "par": 1,
       "h": 4,
       "er": 1,
-      "pitchHand": "R"
-    },
-    {
-      "name": "Jose Espada",
-      "playerId": 664744,
-      "team": "Baltimore Orioles",
-      "teamAbbr": "BAL",
-      "league": "AL",
-      "age": 29,
-      "g": 1,
-      "gs": 0,
-      "ip": 1,
-      "w": 0,
-      "l": 0,
-      "sv": 0,
-      "hr": 0,
-      "k": 0,
-      "bb": 0,
-      "era": 0,
-      "whip": 2,
-      "fip": 3.1,
-      "par": 0,
-      "h": 2,
-      "er": 0,
       "pitchHand": "R"
     },
     {
