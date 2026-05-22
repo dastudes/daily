@@ -6,56 +6,7 @@
       "name": "Shohei Ohtani",
       "team": "—",
       "position": "TWP"
-    },
-    {
-      "id": 672695,
-      "name": "Geraldo Perdomo",
-      "team": "—",
-      "position": "SS"
-    },
-    {
-      "id": 669257,
-      "name": "Will Smith",
-      "team": "—",
-      "position": "C"
-    },
-    {
-      "id": 518692,
-      "name": "Freddie Freeman",
-      "team": "—",
-      "position": "1B"
-    },
-    {
-      "id": 664040,
-      "name": "Brandon Lowe",
-      "team": "—",
-      "position": "2B"
-    },
-    {
-      "id": 691406,
-      "name": "Junior Caminero",
-      "team": "—",
-      "position": "3B"
-    },
-    {
-      "id": 621439,
-      "name": "Byron Buxton",
-      "team": "—",
-      "position": "CF"
-    },
-    {
-      "id": 543807,
-      "name": "George Springer",
-      "team": "—",
-      "position": "DH"
     }
   ],
-  "pitchers": [
-    {
-      "id": 660271,
-      "name": "Shohei Ohtani",
-      "team": "—",
-      "position": "TWP"
-    }
-  ]
+  "pitchers": []
 }
