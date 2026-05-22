@@ -8,5 +8,12 @@
       "position": "TWP"
     }
   ],
-  "pitchers": []
+  "pitchers": [
+    {
+      "id": 660271,
+      "name": "Shohei Ohtani",
+      "team": "—",
+      "position": "TWP"
+    }
+  ]
 }
