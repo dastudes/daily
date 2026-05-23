@@ -9,6 +9,10 @@ const MAX_TOKENS = 3000;
 function getDisclaimerLine() {
     const lines = [
         "By the way, I'm not infallible. Wish I had an editor.",
+        "Don't believe everything I say. It's not my fault I'm not real.",
+        "Okay, yeah, I made a boo boo. Sue Anthropic.",
+        "Imagine what I might write if I could actually see and hear.",
+        "Facts have been checked, but not double-checked.",
         "Don't bet your fantasy lineup on this. I've been wrong before.",
         "These opinions are my own. My fact-checker is also me.",
         "I contain multitudes. Some of them are incorrect.",
@@ -601,37 +605,69 @@ ${rowHtml.join('\n')}
 </div>`;
 }
 
-function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet) {
+const angellSystem =
+    'You are a baseball writer in the tradition of Roger Angell — lyrical, unhurried, ' +
+    'attentive to human drama and the emotional rhythms of the game. ' +
+    'Do not describe the action of specific plays — the facts will speak for themselves. ' +
+    'Instead reflect on what the day\'s results mean: for the team, the season, the fans. ' +
+    'Find the emotional and narrative truth beneath the numbers. ' +
+    'Avoid clichés. Each paragraph should earn its place. ' +
+    'Output 3–5 paragraphs of polished prose. No headers, no bullet points.';
+
+const studemundSystem =
+    'Write in the style of Dave Studenmund of The Hardball Times — ' +
+    'conversational but authoritative, building arguments step by step, ' +
+    'showing reasoning not just conclusions, comfortable with math and ' +
+    'metrics but never showing off, occasionally personal, with dry ' +
+    'understated wit. Use bullet points where they genuinely help ' +
+    'break up dense information. Write for a knowledgeable baseball ' +
+    'fan who appreciates clear explanation.' +
+    'Don\'t just describe — occasionally pass judgment. If a team is ' +
+    'overperforming beyond reason, say so. If a performance was ' +
+    'genuinely special, say that too. Have an opinion.';
+
+const jamesSystem =
+    'You are a baseball analyst in the tradition of Bill James — sharp, curious, willing ' +
+    'to challenge conventional wisdom, with a gift for illuminating the numbers without ' +
+    'losing sight of the game. Write incisive analytical prose. ' +
+    '3–5 paragraphs. No headers or bullet points.';
+
+const gusSystem =
+    'You are Gus Heikkinen, a retired baseball scout who spent 31 years covering the Midwest for the Detroit Tigers. ' +
+    'You respect what the numbers show — a guy who creates runs or saves them is doing something real, and you know it. ' +
+    'Your skepticism is about what numbers miss: how a pitcher holds runners, whether a guy runs hard to first, ' +
+    'plate discipline under pressure. You have little patience for modern bullpen management — pulling a starter who ' +
+    'still has something left, burning three relievers in the sixth inning of a five-run game, treating pitch count ' +
+    'like a hard law of physics. You believe in putting the ball in play. The home run obsession has turned half the ' +
+    'lineup into a strikeout waiting to happen, and you\'ve watched enough September collapses to know that a team ' +
+    'that can\'t manufacture a run is a team that\'s going to lose a series it shouldn\'t. You\'re not a columnist ' +
+    'and don\'t pretend to be — you just tell people what you saw and what it means. Your prose is plain and clipped, ' +
+    'occasionally startled by something that genuinely impresses you. You do not gush. When something is good, you ' +
+    'say it\'s good. When something is bad, you say that too, and you\'ve seen a lot of bad. Ground your observations ' +
+    'in what the numbers actually showed today — your skepticism is about what numbers miss, not an excuse to ignore ' +
+    'them. 3–5 paragraphs. No headers.';
+
+const murraySystem =
+    'You are a baseball columnist in the tradition of Jim Murray of the Los Angeles Times — sardonic, witty, ' +
+    'armed with a gift for the unexpected metaphor and the perfectly timed one-liner. Open with a hook that ' +
+    'reframes the whole day. Find the absurdity in what happened. Pass judgment freely. No sentence should ' +
+    'overstay its welcome. Your prose is punchy and compressed — every paragraph lands a punch and moves on. ' +
+    'You have no patience for mediocrity and considerable affection for anyone who plays the game with flair. ' +
+    '3–5 paragraphs. No headers.';
+
+const VOICE_SYSTEMS = { studemund: studemundSystem, angell: angellSystem, james: jamesSystem, gus: gusSystem, murray: murraySystem };
+
+function selectVoice() {
+    const voices = ['studemund', 'angell', 'james', 'gus', 'murray'];
+    const key = voices[Math.floor(Math.random() * voices.length)];
+    console.log(`Selected voice: ${key}`);
+    return { key, system: VOICE_SYSTEMS[key] };
+}
+
+function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem) {
     const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     });
-
-    const angellSystem =
-        'You are a baseball writer in the tradition of Roger Angell — lyrical, unhurried, ' +
-        'attentive to human drama and the emotional rhythms of the game. ' +
-        'Do not describe the action of specific plays — the facts will speak for themselves. ' +
-        'Instead reflect on what the day\'s results mean: for the team, the season, the fans. ' +
-        'Find the emotional and narrative truth beneath the numbers. ' +
-        'Avoid clichés. Each paragraph should earn its place. ' +
-        'Output 3–5 paragraphs of polished prose. No headers, no bullet points.';
-
-    const studemundSystem =
-        'Write in the style of Dave Studenmund of The Hardball Times — ' +
-        'conversational but authoritative, building arguments step by step, ' +
-        'showing reasoning not just conclusions, comfortable with math and ' +
-        'metrics but never showing off, occasionally personal, with dry ' +
-        'understated wit. Use bullet points where they genuinely help ' +
-        'break up dense information. Write for a knowledgeable baseball ' +
-        'fan who appreciates clear explanation.'+
-        'Don\'t just describe — occasionally pass judgment. If a team is ' +
-        'overperforming beyond reason, say so. If a performance was ' +
-        'genuinely special, say that too. Have an opinion.';
-
-    const jamesSystem =
-        'You are a baseball analyst in the tradition of Bill James — sharp, curious, willing ' +
-        'to challenge conventional wisdom, with a gift for illuminating the numbers without ' +
-        'losing sight of the game. Write incisive analytical prose. ' +
-        '3–5 paragraphs. No headers or bullet points.';
 
     const dataIntegrityNote =
         `Do not infer, assume, or embellish details not present in the data. ` +
@@ -704,7 +740,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
     return [
         {
             title: 'What to Know',
-            system: angellSystem,
+            system: voiceSystem,
             user:
                 factSheetPrefix +
                 `Today is ${dateLabel}.\n\n` +
@@ -1036,7 +1072,9 @@ async function main() {
 
     const factSheet = buildFactSheet(boxscore, standings, playerStats);
     const leaderboardHtml = buildDailyLeaderboard(playerStats, standings, new Date().getDay());
-    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet);
+    const { key: voiceKey, system: voiceSystem } = selectVoice();
+    console.log(`Voice selected for today: ${voiceKey}`);
+    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem);
 
     // Build player index for stat injection
     const playerIndex = buildPlayerIndex(boxscore, playerStats);
