@@ -1,6 +1,6 @@
 {
   "date": "2026-05-22",
-  "generatedAt": "May 23, 2026 at 5:00 AM EDT",
+  "generatedAt": "May 23, 2026 at 6:23 AM EDT",
   "games": [
     {
       "gamePk": 824679,
@@ -1291,7 +1291,7 @@
           "away": {
             "runs": 2,
             "hits": 7,
-            "errors": 2
+            "errors": 3
           },
           "home": {
             "runs": 6,
