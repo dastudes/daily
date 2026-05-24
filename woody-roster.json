@@ -68,12 +68,6 @@
       "position": "3B"
     },
     {
-      "id": 691777,
-      "name": "Max Muncy",
-      "team": "—",
-      "position": "3B"
-    },
-    {
       "id": 571970,
       "name": "Max Muncy",
       "team": "—",
@@ -108,6 +102,48 @@
     {
       "id": 628452,
       "name": "Raisel Iglesias",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 607625,
+      "name": "Seth Lugo",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 547973,
+      "name": "Aroldis Chapman",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 670970,
+      "name": "Adrian Morejon",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 518876,
+      "name": "Merrill Kelly",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 669724,
+      "name": "Brenan Hanifee",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 608372,
+      "name": "Tomoyuki Sugano",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 669467,
+      "name": "Andre Pallante",
       "team": "—",
       "position": "P"
     }
