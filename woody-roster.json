@@ -84,6 +84,12 @@
       "name": "Giancarlo Stanton",
       "team": "—",
       "position": "DH"
+    },
+    {
+      "id": 677649,
+      "name": "Ezequiel Duran",
+      "team": "—",
+      "position": "2B"
     }
   ],
   "pitchers": [
@@ -156,6 +162,18 @@
     {
       "id": 669467,
       "name": "Andre Pallante",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 668964,
+      "name": "Tobias Myers",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 669160,
+      "name": "Dustin May",
       "team": "—",
       "position": "P"
     }
