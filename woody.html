@@ -628,15 +628,16 @@
                         <th class="sortable stat-num" data-col="9">BA</th>
                         <th class="sortable stat-num" data-col="10">OBP</th>
                         <th class="sortable stat-num" data-col="11">SLG</th>
-                        <th class="sortable stat-num" data-col="12">H</th>
-                        <th class="sortable stat-num" data-col="13">2B</th>
-                        <th class="sortable stat-num" data-col="14">3B</th>
-                        <th class="sortable stat-num" data-col="15">HR</th>
-                        <th class="sortable stat-num" data-col="16">TB</th>
-                        <th class="sortable stat-num" data-col="17">BB</th>
-                        <th class="sortable stat-num" data-col="18">SO</th>
-                        <th class="sortable stat-num" data-col="19">SB</th>
-                        <th class="sortable stat-num" data-col="20">CS</th>
+                        <th class="sortable stat-num" data-col="12">OPS</th>
+                        <th class="sortable stat-num" data-col="13">H</th>
+                        <th class="sortable stat-num" data-col="14">2B</th>
+                        <th class="sortable stat-num" data-col="15">3B</th>
+                        <th class="sortable stat-num" data-col="16">HR</th>
+                        <th class="sortable stat-num" data-col="17">TB</th>
+                        <th class="sortable stat-num" data-col="18">BB</th>
+                        <th class="sortable stat-num" data-col="19">SO</th>
+                        <th class="sortable stat-num" data-col="20">SB</th>
+                        <th class="sortable stat-num" data-col="21">CS</th>
                     </tr>
                 </thead>
                 <tbody id="batting-tbody"></tbody>
@@ -1166,10 +1167,10 @@ function renderBatting(players, statsMap, ageMap, teamMap) {
     });
 
     if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="21" style="color:#64748b;font-style:italic;padding:12px;">No batting stats available yet this season.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="22" style="color:#64748b;font-style:italic;padding:12px;">No batting stats available yet this season.</td></tr>';
     } else {
         tbody.innerHTML = rows.map(({ player, s }) => !s
-            ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(19)}</tr>`
+            ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(20)}</tr>`
             : `<tr>
                 <td>${savantLink(player.id,player.name)}</td>
                 <td>${esc(teamMap[player.id]||player.team||'—')}</td>
@@ -1183,6 +1184,7 @@ function renderBatting(players, statsMap, ageMap, teamMap) {
                 <td class="stat-num">${calcAVG(s)}</td>
                 <td class="stat-num">${calcOBP(s)}</td>
                 <td class="stat-num">${calcSLG(s)}</td>
+                <td class="stat-num">${calcOPS(s)}</td>
                 <td class="stat-num">${s.hits||0}</td>
                 <td class="stat-num">${s.doubles||0}</td>
                 <td class="stat-num">${s.triples||0}</td>
