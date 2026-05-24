@@ -48,6 +48,36 @@
       "name": "Will Smith",
       "team": "â",
       "position": "C"
+    },
+    {
+      "id": 672724,
+      "name": "Oswald Peraza",
+      "team": "—",
+      "position": "2B"
+    },
+    {
+      "id": 666018,
+      "name": "Jonathan Aranda",
+      "team": "—",
+      "position": "1B"
+    },
+    {
+      "id": 669707,
+      "name": "Jared Triolo",
+      "team": "—",
+      "position": "3B"
+    },
+    {
+      "id": 691777,
+      "name": "Max Muncy",
+      "team": "—",
+      "position": "3B"
+    },
+    {
+      "id": 571970,
+      "name": "Max Muncy",
+      "team": "—",
+      "position": "3B"
     }
   ],
   "pitchers": [
@@ -56,6 +86,30 @@
       "name": "Shohei Ohtani",
       "team": "â",
       "position": "TWP"
+    },
+    {
+      "id": 808967,
+      "name": "Yoshinobu Yamamoto",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 622491,
+      "name": "Luis Castillo",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 547179,
+      "name": "Michael Lorenzen",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 628452,
+      "name": "Raisel Iglesias",
+      "team": "—",
+      "position": "P"
     }
   ]
 }
