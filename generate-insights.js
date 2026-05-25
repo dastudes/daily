@@ -749,14 +749,13 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Top WPA plays:\n${wpaStr}\n\n` +
                 `Top pitchers:\n${topPitchersStr}\n\n` +
                 `Top batters:\n${topBattersStr}\n\n` +
-                `Write a daily baseball column covering: the games with the most pennant race ` +
-                `significance, the most dramatic or memorable games, standout individual ` +
-                `performances, and what the day's results mean for the overall league picture. ` +
-                `Let the column find its own shape — don't feel obligated to march through these ` +
-                `in order or give each equal weight. Follow the story. ` +
-                `When highlighting individual standout performances, present them as a short bulleted list ` +
-                `using "- " prefix for each item. Everything else should be prose. ` +
-                `No introductory or closing paragraph.` +
+                `Write a daily baseball column of 3–5 paragraphs. Lead with the games that matters most ` +
+                `in title races — prioritize matchups between division leaders or teams in close pennant ` +
+                `races, especially when the game was competitive. After that, cover the most dramatic or ` +
+                `memorable games and standout individual performances. Not every game needs a mention. ` +
+                `Follow the story. Include a short bulleted list of individual highlights using "- " ` +
+                `prefix for each item; place it where it fits naturally in the column. Everything else ` +
+                `should be prose. No introductory or closing paragraph.` +
                 sharedNotes,
         },
     ];
