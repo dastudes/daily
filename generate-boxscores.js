@@ -353,7 +353,9 @@ function extractBattingData(teamData) {
             PA: ab + bb + hbp + sf + sh,
             AB: ab,
             R: s.runs     || 0,
-            H: s.hits     || 0,
+            H:       s.hits      || 0,
+            doubles: s.doubles  || 0,
+            triples: s.triples  || 0,
             HR: s.homeRuns || 0,
             RBI: s.rbi    || 0,
             BB: bb + hbp,
@@ -869,6 +871,20 @@ async function generateHTML() {
                     Math.max(awayScore || 0, homeScore || 0) > 0,
                 sweep: false,
             },
+            notable: (() => {
+                const awayFielding = boxscore.teams.away.teamStats &&
+                    boxscore.teams.away.teamStats.fielding || {};
+                const homeFielding = boxscore.teams.home.teamStats &&
+                    boxscore.teams.home.teamStats.fielding || {};
+                const doublePlays = (awayFielding.doublePlays || 0) +
+                    (homeFielding.doublePlays || 0);
+                const triplePlays = (awayFielding.triplePlays || 0) +
+                    (homeFielding.triplePlays || 0);
+                const unassistedTP = (wpaPlays || []).some(p =>
+                    ((p.result && p.result.description) || '').toLowerCase().includes('unassisted triple play')
+                );
+                return { doublePlays, triplePlays, unassistedTP };
+            })(),
         });
 
     }

@@ -6,7 +6,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const MODEL = 'claude-opus-4-7';
 const MAX_TOKENS = 3000;
 
-function getDisclaimerLine() {
+function getDisclaimerLine(voiceName) {
     const lines = [
         "By the way, I'm not infallible. Wish I had an editor.",
         "Don't believe everything I say. It's not my fault I'm not real.",
@@ -19,7 +19,16 @@ function getDisclaimerLine() {
         "Accuracy not guaranteed. Enthusiasm is.",
         "Handle with care. I was trained on the internet.",
     ];
-    return lines[Math.floor(Math.random() * lines.length)];
+    const byLine = {
+        studenmund: 'Not by Dave Studenmund.',
+        angell:     'Not by Roger Angell.',
+        james:      'Not by Bill James.',
+        gus:        'Not by Gus Heikkinen.',
+        murray:     'Not by Jim Murray.',
+    };
+    const attribution = byLine[voiceName] || '';
+    const line = lines[Math.floor(Math.random() * lines.length)];
+    return attribution ? `${line} ${attribution}` : line;
 }
 
 function loadData() {
@@ -364,6 +373,75 @@ function injectStats(text, playerIndex) {
     return result;
 }
 
+function detectNotableEvents(boxscoreData) {
+    const events = [];
+
+    for (const game of boxscoreData.games) {
+        const label = `${game.away.name} @ ${game.home.name}`;
+        const awayScore = game.away.score;
+        const homeScore = game.home.score;
+
+        // No-hitter / perfect game detection
+        for (const side of ['away', 'home']) {
+            const pitchers = game.pitching[side];
+            const totalH  = pitchers.reduce((sum, p) => sum + (p.H  || 0), 0);
+            const totalBB = pitchers.reduce((sum, p) => sum + (p.BB || 0), 0);
+            const isNoHitter = totalH === 0;
+            const isPerfect  = totalH === 0 && totalBB === 0;
+            const isCombined = pitchers.length > 1;
+            const opponent   = side === 'away' ? game.home.name : game.away.name;
+            const pitcher    = side === 'away' ? game.away.name : game.home.name;
+            const innings    = game.linescore && game.linescore.innings
+                ? game.linescore.innings.length : 9;
+            if (isNoHitter && innings >= 9) {
+                const type = isPerfect ? 'perfect game' : 'no-hitter';
+                const combined = isCombined ? 'combined ' : '';
+                events.push(`PERFECT GAME / NO-HITTER: ${pitcher} threw a ${combined}${type} against ${opponent} (${awayScore}-${homeScore})`);
+            }
+        }
+
+        // Shutout (using existing flag)
+        if (game.flags && game.flags.shutout) {
+            const shutoutSide = awayScore === 0 ? 'home' : 'away';
+            const shutoutTeam = shutoutSide === 'away' ? game.away.name : game.home.name;
+            const blankedTeam = shutoutSide === 'away' ? game.home.name : game.away.name;
+            events.push(`SHUTOUT: ${shutoutTeam} shut out ${blankedTeam} (${awayScore}-${homeScore})`);
+        }
+
+        // Hitting for the cycle
+        for (const side of ['away', 'home']) {
+            for (const b of game.batting[side]) {
+                const singles = (b.H || 0) - (b.doubles || 0) - (b.triples || 0) - (b.HR || 0);
+                if (singles >= 1 && (b.doubles || 0) >= 1 && (b.triples || 0) >= 1 && (b.HR || 0) >= 1) {
+                    const team = side === 'away' ? game.away.name : game.home.name;
+                    events.push(`CYCLE: ${b.name} (${team}) hit for the cycle in ${label}`);
+                }
+            }
+        }
+
+        // 3+ home runs by one batter
+        for (const side of ['away', 'home']) {
+            for (const b of game.batting[side]) {
+                if ((b.HR || 0) >= 3) {
+                    const team = side === 'away' ? game.away.name : game.home.name;
+                    events.push(`${b.HR} HOME RUNS: ${b.name} (${team}) hit ${b.HR} home runs in ${label}`);
+                }
+            }
+        }
+
+        // Triple plays and unassisted triple plays
+        if (game.notable) {
+            if (game.notable.unassistedTP) {
+                events.push(`UNASSISTED TRIPLE PLAY in ${label}`);
+            } else if (game.notable.triplePlays > 0) {
+                events.push(`TRIPLE PLAY in ${label}`);
+            }
+        }
+    }
+
+    return events;
+}
+
 function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
     const sections = [];
 
@@ -535,6 +613,14 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
         s6.push(`Teams above .500: ${above.length > 0 ? above.map(t => teamNickname(t.name)).join(', ') + ` (${above.length})` : 'none (0)'}`);
     }
     sections.push(s6.join('\n'));
+
+    // Section 7 — notable events
+    const notableEvents = detectNotableEvents(boxscoreData);
+    if (notableEvents.length > 0) {
+        const s7 = ['SECTION 7 — NOTABLE EVENTS (MUST MENTION IN NARRATIVE):'];
+        notableEvents.forEach(e => s7.push(`- ${e}`));
+        sections.push(s7.join('\n'));
+    }
 
     return sections.join('\n\n');
 }
@@ -861,7 +947,7 @@ function injectLeaderboard(narrativeHtml, leaderboardHtml) {
     return narrativeHtml.slice(0, insertAt) + '\n' + leaderboardHtml + narrativeHtml.slice(insertAt);
 }
 
-function generateHTML(date, updatedStr, narratives, factSheet) {
+function generateHTML(date, updatedStr, narratives, factSheet, voiceName) {
     const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     });
@@ -891,7 +977,7 @@ function generateHTML(date, updatedStr, narratives, factSheet) {
             </button>
             <div class="insight-body" id="insight-${i}" hidden>
                 ${bodyHtml}
-                <p><em>${getDisclaimerLine()}</em></p>
+                <p><em>${getDisclaimerLine(voiceName)}</em></p>
             </div>
         </div>`;
     }).join('\n');
@@ -1098,7 +1184,7 @@ async function main() {
         narratives.push({ title, text: verified, leaderboardHtml: title === 'What to Know' ? leaderboardHtml : null });
     }
 
-    const html = generateHTML(date, updatedStr, narratives, factSheet);
+    const html = generateHTML(date, updatedStr, narratives, factSheet, voiceKey);
     fs.writeFileSync('insights.html', html);
     console.log('Generated insights.html successfully!');
 
@@ -1117,7 +1203,7 @@ async function main() {
             </button>
             <div class="insight-body" id="${id}" hidden>
                 ${bodyHtml}
-                <p><em>${getDisclaimerLine()}</em></p>
+                <p><em>${getDisclaimerLine(voiceKey)}</em></p>
             </div>
         </div>`;
         fs.writeFileSync(filename, snippet);
