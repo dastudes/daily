@@ -700,7 +700,7 @@ const angellSystem =
     'Avoid clichés. Each paragraph should earn its place. ' +
     'Output 3–5 paragraphs of polished prose. No headers, no bullet points.';
 
-const studemundSystem =
+const studenmundSystem =
     'Write in the style of Dave Studenmund of The Hardball Times — ' +
     'conversational but authoritative, building arguments step by step, ' +
     'showing reasoning not just conclusions, comfortable with math and ' +
@@ -741,10 +741,10 @@ const murraySystem =
     'You have no patience for mediocrity and considerable affection for anyone who plays the game with flair. ' +
     '3–5 paragraphs. No headers.';
 
-const VOICE_SYSTEMS = { studemund: studemundSystem, angell: angellSystem, james: jamesSystem, gus: gusSystem, murray: murraySystem };
+const VOICE_SYSTEMS = { studenmund: studenmundSystem, angell: angellSystem, james: jamesSystem, gus: gusSystem, murray: murraySystem };
 
 function selectVoice() {
-    const voices = ['studemund', 'angell', 'james', 'gus', 'murray'];
+    const voices = ['studenmund', 'angell', 'james', 'gus', 'murray'];
     const key = voices[Math.floor(Math.random() * voices.length)];
     console.log(`Selected voice: ${key}`);
     return { key, system: VOICE_SYSTEMS[key] };
