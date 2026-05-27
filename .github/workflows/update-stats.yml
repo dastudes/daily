@@ -1,9 +1,6 @@
 name: Update Baseball Stats
 
 on:
-  schedule:
-    # Run at 4 AM EST (9 AM UTC) every day
-    - cron: '0 9 * * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
