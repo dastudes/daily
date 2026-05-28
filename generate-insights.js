@@ -20,15 +20,15 @@ function getDisclaimerLine(voiceName) {
         "Handle with care. I was trained on the internet.",
     ];
     const byLine = {
-        studenmund: 'Not by Dave Studenmund.',
-        angell:     'Not by Roger Angell.',
-        james:      'Not by Bill James.',
-        gus:        'Not by Gus Heikkinen.',
-        murray:     'Not by Jim Murray.',
+        studenmund: 'Not written by Dave Studenmund.',
+        angell:     'Not written by Roger Angell.',
+        james:      'Not written by Bill James.',
+        gus:        'Not written by Gus Heikkinen.',
+        murray:     'Not written by Jim Murray.',
     };
     const attribution = byLine[voiceName] || '';
     const line = lines[Math.floor(Math.random() * lines.length)];
-    return attribution ? `${line} ${attribution}` : line;
+    return attribution ? `${attribution} ${line}` : line;
 }
 
 function loadData() {
