@@ -1322,6 +1322,8 @@ async function generateHTML() {
             .header h1 { font-size: 1.6em; }
             .game-teams { font-size: 0.95em; }
             .game-score { font-size: 1em; }
+            .jump-links { display: none; }
+            .jump-legend { display: none; }
         }
         /* Daily Leaderboards */
         .lb-section {
