@@ -791,9 +791,7 @@ async function generateHTML() {
         gamesHTML += `
         <details class="game-box" id="${gameId}">
             <summary class="game-summary">
-                <span class="game-teams">${awayTeam.name} @ ${homeTeam.name}${gameNumber}</span>
-                <span class="game-score">${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}</span>
-                <span class="game-final">Final</span>
+                <span class="game-teams">${awayScore > homeScore ? `${awayTeam.name} ${awayScore}, ${homeTeam.name} ${homeScore}` : `${homeTeam.name} ${homeScore}, ${awayTeam.name} ${awayScore}`}${gameNumber}</span>
             </summary>
             <div class="game-content">
                 <div class="linescore-wrap">
@@ -1144,21 +1142,6 @@ async function generateHTML() {
             color: #2d6a4f;
             flex: 1;
         }
-        .game-score {
-            font-family: "Courier New", Courier, monospace;
-            font-size: 1.15em;
-            font-weight: bold;
-            color: #2F2F2F;
-        }
-        .game-final {
-            font-size: 0.8em;
-            color: #6b7280;
-            background: #f3f4f6;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-family: Georgia, "Times New Roman", serif;
-        }
-
         .game-content { padding: 16px 18px 12px; }
 
         /* Linescore */
@@ -1321,7 +1304,6 @@ async function generateHTML() {
             body { padding: 10px; }
             .header h1 { font-size: 1.6em; }
             .game-teams { font-size: 0.95em; }
-            .game-score { font-size: 1em; }
             .jump-links { display: none; }
             .jump-legend { display: none; }
         }
