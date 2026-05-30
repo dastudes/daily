@@ -400,14 +400,6 @@ function detectNotableEvents(boxscoreData) {
             }
         }
 
-        // Shutout (using existing flag)
-        if (game.flags && game.flags.shutout) {
-            const shutoutSide = awayScore === 0 ? 'home' : 'away';
-            const shutoutTeam = shutoutSide === 'away' ? game.away.name : game.home.name;
-            const blankedTeam = shutoutSide === 'away' ? game.home.name : game.away.name;
-            events.push(`SHUTOUT: ${shutoutTeam} shut out ${blankedTeam} (${awayScore}-${homeScore})`);
-        }
-
         // Hitting for the cycle
         for (const side of ['away', 'home']) {
             for (const b of game.batting[side]) {
@@ -435,6 +427,22 @@ function detectNotableEvents(boxscoreData) {
                 events.push(`UNASSISTED TRIPLE PLAY in ${label}`);
             } else if (game.notable.triplePlays > 0) {
                 events.push(`TRIPLE PLAY in ${label}`);
+            }
+        }
+
+        // Complete game detection
+        const gameInnings = game.linescore && game.linescore.innings ? game.linescore.innings.length : 9;
+        for (const side of ['away', 'home']) {
+            const pitchers = game.pitching[side];
+            if (pitchers.length === 1) {
+                const ip = parseFloat(pitchers[0].IP || 0);
+                if (ip >= gameInnings) {
+                    const pitcherTeam = side === 'away' ? game.away : game.home;
+                    const opponentTeam = side === 'away' ? game.home : game.away;
+                    const isShutout = opponentTeam.score === 0;
+                    const type = isShutout ? 'complete game shutout' : 'complete game';
+                    events.push(`COMPLETE GAME: ${pitchers[0].name} (${pitcherTeam.name}) threw a ${type} against ${opponentTeam.name} (${pitcherTeam.score}-${opponentTeam.score})`);
+                }
             }
         }
     }
@@ -844,13 +852,33 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `should be prose. No introductory or closing paragraph.` +
                 sharedNotes,
         },
+        {
+            title: 'Box Scores Brief',
+            system: 'You are a concise baseball summarizer. Report facts accurately and briefly. No embellishment.',
+            maxTokens: 600,
+            user:
+                factSheetPrefix +
+                `Today is ${dateLabel}.\n\n` +
+                `Write a box scores brief consisting of two parts:\n\n` +
+                `1. One short paragraph (2-3 sentences) identifying the day's most important story. ` +
+                `Prioritize pennant race implications, then dramatic games.\n\n` +
+                `2. A bulleted list using "- " prefix. Scale the count to what happened: ` +
+                `roughly one bullet per notable game result plus bullets for standout individual ` +
+                `performances and any notable events from Section 7. Minimum 4 bullets, maximum 8.\n\n` +
+                `Rules:\n` +
+                `- Use only facts from the verified data above. Do not invent or embellish.\n` +
+                `- Bold all player names using **Name** format.\n` +
+                `- Do not include statistics in prose — stats will be inserted automatically next to player names.\n` +
+                `- If Section 7 contains notable events, they must appear in the bullets.\n` +
+                `- No headers, no intro line, no closing remarks.`,
+        },
     ];
 }
 
 async function callClaude(client, prompt) {
     const message = await client.messages.create({
         model: MODEL,
-        max_tokens: MAX_TOKENS,
+        max_tokens: prompt.maxTokens || MAX_TOKENS,
         system: prompt.system,
         messages: [{ role: 'user', content: prompt.user }],
     });
@@ -1166,8 +1194,10 @@ async function main() {
     console.log(`Player index built: ${playerIndex.size} players`);
 
     // Source data for verification passes
+    const sourceJson = JSON.stringify({ games: boxscore.games, standings: standings.teams }, null, 2);
     const verifySourceData = {
-        'What to Know': JSON.stringify({ games: boxscore.games, standings: standings.teams }, null, 2),
+        'What to Know': sourceJson,
+        'Box Scores Brief': sourceJson,
     };
 
     console.log(`Generating ${prompts.length} narratives via Claude (${MODEL})...`);
@@ -1188,27 +1218,35 @@ async function main() {
     fs.writeFileSync('insights.html', html);
     console.log('Generated insights.html successfully!');
 
-    const snippetMeta = [
-        { filename: 'whats-to-know-snippet.html', id: 'index-insight-0' },
-    ];
-    narratives.forEach((n, i) => {
-        const { filename, id } = snippetMeta[i];
-        const bodyHtml = n.leaderboardHtml
-            ? injectLeaderboard(textToHtml(n.text), n.leaderboardHtml)
-            : textToHtml(n.text);
-        const snippet = `<div class="insight-card">
-            <button class="insight-toggle" aria-expanded="false" onclick="toggleInsight('${id}')">
-                <span class="insight-title">${n.title}</span>
+    // What to Know snippet (insight-card style for index.html)
+    const wtkBodyHtml = narratives[0].leaderboardHtml
+        ? injectLeaderboard(textToHtml(narratives[0].text), narratives[0].leaderboardHtml)
+        : textToHtml(narratives[0].text);
+    const wtkSnippet = `<div class="insight-card">
+            <button class="insight-toggle" aria-expanded="false" onclick="toggleInsight('index-insight-0')">
+                <span class="insight-title">${narratives[0].title}</span>
                 <span class="insight-chevron">&#9660;</span>
             </button>
-            <div class="insight-body" id="${id}" hidden>
-                ${bodyHtml}
+            <div class="insight-body" id="index-insight-0" hidden>
+                ${wtkBodyHtml}
                 <p><em>${getDisclaimerLine(voiceKey)}</em></p>
             </div>
         </div>`;
-        fs.writeFileSync(filename, snippet);
-        console.log(`Generated ${filename}`);
-    });
+    fs.writeFileSync('whats-to-know-snippet.html', wtkSnippet);
+    console.log('Generated whats-to-know-snippet.html');
+
+    // Box Scores Brief snippet (game-box style for box-scores.html)
+    const briefBodyHtml = textToHtml(narratives[1].text);
+    const briefSnippet = `<details class="game-box" id="boxscores-brief">
+            <summary class="game-summary">
+                <span class="game-teams">Today's Briefing</span>
+            </summary>
+            <div class="game-content">
+                ${briefBodyHtml}
+            </div>
+        </details>`;
+    fs.writeFileSync('boxscores-brief-snippet.html', briefSnippet);
+    console.log('Generated boxscores-brief-snippet.html');
 }
 
 main().catch(err => {

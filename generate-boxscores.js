@@ -1393,6 +1393,8 @@ async function generateHTML() {
             <a href="box-scores.html" class="active">Box Scores</a>
         </div>
 
+        <!-- BOXSCORES_BRIEF_SNIPPET -->
+
         ${finalGames.length > 0 ? `
         <div class="controls-bar">
             <div class="jump-links">${jumpLinksHTML}</div>
