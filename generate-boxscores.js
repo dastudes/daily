@@ -1143,6 +1143,8 @@ async function generateHTML() {
             flex: 1;
         }
         .game-content { padding: 16px 18px 12px; }
+        .game-content ul { padding-left: 1.25em; margin: 0.5em 0; }
+        .game-content li { margin-bottom: 0.4em; line-height: 1.6; }
 
         /* Linescore */
         .linescore-wrap {
