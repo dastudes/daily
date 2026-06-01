@@ -6,6 +6,12 @@ const Anthropic = require('@anthropic-ai/sdk');
 const MODEL = 'claude-opus-4-7';
 const MAX_TOKENS = 3000;
 
+function ordinal(n) {
+    const s = ['th','st','nd','rd'];
+    const v = n % 100;
+    return s[(v - 20) % 10] || s[v] || s[0];
+}
+
 function getDisclaimerLine(voiceName) {
     const lines = [
         "By the way, I'm not infallible. Wish I had an editor.",
@@ -237,19 +243,23 @@ function escapeRegex(str) {
 }
 
 function buildPlayerIndex(boxscore, playerStats) {
-    const index = new Map(); // normalized full name -> { type, fullName, gameStats, seasonStats }
+    const index = new Map(); // normalized full name -> { type, fullName, gameStats, seasonStats, gamePk, teamAbbr }
 
     for (const game of boxscore.games) {
         for (const side of ['away', 'home']) {
             for (const b of game.batting[side]) {
                 const key = normalizeForMatch(b.name);
-                if (!index.has(key))
-                    index.set(key, { type: 'batter', fullName: b.name, gameStats: b, seasonStats: null });
+                if (!index.has(key)) {
+                    const abbr = side === 'away' ? game.away.abbr : game.home.abbr;
+                    index.set(key, { type: 'batter', fullName: b.name, gameStats: b, seasonStats: null, gamePk: game.gamePk, teamAbbr: abbr });
+                }
             }
             for (const p of game.pitching[side]) {
                 const key = normalizeForMatch(p.name);
-                if (!index.has(key))
-                    index.set(key, { type: 'pitcher', fullName: p.name, gameStats: p, seasonStats: null });
+                if (!index.has(key)) {
+                    const abbr = side === 'away' ? game.away.abbr : game.home.abbr;
+                    index.set(key, { type: 'pitcher', fullName: p.name, gameStats: p, seasonStats: null, gamePk: game.gamePk, teamAbbr: abbr });
+                }
             }
         }
     }
@@ -264,6 +274,94 @@ function buildPlayerIndex(boxscore, playerStats) {
     }
 
     return index;
+}
+
+function buildTeamIndex(boxscore) {
+    // Maps normalized team name and abbreviation -> gamePk
+    const index = new Map();
+    for (const game of boxscore.games) {
+        for (const side of ['away', 'home']) {
+            const team = game[side];
+            index.set(normalizeForMatch(team.name), game.gamePk);
+            index.set(normalizeForMatch(team.abbr), game.gamePk);
+        }
+    }
+    return index;
+}
+
+function injectBriefLinks(text, playerIndex, teamIndex) {
+    // Build last-name index (same logic as injectStats)
+    const lastNameIndex = new Map();
+    for (const [key, entry] of playerIndex) {
+        const normLast = normalizeForMatch(entry.fullName.split(' ').pop());
+        if (lastNameIndex.has(normLast)) {
+            lastNameIndex.set(normLast, null);
+        } else {
+            lastNameIndex.set(normLast, { key, entry });
+        }
+    }
+
+    const lines = text.split('\n');
+    const result = [];
+
+    for (const line of lines) {
+        // Only process bullet lines
+        if (!line.trim().startsWith('- ')) {
+            result.push(line);
+            continue;
+        }
+
+        const foundPks = new Map(); // gamePk -> teamAbbr label
+
+        // Scan for bolded player names first
+        const boldMatches = [...line.matchAll(/\*\*([^*]+)\*\*/g)];
+        for (const match of boldMatches) {
+            const name = match[1].replace(/\s*\[.*?\]/g, '').trim(); // strip injected stat blocks
+            const key = normalizeForMatch(name);
+            if (playerIndex.has(key)) {
+                const entry = playerIndex.get(key);
+                if (!foundPks.has(entry.gamePk)) {
+                    foundPks.set(entry.gamePk, entry.teamAbbr || null);
+                }
+                continue;
+            }
+            // Try last name
+            const normLast = normalizeForMatch(name.split(' ').pop());
+            const lastEntry = lastNameIndex.get(normLast);
+            if (lastEntry) {
+                const e = lastEntry.entry;
+                if (!foundPks.has(e.gamePk)) {
+                    foundPks.set(e.gamePk, e.teamAbbr || null);
+                }
+            }
+        }
+
+        // Fallback: scan for team names/abbreviations if no player match found
+        if (foundPks.size === 0) {
+            for (const [normName, gamePk] of teamIndex) {
+                const esc = escapeRegex(normName);
+                if (new RegExp(`(?<![\\w])(${esc})(?![\\w])`, 'i').test(normalizeForMatch(line))) {
+                    if (!foundPks.has(gamePk)) {
+                        foundPks.set(gamePk, normName.toUpperCase());
+                    }
+                }
+            }
+        }
+
+        if (foundPks.size === 0) {
+            result.push(line);
+            continue;
+        }
+
+        // Build link tags — use team abbr as label, fall back to "Link"
+        const linkTags = [...foundPks.entries()]
+            .map(([pk, abbr]) => `<a href="#game-${pk}" class="brief-link">(${abbr || 'Link'})</a>`)
+            .join(' ');
+
+        result.push(line + ' ' + linkTags);
+    }
+
+    return result.join('\n');
 }
 
 function formatStatBlock(entry) {
@@ -427,6 +525,21 @@ function detectNotableEvents(boxscoreData) {
                 events.push(`UNASSISTED TRIPLE PLAY in ${label}`);
             } else if (game.notable.triplePlays > 0) {
                 events.push(`TRIPLE PLAY in ${label}`);
+            }
+        }
+
+        // Big inning detection (8+ runs in a single half-inning)
+        const BIG_INNING_THRESHOLD = 8;
+        if (game.linescore && game.linescore.innings) {
+            for (const inn of game.linescore.innings) {
+                for (const side of ['away', 'home']) {
+                    const runs = inn[side] !== null && inn[side] !== undefined ? inn[side] : 0;
+                    if (runs >= BIG_INNING_THRESHOLD) {
+                        const teamName = side === 'away' ? game.away.name : game.home.name;
+                        const oppName  = side === 'away' ? game.home.name : game.away.name;
+                        events.push(`BIG INNING: ${teamName} scored ${runs} runs in the ${inn.inning}${ordinal(inn.inning)} inning against ${oppName}`);
+                    }
+                }
             }
         }
 
@@ -758,7 +871,7 @@ function selectVoice() {
     return { key, system: VOICE_SYSTEMS[key] };
 }
 
-function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem) {
+function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem, enableWhatToKnow = true) {
     const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     });
@@ -831,8 +944,9 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
           `${factSheet}\n\n`
         : '';
 
-    return [
-        {
+    const prompts = [];
+
+    if (enableWhatToKnow) prompts.push({
             title: 'What to Know',
             system: voiceSystem,
             user:
@@ -851,8 +965,9 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `prefix for each item; place it where it fits naturally in the column. Everything else ` +
                 `should be prose. No introductory or closing paragraph.` +
                 sharedNotes,
-        },
-        {
+        });
+
+    prompts.push({
             title: 'Box Scores Brief',
             system: 'You are a concise baseball summarizer. Report facts accurately and briefly. No embellishment.',
             maxTokens: 600,
@@ -871,8 +986,9 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `- Do not include statistics in prose — stats will be inserted automatically next to player names.\n` +
                 `- If Section 7 contains notable events, they must appear in the bullets.\n` +
                 `- No headers, no intro line, no closing remarks.`,
-        },
-    ];
+        });
+
+    return prompts;
 }
 
 async function callClaude(client, prompt) {
@@ -1185,13 +1301,18 @@ async function main() {
 
     const factSheet = buildFactSheet(boxscore, standings, playerStats);
     const leaderboardHtml = buildDailyLeaderboard(playerStats, standings, new Date().getDay());
+    const enableWhatToKnow = config.enableWhatToKnow !== false; // default true if missing
     const { key: voiceKey, system: voiceSystem } = selectVoice();
     console.log(`Voice selected for today: ${voiceKey}`);
-    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem);
+    console.log(`What to Know enabled: ${enableWhatToKnow}`);
+    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem, enableWhatToKnow);
 
     // Build player index for stat injection
     const playerIndex = buildPlayerIndex(boxscore, playerStats);
     console.log(`Player index built: ${playerIndex.size} players`);
+
+    // Build team index for brief links
+    const teamIndex = buildTeamIndex(boxscore);
 
     // Source data for verification passes
     const sourceJson = JSON.stringify({ games: boxscore.games, standings: standings.teams }, null, 2);
@@ -1219,12 +1340,14 @@ async function main() {
     console.log('Generated insights.html successfully!');
 
     // What to Know snippet (insight-card style for index.html)
-    const wtkBodyHtml = narratives[0].leaderboardHtml
-        ? injectLeaderboard(textToHtml(narratives[0].text), narratives[0].leaderboardHtml)
-        : textToHtml(narratives[0].text);
-    const wtkSnippet = `<div class="insight-card">
+    const wtkNarrative = narratives.find(n => n.title === 'What to Know');
+    if (wtkNarrative) {
+        const wtkBodyHtml = wtkNarrative.leaderboardHtml
+            ? injectLeaderboard(textToHtml(wtkNarrative.text), wtkNarrative.leaderboardHtml)
+            : textToHtml(wtkNarrative.text);
+        const wtkSnippet = `<div class="insight-card">
             <button class="insight-toggle" aria-expanded="false" onclick="toggleInsight('index-insight-0')">
-                <span class="insight-title">${narratives[0].title}</span>
+                <span class="insight-title">${wtkNarrative.title}</span>
                 <span class="insight-chevron">&#9660;</span>
             </button>
             <div class="insight-body" id="index-insight-0" hidden>
@@ -1232,14 +1355,20 @@ async function main() {
                 <p><em>${getDisclaimerLine(voiceKey)}</em></p>
             </div>
         </div>`;
-    fs.writeFileSync('whats-to-know-snippet.html', wtkSnippet);
-    console.log('Generated whats-to-know-snippet.html');
+        fs.writeFileSync('whats-to-know-snippet.html', wtkSnippet);
+        console.log('Generated whats-to-know-snippet.html');
+    } else {
+        fs.writeFileSync('whats-to-know-snippet.html', '');
+        console.log('What to Know disabled — writing empty snippet');
+    }
 
     // Box Scores Brief snippet (game-box style for box-scores.html)
-    const briefBodyHtml = textToHtml(narratives[1].text);
+    const briefNarrative = narratives.find(n => n.title === 'Box Scores Brief');
+    const briefWithLinks = injectBriefLinks(briefNarrative.text, playerIndex, teamIndex);
+    const briefBodyHtml = textToHtml(briefWithLinks);
     const briefSnippet = `<details class="game-box" id="boxscores-brief">
             <summary class="game-summary">
-                <span class="game-teams">Today's Briefing</span>
+                <span class="game-teams">Daily Brief</span>
             </summary>
             <div class="game-content">
                 ${briefBodyHtml}

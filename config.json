@@ -3,5 +3,6 @@
   "rosterType": "40Man",
   "defaultMinPA": 0,
   "defaultMinIP": 0,
-  "leaderboardSize": 5
+  "leaderboardSize": 5,
+  "enableWhatToKnow": false
 }
