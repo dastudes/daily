@@ -278,13 +278,16 @@ function buildPlayerIndex(boxscore, playerStats) {
 }
 
 function buildTeamIndex(boxscore) {
-    // Maps normalized team name and abbreviation -> gamePk
+    // Maps normalized team name, abbreviation, and nickname -> gamePk
     const index = new Map();
     for (const game of boxscore.games) {
         for (const side of ['away', 'home']) {
             const team = game[side];
             index.set(normalizeForMatch(team.name), game.gamePk);
             index.set(normalizeForMatch(team.abbr), game.gamePk);
+            // Add nickname (last word of full name, e.g. "Brewers" from "Milwaukee Brewers")
+            const nickname = team.name.split(' ').pop();
+            index.set(normalizeForMatch(nickname), game.gamePk);
         }
     }
     return index;
@@ -1010,9 +1013,14 @@ async function verifyNarrative(client, text, sourceData) {
         `1. Find every statistic, count, or factual claim in the narrative\n` +
         `2. Verify each one against the source data\n` +
         `3. Correct any errors by replacing wrong values with the correct ones from the data\n` +
-        `4. Do not change the writing style, tone, structure, or any sentence that is factually correct\n` +
-        `5. Do not add new information not in the original narrative\n` +
-        `6. Return ONLY the corrected narrative text. Do not include any fact-checking notes, ` +
+        `4. Pay special attention to:\n` +
+        `   - Standings claims: which team leads each division, games back, wild card position\n` +
+        `   - Superlative claims: any use of "best", "worst", "most", "fewest", "only", "first", "top" — verify these against the full standings and league leader data\n` +
+        `   - Scoring attribution: verify which team scored in any referenced inning or rally\n` +
+        `   - Home/away: verify any claim about where a game was played\n` +
+        `5. Do not change the writing style, tone, structure, or any sentence that is factually correct\n` +
+        `6. Do not add new information not in the original narrative\n` +
+        `7. Return ONLY the corrected narrative text. Do not include any fact-checking notes, ` +
         `reasoning, corrections list, headers like 'Corrected Narrative:', or any other text. ` +
         `Just the narrative itself, exactly as it should appear to readers.\n\n` +
         `If you find no errors, return the narrative unchanged.\n\n` +

@@ -1221,6 +1221,14 @@ async function generateHTML() {
             body { padding: 10px; }
             .header h1 { font-size: 1.6em; }
             .game-teams { font-size: 0.95em; }
+            .box-table { width: auto; }
+            .box-table td.name-col,
+            .box-table th.name-col {
+                position: sticky;
+                left: 0;
+                background: white;
+                z-index: 1;
+            }
         }
         /* Daily Leaderboards */
         .lb-section {
