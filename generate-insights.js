@@ -356,7 +356,7 @@ function injectBriefLinks(text, playerIndex, teamIndex) {
 
         // Build link tags — use team abbr as label, fall back to "Link"
         const linkTags = [...foundPks.entries()]
-            .map(([pk, abbr]) => `<a href="#game-${pk}" class="brief-link">(${abbr || 'Link'})</a>`)
+            .map(([pk, abbr]) => `<a href="#game-${pk}" class="brief-link" onclick="expandGame(event,'game-${pk}')">(${abbr || 'Link'})</a>`)
             .join(' ');
 
         result.push(line + ' ' + linkTags);

@@ -910,28 +910,6 @@ async function generateHTML() {
         });
     }
 
-    const GROUP_ORDER  = ['division', 'league', 'interleague'];
-    const GROUP_LABELS = { division: 'Same Division', league: 'Same League', interleague: 'Interleague' };
-    const groups = { division: [], league: [], interleague: [] };
-    jumpLinks.forEach(j => groups[j.gameType].push(j));
-    Object.values(groups).forEach(g => g.sort((a, b) => a.awayAbbr.localeCompare(b.awayAbbr)));
-
-    let jumpLinksHTML = '';
-    for (const type of GROUP_ORDER) {
-        if (groups[type].length === 0) continue;
-        jumpLinksHTML += `<div class="jump-group">`;
-        jumpLinksHTML += `<span class="jump-group-label">${GROUP_LABELS[type]}</span>`;
-        groups[type].forEach(j => {
-            if (j.isDeferred) {
-                jumpLinksHTML += `<span class="jump-link jump-link-deferred">${j.text}</span>`;
-            } else {
-                const cls = j.isNotable ? 'jump-link jump-link-notable' : 'jump-link';
-                jumpLinksHTML += `<a href="#${j.id}" class="${cls}" onclick="expandGame(event,'${j.id}')">${j.text}</a>`;
-            }
-        });
-        jumpLinksHTML += `</div>`;
-    }
-
     // Sort accumulators and take top 5 for each leaderboard
     const topLwts       = Object.values(lwtsAccum).sort((a, b) => b.lwts - a.lwts).slice(0, config.leaderboardSize);
     const topPAR        = Object.values(parAccum).sort((a, b) => b.par - a.par).slice(0, config.leaderboardSize);
@@ -1009,62 +987,6 @@ async function generateHTML() {
             flex-wrap: wrap;
         }
 
-        .jump-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            flex: 1;
-        }
-
-        .jump-link {
-            color: #2563eb;
-            text-decoration: none;
-            font-size: 0.85em;
-            padding: 4px 9px;
-            border: 1px solid #93c5fd;
-            border-radius: 4px;
-            background: white;
-            white-space: nowrap;
-        }
-        .jump-link:hover { background: #eff6ff; border-color: #2563eb; }
-
-        .jump-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            align-items: center;
-            width: 100%;
-        }
-
-        .jump-group-label {
-            display: inline-block;
-            font-size: 0.72em;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #9ca3af;
-            margin-left: 14px;
-            margin-right: 2px;
-            padding-left: 2px;
-            align-self: center;
-        }
-        .jump-group-label:first-child { margin-left: 0; }
-
-        .jump-link-notable {
-            border: 2px solid #1d4ed8;
-            background: #eff6ff;
-            font-weight: bold;
-        }
-        .jump-link-notable:hover { background: #dbeafe; border-color: #1e3a8a; }
-
-        .jump-link-deferred {
-            color: #6b7280;
-            border-color: #d1d5db;
-            background: #f9fafb;
-            cursor: default;
-            font-style: italic;
-        }
-
         .controls-right {
             display: flex;
             flex-direction: column;
@@ -1072,13 +994,6 @@ async function generateHTML() {
             gap: 5px;
             flex-shrink: 0;
         }
-        .jump-legend {
-            font-size: 0.70em;
-            color: #9ca3af;
-            font-style: italic;
-            white-space: nowrap;
-        }
-
         .expand-btn {
             padding: 8px 18px;
             background: linear-gradient(135deg, #2d6a4f, #40916c);
@@ -1306,8 +1221,6 @@ async function generateHTML() {
             body { padding: 10px; }
             .header h1 { font-size: 1.6em; }
             .game-teams { font-size: 0.95em; }
-            .jump-links { display: none; }
-            .jump-legend { display: none; }
         }
         /* Daily Leaderboards */
         .lb-section {
@@ -1399,10 +1312,8 @@ async function generateHTML() {
 
         ${finalGames.length > 0 ? `
         <div class="controls-bar">
-            <div class="jump-links">${jumpLinksHTML}</div>
             <div class="controls-right">
                 <button class="expand-btn" id="expandBtn" onclick="toggleAll()">Expand All</button>
-                <div class="jump-legend">bold border = close or extra innings</div>
             </div>
         </div>
         ${gamesHTML}
