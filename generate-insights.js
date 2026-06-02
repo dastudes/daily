@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const Anthropic = require('@anthropic-ai/sdk');
+const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 const MODEL = 'claude-opus-4-7';
 const MAX_TOKENS = 3000;
