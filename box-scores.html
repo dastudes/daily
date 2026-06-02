@@ -67,62 +67,6 @@
             flex-wrap: wrap;
         }
 
-        .jump-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            flex: 1;
-        }
-
-        .jump-link {
-            color: #2563eb;
-            text-decoration: none;
-            font-size: 0.85em;
-            padding: 4px 9px;
-            border: 1px solid #93c5fd;
-            border-radius: 4px;
-            background: white;
-            white-space: nowrap;
-        }
-        .jump-link:hover { background: #eff6ff; border-color: #2563eb; }
-
-        .jump-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            align-items: center;
-            width: 100%;
-        }
-
-        .jump-group-label {
-            display: inline-block;
-            font-size: 0.72em;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #9ca3af;
-            margin-left: 14px;
-            margin-right: 2px;
-            padding-left: 2px;
-            align-self: center;
-        }
-        .jump-group-label:first-child { margin-left: 0; }
-
-        .jump-link-notable {
-            border: 2px solid #1d4ed8;
-            background: #eff6ff;
-            font-weight: bold;
-        }
-        .jump-link-notable:hover { background: #dbeafe; border-color: #1e3a8a; }
-
-        .jump-link-deferred {
-            color: #6b7280;
-            border-color: #d1d5db;
-            background: #f9fafb;
-            cursor: default;
-            font-style: italic;
-        }
-
         .controls-right {
             display: flex;
             flex-direction: column;
@@ -130,13 +74,6 @@
             gap: 5px;
             flex-shrink: 0;
         }
-        .jump-legend {
-            font-size: 0.70em;
-            color: #9ca3af;
-            font-style: italic;
-            white-space: nowrap;
-        }
-
         .expand-btn {
             padding: 8px 18px;
             background: linear-gradient(135deg, #2d6a4f, #40916c);
@@ -364,8 +301,6 @@
             body { padding: 10px; }
             .header h1 { font-size: 1.6em; }
             .game-teams { font-size: 0.95em; }
-            .jump-links { display: none; }
-            .jump-legend { display: none; }
         }
         /* Daily Leaderboards */
         .lb-section {
@@ -444,7 +379,7 @@
         <div class="header">
             <h1>Baseball Graphs Box Scores</h1>
             <p>Monday, June 1, 2026</p>
-            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: June 2, 2026 at 6:30 AM EDT</p>
+            <p style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Updated: June 2, 2026 at 2:48 PM EDT</p>
         </div>
 
         <div class="nav-bar">
@@ -458,17 +393,15 @@
                 <span class="game-teams">Daily Brief</span>
             </summary>
             <div class="game-content">
-                <p>The Colorado Rockies pulled off the day's most dramatic finish, edging the Los Angeles Angels 9-8 in a game with a 5.21 WPA swing that further damaged LA's AL West hopes. Meanwhile, Arizona's win over the Dodgers tightened the NL West, and Detroit's slugfest victory over Tampa Bay nudged the Tigers closer in the AL Central.</p>
-<ul><li>Rockies beat the Angels 9-8 in the day's most dramatic game, with <strong>Jake McCarthy</strong> [2-4, 2 BB, 1 HR | RC 23] homering in the win. <a href="#game-824027" class="brief-link">(COL)</a></li><li>Diamondbacks topped the Dodgers 4-1 behind a strong start from <strong>Eduardo Rodriguez</strong> [6 IP, 1 ER, 3 K | 2.25 ERA, PAR 24], gaining ground in the NL West. <a href="#game-825078" class="brief-link">(AZ)</a></li><li>Tigers outlasted the Rays 10-9, powered by <strong>Dillon Dingler</strong> [4-5, 2 HR | RC 32]'s two-homer day, <strong>Riley Greene</strong> [3-4, 1 BB, 1 HR | RC 40], and <strong>Kerry Carpenter</strong> [3-5, 1 HR | RC 17]. <a href="#game-822974" class="brief-link">(DET)</a></li><li>Brewers crushed the Giants 16-2, with San Francisco losing ground in the NL wild card race.</li><li>Rangers edged the Cardinals 2-1 as <strong>Jacob deGrom</strong> [5 IP, 0 ER, 8 K | 3.50 ERA, PAR 16] dominated, dropping St. Louis a full game in the NL Central. <a href="#game-823050" class="brief-link">(TEX)</a></li><li>Mariners held off the Mets 3-2 behind <strong>Emerson Hancock</strong> [6 IP, 2 ER, 7 K | 2.82 ERA, PAR 21], costing New York half a game in the NL East. <a href="#game-823131" class="brief-link">(SEA)</a></li><li>Marlins beat the Nationals 7-3 behind <strong>Sandy Alcantara</strong> [7 IP, 3 ER, 5 K | 4.60 ERA, PAR 14], tightening the NL East's second-place picture. <a href="#game-822730" class="brief-link">(MIA)</a></li><li>Royals routed the Reds 9-2, and Twins beat the White Sox 9-6 as <strong>Miguel Vargas</strong> [3-5, 2 HR | RC 40] homered twice in the loss. <a href="#game-823702" class="brief-link">(CWS)</a></li></ul>
+                <p>The Brewers reinforced their NL Central lead with a 16-2 demolition of the Giants, while the Diamondbacks pulled within 5.5 games of the Dodgers after a 4-1 win in Phoenix. In the day's wildest finish, the Rockies edged the Angels 9-8 in a game that produced the largest WPA swing of the slate.</p>
+<ul><li>Rockies 9, Angels 8: the day's most dramatic game, with <strong>Jake McCarthy</strong> [2-4, 2 BB, 1 HR | RC 23] powering Colorado's win <a href="#game-824027" class="brief-link" onclick="expandGame(event,'game-824027')">(COL)</a></li><li>Brewers 16, Giants 2: Milwaukee's rout keeps them tied atop the NL with the league's best record</li><li>Diamondbacks 4, Dodgers 1: <strong>Eduardo Rodriguez</strong> [6 IP, 1 ER, 3 K | 2.25 ERA, PAR 24] stifled Los Angeles to tighten the NL West <a href="#game-825078" class="brief-link" onclick="expandGame(event,'game-825078')">(AZ)</a></li><li>Tigers 10, Rays 9: <strong>Dillon Dingler</strong> [4-5, 2 HR | RC 32] posted the day's top batting line, with <strong>Riley Greene</strong> [3-4, 1 BB, 1 HR | RC 40] and <strong>Kerry Carpenter</strong> [3-5, 1 HR | RC 17] also homering in the upset of the AL East leader <a href="#game-822974" class="brief-link" onclick="expandGame(event,'game-822974')">(DET)</a></li><li>Mariners 3, Mets 2: <strong>Emerson Hancock</strong> [6 IP, 2 ER, 7 K | 2.82 ERA, PAR 21] delivered six strong innings to keep Seattle in first in the AL West <a href="#game-823131" class="brief-link" onclick="expandGame(event,'game-823131')">(SEA)</a></li><li>Rangers 2, Cardinals 1: <strong>Jacob deGrom</strong> [5 IP, 0 ER, 8 K | 3.50 ERA, PAR 16] dominated with 8 K over 5 shutout innings <a href="#game-823050" class="brief-link" onclick="expandGame(event,'game-823050')">(TEX)</a></li><li>Twins 9, White Sox 6: <strong>Miguel Vargas</strong> [3-5, 2 HR | RC 40] homered twice in the loss <a href="#game-823702" class="brief-link" onclick="expandGame(event,'game-823702')">(CWS)</a></li><li>Royals 9, Reds 2 and Marlins 7, Nationals 3 rounded out the slate, with <strong>Sandy Alcantara</strong> [7 IP, 3 ER, 5 K | 4.60 ERA, PAR 14] going seven for Miami <a href="#game-822730" class="brief-link" onclick="expandGame(event,'game-822730')">(MIA)</a></li></ul>
             </div>
         </details>
 
         
         <div class="controls-bar">
-            <div class="jump-links"><div class="jump-group"><span class="jump-group-label">Same Division</span><a href="#game-823702" class="jump-link" onclick="expandGame(event,'game-823702')">CWS 6, MIN 9</a><a href="#game-825078" class="jump-link" onclick="expandGame(event,'game-825078')">LAD 1, AZ 4</a><a href="#game-822730" class="jump-link" onclick="expandGame(event,'game-822730')">MIA 7, WSH 3</a></div><div class="jump-group"><span class="jump-group-label">Same League</span><a href="#game-822974" class="jump-link jump-link-notable" onclick="expandGame(event,'game-822974')">DET 10, TB 9</a><a href="#game-823781" class="jump-link" onclick="expandGame(event,'game-823781')">SF 2, MIL 16</a></div><div class="jump-group"><span class="jump-group-label">Interleague</span><a href="#game-824027" class="jump-link jump-link-notable" onclick="expandGame(event,'game-824027')">COL 9, LAA 8</a><a href="#game-824510" class="jump-link" onclick="expandGame(event,'game-824510')">KC 9, CIN 2</a><a href="#game-823131" class="jump-link jump-link-notable" onclick="expandGame(event,'game-823131')">NYM 2, SEA 3</a><a href="#game-823050" class="jump-link jump-link-notable" onclick="expandGame(event,'game-823050')">TEX 2, STL 1</a></div></div>
             <div class="controls-right">
                 <button class="expand-btn" id="expandBtn" onclick="toggleAll()">Expand All</button>
-                <div class="jump-legend">bold border = close or extra innings</div>
             </div>
         </div>
         

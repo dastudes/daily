@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-06-02T10:30:28.983Z",
+  "updated": "2026-06-02T18:48:35.187Z",
   "batters": [
     {
       "name": "Nick Kurtz",
@@ -22940,30 +22940,6 @@
       "pitchHand": "R"
     },
     {
-      "name": "Brandon Leibrandt",
-      "playerId": 605335,
-      "team": "Cincinnati Reds",
-      "teamAbbr": "CIN",
-      "league": "NL",
-      "age": 33,
-      "g": 1,
-      "gs": 0,
-      "ip": 6,
-      "w": 0,
-      "l": 0,
-      "sv": 0,
-      "hr": 2,
-      "k": 3,
-      "bb": 3,
-      "era": 7.5,
-      "whip": 2.17,
-      "fip": 7.93,
-      "par": -1,
-      "h": 10,
-      "er": 5,
-      "pitchHand": "L"
-    },
-    {
       "name": "Tony Santillan",
       "playerId": 663574,
       "team": "Cincinnati Reds",
@@ -23057,30 +23033,6 @@
       "par": -3,
       "h": 70,
       "er": 35,
-      "pitchHand": "R"
-    },
-    {
-      "name": "Lyon Richardson",
-      "playerId": 680689,
-      "team": "Cincinnati Reds",
-      "teamAbbr": "CIN",
-      "league": "NL",
-      "age": 26,
-      "g": 2,
-      "gs": 1,
-      "ip": 1.2,
-      "w": 0,
-      "l": 1,
-      "sv": 0,
-      "hr": 2,
-      "k": 3,
-      "bb": 2,
-      "era": 37.5,
-      "whip": 3.33,
-      "fip": 27.27,
-      "par": -4,
-      "h": 2,
-      "er": 5,
       "pitchHand": "R"
     },
     {
