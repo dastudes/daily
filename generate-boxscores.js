@@ -1223,6 +1223,7 @@ async function generateHTML() {
             .game-teams { font-size: 0.95em; }
             .table-scroll { width: 100%; overflow-x: auto; display: block; }
             .box-table { width: max-content; min-width: 100%; }
+            .team-col-box { min-width: 0; }
             .box-table td.name-col,
             .box-table th.name-col {
                 position: sticky;
