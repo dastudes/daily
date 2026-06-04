@@ -927,7 +927,14 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `the road has nothing to do with Coors Field. Never use a pitcher's team identity to ` +
         `infer ballpark context — only use the venue field in the data.`;
 
-    const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}\n\n${noStatsNote}\n\n${coorsNote}\n\n${lwtsNote}`;
+    const pennantRaceNote =
+        `CRITICAL: Never infer standings movement from a game result alone. ` +
+        `A team winning does not mean they gained ground in their division or wild card race. ` +
+        `Standings changes are only in Section 2 (Pennant Race Impact) of the verified facts. ` +
+        `If a team does not appear in Section 2, their standings position is unchanged — ` +
+        `do not say they extended, maintained, or grew any lead. Report the win; say nothing about the standings.`;
+
+    const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}\n\n${noStatsNote}\n\n${coorsNote}\n\n${lwtsNote}\n\n${pennantRaceNote}`;
 
     const walksNote =
         `When mentioning a batter's performance, always include walks separately from hits. ` +
@@ -986,6 +993,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `performances and any notable events from Section 7. Minimum 4 bullets, maximum 8.\n\n` +
                 `Rules:\n` +
                 `- Use only facts from the verified data above. Do not invent or embellish.\n` +
+                `- Standings claims (division leads, games back, pennant race movement) must come directly from Section 2 or Section 6 of the verified facts. If a team does not appear in Section 2, do not characterize their result as gaining or extending a lead — report the win or loss only.\n` +
                 `- Bold all player names using **Name** format.\n` +
                 `- Do not include statistics in prose — stats will be inserted automatically next to player names.\n` +
                 `- If Section 7 contains notable events, they must appear in the bullets.\n` +
