@@ -747,6 +747,15 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
         sections.push(s7.join('\n'));
     }
 
+    // Section 8 — postponed/cancelled games
+    if (boxscoreData.postponedGames && boxscoreData.postponedGames.length > 0) {
+        const s8 = ['SECTION 8 — POSTPONED/CANCELLED GAMES:'];
+        boxscoreData.postponedGames.forEach(g => {
+            s8.push(`- ${g.awayTeam} @ ${g.homeTeam} (${g.status})`);
+        });
+        sections.push(s8.join('\n'));
+    }
+
     return sections.join('\n\n');
 }
 
@@ -997,6 +1006,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `- Bold all player names using **Name** format.\n` +
                 `- Do not include statistics in prose — stats will be inserted automatically next to player names.\n` +
                 `- If Section 7 contains notable events, they must appear in the bullets.\n` +
+                `- If Section 8 lists any postponed or cancelled games, add a bullet noting them (e.g., "- [Away] at [Home] was postponed due to rain.").\n` +
                 `- No headers, no intro line, no closing remarks.`,
         });
 

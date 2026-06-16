@@ -1470,6 +1470,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
         document.addEventListener('DOMContentLoaded', function() {
             const radioEl = document.getElementById('radio-' + currentLeague);
             if (radioEl) radioEl.checked = true;
+            updateLeague();
         });
         let chart1, chart2, chart3;
         

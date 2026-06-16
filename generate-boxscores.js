@@ -1366,6 +1366,11 @@ async function generateHTML() {
         date,
         generatedAt: updatedStr,
         games: gamesData,
+        postponedGames: deferredGames.map(g => ({
+            awayTeam: g.teams.away.team.teamName,
+            homeTeam: g.teams.home.team.teamName,
+            status: g.status.detailedState || g.status.statusCode,
+        })),
         topWPAPlaysAllGames: topWPAPlays.map(p => ({
             game: p.gameLabel,
             wpa: parseFloat((p.absWPA / 100).toFixed(3)),
