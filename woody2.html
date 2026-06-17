@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woody's Second Fantasy Team</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            background-color: #eef2f7;
+            color: #1e293b;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* ── Header ── */
+        .header {
+            background: white;
+            border-left: 6px solid #1d4ed8;
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+
+        .header h1 {
+            margin: 0 0 4px 0;
+            font-size: 1.8em;
+            color: #1e293b;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 0.85em;
+            color: #64748b;
+        }
+
+        /* ── Nav ── */
+        .nav-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-bar a {
+            display: inline-block;
+            padding: 6px 14px;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.88em;
+            font-weight: bold;
+        }
+
+        .nav-bar a:hover { background-color: #334155; }
+        .nav-bar a.active { background-color: #1d4ed8; color: white; }
+
+        /* ── Status bar ── */
+        #status-bar {
+            border-radius: 6px;
+            padding: 10px 16px;
+            margin-bottom: 16px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        #status-bar.info    { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+        #status-bar.success { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+        #status-bar.error   { background: #fef2f2; border: 1px solid #fca5a5; color: #7f1d1d; }
+
+        /* ── Help box ── */
+        .help-box {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            font-size: 0.88em;
+            line-height: 1.7;
+            color: #1e293b;
+        }
+
+        .help-box strong { color: #92400e; }
+
+        .help-box ul {
+            margin: 6px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .help-box li { margin-bottom: 4px; }
+
+        details.help-details summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: #92400e;
+            user-select: none;
+            list-style: none;
+        }
+
+        details.help-details summary::before {
+            content: '▶ ';
+            font-size: 0.75em;
+        }
+
+        details.help-details[open] summary::before {
+            content: '▼ ';
+        }
+
+        /* ── Manage roster button ── */
+        .manage-btn {
+            background: #1d4ed8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 9px 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            font-family: Georgia, serif;
+            margin-bottom: 20px;
+        }
+
+        .manage-btn:hover { background: #1e40af; }
+
+        /* ── Admin panel ── */
+        #admin-panel {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 22px;
+            margin-bottom: 24px;
+            display: none;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+        }
+
+        #admin-panel.open { display: block; }
+
+        .admin-section-title {
+            font-size: 0.8em;
+            font-weight: bold;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 5px;
+            margin: 20px 0 12px 0;
+        }
+
+        .admin-section-title:first-of-type { margin-top: 0; }
+
+        /* Buttons */
+        .btn-blue {
+            background: #1d4ed8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 18px;
+            cursor: pointer;
+            font-size: 0.88em;
+            font-weight: bold;
+            font-family: Georgia, serif;
+        }
+
+        .btn-blue:hover { background: #1e40af; }
+        .btn-blue:disabled { opacity: 0.5; cursor: default; }
+
+        .btn-green {
+            background: #15803d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 18px;
+            cursor: pointer;
+            font-size: 0.88em;
+            font-weight: bold;
+            font-family: Georgia, serif;
+        }
+
+        .btn-green:hover { background: #166534; }
+        .btn-green:disabled { opacity: 0.5; cursor: default; }
+
+        .btn-slate {
+            background: #475569;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 18px;
+            cursor: pointer;
+            font-size: 0.88em;
+            font-weight: bold;
+            font-family: Georgia, serif;
+        }
+
+        .btn-slate:hover { background: #334155; }
+
+        .btn-drop {
+            background: transparent;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+            border-radius: 4px;
+            padding: 3px 9px;
+            cursor: pointer;
+            font-size: 0.78em;
+            font-family: Georgia, serif;
+        }
+
+        .btn-drop:hover { background: #fef2f2; }
+
+        /* Toolbar */
+        .admin-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        .toolbar-note {
+            font-size: 0.78em;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        /* Team name */
+        #team-name-display {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e293b;
+            cursor: pointer;
+            border-bottom: 2px dashed #cbd5e1;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        #team-name-display:hover { border-color: #1d4ed8; }
+
+        #team-name-edit {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1e293b;
+            border: none;
+            border-bottom: 2px solid #1d4ed8;
+            background: transparent;
+            outline: none;
+            font-family: Georgia, serif;
+            width: 280px;
+            display: none;
+        }
+
+        /* Search */
+        .search-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            padding: 8px 11px;
+            font-size: 0.9em;
+            font-family: Georgia, serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #1d4ed8;
+            background: white;
+        }
+
+        .search-results {
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            overflow: hidden;
+            font-size: 0.85em;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .result-row:last-child { border-bottom: none; }
+        .result-row:hover { background: #f8fafc; }
+
+        .result-name { font-weight: bold; color: #1e293b; }
+        .result-meta { color: #64748b; font-size: 0.88em; margin-left: 6px; }
+
+        .btn-add-b {
+            background: #1d4ed8;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 3px 9px;
+            cursor: pointer;
+            font-size: 0.75em;
+            margin-left: 4px;
+        }
+
+        .btn-add-b:hover { background: #1e40af; }
+
+        .btn-add-p {
+            background: #15803d;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 3px 9px;
+            cursor: pointer;
+            font-size: 0.75em;
+            margin-left: 4px;
+        }
+
+        .btn-add-p:hover { background: #166534; }
+
+        .btn-add-other {
+            background: #94a3b8;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 3px 9px;
+            cursor: pointer;
+            font-size: 0.75em;
+            margin-left: 4px;
+        }
+
+        /* Roster lists */
+        .roster-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .roster-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .roster-card-header {
+            padding: 7px 14px;
+            font-size: 0.78em;
+            font-weight: bold;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .roster-card-header.blue  { background: #1d4ed8; }
+        .roster-card-header.green { background: #15803d; }
+
+        .roster-player-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.85em;
+        }
+
+        .roster-player-row:last-child { border-bottom: none; }
+        .roster-player-row:hover { background: #f8fafc; }
+
+        .roster-player-name { font-weight: bold; color: #1e293b; }
+        .roster-player-meta { color: #64748b; font-size: 0.85em; }
+        .roster-empty { padding: 14px; color: #94a3b8; font-style: italic; font-size: 0.85em; }
+
+        /* ── Stats area ── */
+        .section-title {
+            font-size: 1.05em;
+            font-weight: bold;
+            color: #1e293b;
+            border-bottom: 2px solid #1d4ed8;
+            padding-bottom: 5px;
+            margin: 22px 0 10px 0;
+        }
+
+        .section-title.green-title { border-color: #15803d; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.87em;
+            margin-bottom: 24px;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        th {
+            background-color: #e8f0fe;
+            padding: 7px 5px;
+            text-align: left;
+            border-bottom: 2px solid #1d4ed8;
+            color: #1e293b;
+            font-weight: bold;
+            font-family: Georgia, "Times New Roman", serif;
+            white-space: nowrap;
+        }
+
+        th.green-th { background-color: #dcfce7; border-bottom-color: #15803d; }
+        th.sortable { cursor: pointer; user-select: none; }
+        th.sortable:hover { background-color: #dde8fd; }
+        th.sorted { background-color: #c7d9fc; }
+        th.green-th.sorted { background-color: #bbf7d0; }
+
+        td {
+            padding: 6px 5px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+
+        tr:hover { background-color: #f8fafc; }
+        .stat-num { text-align: right; }
+
+        td a { color: #1d4ed8; text-decoration: none; }
+        td a:hover { text-decoration: underline; }
+        td:first-child { font-family: Georgia, "Times New Roman", serif; }
+
+        /* Loading */
+        #stats-loading {
+            color: #64748b;
+            font-style: italic;
+            padding: 20px 0;
+            display: none;
+        }
+
+        .no-stats-msg {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 24px;
+            color: #64748b;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* About */
+        details.about-section {
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            background: white;
+        }
+
+        details.about-section summary {
+            padding: 9px 14px;
+            cursor: pointer;
+            background: #f8fafc;
+            font-size: 0.88em;
+            font-weight: bold;
+            color: #475569;
+            user-select: none;
+        }
+
+        details.about-section .about-content {
+            padding: 12px 16px;
+            font-size: 0.85em;
+            line-height: 1.65;
+        }
+
+        details.about-section ul { margin: 6px 0; padding-left: 20px; }
+        details.about-section li { margin-bottom: 4px; }
+
+        /* Roster count badge */
+        .roster-badge {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #3730a3;
+            border-radius: 10px;
+            padding: 1px 9px;
+            font-size: 0.78em;
+            font-weight: bold;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 700px) {
+            .roster-grid { grid-template-columns: 1fr; }
+            table { font-size: 0.75em; }
+            th, td { padding: 4px 3px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>⚾ <span id="page-team-name">Woody's Second Fantasy Team</span></h1>
+        <p id="page-updated">Loading your roster…</p>
+    </div>
+
+    <div class="nav-bar">
+        <a href="index.html">Graphs &amp; Standings</a>
+        <a href="player_stats.html">Player Stats</a>
+        <a href="box-scores.html">Box Scores</a>
+        <a href="woody.html">Woody's Team</a>
+        <a href="woody2.html" class="active">Woody's Team 2</a>
+    </div>
+
+    <!-- Status bar -->
+    <div id="status-bar"></div>
+
+    <!-- Help box -->
+    <div class="help-box">
+        <details class="help-details">
+            <summary>How to use this page</summary>
+            <ul>
+                <li><strong>Your roster and stats load automatically</strong> each time you open the page.</li>
+                <li>Click <strong>Manage My Roster</strong> to add or drop players.</li>
+                <li>To add a player, type their last name in the search box and click <strong>Search</strong>. Then click the blue or green button next to their name.</li>
+                <li>To remove a player, click the <strong>Drop</strong> button next to their name.</li>
+                <li>When you're done making changes, click <strong>Save My Roster</strong>. This saves your changes so they'll still be there next time.</li>
+                <li><strong>Refresh Stats</strong> reloads today's numbers from MLB without changing your roster.</li>
+                <li>The first time you save, you'll be asked for an access key. Ask Dave for it — you'll only need to enter it once.</li>
+            </ul>
+        </details>
+    </div>
+
+    <!-- Manage roster button -->
+    <div>
+        <button class="manage-btn" onclick="toggleAdmin()">⚙ Manage My Roster</button>
+        <span class="roster-badge" id="roster-count">0 players</span>
+    </div>
+
+    <!-- ════════════ ADMIN PANEL ════════════ -->
+    <div id="admin-panel">
+
+        <!-- Action toolbar -->
+        <div class="admin-section-title">Actions</div>
+        <div class="admin-toolbar">
+            <button class="btn-blue"  id="btn-load"  onclick="loadRoster()">↻ Refresh Roster</button>
+            <button class="btn-green" id="btn-save"  onclick="saveRoster()">✓ Save My Roster</button>
+            <button class="btn-slate"               onclick="refreshStats()">↻ Refresh Stats</button>
+        </div>
+        <p class="toolbar-note">
+            <strong>Refresh Roster</strong> reloads your last saved roster.
+            <strong>Save My Roster</strong> saves any adds or drops you've made.
+        </p>
+
+        <!-- Team name -->
+        <div class="admin-section-title">Team Name</div>
+        <div style="margin-bottom: 14px;">
+            <span id="team-name-display" onclick="startEditName()" title="Click to edit"></span>
+            <input id="team-name-edit" type="text"
+                   onblur="finishEditName()"
+                   onkeydown="if(event.key==='Enter') finishEditName()">
+            <span style="font-size:0.75em; color:#94a3b8; margin-left:8px;">(click to edit)</span>
+        </div>
+
+        <!-- Player search -->
+        <div class="admin-section-title">Add a Player</div>
+        <div class="search-row">
+            <input class="search-input" type="text" id="search-input"
+                   placeholder="Type a last name and press Search (e.g. Alonso, Judge, Ohtani)…"
+                   onkeydown="if(event.key==='Enter') searchPlayers()">
+            <button class="btn-blue" id="btn-search" onclick="searchPlayers()">Search</button>
+        </div>
+        <div id="search-results" class="search-results" style="display:none;"></div>
+        <p style="font-size:0.78em; color:#94a3b8; margin-top:6px;">
+            Blue button = add as batter · Green button = add as pitcher · Gray button = override the default position type
+        </p>
+
+        <!-- Roster lists -->
+        <div class="admin-section-title">Players on Your Roster</div>
+        <div class="roster-grid">
+            <div class="roster-card">
+                <div class="roster-card-header blue">Batters (<span id="batter-count">0</span>)</div>
+                <div id="batter-list"></div>
+            </div>
+            <div class="roster-card">
+                <div class="roster-card-header green">Pitchers (<span id="pitcher-count">0</span>)</div>
+                <div id="pitcher-list"></div>
+            </div>
+        </div>
+
+    </div>
+    <!-- end admin panel -->
+
+    <!-- ════════════ STATS AREA ════════════ -->
+    <div id="stats-area">
+
+        <div id="stats-loading">Loading stats from MLB…</div>
+
+        <details class="about-section">
+            <summary>About these stats</summary>
+            <div class="about-content">
+                <p>Stats are pulled live from the official MLB Stats API each time you load the page. Player names link to their Baseball Savant profiles for advanced metrics.</p>
+                <ul>
+                    <li><strong>RC (Runs Created)</strong> = OBP × Total Bases</li>
+                    <li><strong>FIP (Fielding Independent Pitching)</strong> = ((13×HR)+(3×(BB+HBP))−(2×K))/IP + 3.10</li>
+                    <li><strong>PAR (Pitching Above Replacement)</strong> = (6−(FIP+ERA)/2)×IP/9</li>
+                </ul>
+                <p>These are approximations. For more rigorous sabermetrics, see <a href="https://www.fangraphs.com/" target="_blank">Fangraphs</a> or <a href="https://www.baseball-reference.com/" target="_blank">Baseball Reference</a>.</p>
+            </div>
+        </details>
+
+        <div id="batting-section" style="display:none;">
+            <div class="section-title">Batting</div>
+            <table id="batting-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-col="0">Name</th>
+                        <th class="sortable" data-col="1">Team</th>
+                        <th class="sortable stat-num" data-col="2">Age</th>
+                        <th class="sortable" data-col="3">Pos</th>
+                        <th class="sortable stat-num" data-col="4">G</th>
+                        <th class="sortable stat-num" data-col="5">RC</th>
+                        <th class="sortable stat-num" data-col="6">PA</th>
+                        <th class="sortable stat-num" data-col="7">R</th>
+                        <th class="sortable stat-num" data-col="8">RBI</th>
+                        <th class="sortable stat-num" data-col="9">BA</th>
+                        <th class="sortable stat-num" data-col="10">OBP</th>
+                        <th class="sortable stat-num" data-col="11">SLG</th>
+                        <th class="sortable stat-num" data-col="12">OPS</th>
+                        <th class="sortable stat-num" data-col="13">H</th>
+                        <th class="sortable stat-num" data-col="14">2B</th>
+                        <th class="sortable stat-num" data-col="15">3B</th>
+                        <th class="sortable stat-num" data-col="16">HR</th>
+                        <th class="sortable stat-num" data-col="17">TB</th>
+                        <th class="sortable stat-num" data-col="18">BB</th>
+                        <th class="sortable stat-num" data-col="19">SO</th>
+                        <th class="sortable stat-num" data-col="20">SB</th>
+                        <th class="sortable stat-num" data-col="21">CS</th>
+                    </tr>
+                </thead>
+                <tbody id="batting-tbody"></tbody>
+            </table>
+        </div>
+
+        <div id="pitching-section" style="display:none;">
+            <div class="section-title green-title">Pitching</div>
+            <table id="pitching-table">
+                <thead>
+                    <tr>
+                        <th class="sortable green-th" data-col="0">Name</th>
+                        <th class="sortable green-th" data-col="1">Team</th>
+                        <th class="sortable green-th stat-num" data-col="2">Age</th>
+                        <th class="sortable green-th stat-num" data-col="3">PAR</th>
+                        <th class="sortable green-th stat-num" data-col="4">IP</th>
+                        <th class="sortable green-th stat-num" data-col="5">ERA</th>
+                        <th class="sortable green-th stat-num" data-col="6">FIP</th>
+                        <th class="sortable green-th stat-num" data-col="7">WHIP</th>
+                        <th class="sortable green-th stat-num" data-col="8">G</th>
+                        <th class="sortable green-th stat-num" data-col="9">GS</th>
+                        <th class="sortable green-th stat-num" data-col="10">W</th>
+                        <th class="sortable green-th stat-num" data-col="11">L</th>
+                        <th class="sortable green-th stat-num" data-col="12">SV</th>
+                        <th class="sortable green-th stat-num" data-col="13">H</th>
+                        <th class="sortable green-th stat-num" data-col="14">R</th>
+                        <th class="sortable green-th stat-num" data-col="15">ER</th>
+                        <th class="sortable green-th stat-num" data-col="16">HR</th>
+                        <th class="sortable green-th stat-num" data-col="17">BB</th>
+                        <th class="sortable green-th stat-num" data-col="18">SO</th>
+                    </tr>
+                </thead>
+                <tbody id="pitching-tbody"></tbody>
+            </table>
+        </div>
+
+        <div id="no-roster-msg" class="no-stats-msg" style="display:none;">
+            No players on your roster yet. Click <strong>Manage My Roster</strong> above to get started.
+        </div>
+
+    </div>
+
+</div><!-- end container -->
+
+<script>
+// ══════════════════════════════════════
+//  Config — hardcoded for Woody's page
+// ══════════════════════════════════════
+const GITHUB_OWNER  = 'dastudes';
+const GITHUB_REPO   = 'daily';
+const GITHUB_BRANCH = 'main';
+const GITHUB_PATH   = 'woody2-roster.json';
+const MLB_API       = 'https://statsapi.mlb.com/api/v1';
+const SEASON        = new Date().getFullYear();
+
+// ══════════════════════════════════════
+//  Password gate
+// ══════════════════════════════════════
+(function() {
+    const stored = localStorage.getItem('woody_pass');
+    if (stored !== 'woody') {
+        const entered = prompt('Password required:');
+        if (entered !== 'woody') {
+            document.body.innerHTML = '<p style="font-family:Georgia;padding:40px;color:#7f1d1d;">Access denied.</p>';
+            throw new Error('Access denied');
+        }
+        localStorage.setItem('woody_pass', 'woody');
+    }
+})();
+
+// ══════════════════════════════════════
+//  State
+// ══════════════════════════════════════
+let roster   = { teamName: "Woody's Second Fantasy Team", batters: [], pitchers: [] };
+let fileSha  = null;
+let adminOpen = false;
+
+// ══════════════════════════════════════
+//  Init
+// ══════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+    renderAdminRoster();
+    updatePageTitle();
+    autoLoadRoster();
+});
+
+// ══════════════════════════════════════
+//  Status bar
+// ══════════════════════════════════════
+let statusTimer;
+function showStatus(msg, type = 'info', persist = false) {
+    const bar = document.getElementById('status-bar');
+    bar.textContent = msg;
+    bar.className   = type;
+    bar.style.display = 'block';
+    clearTimeout(statusTimer);
+    if (!persist) statusTimer = setTimeout(() => bar.style.display = 'none', 5000);
+}
+
+function clearStatus() { document.getElementById('status-bar').style.display = 'none'; }
+
+// ══════════════════════════════════════
+//  Admin panel
+// ══════════════════════════════════════
+function toggleAdmin() {
+    adminOpen = !adminOpen;
+    document.getElementById('admin-panel').classList.toggle('open', adminOpen);
+}
+
+// ══════════════════════════════════════
+//  Team name
+// ══════════════════════════════════════
+function updatePageTitle() {
+    const name = roster.teamName || "Woody's Second Fantasy Team";
+    document.getElementById('page-team-name').textContent     = name;
+    document.getElementById('team-name-display').textContent  = name;
+}
+
+function startEditName() {
+    const d = document.getElementById('team-name-display');
+    const i = document.getElementById('team-name-edit');
+    i.value = roster.teamName;
+    d.style.display = 'none';
+    i.style.display = 'inline-block';
+    i.focus(); i.select();
+}
+
+function finishEditName() {
+    const d   = document.getElementById('team-name-display');
+    const i   = document.getElementById('team-name-edit');
+    const val = i.value.trim();
+    if (val) roster.teamName = val;
+    d.style.display = '';
+    i.style.display = 'none';
+    updatePageTitle();
+}
+
+// ══════════════════════════════════════
+//  PAT — prompted once, stored locally
+// ══════════════════════════════════════
+function getPAT() {
+    let pat = localStorage.getItem('woody_pat');
+    if (!pat) {
+        pat = prompt('Enter your access key (ask Dave if you don\'t have it):');
+        if (!pat) return null;
+        localStorage.setItem('woody_pat', pat);
+    }
+    return pat;
+}
+
+// ══════════════════════════════════════
+//  Auto-load from public raw URL
+// ══════════════════════════════════════
+async function autoLoadRoster() {
+    const url = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_PATH}?t=${Date.now()}`;
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(res.status);
+        roster = await res.json();
+        renderAdminRoster();
+        updatePageTitle();
+        fetchAndRenderStats();
+    } catch (e) {
+        document.getElementById('no-roster-msg').style.display = '';
+        document.getElementById('page-updated').textContent    = 'Could not load roster — try refreshing the page.';
+    }
+}
+
+// ══════════════════════════════════════
+//  Load via GitHub API (gets SHA)
+// ══════════════════════════════════════
+async function loadRoster() {
+    const pat = getPAT();
+    if (!pat) return;
+
+    const btn = document.getElementById('btn-load');
+    btn.disabled = true; btn.textContent = 'Loading…';
+    showStatus('Loading your roster…', 'info', true);
+
+    try {
+        const res = await fetch(
+            `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}?ref=${GITHUB_BRANCH}`,
+            { headers: { Authorization: `token ${pat}`, Accept: 'application/vnd.github.v3+json' } }
+        );
+        if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
+        const data = await res.json();
+        fileSha = data.sha;
+        roster  = JSON.parse(atob(data.content.replace(/\n/g, '')));
+        renderAdminRoster();
+        updatePageTitle();
+        showStatus('Roster loaded.', 'success');
+        fetchAndRenderStats();
+    } catch (e) {
+        if (e.message.includes('401')) {
+            localStorage.removeItem('woody_pat');
+            showStatus('Access key was not accepted. Please try again.', 'error', true);
+        } else {
+            showStatus('Could not load roster: ' + e.message, 'error', true);
+        }
+    } finally {
+        btn.disabled = false; btn.textContent = '↻ Refresh Roster';
+    }
+}
+
+// ══════════════════════════════════════
+//  Save via GitHub API
+// ══════════════════════════════════════
+async function saveRoster() {
+    const pat = getPAT();
+    if (!pat) return;
+
+    const btn = document.getElementById('btn-save');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    showStatus('Saving your roster…', 'info', true);
+
+    try {
+        // Get current SHA if we don't have it
+        if (!fileSha) {
+            const check = await fetch(
+                `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}?ref=${GITHUB_BRANCH}`,
+                { headers: { Authorization: `token ${pat}`, Accept: 'application/vnd.github.v3+json' } }
+            );
+            if (check.ok) { const d = await check.json(); fileSha = d.sha; }
+        }
+
+        const body = {
+            message: `Update Woody's roster (${new Date().toLocaleDateString()})`,
+            content: btoa(unescape(encodeURIComponent(JSON.stringify(roster, null, 2)))),
+            branch:  GITHUB_BRANCH,
+            ...(fileSha ? { sha: fileSha } : {}),
+        };
+
+        const res = await fetch(
+            `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`,
+            {
+                method: 'PUT',
+                headers: {
+                    Authorization: `token ${pat}`,
+                    Accept: 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            }
+        );
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.message || res.status);
+        }
+        const data = await res.json();
+        fileSha = data.content.sha;
+        showStatus('Roster saved! Your changes are locked in.', 'success');
+    } catch (e) {
+        if (e.message.includes('401')) {
+            localStorage.removeItem('woody_pat');
+            showStatus('Access key was not accepted. Please try again.', 'error', true);
+        } else {
+            showStatus('Save failed: ' + e.message, 'error', true);
+        }
+    } finally {
+        btn.disabled = false; btn.textContent = '✓ Save My Roster';
+    }
+}
+
+// ══════════════════════════════════════
+//  MLB Player Search
+// ══════════════════════════════════════
+async function searchPlayers() {
+    const q   = document.getElementById('search-input').value.trim();
+    const btn = document.getElementById('btn-search');
+    const box = document.getElementById('search-results');
+    if (q.length < 2) return;
+
+    btn.disabled = true; btn.textContent = '…';
+    box.style.display = 'none'; box.innerHTML = '';
+
+    try {
+        const res  = await fetch(`${MLB_API}/people/search?names=${encodeURIComponent(q)}&sportId=1&limit=20`);
+        const data = await res.json();
+        const people = (data.people || []).filter(p => p.active !== false).slice(0, 12);
+
+        if (people.length === 0) {
+            box.innerHTML = '<div style="padding:10px 14px;color:#64748b;font-style:italic;font-size:0.9em;">No active players found. Try just a last name.</div>';
+        } else {
+            box.innerHTML = people.map(p => {
+                const pos  = p.primaryPosition?.abbreviation || '—';
+                const team = p.currentTeam?.abbreviation || p.currentTeam?.name || '—';
+                const pit  = isPitcher(pos);
+                const addB = `<button class="btn-add-b" onclick="addPlayer(${p.id},'${esc(p.fullName)}','${team}','${pos}','B')">+ Batter</button>`;
+                const addP = `<button class="btn-add-p" onclick="addPlayer(${p.id},'${esc(p.fullName)}','${team}','${pos}','P')">+ Pitcher</button>`;
+                const alt  = pit
+                    ? `<button class="btn-add-other" onclick="addPlayer(${p.id},'${esc(p.fullName)}','${team}','${pos}','B')">+ Batter?</button>`
+                    : `<button class="btn-add-other" onclick="addPlayer(${p.id},'${esc(p.fullName)}','${team}','${pos}','P')">+ Pitcher?</button>`;
+                const primary = pit ? addP : addB;
+                return `<div class="result-row">
+                    <div>
+                        <span class="result-name">${esc(p.fullName)}</span>
+                        <span class="result-meta">${team} · ${pos}</span>
+                    </div>
+                    <div>${primary}${alt}</div>
+                </div>`;
+            }).join('');
+        }
+        box.style.display = '';
+    } catch (e) {
+        showStatus('Search failed: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false; btn.textContent = 'Search';
+    }
+}
+
+function isPitcher(pos) {
+    return ['P','SP','RP','CP','CL'].includes((pos||'').toUpperCase());
+}
+
+function esc(s) {
+    return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+}
+
+function addPlayer(id, name, team, position, type) {
+    const key = type === 'P' ? 'pitchers' : 'batters';
+    if (roster[key].some(p => p.id === id)) {
+        showStatus(`${name} is already on your roster.`, 'info');
+        return;
+    }
+    roster[key].push({ id, name, team, position });
+    renderAdminRoster();
+    showStatus(`Added ${name}. Don't forget to Save when you're done.`, 'success');
+}
+
+function dropPlayer(id, key) {
+    const p = roster[key].find(x => x.id === id);
+    roster[key] = roster[key].filter(x => x.id !== id);
+    renderAdminRoster();
+    if (p) showStatus(`Dropped ${p.name}. Don't forget to Save when you're done.`, 'info');
+}
+
+// ══════════════════════════════════════
+//  Render admin roster
+// ══════════════════════════════════════
+function renderAdminRoster() {
+    const batters  = roster.batters  || [];
+    const pitchers = roster.pitchers || [];
+    const total    = batters.length + pitchers.length;
+
+    document.getElementById('batter-count').textContent  = batters.length;
+    document.getElementById('pitcher-count').textContent = pitchers.length;
+    document.getElementById('roster-count').textContent  = `${total} player${total !== 1 ? 's' : ''}`;
+
+    const renderList = (players, key) => players.length === 0
+        ? '<div class="roster-empty">None added yet.</div>'
+        : players.map(p => `
+            <div class="roster-player-row">
+                <div>
+                    <span class="roster-player-name">${esc(p.name)}</span>
+                    <span class="roster-player-meta"> · ${p.team} · ${p.position}</span>
+                </div>
+                <button class="btn-drop" onclick="dropPlayer(${p.id},'${key}')">Drop</button>
+            </div>`).join('');
+
+    document.getElementById('batter-list').innerHTML  = renderList(batters,  'batters');
+    document.getElementById('pitcher-list').innerHTML = renderList(pitchers, 'pitchers');
+    document.getElementById('team-name-display').textContent = roster.teamName || "Woody's Second Fantasy Team";
+}
+
+// ══════════════════════════════════════
+//  Fetch & render stats
+// ══════════════════════════════════════
+async function fetchAndRenderStats() {
+    const batters  = roster.batters  || [];
+    const pitchers = roster.pitchers || [];
+    if (batters.length + pitchers.length === 0) {
+        document.getElementById('no-roster-msg').style.display    = '';
+        document.getElementById('batting-section').style.display  = 'none';
+        document.getElementById('pitching-section').style.display = 'none';
+        document.getElementById('page-updated').textContent       = 'No players on roster.';
+        return;
+    }
+
+    document.getElementById('stats-loading').style.display       = '';
+    document.getElementById('batting-section').style.display     = 'none';
+    document.getElementById('pitching-section').style.display    = 'none';
+    document.getElementById('no-roster-msg').style.display       = 'none';
+
+    try {
+        const allIds   = [...batters, ...pitchers].map(p => p.id);
+        const statsMap = {};
+        const ageMap   = {};
+        const teamMap  = {};
+
+        // Build team lookup from player-stats.json (already on the site, always current)
+        try {
+            const psUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/player-stats.json?t=${Date.now()}`;
+            const psRes = await fetch(psUrl);
+            if (psRes.ok) {
+                const ps = await psRes.json();
+                [...(ps.batters||[]), ...(ps.pitchers||[])].forEach(p => {
+                    if (p.playerId && p.teamAbbr) teamMap[p.playerId] = p.teamAbbr;
+                });
+            }
+        } catch { /* non-fatal */ }
+
+        // Fetch stats and ages in parallel
+        await Promise.all(allIds.map(async id => {
+            try {
+                const [statsRes, personRes] = await Promise.all([
+                    fetch(`${MLB_API}/people/${id}/stats?stats=season&season=${SEASON}&group=hitting,pitching`),
+                    fetch(`${MLB_API}/people/${id}`)
+                ]);
+                const statsData = await statsRes.json();
+                statsMap[id] = statsData.stats || [];
+                if (personRes.ok) {
+                    const personData = await personRes.json();
+                    const p = (personData.people || [])[0];
+                    if (p?.currentAge) ageMap[id] = p.currentAge;
+                }
+            } catch { statsMap[id] = []; }
+        }));
+        renderBatting(batters, statsMap, ageMap, teamMap);
+        renderPitching(pitchers, statsMap, ageMap, teamMap);
+
+        document.getElementById('page-updated').textContent =
+            `Stats as of ${new Date().toLocaleString()}`;
+    } catch (e) {
+        showStatus('Error loading stats: ' + e.message, 'error');
+    } finally {
+        document.getElementById('stats-loading').style.display = 'none';
+    }
+}
+
+async function refreshStats() {
+    showStatus('Refreshing stats…', 'info', true);
+    await fetchAndRenderStats();
+    clearStatus();
+}
+
+// ══════════════════════════════════════
+//  Stat calculators
+// ══════════════════════════════════════
+function fmt3(n) { const v = n.toFixed(3); return v.startsWith('0') ? v.slice(1) : v; }
+
+function calcAVG(s) { return s.atBats ? fmt3(s.hits/s.atBats) : '.000'; }
+
+function calcOBP(s) {
+    const h=s.hits||0, bb=s.baseOnBalls||0, hbp=s.hitByPitch||0, ab=s.atBats||0, sf=s.sacFlies||0;
+    const d = ab+bb+hbp+sf;
+    return d ? fmt3((h+bb+hbp)/d) : '.000';
+}
+
+function calcSLG(s) {
+    const ab=s.atBats||0;
+    if (!ab) return '.000';
+    const sg=(s.hits||0)-(s.doubles||0)-(s.triples||0)-(s.homeRuns||0);
+    const tb=sg+2*(s.doubles||0)+3*(s.triples||0)+4*(s.homeRuns||0);
+    return fmt3(tb/ab);
+}
+
+function calcOPS(s) {
+    return fmt3(parseFloat('0'+calcOBP(s))+parseFloat('0'+calcSLG(s)));
+}
+
+function calcRC(s) {
+    const h=s.hits||0, bb=s.baseOnBalls||0, hbp=s.hitByPitch||0, ab=s.atBats||0, sf=s.sacFlies||0;
+    const d=ab+bb+hbp+sf;
+    if (!d) return '0.0';
+    const obp=(h+bb+hbp)/d;
+    const sg=h-(s.doubles||0)-(s.triples||0)-(s.homeRuns||0);
+    const tb=sg+2*(s.doubles||0)+3*(s.triples||0)+4*(s.homeRuns||0);
+    return Math.round(obp*tb);
+}
+
+function calcFIP(s) {
+    const ip=parseFloat(s.inningsPitched)||0;
+    if (!ip) return '—';
+    return ((13*(s.homeRuns||0)+3*((s.baseOnBalls||0)+(s.hitByPitch||0))-2*(s.strikeOuts||0))/ip+3.10).toFixed(2);
+}
+
+function calcPAR(s) {
+    const ip=parseFloat(s.inningsPitched)||0;
+    if (!ip) return '—';
+    const fip=parseFloat(calcFIP(s));
+    const era=((s.earnedRuns||0)*9/ip);
+    return Math.round((6-(fip+era)/2)*ip/9);
+}
+
+function calcERA(s) {
+    const ip=parseFloat(s.inningsPitched)||0;
+    return ip ? (((s.earnedRuns||0)*9)/ip).toFixed(2) : '0.00';
+}
+
+function calcWHIP(s) {
+    const ip=parseFloat(s.inningsPitched)||0;
+    return ip ? (((s.baseOnBalls||0)+(s.hits||0))/ip).toFixed(2) : '0.00';
+}
+
+function savantLink(id, name) {
+    return `<a href="https://baseballsavant.mlb.com/savant-player/${id}" target="_blank">${esc(name)}</a>`;
+}
+
+// ══════════════════════════════════════
+//  Stat helpers
+// ══════════════════════════════════════
+function calcTB(s) {
+    const sg=(s.hits||0)-(s.doubles||0)-(s.triples||0)-(s.homeRuns||0);
+    return sg+2*(s.doubles||0)+3*(s.triples||0)+4*(s.homeRuns||0);
+}
+
+function calcPA(s) {
+    return (s.atBats||0)+(s.baseOnBalls||0)+(s.hitByPitch||0)+(s.sacFlies||0);
+}
+
+// ══════════════════════════════════════
+//  Render batting table
+// ══════════════════════════════════════
+function renderBatting(players, statsMap, ageMap, teamMap) {
+    const tbody = document.getElementById('batting-tbody');
+    const rows  = [];
+
+    players.forEach(player => {
+        const groups  = statsMap[player.id] || [];
+        const hitting = groups.find(g => g.group?.displayName === 'hitting');
+        const splits  = hitting?.splits || [];
+        if (splits.length === 0) { rows.push({ player, s: null }); return; }
+        splits.forEach(split => {
+            const s  = split.stat;
+            if (calcPA(s) > 0) rows.push({ player, s });
+        });
+    });
+
+    if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="22" style="color:#64748b;font-style:italic;padding:12px;">No batting stats available yet this season.</td></tr>';
+    } else {
+        tbody.innerHTML = rows.map(({ player, s }) => !s
+            ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(20)}</tr>`
+            : `<tr>
+                <td>${savantLink(player.id,player.name)}</td>
+                <td>${esc(teamMap[player.id]||player.team||'—')}</td>
+                <td class="stat-num">${ageMap[player.id]||'—'}</td>
+                <td>${esc(player.position||'—')}</td>
+                <td class="stat-num">${s.gamesPlayed||0}</td>
+                <td class="stat-num">${calcRC(s)}</td>
+                <td class="stat-num">${calcPA(s)}</td>
+                <td class="stat-num">${s.runs||0}</td>
+                <td class="stat-num">${s.rbi||0}</td>
+                <td class="stat-num">${calcAVG(s)}</td>
+                <td class="stat-num">${calcOBP(s)}</td>
+                <td class="stat-num">${calcSLG(s)}</td>
+                <td class="stat-num">${calcOPS(s)}</td>
+                <td class="stat-num">${s.hits||0}</td>
+                <td class="stat-num">${s.doubles||0}</td>
+                <td class="stat-num">${s.triples||0}</td>
+                <td class="stat-num">${s.homeRuns||0}</td>
+                <td class="stat-num">${calcTB(s)}</td>
+                <td class="stat-num">${s.baseOnBalls||0}</td>
+                <td class="stat-num">${s.strikeOuts||0}</td>
+                <td class="stat-num">${s.stolenBases||0}</td>
+                <td class="stat-num">${s.caughtStealing||0}</td>
+            </tr>`
+        ).join('');
+    }
+    document.getElementById('batting-section').style.display = '';
+    initSortable('batting-table', false);
+}
+
+// ══════════════════════════════════════
+//  Render pitching table
+// ══════════════════════════════════════
+function renderPitching(players, statsMap, ageMap, teamMap) {
+    const tbody = document.getElementById('pitching-tbody');
+    const rows  = [];
+
+    players.forEach(player => {
+        const groups   = statsMap[player.id] || [];
+        const pitching = groups.find(g => g.group?.displayName === 'pitching');
+        const splits   = pitching?.splits || [];
+        if (splits.length === 0) { rows.push({ player, s: null }); return; }
+        splits.forEach(split => {
+            const s = split.stat;
+            if ((s.battersFaced||0) > 0) rows.push({ player, s });
+        });
+    });
+
+    if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="19" style="color:#64748b;font-style:italic;padding:12px;">No pitching stats available yet this season.</td></tr>';
+    } else {
+        tbody.innerHTML = rows.map(({ player, s }) => !s
+            ? `<tr><td>${savantLink(player.id,player.name)}</td><td>${esc(player.team)}</td>${'<td class="stat-num">—</td>'.repeat(17)}</tr>`
+            : `<tr>
+                <td>${savantLink(player.id,player.name)}</td>
+                <td>${esc(teamMap[player.id]||player.team||'—')}</td>
+                <td class="stat-num">${ageMap[player.id]||'—'}</td>
+                <td class="stat-num">${calcPAR(s)}</td>
+                <td class="stat-num">${s.inningsPitched||'0.0'}</td>
+                <td class="stat-num">${calcERA(s)}</td>
+                <td class="stat-num">${calcFIP(s)}</td>
+                <td class="stat-num">${calcWHIP(s)}</td>
+                <td class="stat-num">${s.gamesPlayed||0}</td>
+                <td class="stat-num">${s.gamesStarted||0}</td>
+                <td class="stat-num">${s.wins||0}</td>
+                <td class="stat-num">${s.losses||0}</td>
+                <td class="stat-num">${s.saves||0}</td>
+                <td class="stat-num">${s.hits||0}</td>
+                <td class="stat-num">${s.runs||0}</td>
+                <td class="stat-num">${s.earnedRuns||0}</td>
+                <td class="stat-num">${s.homeRuns||0}</td>
+                <td class="stat-num">${s.baseOnBalls||0}</td>
+                <td class="stat-num">${s.strikeOuts||0}</td>
+            </tr>`
+        ).join('');
+    }
+    document.getElementById('pitching-section').style.display = '';
+    initSortable('pitching-table', true);
+}
+
+// ══════════════════════════════════════
+//  Sortable tables
+// ══════════════════════════════════════
+function initSortable(tableId, greenHeaders) {
+    const table   = document.getElementById(tableId);
+    if (!table) return;
+    const headers = table.querySelectorAll('th.sortable');
+    let lastCol = -1, lastAsc = true;
+
+    headers.forEach(th => {
+        th.addEventListener('click', () => {
+            const col = parseInt(th.dataset.col);
+            const asc = (col === lastCol) ? !lastAsc : false;
+            lastCol = col; lastAsc = asc;
+            headers.forEach(h => h.classList.remove('sorted'));
+            th.classList.add('sorted');
+
+            const tbody = table.querySelector('tbody');
+            const rows  = Array.from(tbody.querySelectorAll('tr'));
+            rows.sort((a, b) => {
+                const av = a.cells[col]?.textContent.trim() || '';
+                const bv = b.cells[col]?.textContent.trim() || '';
+                const an = parseFloat(av.replace(/[^0-9.\-]/g, ''));
+                const bn = parseFloat(bv.replace(/[^0-9.\-]/g, ''));
+                const cmp = (!isNaN(an) && !isNaN(bn)) ? an - bn : av.localeCompare(bv);
+                return asc ? cmp : -cmp;
+            });
+            rows.forEach(r => tbody.appendChild(r));
+        });
+    });
+}
+</script>
+</body>
+</html>
