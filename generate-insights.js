@@ -608,6 +608,18 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
                 s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${leagShort} wild card race`);
             }
         }
+
+        // Division leader erosion: summarize rivals closing the gap on each leader
+        for (const leader of standingsData.teams) {
+            if (leader.gb !== '-' || leader.gbChange !== null) continue;
+            const rivals = standingsData.teams
+                .filter(t => t.division === leader.division && t !== leader && t.gbChange !== null && t.gbChange >= 0.5)
+                .sort((a, b) => b.gbChange - a.gbChange);
+            if (rivals.length === 0) continue;
+            const gainers = rivals.map(r => `${r.name} gained ${r.gbChange} GB`).join(', ');
+            s2.push(`- ${leader.name} (${leader.division} leader): lost ground — ${gainers}`);
+        }
+
         if (s2.length > 0) sections.push('SECTION 2 — PENNANT RACE IMPACT:\n' + s2.join('\n'));
     }
 
@@ -754,6 +766,45 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
             s8.push(`- ${g.awayTeam} @ ${g.homeTeam} (${g.status})`);
         });
         sections.push(s8.join('\n'));
+    }
+
+    // Section 9 — doubleheader outcomes
+    const dhGroups = {};
+    for (const game of boxscoreData.games) {
+        const key = game.away.name + '@' + game.home.name;
+        if (!dhGroups[key]) dhGroups[key] = [];
+        dhGroups[key].push(game);
+    }
+    const dhLines = [];
+    for (const games of Object.values(dhGroups)) {
+        if (games.length < 2) continue;
+        const awayName = games[0].away.name;
+        const homeName = games[0].home.name;
+        let awayWins = 0, homeWins = 0;
+        const gameResults = games.map((g, i) => {
+            const homeWon = g.home.score > g.away.score;
+            if (homeWon) homeWins++; else awayWins++;
+            return { homeWon, awayScore: g.away.score, homeScore: g.home.score, num: i + 1 };
+        });
+        let result;
+        if (awayWins === games.length) {
+            const scores = gameResults.map(r => `${r.awayScore}-${r.homeScore}`).join(', ');
+            result = `${awayName} won both games (swept ${homeName} ${awayWins}-0; ${scores})`;
+        } else if (homeWins === games.length) {
+            const scores = gameResults.map(r => `${r.homeScore}-${r.awayScore}`).join(', ');
+            result = `${homeName} won both games (swept ${awayName} ${homeWins}-0; ${scores})`;
+        } else {
+            const summaries = gameResults.map(r => {
+                const winner = r.homeWon ? homeName : awayName;
+                const score = r.homeWon ? `${r.homeScore}-${r.awayScore}` : `${r.awayScore}-${r.homeScore}`;
+                return `${winner} won game ${r.num} ${score}`;
+            }).join(', ');
+            result = `split (${summaries})`;
+        }
+        dhLines.push(`- ${awayName} @ ${homeName} doubleheader: ${result}`);
+    }
+    if (dhLines.length > 0) {
+        sections.push('SECTION 9 — DOUBLEHEADER OUTCOMES:\n' + dhLines.join('\n'));
     }
 
     return sections.join('\n\n');
@@ -1036,6 +1087,7 @@ async function verifyNarrative(client, text, sourceData) {
         `   - Superlative claims: any use of "best", "worst", "most", "fewest", "only", "first", "top" — verify these against the full standings and league leader data\n` +
         `   - Scoring attribution: verify which team scored in any referenced inning or rally\n` +
         `   - Home/away: verify any claim about where a game was played\n` +
+        `   - Doubleheader and series outcomes: any claim that teams "split", "swept", or "took" a doubleheader — verify each game result individually against the source data. A split means exactly one win per side; a sweep means all games to one team. Correct any characterization not supported by the complete game record.\n` +
         `5. Do not change the writing style, tone, structure, or any sentence that is factually correct\n` +
         `6. Do not add new information not in the original narrative\n` +
         `7. Return ONLY the corrected narrative text. Do not include any fact-checking notes, ` +
