@@ -1367,8 +1367,9 @@ async function generateHTML() {
         generatedAt: updatedStr,
         games: gamesData,
         postponedGames: deferredGames.map(g => ({
-            awayTeam: g.teams.away.team.teamName,
-            homeTeam: g.teams.home.team.teamName,
+            awayTeam: g.teams.away.team.name,
+            homeTeam: g.teams.home.team.name,
+            date,
             status: g.status.detailedState || g.status.statusCode,
         })),
         topWPAPlaysAllGames: topWPAPlays.map(p => ({
