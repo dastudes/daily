@@ -1064,17 +1064,28 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
     return prompts;
 }
 
-async function callClaude(client, prompt) {
-    const message = await client.messages.create({
-        model: MODEL,
-        max_tokens: prompt.maxTokens || MAX_TOKENS,
-        system: prompt.system,
-        messages: [{ role: 'user', content: prompt.user }],
-    });
-    return message.content[0].type === 'text' ? message.content[0].text : '';
+async function callClaude(client, prompt, maxRetries = 3) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            const message = await client.messages.create({
+                model: MODEL,
+                max_tokens: prompt.maxTokens || MAX_TOKENS,
+                system: prompt.system,
+                messages: [{ role: 'user', content: prompt.user }],
+            });
+            return message.content[0].type === 'text' ? message.content[0].text : '';
+        } catch (err) {
+            const retryable = ['ERR_STREAM_PREMATURE_CLOSE', 'ECONNRESET', 'ETIMEDOUT', 'ECONNREFUSED'];
+            const isRetryable = retryable.includes(err.code) || (err.status >= 500 && err.status < 600);
+            if (attempt === maxRetries || !isRetryable) throw err;
+            const waitMs = attempt * 5000;
+            console.warn(`  callClaude attempt ${attempt} failed (${err.code || err.status}), retrying in ${waitMs / 1000}s...`);
+            await new Promise(r => setTimeout(r, waitMs));
+        }
+    }
 }
 
-async function verifyNarrative(client, text, sourceData) {
+async function verifyNarrative(client, text, sourceData, maxRetries = 3) {
     const userContent =
         `You are a meticulous fact-checker for a baseball analytics website.\n` +
         `Below is a narrative and the source data it was generated from.\n\n` +
@@ -1099,12 +1110,23 @@ async function verifyNarrative(client, text, sourceData) {
         `Source data:\n${sourceData}\n\n` +
         `Narrative to verify:\n${text}`;
 
-    const message = await client.messages.create({
-        model: MODEL,
-        max_tokens: MAX_TOKENS,
-        messages: [{ role: 'user', content: userContent }],
-    });
-    return message.content[0].type === 'text' ? message.content[0].text : text;
+    const retryable = ['ERR_STREAM_PREMATURE_CLOSE', 'ECONNRESET', 'ETIMEDOUT', 'ECONNREFUSED'];
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            const message = await client.messages.create({
+                model: MODEL,
+                max_tokens: MAX_TOKENS,
+                messages: [{ role: 'user', content: userContent }],
+            });
+            return message.content[0].type === 'text' ? message.content[0].text : text;
+        } catch (err) {
+            const isRetryable = retryable.includes(err.code) || (err.status >= 500 && err.status < 600);
+            if (attempt === maxRetries || !isRetryable) throw err;
+            const waitMs = attempt * 5000;
+            console.warn(`  verifyNarrative attempt ${attempt} failed (${err.code || err.status}), retrying in ${waitMs / 1000}s...`);
+            await new Promise(r => setTimeout(r, waitMs));
+        }
+    }
 }
 
 function textToHtml(text) {
