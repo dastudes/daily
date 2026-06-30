@@ -6,12 +6,90 @@
       "name": "Mookie Betts",
       "team": "—",
       "position": "SS"
+    },
+    {
+      "id": 621043,
+      "name": "Carlos Correa",
+      "team": "—",
+      "position": "SS"
+    },
+    {
+      "id": 681351,
+      "name": "Logan O'Hoppe",
+      "team": "—",
+      "position": "C"
+    },
+    {
+      "id": 665926,
+      "name": "Andrés Giménez",
+      "team": "—",
+      "position": "SS"
+    },
+    {
+      "id": 606192,
+      "name": "Teoscar Hernández",
+      "team": "—",
+      "position": "LF"
+    },
+    {
+      "id": 668804,
+      "name": "Bryan Reynolds",
+      "team": "—",
+      "position": "LF"
+    },
+    {
+      "id": 575929,
+      "name": "Willson Contreras",
+      "team": "—",
+      "position": "1B"
+    },
+    {
+      "id": 502671,
+      "name": "Paul Goldschmidt",
+      "team": "—",
+      "position": "1B"
+    },
+    {
+      "id": 690993,
+      "name": "Colt Keith",
+      "team": "—",
+      "position": "3B"
     }
   ],
   "pitchers": [
     {
       "id": 695505,
       "name": "Chase Burns",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 667463,
+      "name": "John King",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 687911,
+      "name": "Bryan King",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 805673,
+      "name": "Zebby Matthews",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 641927,
+      "name": "Bailey Ober",
+      "team": "—",
+      "position": "P"
+    },
+    {
+      "id": 640455,
+      "name": "Sean Manaea",
       "team": "—",
       "position": "P"
     }
