@@ -1,5 +1,19 @@
 {
   "teamName": "Woody's Second Fantasy Team",
-  "batters": [],
-  "pitchers": []
+  "batters": [
+    {
+      "id": 605141,
+      "name": "Mookie Betts",
+      "team": "—",
+      "position": "SS"
+    }
+  ],
+  "pitchers": [
+    {
+      "id": 695505,
+      "name": "Chase Burns",
+      "team": "—",
+      "position": "P"
+    }
+  ]
 }
