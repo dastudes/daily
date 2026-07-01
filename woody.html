@@ -215,6 +215,64 @@
 
         .btn-drop:hover { background: #fef2f2; }
 
+        /* ── Access key modal ── */
+        .pat-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pat-modal-overlay.open { display: flex; }
+
+        .pat-modal-box {
+            background: white;
+            border-radius: 8px;
+            padding: 28px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .pat-modal-box h3 {
+            margin: 0 0 8px 0;
+            color: #1e293b;
+            font-size: 1.1em;
+        }
+
+        .pat-modal-box p {
+            margin: 0 0 16px 0;
+            font-size: 0.88em;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .pat-modal-input {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 8px 10px;
+            font-size: 0.9em;
+            font-family: monospace;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        .pat-modal-input:focus {
+            outline: none;
+            border-color: #1d4ed8;
+        }
+
+        .pat-modal-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
         /* Toolbar */
         .admin-toolbar {
             display: flex;
@@ -681,6 +739,28 @@
 
     </div>
 
+<!-- ── Access key modal ── -->
+<div id="pat-modal" class="pat-modal-overlay">
+    <div class="pat-modal-box">
+        <h3>🔑 Access Key Required</h3>
+        <p>Enter the access key Dave gave you. It will be saved in your browser so you won't need to enter it again on this device.</p>
+        <input id="pat-input" class="pat-modal-input" type="password"
+               placeholder="Paste your access key here…"
+               onkeydown="if(event.key==='Enter') patModalSubmit(); if(event.key==='Escape') patModalCancel();">
+        <div id="pat-modal-error" style="color:#7f1d1d; font-size:0.82em; margin-bottom:10px; display:none;"></div>
+        <div class="pat-modal-buttons">
+            <button onclick="patModalCancel()"
+                    style="background:transparent; border:1px solid #cbd5e1; border-radius:4px; padding:7px 16px; cursor:pointer; font-family:Georgia,serif; color:#475569;">
+                Cancel
+            </button>
+            <button onclick="patModalSubmit()"
+                    style="background:#1d4ed8; color:white; border:none; border-radius:4px; padding:7px 16px; cursor:pointer; font-family:Georgia,serif; font-weight:bold;">
+                Save Key &amp; Continue
+            </button>
+        </div>
+    </div>
+</div>
+
 </div><!-- end container -->
 
 <script>
@@ -777,16 +857,37 @@ function finishEditName() {
 }
 
 // ══════════════════════════════════════
-//  PAT — prompted once, stored locally
+//  PAT — modal-based, stored locally
 // ══════════════════════════════════════
+let patModalResolve = null;
+
 function getPAT() {
-    let pat = localStorage.getItem('woody_pat');
-    if (!pat) {
-        pat = prompt('Enter your access key (ask Dave if you don\'t have it):');
-        if (!pat) return null;
-        localStorage.setItem('woody_pat', pat);
+    const stored = localStorage.getItem('woody_pat');
+    if (stored) return Promise.resolve(stored);
+    return new Promise(resolve => {
+        patModalResolve = resolve;
+        document.getElementById('pat-modal-error').style.display = 'none';
+        document.getElementById('pat-input').value = '';
+        document.getElementById('pat-modal').classList.add('open');
+        setTimeout(() => document.getElementById('pat-input').focus(), 50);
+    });
+}
+
+function patModalSubmit() {
+    const val = document.getElementById('pat-input').value.trim();
+    if (!val) {
+        document.getElementById('pat-modal-error').textContent = 'Please paste your access key before continuing.';
+        document.getElementById('pat-modal-error').style.display = '';
+        return;
     }
-    return pat;
+    localStorage.setItem('woody_pat', val);
+    document.getElementById('pat-modal').classList.remove('open');
+    if (patModalResolve) { patModalResolve(val); patModalResolve = null; }
+}
+
+function patModalCancel() {
+    document.getElementById('pat-modal').classList.remove('open');
+    if (patModalResolve) { patModalResolve(null); patModalResolve = null; }
 }
 
 // ══════════════════════════════════════
@@ -811,7 +912,7 @@ async function autoLoadRoster() {
 //  Load via GitHub API (gets SHA)
 // ══════════════════════════════════════
 async function loadRoster() {
-    const pat = getPAT();
+    const pat = await getPAT();
     if (!pat) return;
 
     const btn = document.getElementById('btn-load');
@@ -834,7 +935,11 @@ async function loadRoster() {
     } catch (e) {
         if (e.message.includes('401')) {
             localStorage.removeItem('woody_pat');
-            showStatus('Access key was not accepted. Please try again.', 'error', true);
+            showStatus('Access key was not accepted — please try again.', 'error', true);
+            document.getElementById('pat-modal-error').textContent = 'That key was not accepted. Please check it and try again.';
+            document.getElementById('pat-modal-error').style.display = '';
+            document.getElementById('pat-input').value = '';
+            document.getElementById('pat-modal').classList.add('open');
         } else {
             showStatus('Could not load roster: ' + e.message, 'error', true);
         }
@@ -847,7 +952,7 @@ async function loadRoster() {
 //  Save via GitHub API
 // ══════════════════════════════════════
 async function saveRoster() {
-    const pat = getPAT();
+    const pat = await getPAT();
     if (!pat) return;
 
     const btn = document.getElementById('btn-save');
@@ -893,7 +998,11 @@ async function saveRoster() {
     } catch (e) {
         if (e.message.includes('401')) {
             localStorage.removeItem('woody_pat');
-            showStatus('Access key was not accepted. Please try again.', 'error', true);
+            showStatus('Access key was not accepted — please try again.', 'error', true);
+            document.getElementById('pat-modal-error').textContent = 'That key was not accepted. Please check it and try again.';
+            document.getElementById('pat-modal-error').style.display = '';
+            document.getElementById('pat-input').value = '';
+            document.getElementById('pat-modal').classList.add('open');
         } else {
             showStatus('Save failed: ' + e.message, 'error', true);
         }
