@@ -56,46 +56,10 @@
       "position": "3B"
     },
     {
-      "id": 669221,
-      "name": "Sean Murphy",
-      "team": "—",
-      "position": "C"
-    },
-    {
-      "id": 700337,
-      "name": "Edgar Quero",
-      "team": "—",
-      "position": "C"
-    },
-    {
-      "id": 669394,
-      "name": "Jake Burger",
-      "team": "—",
-      "position": "1B"
-    },
-    {
-      "id": 665019,
-      "name": "Kody Clemens",
-      "team": "—",
-      "position": "1B"
-    },
-    {
-      "id": 692225,
-      "name": "Kristian Campbell",
-      "team": "—",
-      "position": "2B"
-    },
-    {
       "id": 669720,
       "name": "Austin Hays",
       "team": "—",
       "position": "LF"
-    },
-    {
-      "id": 682622,
-      "name": "Noelvi Marte",
-      "team": "—",
-      "position": "RF"
     }
   ],
   "pitchers": [
