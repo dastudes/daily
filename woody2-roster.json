@@ -78,6 +78,18 @@
       "name": "Jake Burger",
       "team": "—",
       "position": "1B"
+    },
+    {
+      "id": 692225,
+      "name": "Kristian Campbell",
+      "team": "—",
+      "position": "2B"
+    },
+    {
+      "id": 682622,
+      "name": "Noelvi Marte",
+      "team": "—",
+      "position": "RF"
     }
   ],
   "pitchers": [
