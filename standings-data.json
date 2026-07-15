@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generatedAt": "Tuesday, July 14, 2026 at 5:00 AM EDT",
+  "generatedAt": "Wednesday, July 15, 2026 at 5:00 AM EDT",
   "teams": [
     {
       "name": "Los Angeles Angels",
@@ -34,8 +34,8 @@
       },
       "stats": {
         "obp": 0.315,
-        "slg": 0.393,
-        "ops": 0.708,
+        "slg": 0.392,
+        "ops": 0.707,
         "fip": 4.37,
         "der": 0.695
       }
@@ -414,8 +414,8 @@
       },
       "stats": {
         "obp": 0.315,
-        "slg": 0.396,
-        "ops": 0.711,
+        "slg": 0.397,
+        "ops": 0.712,
         "fip": 4.75,
         "der": 0.689
       }
@@ -833,7 +833,7 @@
       "stats": {
         "obp": 0.32,
         "slg": 0.399,
-        "ops": 0.719,
+        "ops": 0.72,
         "fip": 4.1,
         "der": 0.701
       }
