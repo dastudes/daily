@@ -1101,10 +1101,12 @@ async function verifyNarrative(client, text, sourceData, maxRetries = 3) {
         `   - Doubleheader and series outcomes: any claim that teams "split", "swept", or "took" a doubleheader — verify each game result individually against the source data. A split means exactly one win per side; a sweep means all games to one team. Correct any characterization not supported by the complete game record.\n` +
         `5. Do not change the writing style, tone, structure, or any sentence that is factually correct\n` +
         `6. Do not add new information not in the original narrative\n` +
-        `7. Return ONLY the corrected narrative text. Do not include any fact-checking notes, ` +
-        `reasoning, corrections list, headers like 'Corrected Narrative:', or any other text. ` +
-        `Just the narrative itself, exactly as it should appear to readers.\n\n` +
-        `If you find no errors, return the narrative unchanged.\n\n` +
+        `7. You may reason through your verification however you like before your final answer.\n` +
+        `8. When you are done, output the corrected narrative wrapped in <final> and </final> tags, ` +
+        `with nothing else inside those tags — no fact-checking notes, reasoning, corrections list, ` +
+        `or headers like 'Corrected Narrative:' inside the tags. Just the narrative itself, exactly ` +
+        `as it should appear to readers. This is the ONLY part of your response that will be used.\n\n` +
+        `If you find no errors, return the narrative unchanged inside the <final> tags.\n\n` +
         `Stat blocks in square brackets (e.g., [2-4, 1 BB | RC 45] or [6 IP, 0 ER, 7 K | 2.85 ERA, PAR 8]) ` +
         `have been pre-verified and injected by a separate system. Do not modify, remove, or recalculate them.\n\n` +
         `Source data:\n${sourceData}\n\n` +
@@ -1118,7 +1120,11 @@ async function verifyNarrative(client, text, sourceData, maxRetries = 3) {
                 max_tokens: MAX_TOKENS,
                 messages: [{ role: 'user', content: userContent }],
             });
-            return message.content[0].type === 'text' ? message.content[0].text : text;
+            const raw = message.content[0].type === 'text' ? message.content[0].text : text;
+            const match = raw.match(/<final>([\s\S]*?)<\/final>/);
+            if (match) return match[1].trim();
+            console.warn('  verifyNarrative: no <final> tags found in response, using raw text as fallback');
+            return raw;
         } catch (err) {
             const isRetryable = retryable.includes(err.code) || (err.status >= 500 && err.status < 600);
             if (attempt === maxRetries || !isRetryable) throw err;
