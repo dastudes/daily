@@ -202,6 +202,12 @@ async function fetchTeamRoster(teamId, season) {
     return data.roster || [];
 }
 
+async function fetchFullSeasonRoster(teamId, season) {
+    const response = await fetch(`${API_BASE}/teams/${teamId}/roster?rosterType=fullSeason&season=${season}`);
+    const data = await response.json();
+    return data.roster || [];
+}
+
 async function fetchPlayerStats(playerId, season) {
     const response = await fetch(`${API_BASE}/people/${playerId}/stats?stats=season&season=${season}&group=hitting,pitching`);
     const data = await response.json();
@@ -441,7 +447,7 @@ async function generateHTML() {
     console.log('Counting multi-team players...');
     const playerTeamCount = {};
 
-    const allRosters = await withConcurrency(allTeams, config.concurrency, team => fetchTeamRoster(team.id, season));
+    const allRosters = await withConcurrency(allTeams, config.concurrency, team => fetchFullSeasonRoster(team.id, season));
     for (const roster of allRosters) {
         for (const player of roster) {
             playerTeamCount[player.person.id] = (playerTeamCount[player.person.id] || 0) + 1;
