@@ -1483,6 +1483,8 @@ async function main() {
         </details>`;
     fs.writeFileSync('boxscores-brief-snippet.html', briefSnippet);
     console.log('Generated boxscores-brief-snippet.html');
+    fs.writeFileSync('boxscores-brief-body.html', briefBodyHtml);
+    console.log('Generated boxscores-brief-body.html');
 }
 
 main().catch(err => {
