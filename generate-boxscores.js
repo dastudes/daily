@@ -1354,6 +1354,18 @@ async function generateHTML() {
             });
             document.getElementById('expandBtn').textContent = allExpanded ? 'Collapse All' : 'Expand All';
         }
+
+        function expandFromHash() {
+            const id = window.location.hash.slice(1);
+            if (!id || !id.startsWith('game-')) return;
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (!el.open) el.setAttribute('open', '');
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        window.addEventListener('DOMContentLoaded', expandFromHash);
+        window.addEventListener('hashchange', expandFromHash);
     </script>
 </body>
 </html>`;
