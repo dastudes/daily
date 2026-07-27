@@ -1480,7 +1480,7 @@ async function main() {
             </summary>
             <div class="game-content">
                 ${briefBodyHtml}
-                <p style="font-size:0.85em; color:#666; margin-top:1em;">Get the Daily Brief in your feed reader: <a href="https://dastudes.github.io/daily/feed.xml">subscribe to the RSS feed</a>.</p>
+                <p style="font-size:0.85em; color:#666; margin-top:1em;">Get the Daily Brief in your feed reader: <a href="https://dastudes.github.io/daily/feed.xml">subscribe to the RSS feed</a>, or get it by email via a service like <a href="https://feedrabbit.com/">Feedrabbit</a>.</p>
             </div>
         </details>`;
     fs.writeFileSync('boxscores-brief-snippet.html', briefSnippet);

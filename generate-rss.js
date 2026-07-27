@@ -5,7 +5,7 @@ const PAGE_URL = SITE_URL + 'box-scores.html';
 const FEED_URL = SITE_URL + 'feed.xml';
 const ARCHIVE_FILE = 'briefs-archive.json';
 const MAX_ITEMS = 14;
-const FEED_FOOTER = `<p><a href="${SITE_URL}">Visit Baseball Graphs Daily</a> for full box scores, standings, and graphs.</p>`;
+const FEED_FOOTER = `<p><a href="${SITE_URL}">Visit Baseball Graphs Daily</a> for full box scores, standings, and stats.</p>`;
 
 function formatDisplayDate(isoDate) {
     return new Date(isoDate + 'T12:00:00Z').toLocaleDateString('en-US', {
