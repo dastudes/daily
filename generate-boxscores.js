@@ -1298,6 +1298,7 @@ async function generateHTML() {
     </style>
     <script data-goatcounter="https://baseball-graphs.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
+    <link rel="alternate" type="application/rss+xml" title="Baseball Graphs Daily Brief" href="https://dastudes.github.io/daily/feed.xml">
 </head>
 <body>
     <div class="container">

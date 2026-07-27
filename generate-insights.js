@@ -1353,6 +1353,7 @@ function generateHTML(date, updatedStr, narratives, factSheet, voiceName) {
             color: #92400e;
         }
     </style>
+    <link rel="alternate" type="application/rss+xml" title="Baseball Graphs Daily Brief" href="https://dastudes.github.io/daily/feed.xml">
 </head>
 <body>
     <header class="site-header">
@@ -1479,6 +1480,7 @@ async function main() {
             </summary>
             <div class="game-content">
                 ${briefBodyHtml}
+                <p style="font-size:0.85em; color:#666; margin-top:1em;">Get the Daily Brief in your feed reader: <a href="https://dastudes.github.io/daily/feed.xml">subscribe to the RSS feed</a>.</p>
             </div>
         </details>`;
     fs.writeFileSync('boxscores-brief-snippet.html', briefSnippet);
