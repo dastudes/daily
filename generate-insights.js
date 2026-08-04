@@ -6,6 +6,7 @@ const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 const MODEL = 'claude-opus-4-7';
 const MAX_TOKENS = 3000;
+const VERIFY_MAX_TOKENS = 6000;
 
 function ordinal(n) {
     const s = ['th','st','nd','rd'];
@@ -1117,13 +1118,24 @@ async function verifyNarrative(client, text, sourceData, maxRetries = 3) {
         try {
             const message = await client.messages.create({
                 model: MODEL,
-                max_tokens: MAX_TOKENS,
+                max_tokens: VERIFY_MAX_TOKENS,
                 messages: [{ role: 'user', content: userContent }],
             });
             const raw = message.content[0].type === 'text' ? message.content[0].text : text;
-            const match = raw.match(/<final>([\s\S]*?)<\/final>/);
-            if (match) return match[1].trim();
-            console.warn('  verifyNarrative: no <final> tags found in response, using raw text as fallback');
+            const closedMatch = raw.match(/<final>([\s\S]*?)<\/final>/);
+            if (closedMatch) return closedMatch[1].trim();
+
+            if (message.stop_reason === 'max_tokens') {
+                console.warn(`  verifyNarrative: response truncated at ${VERIFY_MAX_TOKENS} tokens before </final> closed`);
+            }
+
+            const openMatch = raw.match(/<final>([\s\S]*)$/);
+            if (openMatch) {
+                console.warn('  verifyNarrative: <final> tag opened but not closed, using truncated content after it');
+                return openMatch[1].trim();
+            }
+
+            console.warn('  verifyNarrative: no <final> tag found at all, using raw text as fallback');
             return raw;
         } catch (err) {
             const isRetryable = retryable.includes(err.code) || (err.status >= 500 && err.status < 600);
