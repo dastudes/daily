@@ -4,201 +4,195 @@
     {
       "id": 660271,
       "name": "Shohei Ohtani",
-      "team": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ",
+      "team": "ÃÂ¢ÃÂÃÂ",
       "position": "TWP"
     },
     {
       "id": 672695,
       "name": "Geraldo Perdomo",
-      "team": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ",
+      "team": "ÃÂ¢ÃÂÃÂ",
       "position": "SS"
     },
     {
       "id": 664040,
       "name": "Brandon Lowe",
-      "team": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ",
+      "team": "ÃÂ¢ÃÂÃÂ",
       "position": "2B"
     },
     {
       "id": 518692,
       "name": "Freddie Freeman",
-      "team": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ",
+      "team": "ÃÂ¢ÃÂÃÂ",
       "position": "1B"
     },
     {
       "id": 691406,
       "name": "Junior Caminero",
-      "team": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ",
+      "team": "ÃÂ¢ÃÂÃÂ",
       "position": "3B"
     },
     {
       "id": 621439,
       "name": "Byron Buxton",
-      "team": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ",
+      "team": "ÃÂ¢ÃÂÃÂ",
       "position": "CF"
     },
     {
       "id": 543807,
       "name": "George Springer",
-      "team": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ",
+      "team": "ÃÂ¢ÃÂÃÂ",
       "position": "DH"
     },
     {
       "id": 669257,
       "name": "Will Smith",
-      "team": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ",
+      "team": "ÃÂ¢ÃÂÃÂ",
       "position": "C"
     },
     {
       "id": 672724,
       "name": "Oswald Peraza",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "2B"
     },
     {
       "id": 666018,
       "name": "Jonathan Aranda",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "1B"
     },
     {
       "id": 669707,
       "name": "Jared Triolo",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "3B"
     },
     {
       "id": 571970,
       "name": "Max Muncy",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "3B"
     },
     {
       "id": 519317,
       "name": "Giancarlo Stanton",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "DH"
     },
     {
       "id": 677649,
       "name": "Ezequiel Duran",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "2B"
     },
     {
       "id": 676609,
-      "name": "JosÃ© Caballero",
-      "team": "â",
+      "name": "José Caballero",
+      "team": "—",
       "position": "SS"
     },
     {
       "id": 664983,
       "name": "Jake McCarthy",
-      "team": "â",
+      "team": "—",
       "position": "CF"
     },
     {
       "id": 680869,
       "name": "Zack Gelof",
-      "team": "â",
+      "team": "—",
       "position": "3B"
-    },
-    {
-      "id": 663698,
-      "name": "Joey Bart",
-      "team": "â",
-      "position": "C"
     }
   ],
   "pitchers": [
     {
       "id": 660271,
       "name": "Shohei Ohtani",
-      "team": "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ",
+      "team": "ÃÂ¢ÃÂÃÂ",
       "position": "TWP"
     },
     {
       "id": 808967,
       "name": "Yoshinobu Yamamoto",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 622491,
       "name": "Luis Castillo",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 547179,
       "name": "Michael Lorenzen",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 628452,
       "name": "Raisel Iglesias",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 607625,
       "name": "Seth Lugo",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 547973,
       "name": "Aroldis Chapman",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 670970,
       "name": "Adrian Morejon",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 669724,
       "name": "Brenan Hanifee",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 608372,
       "name": "Tomoyuki Sugano",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 669467,
       "name": "Andre Pallante",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 668964,
       "name": "Tobias Myers",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 669160,
       "name": "Dustin May",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 543135,
       "name": "Nathan Eovaldi",
-      "team": "ÃÂ¢ÃÂÃÂ",
+      "team": "Ã¢ÂÂ",
       "position": "P"
     },
     {
       "id": 682243,
       "name": "Bryce Miller",
-      "team": "â",
+      "team": "—",
       "position": "P"
     }
   ]
