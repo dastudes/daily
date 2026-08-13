@@ -1270,10 +1270,9 @@ function renderBatting(players, statsMap, ageMap, teamMap) {
         const hitting = groups.find(g => g.group?.displayName === 'hitting');
         const splits  = hitting?.splits || [];
         if (splits.length === 0) { rows.push({ player, s: null }); return; }
-        splits.forEach(split => {
-            const s  = split.stat;
-            if (calcPA(s) > 0) rows.push({ player, s });
-        });
+        // Pick the single split with the most PA — always the season total for traded players
+        const best = splits.reduce((a, b) => calcPA(b.stat) > calcPA(a.stat) ? b : a);
+        if (calcPA(best.stat) > 0) rows.push({ player, s: best.stat });
     });
 
     if (rows.length === 0) {
@@ -1323,10 +1322,9 @@ function renderPitching(players, statsMap, ageMap, teamMap) {
         const pitching = groups.find(g => g.group?.displayName === 'pitching');
         const splits   = pitching?.splits || [];
         if (splits.length === 0) { rows.push({ player, s: null }); return; }
-        splits.forEach(split => {
-            const s = split.stat;
-            if ((s.battersFaced||0) > 0) rows.push({ player, s });
-        });
+        // Pick the single split with the most batters faced — always the season total for traded players
+        const best = splits.reduce((a, b) => (b.stat.battersFaced||0) > (a.stat.battersFaced||0) ? b : a);
+        if ((best.stat.battersFaced||0) > 0) rows.push({ player, s: best.stat });
     });
 
     if (rows.length === 0) {
