@@ -671,6 +671,19 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
         .forEach((g, i) => s4.push(`${i + 1}. ${g.away.name}-${g.home.name}: ${g.totalWPASwing.toFixed(2)} WPA swing`));
     sections.push(s4.join('\n'));
 
+    // Section 4b — biggest comeback (only if at least one game clears the 0.40 floor)
+    const comebackGames = boxscoreData.games.filter(g => g.comebackSize != null && g.comebackSize >= 0.40);
+    if (comebackGames.length > 0) {
+        const biggest = comebackGames.reduce((a, b) => b.comebackSize > a.comebackSize ? b : a);
+        const awayWon = biggest.away.score > biggest.home.score;
+        const winner  = awayWon ? biggest.away : biggest.home;
+        const loser   = awayWon ? biggest.home : biggest.away;
+        const minWinnerWP = Math.round((1 - biggest.comebackSize) * 100);
+        const s4b = ['SECTION 4B — BIGGEST COMEBACK:'];
+        s4b.push(`${winner.name} def. ${loser.name} ${winner.score}-${loser.score} — ${biggest.comebackTier}, fell to ${minWinnerWP}% win probability before rallying`);
+        sections.push(s4b.join('\n'));
+    }
+
     // Section 5 — season league leaders
     const gamesPlayed = Math.max(...(standingsData.teams || []).map(t => (t.w || 0) + (t.l || 0)), 0);
     const minPA = gamesPlayed * 3.1;

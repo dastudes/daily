@@ -414,6 +414,21 @@ async function fetchWPA(gamePk) {
     }
 }
 
+// Running home-team win probability per play. Uses the raw homeTeamWinProbability
+// field when present; otherwise derives it by cumulatively summing the WPA deltas
+// starting from an even 50/50 game.
+function getHomeWinProbabilities(plays) {
+    if (!plays || plays.length === 0) return [];
+    if (plays[0].homeTeamWinProbability !== undefined && plays[0].homeTeamWinProbability !== null) {
+        return plays.map(p => p.homeTeamWinProbability);
+    }
+    let running = 50;
+    return plays.map(p => {
+        running += (p.homeTeamWinProbabilityAdded || 0);
+        return running;
+    });
+}
+
 // Batting events where pitcher attribution makes sense
 const BATTING_EVENTS = new Set([
     'Single', 'Double', 'Triple', 'Home Run',
@@ -754,6 +769,23 @@ async function generateHTML() {
                 });
             }
         });
+        // Winning team's biggest comeback: how low the winner's win probability
+        // ever dipped over the course of the game.
+        let comebackSize = null;
+        let comebackTier = null;
+        const homeWPs = getHomeWinProbabilities(wpaPlays);
+        if (homeWPs.length > 0) {
+            const winnerWasHome = homeScore > awayScore;
+            const minWinnerWP = winnerWasHome
+                ? Math.min(...homeWPs)
+                : Math.min(...homeWPs.map(wp => 100 - wp));
+            comebackSize = Math.round((1 - minWinnerWP / 100) * 1000) / 1000;
+            if (comebackSize >= 0.85)      comebackTier = 'stunning comeback';
+            else if (comebackSize >= 0.70) comebackTier = 'big comeback';
+            else if (comebackSize >= 0.55) comebackTier = 'solid comeback';
+            else if (comebackSize >= 0.40) comebackTier = 'came back from behind';
+        }
+
         excitement.push({
             label: `${awayAbbr} ${awayScore}, ${homeAbbr} ${homeScore}`,
             absWPA: gameAbsWPA,
@@ -859,6 +891,8 @@ async function generateHTML() {
                     homeScore: p.result && p.result.homeScore !== undefined ? p.result.homeScore : null,
                 })),
             totalWPASwing: parseFloat((gameAbsWPA / 100).toFixed(2)),
+            comebackSize,
+            comebackTier,
             flags: {
                 walkoff: homeScore > awayScore &&
                     !!lastInn && !!lastInn.home &&
