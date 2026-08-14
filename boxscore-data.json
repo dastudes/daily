@@ -1,6 +1,6 @@
 {
   "date": "2026-08-13",
-  "generatedAt": "August 14, 2026 at 5:00 AM EDT",
+  "generatedAt": "August 14, 2026 at 10:43 AM EDT",
   "games": [
     {
       "gamePk": 824238,
@@ -446,6 +446,8 @@
         }
       ],
       "totalWPASwing": 1.82,
+      "comebackSize": 0.503,
+      "comebackTier": "came back from behind",
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -947,6 +949,8 @@
         }
       ],
       "totalWPASwing": 3.25,
+      "comebackSize": 0.642,
+      "comebackTier": "solid comeback",
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -1373,6 +1377,8 @@
         }
       ],
       "totalWPASwing": 1.58,
+      "comebackSize": 0.603,
+      "comebackTier": "solid comeback",
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -1838,6 +1844,8 @@
         }
       ],
       "totalWPASwing": 2.29,
+      "comebackSize": 0.548,
+      "comebackTier": "came back from behind",
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -2270,6 +2278,8 @@
         }
       ],
       "totalWPASwing": 1.8,
+      "comebackSize": 0.538,
+      "comebackTier": "came back from behind",
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -2675,6 +2685,8 @@
         }
       ],
       "totalWPASwing": 1.13,
+      "comebackSize": 0.5,
+      "comebackTier": "came back from behind",
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -3113,6 +3125,8 @@
         }
       ],
       "totalWPASwing": 1.86,
+      "comebackSize": 0.481,
+      "comebackTier": "came back from behind",
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -3596,6 +3610,8 @@
         }
       ],
       "totalWPASwing": 1.43,
+      "comebackSize": 0.5,
+      "comebackTier": "came back from behind",
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -4067,6 +4083,8 @@
         }
       ],
       "totalWPASwing": 4.19,
+      "comebackSize": 0.963,
+      "comebackTier": "stunning comeback",
       "flags": {
         "walkoff": false,
         "extraInnings": false,
