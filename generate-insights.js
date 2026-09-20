@@ -593,17 +593,21 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
 
         const s2 = [];
         for (const team of standingsData.teams) {
-            const { gbChange, wcGbChange, abbreviation, name, division, league } = team;
+            const { gbChange, wcGbChange, abbreviation, name, division, league, eliminationNumber, wildCardEliminationNumber } = team;
 
             const g         = teamGame[abbreviation];
             const prefix    = g ? `${abbreviation} ${g.won ? 'def.' : 'lost to'} ${g.opp}: ` : '';
             const leagShort = league.replace(' League', '');
 
-            if (gbChange !== null && Math.abs(gbChange) >= 0.5) {
+            // "-" means clinched or not applicable, not eliminated — only "E" suppresses a line
+            const divisionAlive  = eliminationNumber !== 'E';
+            const wildCardAlive  = wildCardEliminationNumber !== 'E';
+
+            if (divisionAlive && gbChange !== null && Math.abs(gbChange) >= 0.5) {
                 const dir    = gbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(gbChange);
                 s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${division} race`);
-            } else if (wcGbChange !== null && Math.abs(wcGbChange) >= 0.5) {
+            } else if (wildCardAlive && wcGbChange !== null && Math.abs(wcGbChange) >= 0.5) {
                 const dir    = wcGbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(wcGbChange);
                 s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${leagShort} wild card race`);

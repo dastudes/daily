@@ -39,15 +39,6 @@ async function fetchTodaysGames(dateStr) {
     return dates[0].games || [];
 }
 
-const TEAM_ABBREV = {
-    108: 'LAA', 109: 'ARI', 110: 'BAL', 111: 'BOS', 112: 'CHC',
-    113: 'CIN', 114: 'CLE', 115: 'COL', 116: 'DET', 117: 'HOU',
-    118: 'KC',  119: 'LAD', 120: 'WSH', 121: 'NYM', 133: 'OAK',
-    134: 'PIT', 135: 'SD',  136: 'SEA', 137: 'SF',  138: 'STL',
-    139: 'TB',  140: 'TEX', 141: 'TOR', 142: 'MIN', 143: 'PHI',
-    144: 'ATL', 145: 'CWS', 146: 'MIA', 147: 'NYY', 158: 'MIL'
-};
-
 // Fetch team stats
 async function fetchTeamStats(teamId, season) {
     const response = await fetch(`${API_BASE}/teams/${teamId}/stats?stats=season&season=${season}&group=hitting,pitching,fielding`);
@@ -272,6 +263,10 @@ async function generateHTML() {
                 wcGb: teamRecord.wildCardGamesBack,
                 wcRank: teamRecord.wildCardRank,
                 clinchIndicator: teamRecord.clinchIndicator,
+                eliminationNumber: teamRecord.eliminationNumber,
+                wildCardEliminationNumber: teamRecord.wildCardEliminationNumber,
+                magicNumber: teamRecord.magicNumber,
+                gamesPlayed: teamRecord.gamesPlayed,
                 clinched: teamRecord.clinched,
                 wildCardClinched: teamRecord.wildCardClinched,
                 divisionChamp: teamRecord.divisionChamp,
@@ -356,6 +351,9 @@ async function generateHTML() {
                 wcGb: standings.wcGb,
                 wcRank: standings.wcRank,
                 clinchIndicator: standings.clinchIndicator,
+                eliminationNumber: standings.eliminationNumber,
+                wildCardEliminationNumber: standings.wildCardEliminationNumber,
+                magicNumber: standings.magicNumber,
                 last10: standings.last10,
                 streak: standings.streak,
                 splitHome: standings.splitHome,
@@ -476,6 +474,10 @@ async function generateHTML() {
                 wcGbChange,
                 wcRank: t.wcRank || null,
                 clinchIndicator: t.clinchIndicator || null,
+                eliminationNumber: t.eliminationNumber ?? null,
+                wildCardEliminationNumber: t.wildCardEliminationNumber ?? null,
+                magicNumber: t.magicNumber ?? null,
+                gamesPlayed: t.gamesPlayed ?? null,
                 rs: t.rs,
                 ra: t.ra,
                 rd: t.rd,
@@ -1300,8 +1302,10 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
                 ${todaysGames.map(game => {
                     const awayId = game.teams.away.team.id;
                     const homeId = game.teams.home.team.id;
-                    const away = TEAM_ABBREV[awayId] || game.teams.away.team.name;
-                    const home = TEAM_ABBREV[homeId] || game.teams.home.team.name;
+                    if (!teamData[awayId]) console.warn(`No teamData for away team id ${awayId} (${game.teams.away.team.name}), falling back to full name`);
+                    if (!teamData[homeId]) console.warn(`No teamData for home team id ${homeId} (${game.teams.home.team.name}), falling back to full name`);
+                    const away = (teamData[awayId] && teamData[awayId].abbreviation) || game.teams.away.team.name;
+                    const home = (teamData[homeId] && teamData[homeId].abbreviation) || game.teams.home.team.name;
                     const rawTime = game.gameDate;
                     const timeLabel = rawTime ? new Date(rawTime).toLocaleTimeString('en-US', {
                         hour: 'numeric',
