@@ -24,10 +24,29 @@ async function fetchTeams(season) {
 }
 
 // Fetch standings to get W-L records and games back
-async function fetchStandings(season) {
-    const response = await fetch(`${API_BASE}/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason`);
+// With `date` (YYYY-MM-DD), returns standings as of the end of that day
+async function fetchStandings(season, date) {
+    const dateParam = date ? `&date=${date}` : '';
+    const response = await fetch(`${API_BASE}/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason${dateParam}`);
     const data = await response.json();
     return data.records;
+}
+
+// Shift a YYYY-MM-DD string by whole days (UTC math, so DST can't skew it)
+function shiftDate(dateStr, days) {
+    const d = new Date(`${dateStr}T00:00:00Z`);
+    d.setUTCDate(d.getUTCDate() + days);
+    return d.toISOString().slice(0, 10);
+}
+
+// Games-back strings from the API: "5.0" (behind), "+4.5" (ahead of the wild-card line), "-" (leader/n.a.).
+// Returns games behind as a number (negative when ahead), or null when there is no number.
+function parseGamesBack(gb) {
+    if (gb === null || gb === undefined) return null;
+    const s = String(gb).trim();
+    const n = parseFloat(s);
+    if (!Number.isFinite(n)) return null;
+    return s.startsWith('+') ? -n : n;
 }
 
 // Fetch today's schedule
@@ -432,32 +451,37 @@ async function generateHTML() {
     fs.writeFileSync('index.html', html);
     console.log('Generated index.html successfully!');
 
-    // Read yesterday's GB values before overwriting
-    let prevGbByTeam = {};
-    if (fs.existsSync('standings-data.json')) {
-        try {
-            const prev = JSON.parse(fs.readFileSync('standings-data.json', 'utf8'));
-            for (const team of (prev.teams || [])) {
-                if (team.abbreviation) {
-                    prevGbByTeam[team.abbreviation] = { gb: team.gb, wcGb: team.wcGb };
-                }
+    // Standings as of the day before the games being reported. This run reports yesterday's (CT) games,
+    // so the baseline is the end of the day before that.
+    const previousDate = shiftDate(todayStr, -2);
+    console.log(`Fetching previous standings as of ${previousDate}...`);
+    const prevGbByTeam = {};
+    try {
+        const prevRecords = await fetchStandings(season, previousDate);
+        for (const divisionRecord of (prevRecords || [])) {
+            for (const teamRecord of divisionRecord.teamRecords) {
+                prevGbByTeam[teamRecord.team.id] = { gb: teamRecord.gamesBack ?? null, wcGb: teamRecord.wildCardGamesBack ?? null };
             }
-        } catch (e) {
-            console.warn('Could not parse existing standings-data.json for previous GB values:', e.message);
         }
+    } catch (e) {
+        console.warn(`Could not fetch standings for ${previousDate}; GB changes will be null:`, e.message);
     }
 
     const standingsJson = {
         season,
         generatedAt: dateTimeStr,
-        teams: Object.values(teamData).map(t => {
-            const prev = prevGbByTeam[t.abbreviation] || null;
+        teams: Object.entries(teamData).map(([teamId, t]) => {
+            const prev = prevGbByTeam[teamId] || null;
             const previousGb = prev ? prev.gb : null;
             const previousWcGb = prev ? prev.wcGb : null;
-            const todayGb = t.gb;
-            const todayWcGb = t.wcGb || null;
-            const gbChange = (previousGb !== null && todayGb !== null) ? parseFloat((previousGb - todayGb).toFixed(1)) : null;
-            const wcGbChange = (previousWcGb !== null && todayWcGb !== null) ? parseFloat((previousWcGb - todayWcGb).toFixed(1)) : null;
+            const todayGb = t.gb ?? null;
+            const todayWcGb = t.wcGb ?? null;
+            const gbChangeOf = (before, after) => {
+                const b = parseGamesBack(before), a = parseGamesBack(after);
+                return (b !== null && a !== null) ? parseFloat((b - a).toFixed(1)) : null;
+            };
+            const gbChange = gbChangeOf(previousGb, todayGb);
+            const wcGbChange = gbChangeOf(previousWcGb, todayWcGb);
             return {
                 name: t.name,
                 abbreviation: t.abbreviation,
