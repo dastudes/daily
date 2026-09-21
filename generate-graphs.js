@@ -2307,4 +2307,7 @@ function generateHTMLContent(season, dateStr, teamData, playerStats, todaysGames
 </html>`;
 }
 
-generateHTML().catch(console.error);
+generateHTML().catch(err => {
+    console.error('Error generating graphs:', err);
+    process.exit(1);
+});

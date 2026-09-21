@@ -1525,4 +1525,7 @@ async function generateHTML() {
     console.log('Generated player-stats.json successfully!');
 }
 
-generateHTML().catch(console.error);
+generateHTML().catch(err => {
+    console.error('Error generating stats:', err);
+    process.exit(1);
+});

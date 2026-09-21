@@ -1433,4 +1433,7 @@ async function generateHTML() {
     console.log('Generated boxscore-data.json successfully!');
 }
 
-generateHTML().catch(console.error);
+generateHTML().catch(err => {
+    console.error('Error generating box scores:', err);
+    process.exit(1);
+});
