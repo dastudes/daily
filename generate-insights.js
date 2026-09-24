@@ -581,6 +581,14 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
     }
     sections.push(s1.join('\n'));
 
+    // Games back as a signed number: behind the line is positive, "+4.5" (ahead) is negative, "-" is 0
+    const parseGb = gb => {
+        if (gb === null || gb === undefined || gb === '-' || gb === '') return 0;
+        const s = String(gb);
+        return s.startsWith('+') ? -parseFloat(s.slice(1)) : parseFloat(s);
+    };
+    const gamesLeft = t => 162 - (t.w + t.l);
+
     // Section 2 — pennant race impact (skip if no previous GB data)
     const hasPrevData = standingsData.teams.some(t => t.gbChange !== null || t.wcGbChange !== null);
     if (hasPrevData) {
@@ -591,9 +599,19 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
             teamGame[game.home.abbr] = { won: !awayWon, opp: game.away.abbr };
         }
 
+        // Per league, how far the first team out of the wild card trails the last spot
+        const firstOutGb = {};
+        for (const t of standingsData.teams) {
+            const rank = parseInt(t.wcRank, 10);
+            if (!(rank > 3)) continue;
+            const gb = parseGb(t.wcGb);
+            if (!(t.league in firstOutGb) || gb < firstOutGb[t.league]) firstOutGb[t.league] = gb;
+        }
+
         const s2 = [];
         for (const team of standingsData.teams) {
             const { gbChange, wcGbChange, abbreviation, name, division, league, eliminationNumber, wildCardEliminationNumber } = team;
+            const toPlay = `with ${gamesLeft(team)} to play`;
 
             const g         = teamGame[abbreviation];
             const prefix    = g ? `${abbreviation} ${g.won ? 'def.' : 'lost to'} ${g.opp}: ` : '';
@@ -603,29 +621,126 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
             const divisionAlive  = eliminationNumber !== 'E';
             const wildCardAlive  = wildCardEliminationNumber !== 'E';
 
+            // Only teams holding a wild card spot or within 2 games of the last one are in the race
+            const wcRank        = parseInt(team.wcRank, 10);
+            const wcGbNum       = parseGb(team.wcGb);
+            const holdsWcSpot   = wcRank <= 3;
+            // Teams that have clinched a wild card spot ("w") have nothing left to race for
+            const wildCardInRace = team.clinchIndicator !== 'w' && (holdsWcSpot || (wcRank > 3 && wcGbNum <= 2));
+
             if (divisionAlive && gbChange !== null && Math.abs(gbChange) >= 0.5) {
                 const dir    = gbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(gbChange);
-                s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${division} race`);
-            } else if (wildCardAlive && wcGbChange !== null && Math.abs(wcGbChange) >= 0.5) {
+                const status = `now ${parseGb(team.gb).toFixed(1)} GB ${toPlay}`;
+                s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${division} race (${status})`);
+            } else if (wildCardAlive && wildCardInRace && wcGbChange !== null && Math.abs(wcGbChange) >= 0.5) {
                 const dir    = wcGbChange > 0 ? 'gained' : 'lost';
                 const amount = Math.abs(wcGbChange);
-                s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${leagShort} wild card race`);
+                let status;
+                if (holdsWcSpot) {
+                    // Cushion over the first team out = their deficit to the last spot + our margin above it
+                    const cushion = league in firstOutGb ? firstOutGb[league] - wcGbNum : null;
+                    if (cushion === null)   status = `holds the ${wcRank}${ordinal(wcRank)} spot ${toPlay}`;
+                    else if (cushion === 0) status = `tied for the last spot ${toPlay}`;
+                    else                    status = `holds the ${wcRank}${ordinal(wcRank)} spot by ${cushion.toFixed(1)} ${toPlay}`;
+                } else {
+                    status = `now ${wcGbNum.toFixed(1)} back of the last spot ${toPlay}`;
+                }
+                s2.push(`- ${prefix}${name} ${dir} ${amount} game${amount !== 1 ? 's' : ''} in ${leagShort} wild card race (${status})`);
             }
         }
 
-        // Division leader erosion: summarize rivals closing the gap on each leader
-        for (const leader of standingsData.teams) {
-            if (leader.gb !== '-' || leader.gbChange !== null) continue;
+        // Division leader erosion: summarize live rivals closing the gap on each division's leader(s).
+        // Grouped by division so teams tied atop a division produce one combined line.
+        const leadersByDivision = {};
+        for (const t of standingsData.teams) {
+            if (t.gb !== '-' || t.gbChange !== null) continue;
+            (leadersByDivision[t.division] ||= []).push(t);
+        }
+        for (const [division, leaders] of Object.entries(leadersByDivision)) {
+            if (leaders.some(l => l.clinchIndicator === 'y' || l.clinchIndicator === 'z')) continue;
             const rivals = standingsData.teams
-                .filter(t => t.division === leader.division && t !== leader && t.gbChange !== null && t.gbChange >= 0.5)
+                .filter(t => t.division === division && !leaders.includes(t) && t.eliminationNumber !== 'E'
+                    && t.gbChange !== null && t.gbChange >= 0.5)
                 .sort((a, b) => b.gbChange - a.gbChange);
             if (rivals.length === 0) continue;
             const gainers = rivals.map(r => `${r.name} gained ${r.gbChange} GB`).join(', ');
-            s2.push(`- ${leader.name} (${leader.division} leader): lost ground — ${gainers}`);
+            const who = leaders.length === 1
+                ? `${leaders[0].name} (${division} leader)`
+                : `${leaders.map(l => l.name).join(' and ')} (tied for ${division} lead)`;
+            s2.push(`- ${who}: lost ground — ${gainers}`);
         }
 
         if (s2.length > 0) sections.push('SECTION 2 — PENNANT RACE IMPACT:\n' + s2.join('\n'));
+    }
+
+    // Section 2B — every unsettled race, whether or not it moved today
+    {
+        const s2b = [];
+        const listed = new Set();
+        const record = t => `${t.w}-${t.l}`;
+        const elim = n => (n !== null && n !== undefined && n !== '-' && n !== 'E') ? `, elim # ${n}` : '';
+        const byDivision = {};
+        for (const t of standingsData.teams) (byDivision[t.division] ||= []).push(t);
+
+        // Division races
+        for (const [division, teams] of Object.entries(byDivision)) {
+            const leaders = teams.filter(t => t.gb === '-');
+            if (leaders.length === 0 || leaders.some(l => l.clinchIndicator === 'y' || l.clinchIndicator === 'z')) continue;
+            const contenders = teams
+                .filter(t => !leaders.includes(t) && t.eliminationNumber !== 'E')
+                .sort((a, b) => parseGb(a.gb) - parseGb(b.gb));
+            if (leaders.length === 1 && contenders.length === 0) continue;
+            const lead = leaders.length === 1
+                ? `${leaders[0].name} leads (${record(leaders[0])})`
+                : `${leaders.map(l => l.name).join(' and ')} tied for lead (${record(leaders[0])})`;
+            const chase = contenders.map(t => `${t.name} ${parseGb(t.gb).toFixed(1)} GB${elim(t.eliminationNumber)}`);
+            s2b.push(`- ${division}: ${[lead, ...chase].join('; ')}`);
+            [...leaders, ...contenders].forEach(t => listed.add(t));
+        }
+
+        // Wild card races
+        for (const league of [...new Set(standingsData.teams.map(t => t.league))].sort()) {
+            const pool = standingsData.teams.filter(t => t.league === league && parseInt(t.wcRank, 10) > 0);
+            // Contested while any team not yet clinched is still alive for a spot
+            if (!pool.some(t => t.clinchIndicator !== 'w' && t.wildCardEliminationNumber !== 'E')) continue;
+            const entrants = pool
+                .filter(t => t.clinchIndicator !== 'w' || t.eliminationNumber !== 'E')
+                .filter(t => parseInt(t.wcRank, 10) <= 3 || parseGb(t.wcGb) <= 2)
+                .sort((a, b) => parseGb(a.wcGb) - parseGb(b.wcGb));
+            if (entrants.length === 0) continue;
+            const leagShort = league.replace(' League', '');
+            const parts = entrants.map(t => {
+                const rank = parseInt(t.wcRank, 10);
+                const gb   = parseGb(t.wcGb);
+                const tied = entrants.filter(o => parseGb(o.wcGb) === gb).length > 1 ? ', tied' : '';
+                const pos  = gb < 0 ? `+${(-gb).toFixed(1)}` : gb.toFixed(1);
+                const spot = rank <= 3 ? `${rank}${ordinal(rank)} spot` : 'out';
+                return `${t.name} ${spot} (${pos}${tied}${elim(t.wildCardEliminationNumber)})`;
+            });
+            // Nobody within 2 games: name the closest live challenger so the spot doesn't read as settled
+            if (!entrants.some(t => parseInt(t.wcRank, 10) > 3)) {
+                const challenger = pool
+                    .filter(t => parseInt(t.wcRank, 10) > 3 && t.wildCardEliminationNumber !== 'E')
+                    .sort((a, b) => parseGb(a.wcGb) - parseGb(b.wcGb))[0];
+                if (challenger) {
+                    parts.push(`nearest challenger: ${challenger.name} ${parseGb(challenger.wcGb).toFixed(1)} back${elim(challenger.wildCardEliminationNumber)}`);
+                    listed.add(challenger);
+                }
+            }
+            s2b.push(`- ${leagShort} wild card (GB of last spot, + = ahead): ${parts.join('; ')}`);
+            entrants.forEach(t => listed.add(t));
+        }
+
+        if (s2b.length > 0) {
+            // Games remaining once for the section: the common count, with any teams that differ called out
+            const counts = {};
+            for (const t of listed) (counts[gamesLeft(t)] ||= []).push(t.abbreviation);
+            const [common, ...others] = Object.entries(counts).sort((a, b) => b[1].length - a[1].length);
+            const exceptions = others.map(([n, abbrs]) => `${abbrs.join(', ')}: ${n}`).join('; ');
+            const header = `Games remaining: ${common[0]}${exceptions ? ` (${exceptions})` : ''}`;
+            sections.push('SECTION 2B — RACES STILL ALIVE:\n' + header + '\n' + s2b.join('\n'));
+        }
     }
 
     // Section 3 — top performers (today)
