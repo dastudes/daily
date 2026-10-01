@@ -37,7 +37,7 @@ function formatOPS(val) {
 }
 
 async function fetchSchedule(date) {
-    const url = `${API_BASE}/schedule?sportId=1&date=${date}&hydrate=linescore,decisions`;
+    const url = `${API_BASE}/schedule?sportId=1&date=${date}&hydrate=linescore,decisions,seriesStatus`;
     const response = await fetch(url);
     const data = await response.json();
     return data.dates && data.dates.length > 0 ? data.dates[0].games : [];
@@ -846,9 +846,23 @@ async function generateHTML() {
         // --- Build JSON game record ---
         const inningsArr = linescore && linescore.innings ? linescore.innings : [];
         const lastInn = inningsArr[inningsArr.length - 1];
+        const isPostseasonGame = ['F', 'D', 'L', 'W'].includes(game.gameType);
         gamesData.push({
             gamePk,
             venue: game.venue ? game.venue.name : null,
+            // MLB game type (R regular season; F/D/L/W postseason rounds) plus series context.
+            // Named "series" so it doesn't collide with the division/league/interleague gameType above.
+            series: {
+                mlbGameType:       game.gameType || null,
+                seriesDescription: game.seriesDescription || null,
+                seriesGameNumber:  game.seriesGameNumber ?? null,
+                gamesInSeries:     game.gamesInSeries ?? null,
+                result:            game.seriesStatus ? game.seriesStatus.result : null,
+                isOver:            game.seriesStatus ? !!game.seriesStatus.isOver : null,
+                // In the postseason leagueRecord holds each team's series record, not its season record
+                awaySeriesWins:    isPostseasonGame && game.teams.away.leagueRecord ? game.teams.away.leagueRecord.wins : null,
+                homeSeriesWins:    isPostseasonGame && game.teams.home.leagueRecord ? game.teams.home.leagueRecord.wins : null,
+            },
             away: { name: awayTeam.name, abbr: awayAbbr, score: awayScore },
             home: { name: homeTeam.name, abbr: homeAbbr, score: homeScore },
             linescore: {

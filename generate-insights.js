@@ -146,7 +146,7 @@ function formatStandingsForPrompt(standings) {
             const rd = t.rd > 0 ? `+${t.rd}` : String(t.rd);
             const pv = t.pythVar > 0 ? `+${t.pythVar}` : String(t.pythVar);
             lines.push(
-                `${t.abbreviation} (${t.division}): ${t.w}-${t.l} .${t.pct}` +
+                `${t.abbreviation} (${t.division}): ${t.w}-${t.l} ${t.pct}` +
                 ` | RS/RA: ${t.rs}/${t.ra} RD: ${rd}` +
                 ` | pyW: ${t.pythWins} (${pv})` +
                 ` | Streak: ${t.streak || '?'} L10: ${t.splits.last10 || '?'}` +
@@ -161,6 +161,11 @@ function formatAllWPAForPrompt(boxscore) {
     return (boxscore.topWPAPlaysAllGames || [])
         .map(p => `${p.awayAbbr}@${p.homeAbbr} ${p.inning} WPA+${p.wpa}: ${p.description}`)
         .join('\n');
+}
+
+// Rate stat as baseball shows it: 0.256 -> ".256", 1.033 -> "1.033"
+function fmtRate(v) {
+    return v === null || v === undefined ? '?' : Number(v).toFixed(3).replace(/^0\./, '.');
 }
 
 function getTopBattersForPrompt(boxscore, playerStats) {
@@ -190,7 +195,7 @@ function getTopBattersForPrompt(boxscore, playerStats) {
         if (s) {
             lines.push(
                 `${b.name} (${s.team}): ${today}` +
-                ` | Season: .${s.AVG}/.${s.OBP}/.${s.SLG} OPS ${s.OPS}, ${s.HR} HR, ${s.RBI} RBI in ${s.G} G`
+                ` | Season: ${fmtRate(s.avg)}/${fmtRate(s.obp)}/${fmtRate(s.slg)} OPS ${fmtRate(s.ops)}, ${s.hr} HR, ${s.rbi} RBI in ${s.g} G`
             );
         } else {
             lines.push(`${b.name}: ${today}`);
@@ -227,7 +232,7 @@ function getTopPitchersForPrompt(boxscore, playerStats) {
         if (s) {
             lines.push(
                 `${p.name} (${context}): ${today}` +
-                ` | Season: ${s.W}-${s.L} ERA ${s.ERA} WHIP ${s.WHIP} ${s.SO}K in ${s.IP} IP`
+                ` | Season: ${s.w}-${s.l} ERA ${Number(s.era).toFixed(2)} WHIP ${Number(s.whip).toFixed(2)} ${s.k}K in ${s.ip} IP`
             );
         } else {
             lines.push(`${p.name} (${context}): ${today}`);
@@ -568,8 +573,34 @@ function detectNotableEvents(boxscoreData) {
     return events;
 }
 
+// Postseason detection: games whose MLB game type is a playoff round (Wild Card, Division, LCS, World Series)
+const POSTSEASON_TYPES = ['F', 'D', 'L', 'W'];
+function getPlayoffGames(boxscoreData) {
+    return boxscoreData.games.filter(g => g.series && POSTSEASON_TYPES.includes(g.series.mlbGameType));
+}
+
+// The CONTEXT line for a playoff day, or null during the regular season
+function buildPostseasonContext(boxscoreData) {
+    const playoffGames = getPlayoffGames(boxscoreData);
+    if (playoffGames.length === 0) return null;
+    const season = String(boxscoreData.date).slice(0, 4);
+    // "AL Wild Card Series" + "NL Wild Card Series" -> "Wild Card Series"
+    const rounds = [...new Set(playoffGames.map(g => (g.series.seriesDescription || 'Postseason').replace(/^(AL|NL)\s+/, '')))];
+    const dateLabel = new Date(`${boxscoreData.date}T12:00:00Z`)
+        .toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+    return `CONTEXT: ${season} postseason — ${rounds.join(' and ')}. Games of ${dateLabel}. ` +
+        `These are playoff games, not regular-season games; the regular season is over and there are no pennant or wild-card races.`;
+}
+
 function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
     const sections = [];
+
+    const playoffGames = getPlayoffGames(boxscoreData);
+    const postseasonContext = buildPostseasonContext(boxscoreData);
+    const isPostseason = postseasonContext !== null;
+    const season = String(boxscoreData.date).slice(0, 4);
+
+    if (isPostseason) sections.push(postseasonContext);
 
     // Section 1 — game results
     const s1 = ['SECTION 1 — VERIFIED GAME RESULTS:'];
@@ -589,9 +620,41 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
     };
     const gamesLeft = t => 162 - (t.w + t.l);
 
+    // Section 2 (postseason) — series status replaces the pennant-race sections
+    if (isPostseason) {
+        // One entry per series: the latest game played today between the two teams
+        const bySeries = {};
+        for (const g of playoffGames) {
+            const key = [g.away.abbr, g.home.abbr].sort().join('-');
+            if (!bySeries[key] || g.series.seriesGameNumber > bySeries[key].series.seriesGameNumber) bySeries[key] = g;
+        }
+        const s2 = [];
+        for (const g of Object.values(bySeries)) {
+            const sr = g.series;
+            const line = [`- ${sr.seriesDescription}: ${g.away.name} vs. ${g.home.name} — Game ${sr.seriesGameNumber} of ${sr.gamesInSeries} (best-of-${sr.gamesInSeries}). ${sr.result || 'Series status unavailable'}.`];
+            if (sr.isOver) {
+                line.push('Series OVER.');
+            } else if (sr.awaySeriesWins !== null && sr.homeSeriesWins !== null) {
+                // A team faces elimination when its opponent is one win from clinching
+                const toClinch = Math.ceil(sr.gamesInSeries / 2);
+                const facing = [];
+                if (sr.homeSeriesWins === toClinch - 1) facing.push(g.away.name);
+                if (sr.awaySeriesWins === toClinch - 1) facing.push(g.home.name);
+                const next = `Game ${sr.seriesGameNumber + 1}`;
+                line.push(facing.length === 2 ? `Series continues; both teams face elimination in ${next}.`
+                        : facing.length === 1 ? `Series continues; the ${facing[0]} face elimination in ${next}.`
+                        : `Series continues; no team faces elimination in ${next}.`);
+            } else {
+                line.push('Series continues.');
+            }
+            s2.push(line.join(' '));
+        }
+        sections.push('SECTION 2 — POSTSEASON SERIES STATUS:\n' + s2.join('\n'));
+    }
+
     // Section 2 — pennant race impact (skip if no previous GB data)
     const hasPrevData = standingsData.teams.some(t => t.gbChange !== null || t.wcGbChange !== null);
-    if (hasPrevData) {
+    if (!isPostseason && hasPrevData) {
         const teamGame = {};
         for (const game of boxscoreData.games) {
             const awayWon = game.away.score > game.home.score;
@@ -675,7 +738,7 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
     }
 
     // Section 2B — every unsettled race, whether or not it moved today
-    {
+    if (!isPostseason) {
         const s2b = [];
         const listed = new Set();
         const record = t => `${t.w}-${t.l}`;
@@ -837,7 +900,9 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
         return fullName.split(' ').slice(1).join(' ') || fullName;
     }
 
-    const s5 = ['SECTION 5 — CURRENT LEAGUE LEADERS:',
+    const s5 = [isPostseason
+        ? `SECTION 5 — FINAL ${season} REGULAR SEASON LEAGUE LEADERS — these are final regular-season totals; postseason stats are not included:`
+        : 'SECTION 5 — CURRENT LEAGUE LEADERS:',
         '\nAL BATTING LEADERS:',
         `HR: ${top3(alBatters, 'hr')}`,
         `OPS: ${top3(alQBatters, 'ops')}`,
@@ -866,7 +931,9 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
         'American League East', 'American League Central', 'American League West',
         'National League East', 'National League Central', 'National League West',
     ];
-    const s6 = ['SECTION 6 — DIVISION STANDINGS:'];
+    const s6 = [isPostseason
+        ? `SECTION 6 — FINAL ${season} REGULAR SEASON STANDINGS — the regular season is complete; these are final and no races are active.`
+        : 'SECTION 6 — DIVISION STANDINGS:'];
     for (const div of DIVISIONS) {
         const divTeams = (standingsData.teams || [])
             .filter(t => t.division === div)
@@ -1068,7 +1135,7 @@ function selectVoice() {
     return { key, system: VOICE_SYSTEMS[key] };
 }
 
-function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem, enableWhatToKnow = true) {
+function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem, enableWhatToKnow = true, isPostseason = false) {
     const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     });
@@ -1120,12 +1187,17 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `the road has nothing to do with Coors Field. Never use a pitcher's team identity to ` +
         `infer ballpark context — only use the venue field in the data.`;
 
-    const pennantRaceNote =
-        `CRITICAL: Never infer standings movement from a game result alone. ` +
-        `A team winning does not mean they gained ground in their division or wild card race. ` +
-        `Standings changes are only in Section 2 (Pennant Race Impact) of the verified facts. ` +
-        `If a team does not appear in Section 2, their standings position is unchanged — ` +
-        `do not say they extended, maintained, or grew any lead. Report the win; say nothing about the standings.`;
+    const pennantRaceNote = isPostseason
+        ? `CRITICAL: This is a postseason day. There are no division or wild card races — the regular season is over ` +
+          `and the standings in Section 6 are final. Never describe a team as gaining ground, extending a lead, or moving in the standings. ` +
+          `Series status (game number, series record, clinches, eliminations, who faces elimination next) is only in ` +
+          `Section 2 (Postseason Series Status) of the verified facts. Take every series claim from there; ` +
+          `do not work out a series record yourself from the day's game results.`
+        : `CRITICAL: Never infer standings movement from a game result alone. ` +
+          `A team winning does not mean they gained ground in their division or wild card race. ` +
+          `Standings changes are only in Section 2 (Pennant Race Impact) of the verified facts. ` +
+          `If a team does not appear in Section 2, their standings position is unchanged — ` +
+          `do not say they extended, maintained, or grew any lead. Report the win; say nothing about the standings.`;
 
     const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}\n\n${noStatsNote}\n\n${coorsNote}\n\n${lwtsNote}\n\n${pennantRaceNote}`;
 
@@ -1144,7 +1216,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
 
     const factSheetPrefix = factSheet
         ? `VERIFIED FACTS — use these as ground truth for all specific claims about game results, ` +
-          `standings movement, top performers, and league leaders. Do not contradict anything in this section.\n\n` +
+          `${isPostseason ? 'series status' : 'standings movement'}, top performers, and league leaders. Do not contradict anything in this section.\n\n` +
           `${factSheet}\n\n`
         : '';
 
@@ -1157,14 +1229,21 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 factSheetPrefix +
                 `Today is ${dateLabel}.\n\n` +
                 `Box scores:\n${boxStr}\n\n` +
-                `Standings:\n${standStr}\n\n` +
+                // Final regular-season standings add nothing on a playoff day and invite race talk
+                (isPostseason ? '' : `Standings:\n${standStr}\n\n`) +
                 `Top WPA plays:\n${wpaStr}\n\n` +
                 `Top pitchers:\n${topPitchersStr}\n\n` +
                 `Top batters:\n${topBattersStr}\n\n` +
-                `Write a daily baseball column of 3–5 paragraphs. Lead with the games that matters most ` +
-                `in title races — prioritize matchups between division leaders or teams in close pennant ` +
-                `races, especially when the game was competitive. After that, cover the most dramatic or ` +
-                `memorable games and standout individual performances. Not every game needs a mention. ` +
+                (isPostseason
+                    ? `Write a daily postseason column of 3–5 paragraphs. Lead with the games that decided or swung ` +
+                      `a series — eliminations and series clinches first, then games that tied a series or pushed a ` +
+                      `team to the brink of elimination, especially when the game was competitive. Take every series ` +
+                      `result from Section 2. After that, cover the most dramatic or memorable games and standout ` +
+                      `individual performances. Not every game needs a mention. `
+                    : `Write a daily baseball column of 3–5 paragraphs. Lead with the games that matters most ` +
+                      `in title races — prioritize matchups between division leaders or teams in close pennant ` +
+                      `races, especially when the game was competitive. After that, cover the most dramatic or ` +
+                      `memorable games and standout individual performances. Not every game needs a mention. `) +
                 `Follow the story. Include a short bulleted list of individual highlights using "- " ` +
                 `prefix for each item; place it where it fits naturally in the column. Everything else ` +
                 `should be prose. No introductory or closing paragraph.` +
@@ -1180,13 +1259,17 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `Today is ${dateLabel}.\n\n` +
                 `Write a box scores brief consisting of two parts:\n\n` +
                 `1. One short paragraph (2-3 sentences) identifying the day's most important story. ` +
-                `Prioritize pennant race implications, then dramatic games.\n\n` +
+                (isPostseason
+                    ? `Prioritize series outcomes — eliminations and series clinches first, then series swings — then dramatic games.\n\n`
+                    : `Prioritize pennant race implications, then dramatic games.\n\n`) +
                 `2. A bulleted list using "- " prefix. Scale the count to what happened: ` +
                 `roughly one bullet per notable game result plus bullets for standout individual ` +
                 `performances and any notable events from Section 7. Minimum 4 bullets, maximum 8.\n\n` +
                 `Rules:\n` +
                 `- Use only facts from the verified data above. Do not invent or embellish.\n` +
-                `- Standings claims (division leads, games back, pennant race movement) must come directly from Section 2 or Section 6 of the verified facts. If a team does not appear in Section 2, do not characterize their result as gaining or extending a lead — report the win or loss only.\n` +
+                (isPostseason
+                    ? `- Series claims (series record, game number, clinches, eliminations, who faces elimination next) must come directly from Section 2 (Postseason Series Status) of the verified facts. Do not describe any team as gaining ground, leading a division, or moving in the standings — the regular season is over and Section 6 holds final standings only.\n`
+                    : `- Standings claims (division leads, games back, pennant race movement) must come directly from Section 2 or Section 6 of the verified facts. If a team does not appear in Section 2, do not characterize their result as gaining or extending a lead — report the win or loss only.\n`) +
                 `- Bold all player names using **Name** format.\n` +
                 `- Do not include statistics in prose — stats will be inserted automatically next to player names.\n` +
                 `- If Section 7 contains notable events, they must appear in the bullets.\n` +
@@ -1218,8 +1301,9 @@ async function callClaude(client, prompt, maxRetries = 3) {
     }
 }
 
-async function verifyNarrative(client, text, sourceData, maxRetries = 3) {
+async function verifyNarrative(client, text, sourceData, postseasonContext = null, maxRetries = 3) {
     const userContent =
+        (postseasonContext ? `${postseasonContext}\n\n` : '') +
         `You are a meticulous fact-checker for a baseball analytics website.\n` +
         `Below is a narrative and the source data it was generated from.\n\n` +
         `Your job:\n` +
@@ -1227,7 +1311,10 @@ async function verifyNarrative(client, text, sourceData, maxRetries = 3) {
         `2. Verify each one against the source data\n` +
         `3. Correct any errors by replacing wrong values with the correct ones from the data\n` +
         `4. Pay special attention to:\n` +
-        `   - Standings claims: which team leads each division, games back, wild card position\n` +
+        (postseasonContext
+            ? `   - Standings claims: the standings are final regular-season standings. Correct any claim that a team gained ground, extended a lead, or moved in a division or wild card race\n` +
+              `   - Series outcomes: verify any claim about a series record, game number, a team clinching, sweeping, being eliminated, or facing elimination against each game's "series" field (seriesDescription, seriesGameNumber, gamesInSeries, result, isOver, awaySeriesWins, homeSeriesWins). Do not derive a series record by counting the day's games\n`
+            : `   - Standings claims: which team leads each division, games back, wild card position\n`) +
         `   - Superlative claims: any use of "best", "worst", "most", "fewest", "only", "first", "top" — verify these against the full standings and league leader data\n` +
         `   - Scoring attribution: verify which team scored in any referenced inning or rally\n` +
         `   - Home/away: verify any claim about where a game was played\n` +
@@ -1570,7 +1657,9 @@ async function main() {
     const { key: voiceKey, system: voiceSystem } = selectVoice();
     console.log(`Voice selected for today: ${voiceKey}`);
     console.log(`What to Know enabled: ${enableWhatToKnow}`);
-    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem, enableWhatToKnow);
+    const postseasonContext = buildPostseasonContext(boxscore);
+    if (postseasonContext) console.log(`Postseason day: ${postseasonContext}`);
+    const prompts = buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchersStr, factSheet, voiceSystem, enableWhatToKnow, postseasonContext !== null);
 
     // Build player index for stat injection
     const playerIndex = buildPlayerIndex(boxscore, playerStats);
@@ -1595,7 +1684,7 @@ async function main() {
         console.log(`  Generated (${text.length} chars), injecting stats...`);
         const withStats = injectStats(text, playerIndex);
         console.log(`  Stats injected, verifying...`);
-        const verified = await verifyNarrative(client, withStats, verifySourceData[title]);
+        const verified = await verifyNarrative(client, withStats, verifySourceData[title], postseasonContext);
         console.log(`  Verified (${verified.length} chars)`);
         narratives.push({ title, text: verified, leaderboardHtml: title === 'What to Know' ? leaderboardHtml : null });
     }
