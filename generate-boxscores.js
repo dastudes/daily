@@ -780,10 +780,10 @@ async function generateHTML() {
                 ? Math.min(...homeWPs)
                 : Math.min(...homeWPs.map(wp => 100 - wp));
             comebackSize = Math.round((1 - minWinnerWP / 100) * 1000) / 1000;
-            if (comebackSize >= 0.85)      comebackTier = 'stunning comeback';
-            else if (comebackSize >= 0.70) comebackTier = 'big comeback';
-            else if (comebackSize >= 0.55) comebackTier = 'solid comeback';
-            else if (comebackSize >= 0.40) comebackTier = 'came back from behind';
+            // Every game opens near 50%, so only dips to ~35% or below count as a comeback
+            if (comebackSize >= 0.90)      comebackTier = 'stunning comeback';
+            else if (comebackSize >= 0.80) comebackTier = 'big comeback';
+            else if (comebackSize >= 0.65) comebackTier = 'came back from behind';
         }
 
         excitement.push({

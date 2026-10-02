@@ -853,8 +853,23 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
         .forEach((g, i) => s4.push(`${i + 1}. ${g.away.name}-${g.home.name}: ${g.totalWPASwing.toFixed(2)} WPA swing`));
     sections.push(s4.join('\n'));
 
-    // Section 4b — biggest comeback (only if at least one game clears the 0.40 floor)
-    const comebackGames = boxscoreData.games.filter(g => g.comebackSize != null && g.comebackSize >= 0.40);
+    // Section 4b — biggest comeback. A game qualifies only if the winner's win probability
+    // fell to ~35% or below AND the winner actually trailed at some point (every game opens
+    // near 50%, so the WP dip alone isn't enough). Omitted entirely if nothing qualifies.
+    const COMEBACK_FLOOR = 0.65;
+    const winnerTrailed = (g) => {
+        const awayWon = g.away.score > g.home.score;
+        let away = 0, home = 0;
+        for (const inn of (g.linescore && g.linescore.innings) || []) {
+            away += inn.away || 0;
+            if (awayWon ? away < home : home < away) return true;
+            home += inn.home || 0;
+            if (awayWon ? away < home : home < away) return true;
+        }
+        return false;
+    };
+    const comebackGames = boxscoreData.games.filter(g =>
+        g.comebackSize != null && g.comebackSize >= COMEBACK_FLOOR && winnerTrailed(g));
     if (comebackGames.length > 0) {
         const biggest = comebackGames.reduce((a, b) => b.comebackSize > a.comebackSize ? b : a);
         const awayWon = biggest.away.score > biggest.home.score;
