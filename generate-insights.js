@@ -71,6 +71,37 @@ function cleanVenue(v) {
     return v;
 }
 
+// Walks the linescore half-inning by half-inning from the winner's point of view.
+// Returns the largest run deficit the winner faced and the last moment they trailed,
+// so the brief can describe a comeback in runs and innings, not just win probability.
+function winnerDeficitInfo(game) {
+    const awayWon = game.away.score > game.home.score;
+    let away = 0, home = 0, maxDeficit = 0, lastTrail = null;
+    const check = (nextHalf) => {
+        const deficit = awayWon ? home - away : away - home;
+        if (deficit > 0) {
+            maxDeficit = Math.max(maxDeficit, deficit);
+            lastTrail = { winnerRuns: awayWon ? away : home, loserRuns: awayWon ? home : away, nextHalf };
+        }
+    };
+    for (const inn of (game.linescore && game.linescore.innings) || []) {
+        away += inn.away || 0;
+        check(`bottom of the ${inn.inning}${ordinal(inn.inning)}`);
+        home += inn.home || 0;
+        check(`top of the ${inn.inning + 1}${ordinal(inn.inning + 1)}`);
+    }
+    return { maxDeficit, lastTrail };
+}
+
+// The play that ended a walk-off game: a bottom-half play that produced the final score.
+function findWalkoffPlay(game) {
+    if (!game.flags || !game.flags.walkoff) return null;
+    const plays = (game.topWPAPlays || []).filter(p =>
+        /^BOT/.test(p.inning) && p.homeScore === game.home.score && p.awayScore === game.away.score);
+    if (!plays.length) return null;
+    return plays.reduce((a, b) => (b.wpa > a.wpa ? b : a));
+}
+
 function formatBoxscoreForPrompt(boxscore) {
     const lines = ['Games and venues:'];
     for (const game of boxscore.games) {
@@ -96,6 +127,10 @@ function formatBoxscoreForPrompt(boxscore) {
         if (game.flags.extraInnings) flags.push('extra innings');
         if (game.flags.shutout) flags.push('shutout');
         if (flags.length) lines.push(`Notable: ${flags.join(', ')}`);
+        const walkoffPlay = findWalkoffPlay(game);
+        if (walkoffPlay) {
+            lines.push(`Walk-off play (${walkoffPlay.inning}, WPA +${walkoffPlay.wpa.toFixed(3)}): ${walkoffPlay.description}`);
+        }
         if (game.totalWPASwing !== undefined) {
             lines.push(`Total WPA Swing: ${game.totalWPASwing.toFixed(2)}`);
         }
@@ -284,18 +319,35 @@ function buildPlayerIndex(boxscore, playerStats) {
 }
 
 function buildTeamIndex(boxscore) {
-    // Maps normalized team name, abbreviation, and nickname -> gamePk
+    // Maps normalized team name, abbreviation, nickname and city -> { gamePk, abbr }.
+    // The abbr is used as the link label, so every brief link reads "(SD)", never "(PADRES)".
+    // A key shared by two teams playing in different games (e.g. "Sox", "Los Angeles")
+    // is marked ambiguous (null) and skipped.
     const index = new Map();
+    const add = (key, value) => {
+        const k = normalizeForMatch(key || '');
+        if (!k) return;
+        const existing = index.get(k);
+        if (existing === undefined) index.set(k, value);
+        else if (existing && existing.gamePk !== value.gamePk) index.set(k, null);
+    };
     for (const game of boxscore.games) {
         for (const side of ['away', 'home']) {
             const team = game[side];
-            index.set(normalizeForMatch(team.name), game.gamePk);
-            index.set(normalizeForMatch(team.abbr), game.gamePk);
-            // Add nickname (last word of full name, e.g. "Brewers" from "Milwaukee Brewers")
-            const nickname = team.name.split(' ').pop();
-            index.set(normalizeForMatch(nickname), game.gamePk);
+            const value = { gamePk: game.gamePk, abbr: team.abbr };
+            const words = team.name.split(' ');
+            // Two-word nicknames: Red Sox, White Sox, Blue Jays
+            const nickLen = words.length >= 3 && ['Red', 'White', 'Blue'].includes(words[words.length - 2]) ? 2 : 1;
+            const nickname = words.slice(-nickLen).join(' ');
+            const city = words.slice(0, -nickLen).join(' ');
+            add(team.name, value);
+            add(team.abbr, value);
+            add(nickname, value);
+            add(words[words.length - 1], value); // e.g. "Sox", "Jays"
+            add(city, value);                    // e.g. "Milwaukee", "San Diego"
         }
     }
+    for (const [k, v] of index) if (v === null) index.delete(k);
     return index;
 }
 
@@ -348,14 +400,20 @@ function injectBriefLinks(text, playerIndex, teamIndex) {
 
         // Fallback: scan for team names/abbreviations if no player match found
         if (foundPks.size === 0) {
-            for (const [normName, gamePk] of teamIndex) {
+            // Label each game with the team mentioned first in the line
+            const normLine = normalizeForMatch(line);
+            const firstHit = new Map(); // gamePk -> { pos, abbr }
+            for (const [normName, { gamePk, abbr }] of teamIndex) {
                 const esc = escapeRegex(normName);
-                if (new RegExp(`(?<![\\w])(${esc})(?![\\w])`, 'i').test(normalizeForMatch(line))) {
-                    if (!foundPks.has(gamePk)) {
-                        foundPks.set(gamePk, normName.toUpperCase());
-                    }
+                const m = new RegExp(`(?<![\\w])(${esc})(?![\\w])`, 'i').exec(normLine);
+                if (m) {
+                    const prev = firstHit.get(gamePk);
+                    if (!prev || m.index < prev.pos) firstHit.set(gamePk, { pos: m.index, abbr });
                 }
             }
+            [...firstHit.entries()]
+                .sort((a, b) => a[1].pos - b[1].pos)
+                .forEach(([gamePk, { abbr }]) => foundPks.set(gamePk, abbr));
         }
 
         if (foundPks.size === 0) {
@@ -878,7 +936,42 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
         const minWinnerWP = Math.round((1 - biggest.comebackSize) * 100);
         const s4b = ['SECTION 4B — BIGGEST COMEBACK:'];
         s4b.push(`${winner.name} def. ${loser.name} ${winner.score}-${loser.score} — ${biggest.comebackTier}, fell to ${minWinnerWP}% win probability before rallying`);
+        const { maxDeficit, lastTrail } = winnerDeficitInfo(biggest);
+        if (maxDeficit > 0) {
+            s4b.push(`Largest deficit: ${maxDeficit} run${maxDeficit === 1 ? '' : 's'}`);
+        }
+        if (lastTrail) {
+            s4b.push(`${winner.name} trailed ${lastTrail.loserRuns}-${lastTrail.winnerRuns} entering the ${lastTrail.nextHalf}`);
+        }
+        const walkoffPlay = findWalkoffPlay(biggest);
+        if (walkoffPlay) {
+            s4b.push(`Ended on a walk-off: ${walkoffPlay.description}`);
+        }
+        s4b.push('NOTE: The comeback label reflects how low win probability fell, which depends on how late the game was, not on the size of the deficit. Describe the deficit only with the run figures above; do not call a 1- or 2-run deficit "deep" or "large".');
         sections.push(s4b.join('\n'));
+    }
+
+    // Section 4c (postseason only) — each game's decisive moment, so playoff bullets lead with
+    // the swing play rather than stat lines. A game is a blowout if the final margin is 5+ runs
+    // AND no single play swung win probability by 0.20 or more; blowouts get no key moment.
+    if (isPostseason) {
+        const BLOWOUT_MARGIN = 5;
+        const KEY_PLAY_MIN_WPA = 0.20;
+        const s4c = ['SECTION 4C — DECISIVE MOMENT OF EACH GAME (postseason):'];
+        for (const g of boxscoreData.games) {
+            const margin = Math.abs(g.away.score - g.home.score);
+            const top = (g.topWPAPlays || []).reduce((a, b) => (!a || b.wpa > a.wpa ? b : a), null);
+            const label = `${g.away.name} ${g.away.score} @ ${g.home.name} ${g.home.score}`;
+            if (!top || (margin >= BLOWOUT_MARGIN && top.wpa < KEY_PLAY_MIN_WPA)) {
+                s4c.push(`- ${label}: BLOWOUT — no single decisive moment; cover it with the result and standout performances.`);
+                continue;
+            }
+            const half = /^BOT/.test(top.inning) ? g.home : g.away;
+            const walkoff = findWalkoffPlay(g) === top ? ' (walk-off)' : '';
+            s4c.push(`- ${label}: ${top.inning.replace(/^BOT/, 'bottom').replace(/^TOP/, 'top')}, ${half.abbr} batting${walkoff}, ` +
+                     `WPA swing ${top.wpa.toFixed(3)}, score after play ${g.away.abbr} ${top.awayScore}-${g.home.abbr} ${top.homeScore}: ${top.description}`);
+        }
+        sections.push(s4c.join('\n'));
     }
 
     // Section 5 — season league leaders
@@ -1254,7 +1347,8 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                       `a series — eliminations and series clinches first, then games that tied a series or pushed a ` +
                       `team to the brink of elimination, especially when the game was competitive. Take every series ` +
                       `result from Section 2. After that, cover the most dramatic or memorable games and standout ` +
-                      `individual performances. Not every game needs a mention. `
+                      `individual performances. Not every game needs a mention. When describing a competitive ` +
+                      `game, tell it through its decisive moment from Section 4C rather than through stat lines. `
                     : `Write a daily baseball column of 3–5 paragraphs. Lead with the games that matters most ` +
                       `in title races — prioritize matchups between division leaders or teams in close pennant ` +
                       `races, especially when the game was competitive. After that, cover the most dramatic or ` +
@@ -1280,6 +1374,13 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 `2. A bulleted list using "- " prefix. Scale the count to what happened: ` +
                 `roughly one bullet per notable game result plus bullets for standout individual ` +
                 `performances and any notable events from Section 7. Minimum 4 bullets, maximum 8.\n\n` +
+                (isPostseason
+                    ? `In the postseason, each game's result bullet should be built around its decisive moment from ` +
+                      `Section 4C — name the player (bolded), the inning, and what the play did to the game. ` +
+                      `Games marked BLOWOUT in Section 4C get a plain result bullet instead. Pitching and hitting ` +
+                      `stat-line bullets come after the game bullets and only when a performance stands out — ` +
+                      `including a reliever who gave up the decisive runs.\n\n`
+                    : '') +
                 `Rules:\n` +
                 `- Use only facts from the verified data above. Do not invent or embellish.\n` +
                 (isPostseason
