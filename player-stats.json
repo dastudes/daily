@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-10-04T09:00:27.858Z",
+  "updated": "2026-10-05T09:00:27.477Z",
   "batters": [
     {
       "name": "Nick Kurtz",
@@ -25882,7 +25882,7 @@
       "team": "Chicago Cubs",
       "teamAbbr": "CHC",
       "league": "NL",
-      "age": 32,
+      "age": 33,
       "g": 18,
       "gs": 0,
       "ip": 18.2,
@@ -30154,7 +30154,7 @@
       "team": "Pittsburgh Pirates",
       "teamAbbr": "PIT",
       "league": "NL",
-      "age": 26,
+      "age": 27,
       "g": 28,
       "gs": 28,
       "ip": 165.1,
