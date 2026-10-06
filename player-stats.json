@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-10-05T09:00:27.477Z",
+  "updated": "2026-10-06T09:00:39.598Z",
   "batters": [
     {
       "name": "Nick Kurtz",
@@ -11402,7 +11402,7 @@
       "team": "Milwaukee Brewers",
       "teamAbbr": "MIL",
       "league": "NL",
-      "age": 30,
+      "age": 31,
       "g": 144,
       "pa": 578,
       "ab": 477,
@@ -12428,7 +12428,7 @@
       "team": "Philadelphia Phillies",
       "teamAbbr": "PHI",
       "league": "NL",
-      "age": 28,
+      "age": 29,
       "g": 155,
       "pa": 604,
       "ab": 536,
@@ -21778,7 +21778,7 @@
       "team": "New York Yankees",
       "teamAbbr": "NYY",
       "league": "AL",
-      "age": 27,
+      "age": 28,
       "g": 4,
       "gs": 2,
       "ip": 12.2,
