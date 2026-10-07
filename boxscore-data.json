@@ -1,36 +1,36 @@
 {
-  "date": "2026-10-05",
-  "generatedAt": "October 6, 2026 at 5:00 AM EDT",
+  "date": "2026-10-06",
+  "generatedAt": "October 7, 2026 at 5:00 AM EDT",
   "games": [
     {
-      "gamePk": 849834,
-      "venue": "Progressive Field",
+      "gamePk": 849819,
+      "venue": "Truist Park",
       "series": {
         "mlbGameType": "D",
-        "seriesDescription": "AL Division Series",
-        "seriesGameNumber": 2,
+        "seriesDescription": "NL Division Series",
+        "seriesGameNumber": 3,
         "gamesInSeries": 5,
-        "result": "CWS leads 2-0",
+        "result": "LAD leads 2-1",
         "isOver": false,
         "awaySeriesWins": 2,
-        "homeSeriesWins": 0
+        "homeSeriesWins": 1
       },
       "away": {
-        "name": "Chicago White Sox",
-        "abbr": "CWS",
-        "score": 4
+        "name": "Los Angeles Dodgers",
+        "abbr": "LAD",
+        "score": 3
       },
       "home": {
-        "name": "Cleveland Guardians",
-        "abbr": "CLE",
-        "score": 3
+        "name": "Atlanta Braves",
+        "abbr": "ATL",
+        "score": 1
       },
       "linescore": {
         "innings": [
           {
             "inning": 1,
             "away": 0,
-            "home": 2
+            "home": 0
           },
           {
             "inning": 2,
@@ -44,17 +44,17 @@
           },
           {
             "inning": 4,
-            "away": 1,
+            "away": 3,
             "home": 0
           },
           {
             "inning": 5,
             "away": 0,
-            "home": 0
+            "home": 1
           },
           {
             "inning": 6,
-            "away": 3,
+            "away": 0,
             "home": 0
           },
           {
@@ -65,7 +65,7 @@
           {
             "inning": 8,
             "away": 0,
-            "home": 1
+            "home": 0
           },
           {
             "inning": 9,
@@ -75,25 +75,25 @@
         ],
         "totals": {
           "away": {
-            "runs": 4,
-            "hits": 6,
-            "errors": 1
+            "runs": 3,
+            "hits": 8,
+            "errors": 0
           },
           "home": {
-            "runs": 3,
-            "hits": 4,
-            "errors": 1
+            "runs": 1,
+            "hits": 5,
+            "errors": 2
           }
         }
       },
       "batting": {
         "away": [
           {
-            "name": "Sam Antonacci",
-            "PA": 4,
-            "AB": 4,
+            "name": "Mookie Betts",
+            "PA": 5,
+            "AB": 5,
             "R": 0,
-            "H": 0,
+            "H": 2,
             "doubles": 0,
             "triples": 0,
             "HR": 0,
@@ -101,45 +101,21 @@
             "BB": 0
           },
           {
-            "name": "Kyle Teel",
-            "PA": 4,
+            "name": "Freddie Freeman",
+            "PA": 5,
             "AB": 4,
             "R": 1,
             "H": 1,
             "doubles": 0,
             "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Miguel Vargas",
-            "PA": 4,
-            "AB": 2,
-            "R": 1,
-            "H": 1,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 2
-          },
-          {
-            "name": "Munetaka Murakami",
-            "PA": 4,
-            "AB": 4,
-            "R": 0,
-            "H": 1,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
+            "HR": 1,
             "RBI": 1,
-            "BB": 0
+            "BB": 1
           },
           {
-            "name": "Andrew Benintendi",
-            "PA": 2,
-            "AB": 2,
+            "name": "Teoscar Hernández",
+            "PA": 4,
+            "AB": 4,
             "R": 0,
             "H": 0,
             "doubles": 0,
@@ -149,10 +125,34 @@
             "BB": 0
           },
           {
-            "name": "Randal Grichuk",
-            "PA": 2,
+            "name": "Max Muncy",
+            "PA": 1,
             "AB": 1,
-            "R": 1,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Will Smith",
+            "PA": 4,
+            "AB": 4,
+            "R": 0,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Shohei Ohtani",
+            "PA": 3,
+            "AB": 2,
+            "R": 0,
             "H": 0,
             "doubles": 0,
             "triples": 0,
@@ -161,68 +161,8 @@
             "BB": 1
           },
           {
-            "name": "Tristan Peters",
-            "PA": 2,
-            "AB": 2,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Tommy Pham",
-            "PA": 1,
-            "AB": 1,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Brenton Doyle",
-            "PA": 1,
-            "AB": 1,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Braden Montgomery",
-            "PA": 4,
-            "AB": 4,
-            "R": 1,
-            "H": 1,
-            "doubles": 1,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 2,
-            "BB": 0
-          },
-          {
-            "name": "Chase Meidroth",
-            "PA": 4,
-            "AB": 4,
-            "R": 0,
-            "H": 2,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 1,
-            "BB": 0
-          },
-          {
-            "name": "Colson Montgomery",
-            "PA": 4,
+            "name": "Miguel Rojas",
+            "PA": 3,
             "AB": 3,
             "R": 0,
             "H": 0,
@@ -230,60 +170,60 @@
             "triples": 0,
             "HR": 0,
             "RBI": 0,
-            "BB": 1
+            "BB": 0
+          },
+          {
+            "name": "Tommy Edman",
+            "PA": 1,
+            "AB": 1,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Andy Pages",
+            "PA": 4,
+            "AB": 4,
+            "R": 1,
+            "H": 2,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Kyle Tucker",
+            "PA": 4,
+            "AB": 4,
+            "R": 0,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Enrique Hernández",
+            "PA": 4,
+            "AB": 4,
+            "R": 1,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 1,
+            "RBI": 2,
+            "BB": 0
           }
         ],
         "home": [
           {
-            "name": "Steven Kwan",
-            "PA": 4,
-            "AB": 4,
-            "R": 1,
-            "H": 1,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "José Ramírez",
-            "PA": 4,
-            "AB": 3,
-            "R": 1,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 1
-          },
-          {
-            "name": "Chase DeLauter",
-            "PA": 4,
-            "AB": 4,
-            "R": 1,
-            "H": 2,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Jo Adell",
-            "PA": 4,
-            "AB": 3,
-            "R": 0,
-            "H": 1,
-            "doubles": 0,
-            "triples": 1,
-            "HR": 0,
-            "RBI": 1,
-            "BB": 1
-          },
-          {
-            "name": "Nathaniel Lowe",
+            "name": "Drake Baldwin",
             "PA": 4,
             "AB": 4,
             "R": 0,
@@ -295,19 +235,7 @@
             "BB": 0
           },
           {
-            "name": "Angel Martínez",
-            "PA": 4,
-            "AB": 4,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Travis Bazzana",
+            "name": "Ronald Acuña Jr.",
             "PA": 4,
             "AB": 3,
             "R": 0,
@@ -319,11 +247,11 @@
             "BB": 1
           },
           {
-            "name": "Patrick Bailey",
+            "name": "Matt Olson",
             "PA": 4,
             "AB": 4,
             "R": 0,
-            "H": 0,
+            "H": 1,
             "doubles": 0,
             "triples": 0,
             "HR": 0,
@@ -331,9 +259,105 @@
             "BB": 0
           },
           {
-            "name": "Brayan Rocchio",
+            "name": "Ozzie Albies",
+            "PA": 4,
+            "AB": 4,
+            "R": 0,
+            "H": 1,
+            "doubles": 1,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Michael Harris II",
+            "PA": 4,
+            "AB": 4,
+            "R": 0,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Mauricio Dubón",
+            "PA": 4,
+            "AB": 4,
+            "R": 1,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Lane Thomas",
             "PA": 3,
             "AB": 3,
+            "R": 0,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Mike Yastrzemski",
+            "PA": 1,
+            "AB": 1,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Austin Riley",
+            "PA": 3,
+            "AB": 3,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Ha-Seong Kim",
+            "PA": 1,
+            "AB": 1,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Rowdy Tellez",
+            "PA": 1,
+            "AB": 0,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 1
+          },
+          {
+            "name": "Brewer Hicklen",
+            "PA": 1,
+            "AB": 1,
             "R": 0,
             "H": 0,
             "doubles": 0,
@@ -347,135 +371,126 @@
       "pitching": {
         "away": [
           {
-            "name": "Anthony Kay",
-            "IP": 0.1,
-            "H": 1,
+            "name": "Yoshinobu Yamamoto",
+            "IP": 7,
+            "H": 4,
             "ER": 1,
             "BB": 1,
-            "K": 0,
-            "par": -0.62
+            "K": 10,
+            "par": 3.91
           },
           {
-            "name": "Sean Newcomb",
-            "IP": 2,
-            "H": 1,
+            "name": "Tanner Scott",
+            "IP": 1,
+            "H": 0,
             "ER": 0,
             "BB": 1,
-            "K": 3,
-            "par": 1.16
+            "K": 2,
+            "par": 0.55
           },
           {
-            "name": "Sean Burke",
-            "IP": 5.1,
-            "H": 1,
-            "ER": 1,
-            "BB": 1,
-            "K": 6,
-            "par": 2.52
-          },
-          {
-            "name": "Grant Taylor",
-            "IP": 1.1,
+            "name": "Edwin Díaz",
+            "IP": 1,
             "H": 1,
             "ER": 0,
             "BB": 0,
             "K": 0,
-            "par": 0.54
+            "par": 0.49
           }
         ],
         "home": [
           {
-            "name": "Gavin Williams",
+            "name": "Chris Sale",
             "IP": 5,
-            "H": 4,
-            "ER": 2,
-            "BB": 3,
-            "K": 11,
-            "par": 2.19
+            "H": 7,
+            "ER": 3,
+            "BB": 0,
+            "K": 7,
+            "par": 0.31
           },
           {
-            "name": "Erik Sabrowski",
-            "IP": 0.2,
-            "H": 1,
-            "ER": 2,
-            "BB": 1,
-            "K": 0,
-            "par": -1.07
-          },
-          {
-            "name": "Hunter Gaddis",
+            "name": "Dylan Dodd",
             "IP": 1,
             "H": 1,
+            "ER": 0,
+            "BB": 0,
+            "K": 2,
+            "par": 0.72
+          },
+          {
+            "name": "Dylan Lee",
+            "IP": 1,
+            "H": 0,
             "ER": 0,
             "BB": 0,
             "K": 1,
             "par": 0.61
           },
           {
-            "name": "Shawn Armstrong",
-            "IP": 1.1,
-            "H": 0,
-            "ER": 0,
-            "BB": 0,
-            "K": 1,
-            "par": 0.66
-          },
-          {
-            "name": "Cade Smith",
+            "name": "Brent Suter",
             "IP": 1,
             "H": 0,
             "ER": 0,
-            "BB": 0,
+            "BB": 1,
             "K": 0,
-            "par": 0.49
+            "par": 0.33
+          },
+          {
+            "name": "Raisel Iglesias",
+            "IP": 1,
+            "H": 0,
+            "ER": 0,
+            "BB": 1,
+            "K": 2,
+            "par": 0.55
           }
         ]
       },
       "decisions": {
-        "winner": "Sean Burke",
-        "loser": "Erik Sabrowski",
-        "save": "Grant Taylor"
+        "winner": "Yoshinobu Yamamoto",
+        "loser": "Chris Sale",
+        "save": "Edwin Díaz"
       },
       "topWPAPlays": [
         {
-          "wpa": 0.287,
-          "inning": "TOP 6th",
-          "description": "Braden Montgomery doubles (1) on a sharp line drive to right fielder Chase DeLauter. Miguel Vargas scores. Randal Grichuk scores.",
-          "awayScore": 3,
-          "homeScore": 2
-        },
-        {
-          "wpa": 0.162,
-          "inning": "BOT 8th",
-          "description": "Jo Adell triples (1) on a sharp fly ball to left fielder Sam Antonacci. Chase DeLauter scores.",
-          "awayScore": 4,
-          "homeScore": 3
-        },
-        {
-          "wpa": 0.134,
-          "inning": "BOT 1st",
-          "description": "Nathaniel Lowe reaches on a throwing error by pitcher Sean Newcomb. Steven Kwan scores. José Ramírez scores. Jo Adell to 3rd.",
-          "awayScore": 0,
-          "homeScore": 2
-        },
-        {
-          "wpa": 0.128,
-          "inning": "TOP 6th",
-          "description": "Tommy Pham flies out to left fielder Angel Martínez.",
-          "awayScore": 1,
-          "homeScore": 2
+          "wpa": 0.208,
+          "inning": "TOP 4th",
+          "description": "Enrique Hernández homers (1) on a fly ball to left field. Andy Pages scores.",
+          "awayScore": 2,
+          "homeScore": 0
         },
         {
           "wpa": 0.116,
-          "inning": "BOT 8th",
-          "description": "Nathaniel Lowe flies out to left fielder Sam Antonacci.",
-          "awayScore": 4,
-          "homeScore": 3
+          "inning": "BOT 9th",
+          "description": "Ozzie Albies doubles (1) on a sharp line drive to center fielder Andy Pages.",
+          "awayScore": 3,
+          "homeScore": 1
+        },
+        {
+          "wpa": 0.093,
+          "inning": "TOP 4th",
+          "description": "Freddie Freeman homers (2) on a fly ball to right center field.",
+          "awayScore": 3,
+          "homeScore": 0
+        },
+        {
+          "wpa": 0.083,
+          "inning": "TOP 3rd",
+          "description": "Miguel Rojas lines out to right fielder Lane Thomas.",
+          "awayScore": 0,
+          "homeScore": 0
+        },
+        {
+          "wpa": 0.083,
+          "inning": "BOT 5th",
+          "description": "Ronald Acuña Jr. grounds out, second baseman Miguel Rojas to first baseman Freddie Freeman.",
+          "awayScore": 3,
+          "homeScore": 1
         }
       ],
-      "totalWPASwing": 2.9,
-      "comebackSize": 0.779,
-      "comebackTier": "came back from behind",
+      "totalWPASwing": 2.5,
+      "comebackSize": 0.555,
+      "comebackTier": null,
       "flags": {
         "walkoff": false,
         "extraInnings": false,
@@ -489,34 +504,34 @@
       }
     },
     {
-      "gamePk": 849839,
-      "venue": "Tropicana Field",
+      "gamePk": 849826,
+      "venue": "Petco Park",
       "series": {
         "mlbGameType": "D",
-        "seriesDescription": "AL Division Series",
-        "seriesGameNumber": 2,
+        "seriesDescription": "NL Division Series",
+        "seriesGameNumber": 3,
         "gamesInSeries": 5,
-        "result": "TB leads 2-0",
+        "result": "MIL leads 2-1",
         "isOver": false,
-        "awaySeriesWins": 0,
-        "homeSeriesWins": 2
+        "awaySeriesWins": 2,
+        "homeSeriesWins": 1
       },
       "away": {
-        "name": "New York Yankees",
-        "abbr": "NYY",
-        "score": 2
+        "name": "Milwaukee Brewers",
+        "abbr": "MIL",
+        "score": 3
       },
       "home": {
-        "name": "Tampa Bay Rays",
-        "abbr": "TB",
-        "score": 5
+        "name": "San Diego Padres",
+        "abbr": "SD",
+        "score": 4
       },
       "linescore": {
         "innings": [
           {
             "inning": 1,
             "away": 0,
-            "home": 1
+            "home": 0
           },
           {
             "inning": 2,
@@ -526,7 +541,7 @@
           {
             "inning": 3,
             "away": 0,
-            "home": 0
+            "home": 2
           },
           {
             "inning": 4,
@@ -535,22 +550,22 @@
           },
           {
             "inning": 5,
-            "away": 0,
-            "home": 4
+            "away": 1,
+            "home": 1
           },
           {
             "inning": 6,
             "away": 0,
-            "home": 0
+            "home": 1
           },
           {
             "inning": 7,
-            "away": 0,
+            "away": 1,
             "home": 0
           },
           {
             "inning": 8,
-            "away": 1,
+            "away": 0,
             "home": 0
           },
           {
@@ -561,13 +576,13 @@
         ],
         "totals": {
           "away": {
-            "runs": 2,
-            "hits": 4,
-            "errors": 4
+            "runs": 3,
+            "hits": 11,
+            "errors": 1
           },
           "home": {
-            "runs": 5,
-            "hits": 8,
+            "runs": 4,
+            "hits": 6,
             "errors": 0
           }
         }
@@ -575,19 +590,91 @@
       "batting": {
         "away": [
           {
-            "name": "Ben Rice",
-            "PA": 4,
-            "AB": 3,
+            "name": "Jackson Chourio",
+            "PA": 5,
+            "AB": 4,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 1,
+            "BB": 0
+          },
+          {
+            "name": "Jake Bauers",
+            "PA": 5,
+            "AB": 4,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 1
+          },
+          {
+            "name": "William Contreras",
+            "PA": 5,
+            "AB": 4,
             "R": 2,
+            "H": 3,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 1,
+            "RBI": 1,
+            "BB": 1
+          },
+          {
+            "name": "Brice Turang",
+            "PA": 5,
+            "AB": 4,
+            "R": 0,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 1
+          },
+          {
+            "name": "Christian Yelich",
+            "PA": 5,
+            "AB": 4,
+            "R": 0,
             "H": 2,
             "doubles": 0,
             "triples": 0,
-            "HR": 2,
-            "RBI": 2,
+            "HR": 0,
+            "RBI": 1,
             "BB": 1
           },
           {
-            "name": "Cody Bellinger",
+            "name": "Garrett Mitchell",
+            "PA": 4,
+            "AB": 4,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Cooper Pratt",
+            "PA": 4,
+            "AB": 4,
+            "R": 1,
+            "H": 2,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Sal Frelick",
             "PA": 4,
             "AB": 4,
             "R": 0,
@@ -599,82 +686,84 @@
             "BB": 0
           },
           {
-            "name": "Luis García Jr.",
-            "PA": 4,
-            "AB": 4,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Spencer Jones",
-            "PA": 4,
-            "AB": 4,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "George Lombard Jr.",
-            "PA": 4,
-            "AB": 4,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Jazz Chisholm Jr.",
-            "PA": 4,
-            "AB": 4,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Trent Grisham",
+            "name": "Joey Ortiz",
             "PA": 3,
-            "AB": 3,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Austin Wells",
-            "PA": 3,
-            "AB": 3,
+            "AB": 2,
             "R": 0,
             "H": 1,
-            "doubles": 1,
+            "doubles": 0,
             "triples": 0,
             "HR": 0,
             "RBI": 0,
             "BB": 0
           },
           {
-            "name": "Ryan McMahon",
-            "PA": 2,
+            "name": "David Hamilton",
+            "PA": 1,
             "AB": 1,
             "R": 0,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          }
+        ],
+        "home": [
+          {
+            "name": "Fernando Tatis Jr.",
+            "PA": 4,
+            "AB": 4,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 1,
+            "BB": 0
+          },
+          {
+            "name": "Jackson Merrill",
+            "PA": 4,
+            "AB": 4,
+            "R": 1,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Manny Machado",
+            "PA": 4,
+            "AB": 3,
+            "R": 0,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 1,
+            "BB": 1
+          },
+          {
+            "name": "Ty France",
+            "PA": 4,
+            "AB": 4,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Ethan Salas",
+            "PA": 4,
+            "AB": 3,
+            "R": 0,
             "H": 0,
             "doubles": 0,
             "triples": 0,
@@ -683,7 +772,31 @@
             "BB": 1
           },
           {
-            "name": "Paul Goldschmidt",
+            "name": "Xander Bogaerts",
+            "PA": 3,
+            "AB": 3,
+            "R": 1,
+            "H": 1,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Dustin Harris",
+            "PA": 2,
+            "AB": 2,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Miguel Andujar",
             "PA": 1,
             "AB": 1,
             "R": 0,
@@ -693,115 +806,29 @@
             "HR": 0,
             "RBI": 0,
             "BB": 0
-          }
-        ],
-        "home": [
-          {
-            "name": "Yandy Díaz",
-            "PA": 5,
-            "AB": 4,
-            "R": 1,
-            "H": 1,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 1
           },
           {
-            "name": "Jonathan Aranda",
-            "PA": 5,
-            "AB": 5,
-            "R": 1,
-            "H": 2,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Junior Caminero",
-            "PA": 4,
-            "AB": 4,
-            "R": 1,
-            "H": 2,
-            "doubles": 1,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Liam Hicks",
+            "name": "Samad Taylor",
             "PA": 3,
             "AB": 3,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 1,
-            "BB": 0
-          },
-          {
-            "name": "Chandler Simpson",
-            "PA": 4,
-            "AB": 4,
             "R": 1,
             "H": 1,
             "doubles": 0,
             "triples": 0,
             "HR": 0,
-            "RBI": 1,
+            "RBI": 0,
             "BB": 0
           },
           {
-            "name": "Victor Mesa Jr.",
-            "PA": 4,
-            "AB": 3,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 1
-          },
-          {
-            "name": "Jonny DeLuca",
-            "PA": 4,
-            "AB": 4,
+            "name": "Jake Cronenworth",
+            "PA": 3,
+            "AB": 2,
             "R": 1,
-            "H": 1,
-            "doubles": 1,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Richie Palacios",
-            "PA": 4,
-            "AB": 4,
-            "R": 0,
-            "H": 1,
+            "H": 2,
             "doubles": 0,
             "triples": 0,
-            "HR": 0,
-            "RBI": 2,
-            "BB": 0
-          },
-          {
-            "name": "Taylor Walls",
-            "PA": 4,
-            "AB": 4,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
+            "HR": 1,
+            "RBI": 1,
             "BB": 0
           }
         ]
@@ -809,143 +836,143 @@
       "pitching": {
         "away": [
           {
-            "name": "Cam Schlittler",
-            "IP": 4.1,
-            "H": 6,
+            "name": "Dustin May",
+            "IP": 3,
+            "H": 3,
             "ER": 2,
-            "BB": 1,
-            "K": 2,
-            "par": 1.08
+            "BB": 2,
+            "K": 3,
+            "par": 0.48
           },
           {
-            "name": "Brent Headrick",
-            "IP": 0.2,
+            "name": "JoJo Romero",
+            "IP": 1.2,
             "H": 1,
-            "ER": 0,
+            "ER": 1,
             "BB": 0,
-            "K": 1,
-            "par": 0.21
+            "K": 2,
+            "par": -0.41
           },
           {
-            "name": "John Schreiber",
+            "name": "Antonio Senzatela",
             "IP": 1,
-            "H": 0,
+            "H": 1,
             "ER": 0,
             "BB": 0,
             "K": 1,
             "par": 0.61
           },
           {
-            "name": "Ryan Weathers",
-            "IP": 0.2,
-            "H": 0,
+            "name": "DL Hall",
+            "IP": 1.1,
+            "H": 1,
             "ER": 0,
-            "BB": 1,
-            "K": 0,
-            "par": -0.07
+            "BB": 0,
+            "K": 1,
+            "par": 0.66
           },
           {
-            "name": "Paul Blackburn",
+            "name": "Abner Uribe",
             "IP": 1,
             "H": 0,
             "ER": 0,
             "BB": 0,
             "K": 0,
             "par": 0.49
-          },
-          {
-            "name": "David Bednar",
-            "IP": 0.1,
-            "H": 1,
-            "ER": 0,
-            "BB": 0,
-            "K": 0,
-            "par": 0.05
           }
         ],
         "home": [
           {
-            "name": "Freddy Peralta",
-            "IP": 4.2,
-            "H": 3,
-            "ER": 1,
-            "BB": 1,
-            "K": 3,
-            "par": 1.02
+            "name": "Nick Pivetta",
+            "IP": 4.1,
+            "H": 5,
+            "ER": 2,
+            "BB": 0,
+            "K": 4,
+            "par": 0.75
           },
           {
-            "name": "Cam Booser",
+            "name": "Jason Adam",
             "IP": 0.1,
-            "H": 0,
+            "H": 1,
             "ER": 0,
             "BB": 1,
             "K": 0,
             "par": -0.12
           },
           {
-            "name": "Ian Seymour",
-            "IP": 3,
+            "name": "Yuki Matsui",
+            "IP": 1,
             "H": 1,
-            "ER": 1,
-            "BB": 0,
-            "K": 4,
-            "par": 0.71
+            "ER": 0,
+            "BB": 1,
+            "K": 1,
+            "par": 0.44
           },
           {
-            "name": "Bryan Baker",
-            "IP": 1,
-            "H": 0,
-            "ER": 0,
+            "name": "Bradgley Rodriguez",
+            "IP": 1.1,
+            "H": 3,
+            "ER": 1,
             "BB": 0,
-            "K": 0,
-            "par": 0.49
+            "K": 3,
+            "par": 0.38
+          },
+          {
+            "name": "Michael King",
+            "IP": 2,
+            "H": 1,
+            "ER": 0,
+            "BB": 2,
+            "K": 1,
+            "par": 0.77
           }
         ]
       },
       "decisions": {
-        "winner": "Cam Booser",
-        "loser": "Cam Schlittler",
-        "save": "Bryan Baker"
+        "winner": "Yuki Matsui",
+        "loser": "JoJo Romero",
+        "save": "Michael King"
       },
       "topWPAPlays": [
         {
-          "wpa": 0.128,
-          "inning": "BOT 5th",
-          "description": "Junior Caminero doubles (1) on a sharp line drive to center fielder Trent Grisham. Jonathan Aranda to 3rd.",
-          "awayScore": 1,
-          "homeScore": 1
+          "wpa": 0.289,
+          "inning": "TOP 9th",
+          "description": "Christian Yelich grounds into a double play, shortstop Xander Bogaerts to first baseman Ty France. Brice Turang out at 2nd. Christian Yelich out at 1st.",
+          "awayScore": 3,
+          "homeScore": 4
         },
         {
-          "wpa": 0.123,
+          "wpa": 0.141,
+          "inning": "BOT 5th",
+          "description": "Jake Cronenworth homers (1) on a fly ball to right field.",
+          "awayScore": 2,
+          "homeScore": 3
+        },
+        {
+          "wpa": 0.114,
+          "inning": "TOP 9th",
+          "description": "Ethan Salas challenged (pitch result), call on the field was confirmed: Brice Turang walks. Luis Lara to 2nd.",
+          "awayScore": 3,
+          "homeScore": 4
+        },
+        {
+          "wpa": 0.112,
+          "inning": "TOP 7th",
+          "description": "Christian Yelich singles on a sharp line drive to center fielder Jackson Merrill. William Contreras scores. Brice Turang to 2nd.",
+          "awayScore": 3,
+          "homeScore": 4
+        },
+        {
+          "wpa": 0.106,
           "inning": "TOP 4th",
-          "description": "Ben Rice homers (3) on a fly ball to right field.",
+          "description": "William Contreras homers (2) on a fly ball to left field.",
           "awayScore": 1,
-          "homeScore": 1
-        },
-        {
-          "wpa": 0.107,
-          "inning": "BOT 5th",
-          "description": "Richie Palacios singles on a line drive to center fielder Trent Grisham. Chandler Simpson scores. Jonny DeLuca scores.",
-          "awayScore": 1,
-          "homeScore": 5
-        },
-        {
-          "wpa": 0.098,
-          "inning": "TOP 5th",
-          "description": "Cody Bellinger flies out sharply to center fielder Jonny DeLuca.",
-          "awayScore": 1,
-          "homeScore": 1
-        },
-        {
-          "wpa": 0.054,
-          "inning": "BOT 2nd",
-          "description": "Jonny DeLuca doubles (1) on a fly ball to left fielder Cody Bellinger.",
-          "awayScore": 0,
-          "homeScore": 1
+          "homeScore": 2
         }
       ],
-      "totalWPASwing": 1.85,
-      "comebackSize": 0.544,
+      "totalWPASwing": 3.01,
+      "comebackSize": 0.531,
       "comebackTier": null,
       "flags": {
         "walkoff": false,
@@ -963,54 +990,54 @@
   "postponedGames": [],
   "topWPAPlaysAllGames": [
     {
-      "game": "CWS @ CLE",
-      "wpa": 0.287,
-      "inning": "TOP 6th",
-      "description": "Braden Montgomery doubles (1) on a sharp line drive to right fielder Chase DeLauter. Miguel Vargas scores. Randal Grichuk scores.",
-      "awayAbbr": "CWS",
-      "homeAbbr": "CLE",
+      "game": "MIL @ SD",
+      "wpa": 0.289,
+      "inning": "TOP 9th",
+      "description": "Christian Yelich grounds into a double play, shortstop Xander Bogaerts to first baseman Ty France. Brice Turang out at 2nd. Christian Yelich out at 1st.",
+      "awayAbbr": "MIL",
+      "homeAbbr": "SD",
       "awayScore": 3,
-      "homeScore": 2
+      "homeScore": 4
     },
     {
-      "game": "CWS @ CLE",
-      "wpa": 0.162,
-      "inning": "BOT 8th",
-      "description": "Jo Adell triples (1) on a sharp fly ball to left fielder Sam Antonacci. Chase DeLauter scores.",
-      "awayAbbr": "CWS",
-      "homeAbbr": "CLE",
-      "awayScore": 4,
+      "game": "LAD @ ATL",
+      "wpa": 0.208,
+      "inning": "TOP 4th",
+      "description": "Enrique Hernández homers (1) on a fly ball to left field. Andy Pages scores.",
+      "awayAbbr": "LAD",
+      "homeAbbr": "ATL",
+      "awayScore": 2,
+      "homeScore": 0
+    },
+    {
+      "game": "MIL @ SD",
+      "wpa": 0.141,
+      "inning": "BOT 5th",
+      "description": "Jake Cronenworth homers (1) on a fly ball to right field.",
+      "awayAbbr": "MIL",
+      "homeAbbr": "SD",
+      "awayScore": 2,
       "homeScore": 3
     },
     {
-      "game": "CWS @ CLE",
-      "wpa": 0.134,
-      "inning": "BOT 1st",
-      "description": "Nathaniel Lowe reaches on a throwing error by pitcher Sean Newcomb. Steven Kwan scores. José Ramírez scores. Jo Adell to 3rd.",
-      "awayAbbr": "CWS",
-      "homeAbbr": "CLE",
-      "awayScore": 0,
-      "homeScore": 2
-    },
-    {
-      "game": "CWS @ CLE",
-      "wpa": 0.128,
-      "inning": "TOP 6th",
-      "description": "Tommy Pham flies out to left fielder Angel Martínez.",
-      "awayAbbr": "CWS",
-      "homeAbbr": "CLE",
-      "awayScore": 1,
-      "homeScore": 2
-    },
-    {
-      "game": "NYY @ TB",
-      "wpa": 0.128,
-      "inning": "BOT 5th",
-      "description": "Junior Caminero doubles (1) on a sharp line drive to center fielder Trent Grisham. Jonathan Aranda to 3rd.",
-      "awayAbbr": "NYY",
-      "homeAbbr": "TB",
-      "awayScore": 1,
+      "game": "LAD @ ATL",
+      "wpa": 0.116,
+      "inning": "BOT 9th",
+      "description": "Ozzie Albies doubles (1) on a sharp line drive to center fielder Andy Pages.",
+      "awayAbbr": "LAD",
+      "homeAbbr": "ATL",
+      "awayScore": 3,
       "homeScore": 1
+    },
+    {
+      "game": "MIL @ SD",
+      "wpa": 0.114,
+      "inning": "TOP 9th",
+      "description": "Ethan Salas challenged (pitch result), call on the field was confirmed: Brice Turang walks. Luis Lara to 2nd.",
+      "awayAbbr": "MIL",
+      "homeAbbr": "SD",
+      "awayScore": 3,
+      "homeScore": 4
     }
   ]
 }
