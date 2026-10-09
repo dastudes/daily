@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-10-08T09:00:26.623Z",
+  "updated": "2026-10-09T09:00:41.871Z",
   "batters": [
     {
       "name": "Nick Kurtz",
@@ -15506,7 +15506,7 @@
       "team": "Washington Nationals",
       "teamAbbr": "WSH",
       "league": "NL",
-      "age": 24,
+      "age": 25,
       "g": 17,
       "pa": 47,
       "ab": 47,
@@ -28066,7 +28066,7 @@
       "team": "Miami Marlins",
       "teamAbbr": "MIA",
       "league": "NL",
-      "age": 26,
+      "age": 27,
       "g": 53,
       "gs": 0,
       "ip": 58.2,
@@ -32578,7 +32578,7 @@
       "team": "Washington Nationals",
       "teamAbbr": "WSH",
       "league": "NL",
-      "age": 27,
+      "age": 28,
       "g": 50,
       "gs": 0,
       "ip": 48,
