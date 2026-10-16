@@ -159,7 +159,7 @@ function formatBoxscoreForPrompt(boxscore) {
         if (game.topWPAPlays && game.topWPAPlays.length > 0) {
             lines.push(`\nTop WPA Plays:`);
             for (const play of game.topWPAPlays) {
-                lines.push(`  ${play.inning} WPA+${play.wpa}: ${play.description}`);
+                lines.push(`  ${play.inning} WPA+${play.wpa}${runsOnPlayTag(play)}: ${play.description}`);
             }
         }
     }
@@ -192,9 +192,18 @@ function formatStandingsForPrompt(standings) {
     return lines.join('\n');
 }
 
+// States explicitly whether a run scored on a play. WPA measures win probability, not runs,
+// so a high-WPA play (e.g. a double that moves the tying run to third) can score nobody.
+// Empty string when the data lacks the field (older boxscore-data.json).
+function runsOnPlayTag(p) {
+    if (p.runsOnPlay === 0) return ' [NO RUNS SCORED ON THIS PLAY]';
+    if (p.runsOnPlay > 0) return ` [${p.runsOnPlay} run${p.runsOnPlay === 1 ? '' : 's'} scored on this play]`;
+    return '';
+}
+
 function formatAllWPAForPrompt(boxscore) {
     return (boxscore.topWPAPlaysAllGames || [])
-        .map(p => `${p.awayAbbr}@${p.homeAbbr} ${p.inning} WPA+${p.wpa}: ${p.description}`)
+        .map(p => `${p.awayAbbr}@${p.homeAbbr} ${p.inning} WPA+${p.wpa}${runsOnPlayTag(p)}: ${p.description}`)
         .join('\n');
 }
 
@@ -969,7 +978,7 @@ function buildFactSheet(boxscoreData, standingsData, playerStatsData) {
             const half = /^BOT/.test(top.inning) ? g.home : g.away;
             const walkoff = findWalkoffPlay(g) === top ? ' (walk-off)' : '';
             s4c.push(`- ${label}: ${top.inning.replace(/^BOT/, 'bottom').replace(/^TOP/, 'top')}, ${half.abbr} batting${walkoff}, ` +
-                     `WPA swing ${top.wpa.toFixed(3)}, score after play ${g.away.abbr} ${top.awayScore}-${g.home.abbr} ${top.homeScore}: ${top.description}`);
+                     `WPA swing ${top.wpa.toFixed(3)}${runsOnPlayTag(top)}, score after play ${g.away.abbr} ${top.awayScore}-${g.home.abbr} ${top.homeScore}: ${top.description}`);
         }
         sections.push(s4c.join('\n'));
     }
@@ -1295,6 +1304,15 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
         `the road has nothing to do with Coors Field. Never use a pitcher's team identity to ` +
         `infer ballpark context — only use the venue field in the data.`;
 
+    const wpaPlayNote =
+        `WPA measures the change in win probability, not runs. A play can have a large WPA ` +
+        `without any run scoring (a double or error that puts the tying run in scoring position, ` +
+        `a walk that loads the bases). Never say a play scored, drove in, tied the game, or cut a ` +
+        `deficit unless the play is tagged with runs scored or its description says a run scored. ` +
+        `A play tagged [NO RUNS SCORED ON THIS PLAY] changed the baserunners, not the score — ` +
+        `describe what it did on the bases (runner to third, tying run in scoring position) ` +
+        `rather than what it did to the score.`;
+
     const pennantRaceNote = isPostseason
         ? `CRITICAL: This is a postseason day. There are no division or wild card races — the regular season is over ` +
           `and the standings in Section 6 are final. Never describe a team as gaining ground, extending a lead, or moving in the standings. ` +
@@ -1307,7 +1325,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
           `If a team does not appear in Section 2, their standings position is unchanged — ` +
           `do not say they extended, maintained, or grew any lead. Report the win; say nothing about the standings.`;
 
-    const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}\n\n${noStatsNote}\n\n${coorsNote}\n\n${lwtsNote}\n\n${pennantRaceNote}`;
+    const sharedNotes = `\n\n${dataIntegrityNote}\n\n${homeAwayNote}\n\n${teamIdNote}\n\n${boldNamesNote}\n\n${parNote}\n\n${noStatsNote}\n\n${coorsNote}\n\n${lwtsNote}\n\n${wpaPlayNote}\n\n${pennantRaceNote}`;
 
     const walksNote =
         `When mentioning a batter's performance, always include walks separately from hits. ` +
@@ -1386,6 +1404,7 @@ function buildPrompts(date, boxStr, standStr, wpaStr, topBattersStr, topPitchers
                 (isPostseason
                     ? `- Series claims (series record, game number, clinches, eliminations, who faces elimination next) must come directly from Section 2 (Postseason Series Status) of the verified facts. Do not describe any team as gaining ground, leading a division, or moving in the standings — the regular season is over and Section 6 holds final standings only.\n`
                     : `- Standings claims (division leads, games back, pennant race movement) must come directly from Section 2 or Section 6 of the verified facts. If a team does not appear in Section 2, do not characterize their result as gaining or extending a lead — report the win or loss only.\n`) +
+                `- ${wpaPlayNote}\n` +
                 `- Bold all player names using **Name** format.\n` +
                 `- Do not include statistics in prose — stats will be inserted automatically next to player names.\n` +
                 `- If Section 7 contains notable events, they must appear in the bullets.\n` +
@@ -1433,6 +1452,7 @@ async function verifyNarrative(client, text, sourceData, postseasonContext = nul
             : `   - Standings claims: which team leads each division, games back, wild card position\n`) +
         `   - Superlative claims: any use of "best", "worst", "most", "fewest", "only", "first", "top" — verify these against the full standings and league leader data\n` +
         `   - Scoring attribution: verify which team scored in any referenced inning or rally\n` +
+        `   - Runs on a play: WPA is win probability, not runs. If the narrative says a play scored, drove in, tied the game, or cut a deficit, confirm a run actually scored on that play (a play tagged [NO RUNS SCORED ON THIS PLAY] scored none). Correct the wording to what the play did on the bases instead\n` +
         `   - Home/away: verify any claim about where a game was played\n` +
         `   - Doubleheader and series outcomes: any claim that teams "split", "swept", or "took" a doubleheader — verify each game result individually against the source data. A split means exactly one win per side; a sweep means all games to one team. Correct any characterization not supported by the complete game record.\n` +
         `5. Do not change the writing style, tone, structure, or any sentence that is factually correct\n` +

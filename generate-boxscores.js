@@ -414,6 +414,22 @@ async function fetchWPA(gamePk) {
     }
 }
 
+// Runs that scored on each play = change in combined score from the previous play.
+// The winProbability endpoint lists plays in order and gives the score AFTER each one.
+// A big WPA swing does not mean a run scored (e.g. a double that puts the tying run on
+// third), so the Daily Brief needs this stated as a fact. null when scores are missing.
+function addRunsOnPlay(plays) {
+    let prevTotal = 0;
+    for (const p of plays || []) {
+        const a = p.result && p.result.awayScore;
+        const h = p.result && p.result.homeScore;
+        if (typeof a !== 'number' || typeof h !== 'number') { p.runsOnPlay = null; continue; }
+        p.runsOnPlay = Math.max(0, (a + h) - prevTotal);
+        prevTotal = a + h;
+    }
+    return plays;
+}
+
 // Running home-team win probability per play. Uses the raw homeTeamWinProbability
 // field when present; otherwise derives it by cumulatively summing the WPA deltas
 // starting from an even 50/50 game.
@@ -660,7 +676,7 @@ async function generateHTML() {
         console.log(`Fetching boxscore for ${awayTeam.name} @ ${homeTeam.name}...`);
         const boxscore = await fetchBoxscore(game.gamePk);
         console.log(`Fetching WPA for ${awayTeam.name} @ ${homeTeam.name}...`);
-        const wpaPlays = await fetchWPA(game.gamePk);
+        const wpaPlays = addRunsOnPlay(await fetchWPA(game.gamePk));
         return { game, boxscore, wpaPlays };
     });
 
@@ -764,6 +780,7 @@ async function generateHTML() {
                     event: (play.result && play.result.event) || '',
                     awayScore: play.result && play.result.awayScore !== undefined ? play.result.awayScore : '',
                     homeScore: play.result && play.result.homeScore !== undefined ? play.result.homeScore : '',
+                    runsOnPlay: play.runsOnPlay,
                     awayAbbr,
                     homeAbbr,
                 });
@@ -903,6 +920,7 @@ async function generateHTML() {
                     description: (p.result && p.result.description) || '',
                     awayScore: p.result && p.result.awayScore !== undefined ? p.result.awayScore : null,
                     homeScore: p.result && p.result.homeScore !== undefined ? p.result.homeScore : null,
+                    runsOnPlay: p.runsOnPlay,
                 })),
             totalWPASwing: parseFloat((gameAbsWPA / 100).toFixed(2)),
             comebackSize,
@@ -1441,6 +1459,7 @@ async function generateHTML() {
             homeAbbr: p.homeAbbr,
             awayScore: p.awayScore !== '' ? p.awayScore : null,
             homeScore: p.homeScore !== '' ? p.homeScore : null,
+            runsOnPlay: p.runsOnPlay,
         })),
     };
     fs.writeFileSync('boxscore-data.json', JSON.stringify(boxscoreJson, null, 2));
