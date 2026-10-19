@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-10-18T09:00:37.378Z",
+  "updated": "2026-10-19T09:00:50.468Z",
   "batters": [
     {
       "name": "Nick Kurtz",
@@ -143,7 +143,7 @@
       "team": "Athletics",
       "teamAbbr": "ATH",
       "league": "AL",
-      "age": 26,
+      "age": 27,
       "g": 111,
       "pa": 432,
       "ab": 394,
