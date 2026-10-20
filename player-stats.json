@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "updated": "2026-10-19T09:00:50.468Z",
+  "updated": "2026-10-20T09:00:30.040Z",
   "batters": [
     {
       "name": "Nick Kurtz",
@@ -13994,7 +13994,7 @@
       "team": "San Francisco Giants",
       "teamAbbr": "SF",
       "league": "NL",
-      "age": 21,
+      "age": 22,
       "g": 107,
       "pa": 448,
       "ab": 386,
@@ -23572,7 +23572,7 @@
       "team": "Toronto Blue Jays",
       "teamAbbr": "TOR",
       "league": "AL",
-      "age": 27,
+      "age": 28,
       "g": 32,
       "gs": 32,
       "ip": 177.1,
@@ -31684,7 +31684,7 @@
       "team": "San Francisco Giants",
       "teamAbbr": "SF",
       "league": "NL",
-      "age": 25,
+      "age": 26,
       "g": 8,
       "gs": 8,
       "ip": 34.2,
