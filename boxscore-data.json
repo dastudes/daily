@@ -1,29 +1,29 @@
 {
-  "date": "2026-10-27",
-  "generatedAt": "October 28, 2026 at 5:00 AM EDT",
+  "date": "2026-10-28",
+  "generatedAt": "October 29, 2026 at 5:00 AM EDT",
   "games": [
     {
-      "gamePk": 849803,
+      "gamePk": 849799,
       "venue": "Tropicana Field",
       "series": {
         "mlbGameType": "W",
         "seriesDescription": "World Series",
-        "seriesGameNumber": 4,
+        "seriesGameNumber": 5,
         "gamesInSeries": 7,
-        "result": "MIL leads 3-1",
-        "isOver": false,
-        "awaySeriesWins": 3,
+        "result": "MIL wins 4-1",
+        "isOver": true,
+        "awaySeriesWins": 4,
         "homeSeriesWins": 1
       },
       "away": {
         "name": "Milwaukee Brewers",
         "abbr": "MIL",
-        "score": 3
+        "score": 4
       },
       "home": {
         "name": "Tampa Bay Rays",
         "abbr": "TB",
-        "score": 4
+        "score": 1
       },
       "linescore": {
         "innings": [
@@ -34,8 +34,8 @@
           },
           {
             "inning": 2,
-            "away": 0,
-            "home": 1
+            "away": 1,
+            "home": 0
           },
           {
             "inning": 3,
@@ -44,8 +44,8 @@
           },
           {
             "inning": 4,
-            "away": 1,
-            "home": 1
+            "away": 0,
+            "home": 0
           },
           {
             "inning": 5,
@@ -54,7 +54,7 @@
           },
           {
             "inning": 6,
-            "away": 0,
+            "away": 2,
             "home": 0
           },
           {
@@ -70,34 +70,19 @@
           {
             "inning": 9,
             "away": 0,
-            "home": 0
-          },
-          {
-            "inning": 10,
-            "away": 0,
-            "home": 0
-          },
-          {
-            "inning": 11,
-            "away": 0,
-            "home": 0
-          },
-          {
-            "inning": 12,
-            "away": 1,
-            "home": 2
+            "home": 1
           }
         ],
         "totals": {
           "away": {
-            "runs": 3,
+            "runs": 4,
             "hits": 8,
             "errors": 2
           },
           "home": {
-            "runs": 4,
-            "hits": 9,
-            "errors": 1
+            "runs": 1,
+            "hits": 4,
+            "errors": 0
           }
         }
       },
@@ -105,11 +90,11 @@
         "away": [
           {
             "name": "Jackson Chourio",
-            "PA": 6,
-            "AB": 6,
+            "PA": 4,
+            "AB": 4,
             "R": 0,
-            "H": 2,
-            "doubles": 1,
+            "H": 1,
+            "doubles": 0,
             "triples": 0,
             "HR": 0,
             "RBI": 0,
@@ -117,8 +102,8 @@
           },
           {
             "name": "Jake Bauers",
-            "PA": 6,
-            "AB": 6,
+            "PA": 4,
+            "AB": 4,
             "R": 0,
             "H": 0,
             "doubles": 0,
@@ -129,7 +114,43 @@
           },
           {
             "name": "Christian Yelich",
-            "PA": 5,
+            "PA": 4,
+            "AB": 3,
+            "R": 1,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 1
+          },
+          {
+            "name": "William Contreras",
+            "PA": 4,
+            "AB": 4,
+            "R": 1,
+            "H": 1,
+            "doubles": 1,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 1,
+            "BB": 0
+          },
+          {
+            "name": "Brice Turang",
+            "PA": 4,
+            "AB": 4,
+            "R": 1,
+            "H": 2,
+            "doubles": 1,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Sal Frelick",
+            "PA": 4,
             "AB": 3,
             "R": 0,
             "H": 0,
@@ -137,100 +158,52 @@
             "triples": 0,
             "HR": 0,
             "RBI": 0,
-            "BB": 2
-          },
-          {
-            "name": "William Contreras",
-            "PA": 5,
-            "AB": 4,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
             "BB": 1
-          },
-          {
-            "name": "Brice Turang",
-            "PA": 5,
-            "AB": 4,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 1
-          },
-          {
-            "name": "Sal Frelick",
-            "PA": 5,
-            "AB": 5,
-            "R": 1,
-            "H": 1,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
           },
           {
             "name": "Cooper Pratt",
-            "PA": 5,
-            "AB": 5,
+            "PA": 4,
+            "AB": 3,
             "R": 1,
-            "H": 4,
-            "doubles": 1,
+            "H": 2,
+            "doubles": 0,
             "triples": 0,
-            "HR": 1,
+            "HR": 0,
             "RBI": 2,
             "BB": 0
           },
           {
             "name": "Garrett Mitchell",
-            "PA": 5,
-            "AB": 5,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "David Hamilton",
-            "PA": 3,
+            "PA": 4,
             "AB": 3,
-            "R": 1,
+            "R": 0,
             "H": 1,
             "doubles": 0,
             "triples": 0,
-            "HR": 1,
-            "RBI": 1,
-            "BB": 0
+            "HR": 0,
+            "RBI": 0,
+            "BB": 1
           },
           {
-            "name": "Joey Ortiz",
-            "PA": 2,
-            "AB": 2,
+            "name": "David Hamilton",
+            "PA": 4,
+            "AB": 4,
             "R": 0,
-            "H": 0,
+            "H": 1,
             "doubles": 0,
             "triples": 0,
             "HR": 0,
-            "RBI": 0,
+            "RBI": 1,
             "BB": 0
           }
         ],
         "home": [
           {
             "name": "Yandy Díaz",
-            "PA": 5,
-            "AB": 4,
+            "PA": 4,
+            "AB": 3,
             "R": 0,
-            "H": 1,
+            "H": 0,
             "doubles": 0,
             "triples": 0,
             "HR": 0,
@@ -239,8 +212,8 @@
           },
           {
             "name": "Jonathan Aranda",
-            "PA": 5,
-            "AB": 5,
+            "PA": 4,
+            "AB": 4,
             "R": 0,
             "H": 0,
             "doubles": 0,
@@ -251,9 +224,9 @@
           },
           {
             "name": "Junior Caminero",
-            "PA": 5,
-            "AB": 5,
-            "R": 1,
+            "PA": 4,
+            "AB": 4,
+            "R": 0,
             "H": 1,
             "doubles": 0,
             "triples": 0,
@@ -263,10 +236,22 @@
           },
           {
             "name": "Liam Hicks",
-            "PA": 5,
-            "AB": 5,
+            "PA": 4,
+            "AB": 3,
+            "R": 1,
+            "H": 1,
+            "doubles": 1,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 1
+          },
+          {
+            "name": "Jonny DeLuca",
+            "PA": 4,
+            "AB": 4,
             "R": 0,
-            "H": 2,
+            "H": 0,
             "doubles": 0,
             "triples": 0,
             "HR": 0,
@@ -274,23 +259,11 @@
             "BB": 0
           },
           {
-            "name": "Jonny DeLuca",
-            "PA": 5,
-            "AB": 5,
-            "R": 1,
-            "H": 1,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 1,
-            "BB": 0
-          },
-          {
             "name": "Chandler Simpson",
-            "PA": 5,
-            "AB": 5,
+            "PA": 4,
+            "AB": 4,
             "R": 0,
-            "H": 3,
+            "H": 2,
             "doubles": 1,
             "triples": 0,
             "HR": 0,
@@ -298,9 +271,33 @@
             "BB": 0
           },
           {
+            "name": "Ben Williamson",
+            "PA": 2,
+            "AB": 2,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
+            "name": "Richie Palacios",
+            "PA": 2,
+            "AB": 2,
+            "R": 0,
+            "H": 0,
+            "doubles": 0,
+            "triples": 0,
+            "HR": 0,
+            "RBI": 0,
+            "BB": 0
+          },
+          {
             "name": "Ryan Vilade",
-            "PA": 1,
-            "AB": 1,
+            "PA": 2,
+            "AB": 2,
             "R": 0,
             "H": 0,
             "doubles": 0,
@@ -311,32 +308,8 @@
           },
           {
             "name": "Victor Mesa Jr.",
-            "PA": 3,
-            "AB": 3,
-            "R": 0,
-            "H": 0,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 0,
-            "BB": 0
-          },
-          {
-            "name": "Ben Williamson",
             "PA": 1,
             "AB": 1,
-            "R": 0,
-            "H": 1,
-            "doubles": 0,
-            "triples": 0,
-            "HR": 0,
-            "RBI": 1,
-            "BB": 0
-          },
-          {
-            "name": "Richie Palacios",
-            "PA": 4,
-            "AB": 4,
             "R": 0,
             "H": 0,
             "doubles": 0,
@@ -347,8 +320,8 @@
           },
           {
             "name": "Taylor Walls",
-            "PA": 4,
-            "AB": 4,
+            "PA": 3,
+            "AB": 3,
             "R": 0,
             "H": 0,
             "doubles": 0,
@@ -362,61 +335,72 @@
       "pitching": {
         "away": [
           {
-            "name": "Dustin May",
-            "IP": 3,
-            "H": 3,
-            "ER": 2,
-            "BB": 0,
-            "K": 3,
-            "par": 0.82
+            "name": "Jacob Misiorowski",
+            "IP": 5.2,
+            "H": 2,
+            "ER": 0,
+            "BB": 1,
+            "K": 2,
+            "par": 2.46
           },
           {
             "name": "JoJo Romero",
-            "IP": 1,
-            "H": 0,
-            "ER": 0,
-            "BB": 0,
-            "K": 0,
-            "par": 0.49
-          },
-          {
-            "name": "Abner Uribe",
-            "IP": 2,
-            "H": 1,
-            "ER": 0,
-            "BB": 0,
-            "K": 2,
-            "par": 1.21
-          },
-          {
-            "name": "DL Hall",
-            "IP": 1.2,
-            "H": 1,
-            "ER": 0,
-            "BB": 0,
-            "K": 0,
-            "par": 0.59
-          },
-          {
-            "name": "Trevor Megill",
-            "IP": 0.1,
+            "IP": 0.2,
             "H": 0,
             "ER": 0,
             "BB": 0,
             "K": 1,
-            "par": 0.16
+            "par": 0.21
           },
           {
-            "name": "Aaron Ashby",
-            "IP": 2.1,
+            "name": "Abner Uribe",
+            "IP": 0.2,
             "H": 0,
             "ER": 0,
             "BB": 0,
-            "K": 3,
-            "par": 1.37
+            "K": 0,
+            "par": 0.1
           },
           {
-            "name": "Antonio Senzatela",
+            "name": "Trevor Megill",
+            "IP": 2,
+            "H": 2,
+            "ER": 1,
+            "BB": 0,
+            "K": 3,
+            "par": 0.82
+          }
+        ],
+        "home": [
+          {
+            "name": "Drew Rasmussen",
+            "IP": 4,
+            "H": 2,
+            "ER": 1,
+            "BB": 0,
+            "K": 4,
+            "par": 1.76
+          },
+          {
+            "name": "Kevin Kelly",
+            "IP": 0.2,
+            "H": 3,
+            "ER": 1,
+            "BB": 0,
+            "K": 1,
+            "par": -0.29
+          },
+          {
+            "name": "Garrett Cleavinger",
+            "IP": 0.1,
+            "H": 2,
+            "ER": 2,
+            "BB": 0,
+            "K": 1,
+            "par": -1.01
+          },
+          {
+            "name": "Tyler Wells",
             "IP": 0.2,
             "H": 0,
             "ER": 0,
@@ -425,134 +409,87 @@
             "par": 0.04
           },
           {
-            "name": "Shane Drohan",
-            "IP": 0,
-            "H": 4,
-            "ER": 1,
-            "BB": 0,
-            "K": 0,
-            "par": null
-          }
-        ],
-        "home": [
-          {
-            "name": "Griffin Jax",
-            "IP": 4,
-            "H": 4,
-            "ER": 2,
-            "BB": 2,
-            "K": 6,
-            "par": 0.59
-          },
-          {
-            "name": "Kevin Kelly",
-            "IP": 1,
-            "H": 0,
-            "ER": 0,
-            "BB": 1,
-            "K": 1,
-            "par": 0.44
-          },
-          {
-            "name": "Nick Martinez",
-            "IP": 2,
+            "name": "Steven Matz",
+            "IP": 1.1,
             "H": 1,
             "ER": 0,
             "BB": 0,
-            "K": 1,
-            "par": 1.1
+            "K": 0,
+            "par": 0.54
           },
           {
             "name": "Bryan Baker",
-            "IP": 2,
-            "H": 1,
-            "ER": 0,
-            "BB": 0,
-            "K": 0,
-            "par": 0.99
-          },
-          {
-            "name": "Tyler Wells",
-            "IP": 1.2,
+            "IP": 1,
             "H": 0,
             "ER": 0,
             "BB": 0,
             "K": 1,
-            "par": 0.7
-          },
-          {
-            "name": "Cam Booser",
-            "IP": 0.1,
-            "H": 0,
-            "ER": 0,
-            "BB": 1,
-            "K": 1,
-            "par": -0.01
+            "par": 0.61
           },
           {
             "name": "Ian Seymour",
             "IP": 1,
-            "H": 2,
-            "ER": 1,
+            "H": 0,
+            "ER": 0,
             "BB": 0,
-            "K": 1,
-            "par": -0.62
+            "K": 2,
+            "par": 0.72
           }
         ]
       },
       "decisions": {
-        "winner": "Ian Seymour",
-        "loser": "Shane Drohan",
+        "winner": "Jacob Misiorowski",
+        "loser": "Drew Rasmussen",
         "save": null
       },
       "topWPAPlays": [
         {
-          "wpa": 0.335,
-          "inning": "TOP 12th",
-          "description": "Cooper Pratt homers (1) on a fly ball to left center field.",
+          "wpa": 0.088,
+          "inning": "TOP 6th",
+          "description": "William Contreras doubles (2) on a fly ball to left fielder Chandler Simpson. Christian Yelich scores.",
           "awayScore": 3,
-          "homeScore": 2,
+          "homeScore": 0,
           "runsOnPlay": 1
         },
         {
-          "wpa": 0.308,
-          "inning": "BOT 12th",
-          "description": "Liam Hicks singles on a ground ball to left fielder Jackson Chourio. Junior Caminero to 3rd.",
-          "awayScore": 3,
-          "homeScore": 2,
+          "wpa": 0.078,
+          "inning": "BOT 4th",
+          "description": "Ben Williamson grounds out, third baseman David Hamilton to first baseman Jake Bauers.",
+          "awayScore": 1,
+          "homeScore": 0,
           "runsOnPlay": 0
         },
         {
-          "wpa": 0.164,
-          "inning": "BOT 12th",
-          "description": "Jonny DeLuca singles on a ground ball to center fielder Luis Lara. Cedric Mullins scores. Liam Hicks to 2nd.",
-          "awayScore": 3,
-          "homeScore": 3,
-          "runsOnPlay": 1
-        },
-        {
-          "wpa": 0.138,
-          "inning": "TOP 4th",
-          "description": "Cooper Pratt doubles (3) on a line drive to left fielder Chandler Simpson. Sal Frelick scores.",
-          "awayScore": 1,
-          "homeScore": 1,
-          "runsOnPlay": 1
-        },
-        {
-          "wpa": 0.138,
+          "wpa": 0.071,
           "inning": "TOP 5th",
-          "description": "David Hamilton homers (2) on a fly ball to right center field.",
+          "description": "David Hamilton singles on a sharp ground ball to right fielder Ryan Vilade. Cooper Pratt scores. Garrett Mitchell to 2nd.",
           "awayScore": 2,
-          "homeScore": 2,
+          "homeScore": 0,
+          "runsOnPlay": 1
+        },
+        {
+          "wpa": 0.07,
+          "inning": "TOP 5th",
+          "description": "Garrett Mitchell singles on a sharp line drive to left fielder Chandler Simpson. Cooper Pratt to 3rd.",
+          "awayScore": 1,
+          "homeScore": 0,
+          "runsOnPlay": 0
+        },
+        {
+          "wpa": 0.051,
+          "inning": "TOP 2nd",
+          "description": "Cooper Pratt singles on a line drive to center fielder Jonny DeLuca. Brice Turang scores. Cooper Pratt out at 2nd on the throw, center fielder Jonny DeLuca to third baseman Junior Caminero to second baseman Ben Williamson to first baseman Jonathan Aranda to shortstop Taylor Walls. Sal Frelick to 3rd.",
+          "awayScore": 1,
+          "homeScore": 0,
           "runsOnPlay": 1
         }
       ],
-      "totalWPASwing": 4.43,
-      "comebackSize": 0.835,
-      "comebackTier": "big comeback",
+      "totalWPASwing": 1.56,
+      "comebackSize": 0.548,
+      "comebackTier": null,
       "flags": {
-        "walkoff": true,
-        "extraInnings": true,
+        "walkoff": false,
+        "extraInnings": false,
         "shutout": false,
         "sweep": false
       },
@@ -567,57 +504,57 @@
   "topWPAPlaysAllGames": [
     {
       "game": "MIL @ TB",
-      "wpa": 0.335,
-      "inning": "TOP 12th",
-      "description": "Cooper Pratt homers (1) on a fly ball to left center field.",
+      "wpa": 0.088,
+      "inning": "TOP 6th",
+      "description": "William Contreras doubles (2) on a fly ball to left fielder Chandler Simpson. Christian Yelich scores.",
       "awayAbbr": "MIL",
       "homeAbbr": "TB",
       "awayScore": 3,
-      "homeScore": 2,
+      "homeScore": 0,
       "runsOnPlay": 1
     },
     {
       "game": "MIL @ TB",
-      "wpa": 0.308,
-      "inning": "BOT 12th",
-      "description": "Liam Hicks singles on a ground ball to left fielder Jackson Chourio. Junior Caminero to 3rd.",
+      "wpa": 0.078,
+      "inning": "BOT 4th",
+      "description": "Ben Williamson grounds out, third baseman David Hamilton to first baseman Jake Bauers.",
       "awayAbbr": "MIL",
       "homeAbbr": "TB",
-      "awayScore": 3,
-      "homeScore": 2,
+      "awayScore": 1,
+      "homeScore": 0,
       "runsOnPlay": 0
     },
     {
       "game": "MIL @ TB",
-      "wpa": 0.164,
-      "inning": "BOT 12th",
-      "description": "Jonny DeLuca singles on a ground ball to center fielder Luis Lara. Cedric Mullins scores. Liam Hicks to 2nd.",
-      "awayAbbr": "MIL",
-      "homeAbbr": "TB",
-      "awayScore": 3,
-      "homeScore": 3,
-      "runsOnPlay": 1
-    },
-    {
-      "game": "MIL @ TB",
-      "wpa": 0.138,
-      "inning": "TOP 4th",
-      "description": "Cooper Pratt doubles (3) on a line drive to left fielder Chandler Simpson. Sal Frelick scores.",
-      "awayAbbr": "MIL",
-      "homeAbbr": "TB",
-      "awayScore": 1,
-      "homeScore": 1,
-      "runsOnPlay": 1
-    },
-    {
-      "game": "MIL @ TB",
-      "wpa": 0.138,
+      "wpa": 0.071,
       "inning": "TOP 5th",
-      "description": "David Hamilton homers (2) on a fly ball to right center field.",
+      "description": "David Hamilton singles on a sharp ground ball to right fielder Ryan Vilade. Cooper Pratt scores. Garrett Mitchell to 2nd.",
       "awayAbbr": "MIL",
       "homeAbbr": "TB",
       "awayScore": 2,
-      "homeScore": 2,
+      "homeScore": 0,
+      "runsOnPlay": 1
+    },
+    {
+      "game": "MIL @ TB",
+      "wpa": 0.07,
+      "inning": "TOP 5th",
+      "description": "Garrett Mitchell singles on a sharp line drive to left fielder Chandler Simpson. Cooper Pratt to 3rd.",
+      "awayAbbr": "MIL",
+      "homeAbbr": "TB",
+      "awayScore": 1,
+      "homeScore": 0,
+      "runsOnPlay": 0
+    },
+    {
+      "game": "MIL @ TB",
+      "wpa": 0.051,
+      "inning": "TOP 2nd",
+      "description": "Cooper Pratt singles on a line drive to center fielder Jonny DeLuca. Brice Turang scores. Cooper Pratt out at 2nd on the throw, center fielder Jonny DeLuca to third baseman Junior Caminero to second baseman Ben Williamson to first baseman Jonathan Aranda to shortstop Taylor Walls. Sal Frelick to 3rd.",
+      "awayAbbr": "MIL",
+      "homeAbbr": "TB",
+      "awayScore": 1,
+      "homeScore": 0,
       "runsOnPlay": 1
     }
   ]
